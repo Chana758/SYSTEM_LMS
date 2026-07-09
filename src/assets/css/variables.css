@@ -1,0 +1,6 @@
+@theme {
+  --color-primary: #10b981;        /* Emerald 500 (សម្រាប់ប៊ូតុង និង Icon) */
+  --color-sidebar: #064e3b;        /* Emerald 900 (ពណ៌ Sidebar) */
+  --color-header-bg: #10b981;      /* Emerald 500 (សម្រាប់ Header ដូចរូប) */
+  --color-bg-body: #f8fafc;        /* Slate 50 (ពណ៌ Background) */
+}
