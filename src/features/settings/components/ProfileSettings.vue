@@ -1,48 +1,35 @@
 <template>
-  <div class="bg-white rounded-xl border border-gray-200 p-6 max-w-xl">
-    <!-- Section title -->
-    <h2 class="text-lg font-bold text-gray-800 mb-6">
-      Profile Picture
-    </h2>
+  <div class="bg-white rounded-2xl border border-gray-200 p-6 max-w-xl">
+    <h2 class="text-lg font-bold text-gray-800 mb-1">Profile Picture</h2>
+    <p class="text-sm text-gray-400 mb-6">This is how others will see you across the system.</p>
 
     <div class="flex items-center gap-6">
-      <!-- Avatar preview -->
       <div class="relative">
-        <!-- Display the current avatar -->
         <img
           v-if="previewUrl"
           :src="previewUrl"
           alt="Profile Avatar"
-          class="w-24 h-24 rounded-full object-cover border border-gray-200"
+          class="w-24 h-24 rounded-full object-cover border-4 border-green-50 shadow-sm"
         />
-
-        <!-- Display user initials if no avatar exists -->
         <div
           v-else
-          class="w-24 h-24 rounded-full bg-green-700 text-white text-2xl font-extrabold flex items-center justify-center"
+          class="w-24 h-24 rounded-full bg-gradient-to-br from-green-600 to-green-800 text-white text-2xl font-extrabold flex items-center justify-center border-4 border-green-50 shadow-sm"
         >
           {{ initials }}
         </div>
 
-        <!-- Loading overlay while uploading/removing -->
-        <div
-          v-if="authStore.loading"
-          class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center"
-        >
-          <span class="text-white text-xs">...</span>
+        <div v-if="authStore.loading" class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center">
+          <span class="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
         </div>
       </div>
 
-      <!-- Avatar actions -->
       <div class="flex flex-col gap-2">
-        <!-- Upload button -->
         <label
-          class="cursor-pointer inline-flex items-center justify-center px-4 py-2 bg-green-700 text-white text-sm font-medium rounded-lg hover:bg-green-800 transition"
+          class="cursor-pointer inline-flex items-center gap-2 justify-center px-4 py-2 bg-green-700 text-white text-sm font-medium rounded-xl hover:bg-green-800 transition"
           :class="{ 'opacity-50 pointer-events-none': authStore.loading }"
         >
+          <ArrowUpTrayIcon class="w-4 h-4" />
           Upload New Photo
-
-          <!-- Hidden file input -->
           <input
             type="file"
             accept="image/png, image/jpeg, image/jpg, image/webp"
@@ -52,170 +39,81 @@
           />
         </label>
 
-        <!-- Remove avatar button -->
         <button
           v-if="authStore.user?.avatar"
           @click="handleRemove"
           :disabled="authStore.loading"
-          class="px-4 py-2 border border-red-300 text-red-600 text-sm font-medium rounded-lg hover:bg-red-50 transition disabled:opacity-50"
+          class="inline-flex items-center gap-2 justify-center px-4 py-2 border border-red-200 text-red-600 text-sm font-medium rounded-xl hover:bg-red-50 transition disabled:opacity-50"
         >
+          <TrashIcon class="w-4 h-4" />
           Remove Photo
         </button>
 
-        <!-- Upload requirements -->
-        <p class="text-xs text-gray-500">
-          JPG, PNG or WEBP. Maximum file size: 2 MB.
-        </p>
+        <p class="text-xs text-gray-400">JPG, PNG or WEBP. Maximum file size: 2 MB.</p>
       </div>
     </div>
 
-    <!-- Error message -->
-    <p
-      v-if="errorMessage"
-      class="text-sm text-red-600 mt-4"
-    >
-      {{ errorMessage }}
-    </p>
-
-    <!-- Success message -->
-    <p
-      v-if="successMessage"
-      class="text-sm text-green-600 mt-4"
-    >
-      {{ successMessage }}
-    </p>
+    <transition name="fade">
+      <p v-if="errorMessage" class="text-sm text-red-600 mt-4 bg-red-50 rounded-lg px-3 py-2">{{ errorMessage }}</p>
+    </transition>
+    <transition name="fade">
+      <p v-if="successMessage" class="text-sm text-green-700 mt-4 bg-green-50 rounded-lg px-3 py-2">{{ successMessage }}</p>
+    </transition>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/features/auth/store/authStore'
 
-// Access the authentication store
 const authStore = useAuthStore()
-
-// Store success message
 const successMessage = ref('')
-
-// Store client-side validation errors
 const localError = ref('')
 
-/**
- * Generate the full avatar URL.
- *
- * Backend returns only:
- * avatars/example.jpg
- *
- * This computed property converts it to:
- * http://localhost:8000/storage/avatars/example.jpg
- */
 const previewUrl = computed(() => {
-  if (!authStore.user?.avatar) {
-    return null
-  }
-
+  if (!authStore.user?.avatar) return null
   const baseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '')
-
   return `${baseUrl}/storage/${authStore.user.avatar}`
 })
 
-/**
- * Generate the user's initials.
- *
- * Example:
- * John Doe -> JD
- * San Channa -> SC
- */
 const initials = computed(() => {
   const name = authStore.user?.name || ''
-
-  return (
-    name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase() || '?'
-  )
+  return name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase() || '?'
 })
 
-/**
- * Display validation errors.
- *
- * Priority:
- * 1. Client-side validation
- * 2. Backend avatar validation
- * 3. General backend error
- */
-const errorMessage = computed(() => {
-  return (
-    localError.value ||
-    authStore.errors?.avatar ||
-    authStore.errors?.general ||
-    ''
-  )
-})
+const errorMessage = computed(() => localError.value || authStore.errors?.avatar || authStore.errors?.general || '')
 
-/**
- * Reset all success and error messages.
- */
-const resetMessages = () => {
+function resetMessages() {
   localError.value = ''
   successMessage.value = ''
   authStore.errors = {}
 }
 
-/**
- * Handle avatar file selection.
- */
-const handleFileSelect = async (event) => {
-  // Get the selected file
+async function handleFileSelect(event) {
   const file = event.target.files[0]
-
   if (!file) return
-
-  // Clear previous messages
   resetMessages()
 
-  /**
-   * Validate file size.
-   * Maximum allowed size: 2 MB.
-   */
   if (file.size > 2 * 1024 * 1024) {
     localError.value = 'File size must be under 2 MB.'
-
-    // Reset the input
     event.target.value = ''
-
     return
   }
 
-  // Upload the avatar
   const success = await authStore.uploadAvatar(file)
-
-  if (success) {
-    successMessage.value = 'Avatar updated successfully.'
-  }
-
-  /**
-   * Reset the input so the same file
-   * can be selected again.
-   */
+  if (success) successMessage.value = 'Avatar updated successfully.'
   event.target.value = ''
 }
 
-/**
- * Remove the current avatar.
- */
-const handleRemove = async () => {
-  // Clear previous messages
+async function handleRemove() {
   resetMessages()
-
-  // Remove avatar
   const success = await authStore.removeAvatar()
-
-  if (success) {
-    successMessage.value = 'Avatar removed successfully.'
-  }
+  if (success) successMessage.value = 'Avatar removed successfully.'
 }
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>

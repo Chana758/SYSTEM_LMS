@@ -1,22 +1,34 @@
 export default [
   {
     path: '/members',
-    name: 'members.list',
-    component: () => import('@/features/members/pages/MemberListPage.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
+    children: [
+      {
+        path: '',
+        name: 'member-list',
+        component: () => import('@/features/members/pages/MemberListPage.vue'),
+      },
+      {
+        path: ':id',
+        name: 'member-detail',
+        component: () => import('@/features/members/pages/MemberDetailPage.vue'),
+      },
+    ],
   },
+  // FIX: was missing — no route existed for MyProfilePage.vue, so a
+  // member clicking a "My Profile" link (or navigating to /my-profile
+  // directly) would hit a 404/NotFound instead of their profile page.
   {
-    path: '/members/:id',
-    name: 'members.detail',
-    component: () => import('@/features/members/pages/MemberDetailPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
-    props: true,
-  },
-  {
-    path: '/members/:id/profile',
-    name: 'members.profile',
-    component: () => import('@/features/members/pages/MemberProfilePage.vue'),
-    meta: { middleware: 'auth' },
-    props: true,
+    path: '/my-profile',
+    component: () => import('@/layouts/AdminLayout.vue'),
+    meta: { middleware: 'auth', roles: ['member'] },
+    children: [
+      {
+        path: '',
+        name: 'my-profile',
+        component: () => import('@/features/members/pages/MyProfilePage.vue'),
+      },
+    ],
   },
 ]

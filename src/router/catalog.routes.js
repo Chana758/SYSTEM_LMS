@@ -1,28 +1,25 @@
 export default [
   {
     path: '/books',
-    name: 'books.list',
-    component: () => import('@/features/catalog/pages/BookListPage.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth' },
-  },
-  {
-    path: '/books/create',
-    name: 'books.create',
-    component: () => import('@/features/catalog/pages/AddBookPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
-  },
-  {
-    path: '/books/:id',
-    name: 'books.detail',
-    component: () => import('@/features/catalog/pages/BookDetailPage.vue'),
-    meta: { middleware: 'auth' },
-    props: true,
-  },
-  {
-    path: '/books/:id/edit',
-    name: 'books.edit',
-    component: () => import('@/features/catalog/pages/EditBookPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
-    props: true,
+    children: [
+      {
+        path: '',
+        name: 'book-list',
+        component: () => import('@/features/catalog/pages/BookListPage.vue'),
+      },
+      {
+        path: 'categories',
+        name: 'category-list',
+        component: () => import('@/features/catalog/pages/CategoryListPage.vue'),
+        meta: { roles: ['admin', 'librarian'] },
+      },
+      {
+        path: ':id',
+        name: 'book-detail',
+        component: () => import('@/features/catalog/pages/BookDetailPage.vue'),
+      },
+    ],
   },
 ]

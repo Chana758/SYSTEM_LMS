@@ -1,26 +1,15 @@
 export default [
   {
     path: '/reports',
-    name: 'reports.dashboard',
-    component: () => import('@/features/reports/pages/ReportDashboardPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin'] },
-  },
-  {
-    path: '/reports/borrow',
-    name: 'reports.borrow',
-    component: () => import('@/features/reports/pages/BorrowReportPage.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
-  },
-  {
-    path: '/reports/fine',
-    name: 'reports.fine',
-    component: () => import('@/features/reports/pages/FineReportPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin'] },
-  },
-  {
-    path: '/reports/user',
-    name: 'reports.user',
-    component: () => import('@/features/reports/pages/UserReportPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin'] },
+    children: [
+      { path: '', name: 'report-dashboard', component: () => import('@/features/reports/pages/ReportDashboardPage.vue') },
+      { path: 'borrow', name: 'report-borrow', component: () => import('@/features/reports/pages/BorrowReportPage.vue') },
+      { path: 'fine', name: 'report-fine', component: () => import('@/features/reports/pages/FineReportPage.vue') },
+      { path: 'revenue', name: 'report-revenue', component: () => import('@/features/reports/pages/RevenueReportPage.vue') },
+      { path: 'stock', name: 'report-stock', component: () => import('@/features/reports/pages/StockReportPage.vue') },
+      { path: 'user', name: 'report-user', component: () => import('@/features/reports/pages/UserReportPage.vue') },
+    ],
   },
 ]

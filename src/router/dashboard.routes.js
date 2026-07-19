@@ -2,7 +2,7 @@ export default [
   {
     path: '/dashboard',
     component: () => import('@/layouts/AdminLayout.vue'),
-    meta: { middleware: 'auth' },
+    meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
     children: [
       {
         path: '',

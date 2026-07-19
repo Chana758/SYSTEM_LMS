@@ -51,15 +51,8 @@
         <ArrowsPointingOutIcon class="w-[18px] h-[18px]" />
       </button>
 
-      <button
-        class="relative w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-white/15 transition"
-        title="Notifications"
-      >
-        <BellIcon class="w-[18px] h-[18px]" />
-        <span
-          class="absolute top-[7px] right-[7px] w-[7px] h-[7px] bg-red-500 rounded-full border-[1.5px] border-green-700"
-        ></span>
-      </button>
+      <!-- ជំនួស static bell button ដោយ NotificationBell.vue -->
+      <NotificationBell />
 
       <div class="w-px h-6 bg-white/30 mx-2"></div>
 
@@ -96,12 +89,12 @@ import { ref, computed } from 'vue'
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
-  BellIcon,
   SunIcon,
   GlobeAltIcon,
   ArrowsPointingOutIcon,
 } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/features/auth/store/authStore'
+import NotificationBell from '@/features/notifications/components/NotificationBell.vue'
 
 defineEmits(['toggle-sidebar', 'toggle-theme', 'toggle-language'])
 

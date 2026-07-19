@@ -1,29 +1,14 @@
 export default [
   {
     path: '/digital-library',
-    name: 'digital-library.home',
-    component: () => import('@/features/digital-library/pages/LibraryHomePage.vue'),
-    meta: { middleware: 'auth' },
-  },
-  {
-    path: '/digital-library/category/:id',
-    name: 'digital-library.category',
-    component: () => import('@/features/digital-library/pages/LibraryCategoryPage.vue'),
-    meta: { middleware: 'auth' },
-    props: true,
-  },
-  {
-    path: '/digital-library/book/:id',
-    name: 'digital-library.detail',
-    component: () => import('@/features/digital-library/pages/LibraryDetailPage.vue'),
-    meta: { middleware: 'auth' },
-    props: true,
-  },
-  {
-    path: '/digital-library/reader/:id',
-    name: 'digital-library.reader',
-    component: () => import('@/features/digital-library/pages/BookReaderPage.vue'),
-    meta: { middleware: 'auth' },
-    props: true,
+    component: () => import('@/layouts/AdminLayout.vue'),
+    meta: { middleware: 'auth', roles: ['admin', 'librarian', 'member'] },
+    children: [
+      { path: '', name: 'library-home-page', component: () => import('@/features/digital-library/pages/LibraryHomePage.vue') },
+      { path: 'category/:id', name: 'library-category-page', component: () => import('@/features/digital-library/pages/LibraryCategoryPage.vue') },
+      { path: 'favorites', name: 'my-favorites-page', component: () => import('@/features/digital-library/pages/MyFavoritesPage.vue') },
+      { path: ':id', name: 'library-detail-page', component: () => import('@/features/digital-library/pages/LibraryDetailPage.vue') },
+      { path: ':id/read', name: 'book-reader-page', component: () => import('@/features/digital-library/pages/BookReaderPage.vue') },
+    ],
   },
 ]

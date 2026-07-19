@@ -33,12 +33,13 @@ const authStore = useAuthStore()
 async function handleLogin(formData) {
   const success = await authStore.login(formData)
   if (success) {
-    const roleRedirect = {
-      admin: 'dashboard',
-      librarian: 'dashboard',
-      member: 'dashboard',
-    }
-    router.push({ name: roleRedirect[authStore.role] || 'dashboard' })
+    // Staff (admin/librarian) land on the management dashboard.
+    // Members have no access to /dashboard (see member.routes.js comment
+    // and roleGuard), so they must be sent to their own landing page —
+    // otherwise roleGuard immediately bounces them to /unauthorized.
+    // Members land on the book catalog so they can browse right away.
+    const isStaff = ['admin', 'librarian'].includes(authStore.role)
+    router.push({ name: isStaff ? 'dashboard' : 'book-list' })
   }
 }
 </script>

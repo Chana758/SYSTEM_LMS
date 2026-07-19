@@ -1,40 +1,24 @@
 export default [
   {
     path: '/fines',
-    name: 'fines.list',
-    component: () => import('@/features/fines/pages/FineListPage.vue'),
-    meta: { middleware: 'auth' },
-  },
-  {
-    path: '/fines/create',
-    name: 'fines.create',
-    component: () => import('@/features/fines/pages/FineCreatePage.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
+    children: [
+      { path: '', name: 'fine-list', component: () => import('@/features/fines/pages/FineListPage.vue') },
+      { path: 'create', name: 'fine-create', component: () => import('@/features/fines/pages/FineCreatePage.vue') },
+      { path: 'history', name: 'fine-history', component: () => import('@/features/fines/pages/FineHistoryPage.vue') },
+      { path: 'report', name: 'fine-report', component: () => import('@/features/fines/pages/FineReportPage.vue') },
+      { path: ':id', name: 'fine-detail', component: () => import('@/features/fines/pages/FineDetailPage.vue') },
+      { path: ':id/edit', name: 'fine-edit', component: () => import('@/features/fines/pages/FineEditPage.vue') },
+    ],
   },
   {
-    path: '/fines/:id',
-    name: 'fines.detail',
-    component: () => import('@/features/fines/pages/FineDetailPage.vue'),
+    // ★ new — Member self-service page
+    path: '/my-fines',
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth' },
-    props: true,
-  },
-  {
-    path: '/fines/:id/edit',
-    name: 'fines.edit',
-    component: () => import('@/features/fines/pages/FineEditPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
-    props: true,
-  },
-  {
-    path: '/fines/history',
-    name: 'fines.history',
-    component: () => import('@/features/fines/pages/FineHistoryPage.vue'),
-    meta: { middleware: 'auth' },
-  },
-  {
-    path: '/fines/report',
-    name: 'fines.report',
-    component: () => import('@/features/fines/pages/FineReportPage.vue'),
-    meta: { middleware: 'auth', roles: ['admin'] },
+    children: [
+      { path: '', name: 'my-fines-page', component: () => import('@/features/fines/pages/MyFinesPage.vue') },
+    ],
   },
 ]

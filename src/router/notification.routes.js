@@ -1,21 +1,12 @@
 export default [
   {
     path: '/notifications',
-    name: 'notifications.list',
-    component: () => import('@/features/notifications/pages/NotificationListPage.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth' },
-  },
-  {
-    path: '/notifications/:id',
-    name: 'notifications.detail',
-    component: () => import('@/features/notifications/pages/NotificationDetailPage.vue'),
-    meta: { middleware: 'auth' },
-    props: true,
-  },
-  {
-    path: '/notifications/settings',
-    name: 'notifications.settings',
-    component: () => import('@/features/notifications/pages/NotificationSettingsPage.vue'),
-    meta: { middleware: 'auth' },
+    children: [
+      { path: '', name: 'notification-list', component: () => import('@/features/notifications/pages/NotificationListPage.vue') },
+      { path: 'settings', name: 'notification-settings', component: () => import('@/features/notifications/pages/NotificationSettingsPage.vue') },
+      { path: ':id', name: 'notification-detail', component: () => import('@/features/notifications/pages/NotificationDetailPage.vue') },
+    ],
   },
 ]
