@@ -9,7 +9,15 @@ export const ENDPOINTS = {
     REMOVE_AVATAR: '/auth/profile/avatar',
     UPDATE_ACCOUNT: '/auth/profile/account',
     CHANGE_PASSWORD: '/auth/change-password',
+    LOGIN_QR: '/auth/login/qr',
+    QR_TOKEN_GENERATE: '/auth/qr-token/generate',
+    QR_TOKEN_REVOKE: '/auth/qr-token/revoke',
+    // FIX: were missing — used by generateQrTokenFor() / pendingCards()
+    // in authService.js for staff-issued QR cards.
+    QR_TOKEN_GENERATE_FOR: (userId) => `/auth/users/${userId}/qr-token/generate`,
+    PENDING_CARDS: '/auth/pending-cards',
   },
+
   MEMBERS: {
     LIST: '/members',
     CREATE: '/members',
@@ -43,6 +51,16 @@ export const ENDPOINTS = {
     CREATE: '/categories',
     UPDATE: (id) => `/categories/${id}`,
     DELETE: (id) => `/categories/${id}`,
+  },
+  // FIX: entire section was missing even though membershipTypeService.js
+  // already calls these paths as hardcoded strings — centralizing here
+  // avoids typo drift, matching the pattern used everywhere else in
+  // this file.
+  MEMBERSHIP_TYPES: {
+    LIST: '/membership-types',
+    CREATE: '/membership-types',
+    UPDATE: (id) => `/membership-types/${id}`,
+    DELETE: (id) => `/membership-types/${id}`,
   },
   BORROWS: {
     LIST: '/borrows',
@@ -120,5 +138,15 @@ export const ENDPOINTS = {
     STORE: '/scan',
     HISTORY: '/scan/history',
     SUMMARY: '/scan/summary',
+  },
+  // FIX: entire section was missing — dashboardStore.js's fetchStats(),
+  // fetchRecentActivities(), and fetchRevenueChart() currently call these
+  // three paths as hardcoded apiClient.get(...) strings; adding them here
+  // for consistency (dashboardStore.js itself doesn't need to change
+  // unless you want to swap it over to using ENDPOINTS.DASHBOARD.*).
+  DASHBOARD: {
+    STATS: '/dashboard',
+    RECENT_ACTIVITIES: '/dashboard/recent-activities',
+    REVENUE_CHART: '/dashboard/revenue-chart',
   },
 }

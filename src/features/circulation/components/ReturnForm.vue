@@ -16,12 +16,29 @@
 
         <div v-if="form.condition === 'damaged'">
           <label class="block text-sm font-medium text-gray-700 mb-1">Damage Fee (៛)</label>
-          <input v-model.number="form.damage_fee" type="number" min="0" class="w-full border rounded-lg px-3 py-2" placeholder="5000" />
+          <input
+            v-model.number="form.damage_fee"
+            type="number" min="0" step="100"
+            class="w-full border rounded-lg px-3 py-2"
+            placeholder="5000"
+          />
+          <!-- Display-only USD preview — purely informational, never sent
+               to the backend. Helps the librarian sanity-check the Riel
+               amount before submitting (this is exactly the kind of
+               "wait, that's way too high" signal that was missing when
+               the $5000/$15000 fines got created in the first place). -->
+          <p class="text-xs text-gray-400 mt-1">≈ {{ formatUsd(khrToUsd(form.damage_fee)) }}</p>
         </div>
 
         <div v-if="form.condition === 'lost'">
           <label class="block text-sm font-medium text-gray-700 mb-1">Lost Fee (៛)</label>
-          <input v-model.number="form.lost_fee" type="number" min="0" class="w-full border rounded-lg px-3 py-2" placeholder="15000" />
+          <input
+            v-model.number="form.lost_fee"
+            type="number" min="0" step="100"
+            class="w-full border rounded-lg px-3 py-2"
+            placeholder="15000"
+          />
+          <p class="text-xs text-gray-400 mt-1">≈ {{ formatUsd(khrToUsd(form.lost_fee)) }}</p>
         </div>
 
         <div v-if="form.condition !== 'good'">
@@ -50,6 +67,10 @@
 
 <script setup>
 import { reactive, computed } from 'vue'
+// NOTE: khrToUsd/formatUsd are used ONLY for the on-screen "≈ $x.xx"
+// preview text below the Riel inputs — they are display-only helpers now.
+// They are NOT applied to the payload anymore (see handleSubmit below).
+import { khrToUsd, formatUsd } from '@/utils/currencyHelper'
 
 const props = defineProps({
   borrow: { type: Object, required: true },
@@ -60,7 +81,7 @@ const emit = defineEmits(['submit', 'cancel'])
 
 const form = reactive({
   condition: 'good',
-  damage_fee: 5000,
+  damage_fee: 5000,   // Riel — matches the "(៛)" label on the input above
   lost_fee: 15000,
   notes: '',
 })
@@ -73,8 +94,25 @@ const daysLate = computed(() => {
 
 function handleSubmit() {
   const payload = { condition: form.condition, notes: form.notes || undefined }
-  if (form.condition === 'damaged') payload.damage_fee = form.damage_fee
-  if (form.condition === 'lost') payload.lost_fee = form.lost_fee
+
+  // REVERTED: this used to call khrToUsd() here before emitting the
+  // payload. That was correct as a standalone fix, but it created a
+  // second, disconnected conversion point — the overdue fine (calculated
+  // entirely server-side from daysLate * finePerDay) had no equivalent
+  // frontend step to convert, so it stayed broken even after this fix.
+  // Currency conversion is now centralized in ONE place only —
+  // BorrowController::returnBook() on the backend, via CurrencyHelper::
+  // khrToUsd() — so every fine type (overdue, damaged, lost) is
+  // converted consistently regardless of entry point (this form, a
+  // future mobile app, a direct API call, etc.). This form now sends
+  // the raw Riel values exactly as entered; the backend owns the math.
+  if (form.condition === 'damaged') {
+    payload.damage_fee = form.damage_fee
+  }
+  if (form.condition === 'lost') {
+    payload.lost_fee = form.lost_fee
+  }
+
   emit('submit', payload)
 }
 </script>

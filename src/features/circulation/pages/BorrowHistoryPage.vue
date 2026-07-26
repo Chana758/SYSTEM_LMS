@@ -1,88 +1,103 @@
 <template>
-  <div>
-    <div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-        <ClockIcon class="w-6 h-6 text-purple-600" />
-      </div>
-      <div>
-        <h1 class="text-xl font-bold text-gray-800">Borrow History</h1>
-        <p class="text-sm text-gray-400 mt-0.5">{{ store.pagination.total }} record(s) total</p>
-      </div>
-    </div>
-
-    <!-- Filter bar -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-4 mb-5">
-      <div class="flex flex-wrap gap-3 items-center">
-        <div class="relative flex-1 min-w-[240px]">
-          <MagnifyingGlassIcon class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            v-model="store.filters.search"
-            @input="debouncedFetch"
-            type="text"
-            placeholder="Search member or book title..."
-            class="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
-          />
+  <div class="space-y-6 pb-12">
+    <!-- Main Wrapper Card -->
+    <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8 space-y-6">
+      
+      <!-- Header Banner -->
+      <div class="flex items-center justify-between pb-6 border-b border-slate-200">
+        <div class="flex items-center gap-5">
+          <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <ClockIcon class="w-7 h-7 text-purple-700" />
+          </div>
+          <div>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Borrow History</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">{{ store.pagination.total }} record(s) total</p>
+          </div>
         </div>
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-purple-600 bg-purple-50 border border-purple-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
+          History
+        </span>
+      </div>
 
-        <select
-          v-model="store.filters.status"
-          @change="store.fetchList(1)"
-          class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-        >
-          <option value="">All Status</option>
-          <option value="borrowed">Borrowed</option>
-          <option value="returned">Returned</option>
-        </select>
+      <!-- Filter Bar -->
+      <div class="bg-slate-50/70 rounded-xl border border-slate-200 p-4">
+        <div class="flex flex-wrap gap-3 items-center">
+          <div class="relative flex-1 min-w-[240px]">
+            <MagnifyingGlassIcon class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              v-model="store.filters.search"
+              @input="debouncedFetch"
+              type="text"
+              placeholder="Search member or book title..."
+              class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 transition-shadow shadow-2xs"
+            />
+          </div>
 
-        <div class="flex items-center gap-2">
-          <input
-            v-model="store.filters.from"
+          <select
+            v-model="store.filters.status"
             @change="store.fetchList(1)"
-            type="date"
-            class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-          />
-          <span class="text-gray-400 text-sm">to</span>
-          <input
-            v-model="store.filters.to"
-            @change="store.fetchList(1)"
-            type="date"
-            class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-          />
+            class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
+          >
+            <option value="">All Status</option>
+            <option value="borrowed">Borrowed</option>
+            <option value="returned">Returned</option>
+          </select>
+
+          <div class="flex items-center gap-2">
+            <input
+              v-model="store.filters.from"
+              @change="store.fetchList(1)"
+              type="date"
+              class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
+            />
+            <span class="text-slate-400 text-xs font-bold">to</span>
+            <input
+              v-model="store.filters.to"
+              @change="store.fetchList(1)"
+              type="date"
+              class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
+            />
+          </div>
+
+          <button
+            v-if="hasActiveFilters"
+            @click="clearFilters"
+            class="text-xs font-bold text-slate-500 hover:text-rose-600 px-3 py-2 transition-colors ml-auto"
+          >
+            Clear filters
+          </button>
         </div>
+      </div>
 
+      <!-- Loading / Table Container -->
+      <div v-if="store.loading" class="bg-white rounded-2xl border border-slate-200 p-14 text-center text-slate-400 text-sm font-semibold shadow-2xs">
+        Loading records...
+      </div>
+
+      <div v-else class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+        <BorrowTable
+          :items="store.borrows"
+          role="admin"
+          @renew="handleRenew"
+          @return="returningBorrow = $event"
+        />
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-2 pt-2" v-if="store.pagination.last_page > 1">
         <button
-          v-if="hasActiveFilters"
-          @click="clearFilters"
-          class="text-xs font-medium text-gray-500 hover:text-red-500 px-3 py-2 transition-colors"
+          v-for="p in store.pagination.last_page" :key="p"
+          @click="store.fetchList(p)"
+          class="w-8 h-8 rounded-xl text-xs font-bold transition-colors shadow-2xs"
+          :class="p === store.pagination.current_page ? 'bg-purple-600 text-white' : 'bg-white border border-slate-300 text-slate-700 hover:bg-purple-50'"
         >
-          Clear filters
+          {{ p }}
         </button>
       </div>
+
     </div>
 
-    <div v-if="store.loading" class="bg-white rounded-2xl border border-gray-200 p-14 text-center text-gray-400 text-sm">
-      Loading records...
-    </div>
-
-    <BorrowTable
-      v-else
-      :items="store.borrows"
-      role="admin"
-      @renew="handleRenew"
-      @return="returningBorrow = $event"
-    />
-
-    <div class="flex justify-center gap-2 mt-6" v-if="store.pagination.last_page > 1">
-      <button
-        v-for="p in store.pagination.last_page" :key="p"
-        @click="store.fetchList(p)"
-        class="w-8 h-8 rounded-lg text-sm transition-colors"
-        :class="p === store.pagination.current_page ? 'bg-purple-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-purple-50'"
-      >
-        {{ p }}
-      </button>
-    </div>
-
+    <!-- Return Modal Form -->
     <ReturnForm
       v-if="returningBorrow"
       :borrow="returningBorrow"

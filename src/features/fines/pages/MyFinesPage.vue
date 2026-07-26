@@ -1,47 +1,90 @@
 <template>
-  <div>
-    <div class="mb-5">
-      <h1 class="text-xl font-bold text-gray-800">My Fines</h1>
-      <p class="text-sm text-gray-400 mt-0.5">Overview of your library fines and payment history</p>
-    </div>
-
-    <!-- Balance Card -->
-    <div class="bg-gradient-to-br from-green-700 to-green-800 rounded-2xl p-6 text-white mb-6">
-      <p class="text-white/70 text-sm">Total Outstanding Balance</p>
-      <p class="text-4xl font-bold mt-1">${{ store.myTotalUnpaid.toFixed(2) }}</p>
-      <p class="text-white/60 text-xs mt-2" v-if="store.myTotalUnpaid > 0">
-        Please settle at the library front desk to continue borrowing.
-      </p>
-      <p class="text-white/60 text-xs mt-2" v-else>You have no outstanding fines. 🎉</p>
-    </div>
-
-    <!-- List -->
-    <div class="space-y-3">
-      <p v-if="store.loading" class="text-center text-gray-400 py-8">Loading...</p>
-      <p v-else-if="!store.myFines.length" class="text-center text-gray-400 py-8">You have no fine records.</p>
-
-      <div v-for="fine in store.myFines" :key="fine.id" class="bg-white rounded-2xl border border-gray-200 p-4">
-        <div class="flex justify-between items-start">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-              :class="fine.status === 'unpaid' ? 'bg-red-50' : 'bg-gray-100'">
-              <BookOpenIcon class="w-5 h-5" :class="fine.status === 'unpaid' ? 'text-red-500' : 'text-gray-400'" />
-            </div>
-            <div>
-              <p class="font-semibold text-gray-800">{{ fine.borrow?.book_copy?.book?.title || 'Unknown Book' }}</p>
-              <p class="text-xs text-gray-400 capitalize">Reason: {{ fine.reason }}</p>
-            </div>
-          </div>
-          <FineStatusBadge :status="fine.status" />
+  <div class="space-y-6 pb-12">
+    <!-- Header Banner -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-emerald-50 border-2 border-emerald-200 rounded-xl flex items-center justify-center text-xl shadow-2xs flex-shrink-0">
+          💳
         </div>
-
-        <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-50">
-          <span class="text-xs text-gray-400">{{ formatDate(fine.created_at) }}</span>
-          <span class="text-lg font-bold" :class="fine.status === 'unpaid' ? 'text-red-600' : 'text-gray-800'">
-            ${{ Number(fine.amount).toFixed(2) }}
-          </span>
+        <div>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">My Fines</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">Overview of your library fines and payment history</p>
         </div>
       </div>
+    </div>
+
+    <!-- Main Large Container with Dashed Inner Border matching Reservations Style -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg space-y-6 border-dashed">
+      
+      <!-- Balance Card with Original Green Theme -->
+      <div class="bg-gradient-to-br from-green-700 to-green-800 rounded-2xl border-2 border-green-800 p-6 sm:p-8 shadow-lg text-white relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute right-[-20px] bottom-[-20px] w-40 h-40 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="space-y-1 relative z-10">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest bg-green-900/80 text-white border border-green-500/40">
+            <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+            Balance Overview
+          </span>
+          <p class="text-xs font-bold text-emerald-100 uppercase tracking-widest pt-2">Total Outstanding Balance</p>
+          <p class="text-4xl sm:text-5xl font-black tracking-tight">${{ Number(store.myTotalUnpaid || 0).toFixed(2) }}</p>
+        </div>
+        <div class="mt-4 pt-4 border-t border-green-600/50 relative z-10 flex items-center gap-2">
+          <span class="text-base">ℹ️</span>
+          <p class="text-xs font-bold text-emerald-100" v-if="store.myTotalUnpaid > 0">
+            Please settle at the library front desk to continue borrowing.
+          </p>
+          <p class="text-xs font-bold text-emerald-100" v-else>
+            You have no outstanding fines. 🎉 Great job keeping your account clear!
+          </p>
+        </div>
+      </div>
+
+      <!-- Fine Records List Section -->
+      <div class="space-y-4 pt-2">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider">Fine Records</h3>
+          <span class="text-xs font-bold text-slate-400">{{ store.myFines.length }} record(s) found</span>
+        </div>
+
+        <div v-if="store.loading" class="text-center py-16 text-slate-400 font-bold text-xs uppercase tracking-widest">
+          Loading your fines...
+        </div>
+        
+        <div v-else-if="!store.myFines.length" class="text-center py-16 space-y-3">
+          <div class="w-12 h-12 bg-emerald-50 border-2 border-emerald-200 rounded-xl flex items-center justify-center mx-auto text-xl shadow-2xs text-emerald-600">
+            ✨
+          </div>
+          <div>
+            <p class="text-sm font-black text-slate-900 uppercase tracking-wider">No Fine Records</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">You don't have any library fine history right now.</p>
+          </div>
+        </div>
+
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div v-for="fine in store.myFines" :key="fine.id" class="bg-slate-50/70 rounded-2xl border-2 border-slate-200 p-5 space-y-4 hover:border-slate-300 transition-all shadow-2xs">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border-2"
+                  :class="fine.status === 'unpaid' ? 'bg-rose-50 border-rose-200 text-rose-600' : 'bg-emerald-50 border-emerald-200 text-emerald-600'">
+                  <BookOpenIcon class="w-5 h-5" />
+                </div>
+                <div>
+                  <p class="text-xs font-black text-slate-900 tracking-tight line-clamp-1">{{ fine.borrow?.book_copy?.book?.title || 'Unknown Book' }}</p>
+                  <p class="text-[11px] font-bold text-slate-500 capitalize">Reason: {{ fine.reason }}</p>
+                </div>
+              </div>
+              <FineStatusBadge :status="fine.status" />
+            </div>
+
+            <div class="flex justify-between items-center pt-3 border-t border-slate-200/80">
+              <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ formatDate(fine.created_at) }}</span>
+              <span class="text-base font-black" :class="fine.status === 'unpaid' ? 'text-rose-600' : 'text-slate-900'">
+                ${{ Number(fine.amount).toFixed(2) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>

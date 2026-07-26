@@ -1,63 +1,84 @@
 <template>
-  <div class="p-6 space-y-6">
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center justify-between flex-wrap gap-4">
+  <div class="p-6 space-y-6 pb-12">
+    <!-- Header Banner -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 border-2 border-blue-200 flex items-center justify-center flex-shrink-0 text-xl shadow-2xs">
           <ArrowsRightLeftIcon class="w-6 h-6 text-blue-600" />
         </div>
         <div>
-          <h1 class="text-xl font-bold text-gray-800">Borrow Report</h1>
-          <p class="text-sm text-gray-400 mt-0.5">Circulation activity for the selected period</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Borrow Report</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">Circulation activity for the selected period</p>
         </div>
       </div>
-      <ExportReportButton type="borrow" :filters="filters" />
-    </div>
 
-    <ReportFilter
-      :status-options="statusOptions"
-      status-label="Status"
-      :show-search="false"
-      @apply="onApply"
-    />
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-      <ReportSummaryCard label="Total"    :value="summary.total"    color="text-gray-800"   bg="bg-gray-50" />
-      <ReportSummaryCard label="Returned" :value="summary.returned" color="text-emerald-700" bg="bg-emerald-50" />
-      <ReportSummaryCard label="Active"   :value="summary.active"   color="text-blue-600"   bg="bg-blue-50" />
-      <ReportSummaryCard label="Overdue"  :value="summary.overdue"  color="text-red-500"    bg="bg-red-50" />
-    </div>
-
-    <ReportTable
-      :columns="columns"
-      :rows="rows"
-      :loading="loading"
-      :pagination="pagination"
-      @page-change="onPageChange"
-    >
-      <template #cell-user.name="{ row }">
-        <div>
-          <p class="font-bold text-gray-700">{{ row.user?.name ?? 'Guest' }}</p>
-          <p class="text-[11px] text-gray-400">{{ row.user?.email }}</p>
-        </div>
-      </template>
-      <template #cell-book_copy.book.title="{ row }">
-        {{ row.book_copy?.book?.title ?? '—' }}
-      </template>
-      <template #cell-status="{ row }">
-        <span
-          class="px-3 py-1 rounded-full text-[10px] font-black uppercase border"
-          :class="statusStyles[row.status] ?? statusStyles.borrowed"
+      <!-- Action Buttons Group (Back & Export) on the right -->
+      <div class="flex items-center gap-3 flex-wrap">
+        <RouterLink
+          to="/reports"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-black tracking-wider uppercase transition-all shadow-2xs"
         >
-          {{ row.status }}
-        </span>
-      </template>
-    </ReportTable>
+          <ArrowLeftIcon class="w-4 h-4" />
+          <span>Back to Reports</span>
+        </RouterLink>
+
+        <ExportReportButton type="borrow" :filters="filters" />
+      </div>
+    </div>
+
+    <!-- Main Content Container with White Box & Dashed Border -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed space-y-6">
+      
+      <!-- Filters Section -->
+      <ReportFilter
+        :status-options="statusOptions"
+        status-label="Status"
+        :show-search="false"
+        @apply="onApply"
+      />
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
+        <ReportSummaryCard label="Total"    :value="summary.total"    color="text-slate-900"   bg="bg-slate-50" />
+        <ReportSummaryCard label="Returned" :value="summary.returned" color="text-emerald-700" bg="bg-emerald-50" />
+        <ReportSummaryCard label="Active"   :value="summary.active"   color="text-blue-600"   bg="bg-blue-50" />
+        <ReportSummaryCard label="Overdue"  :value="summary.overdue"  color="text-red-500"    bg="bg-red-50" />
+      </div>
+
+      <!-- Data Table -->
+      <ReportTable
+        :columns="columns"
+        :rows="rows"
+        :loading="loading"
+        :pagination="pagination"
+        @page-change="onPageChange"
+      >
+        <template #cell-user.name="{ row }">
+          <div>
+            <p class="font-bold text-slate-700">{{ row.user?.name ?? 'Guest' }}</p>
+            <p class="text-[11px] text-slate-400">{{ row.user?.email }}</p>
+          </div>
+        </template>
+        <template #cell-book_copy.book.title="{ row }">
+          <span class="font-semibold text-slate-700">{{ row.book_copy?.book?.title ?? '—' }}</span>
+        </template>
+        <template #cell-status="{ row }">
+          <span
+            class="px-3 py-1 rounded-full text-[10px] font-black uppercase border"
+            :class="statusStyles[row.status] ?? statusStyles.borrowed"
+          >
+            {{ row.status }}
+          </span>
+        </template>
+      </ReportTable>
+
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { ArrowsRightLeftIcon } from '@heroicons/vue/24/outline'
+import { ArrowsRightLeftIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import { reportService } from '../services/reportService'
 import ReportFilter from '../components/ReportFilter.vue'
 import ReportSummaryCard from '../components/ReportSummaryCard.vue'
@@ -104,7 +125,7 @@ const load = async (page = 1) => {
   }
 }
 
-const onApply = (f) => {
+const onApply = (f) => { 
   Object.assign(filters, f)
   load(1)
 }

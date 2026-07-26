@@ -1,142 +1,168 @@
 <template>
-  <div>
-    <!-- ============ HEADER ============ -->
-    <div class="flex items-start justify-between mb-6">
-      <h1 class="font-serif text-2xl font-bold text-gray-900">Book Management</h1>
-      <div class="flex gap-2">
-        <router-link
-          v-if="canManage"
-          to="/books/categories"
-          class="border border-green-700 text-green-700 hover:bg-green-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-        >
-          Manage Categories
-        </router-link>
-        <button
-          v-if="canManage"
-          @click="openCreateModal"
-          class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
-        >
-          + Add New Book
-        </button>
+  <div class="space-y-6 pb-12">
+    <!-- ============ HEADER SECTION WITH DELIVERY-STYLE STAT CARDS INSIDE ============ -->
+    <div class="bg-white rounded-3xl border border-slate-300 p-6 md:p-8 shadow-sm space-y-6">
+      
+      <!-- Top Title & Action Buttons -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">Book Management</h1>
+          <p class="text-xs font-medium text-slate-500 mt-1">Manage library inventory, track checkouts, and organize book categories seamlessly.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <router-link
+            v-if="canManage"
+            to="/books/categories"
+            class="inline-flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs"
+          >
+            <RectangleStackIcon class="w-4 h-4 text-slate-500"/>
+            <span>Categories</span>
+          </router-link>
+          <button
+            v-if="canManage"
+            @click="openCreateModal"
+            class="inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
+          >
+            <span class="text-base leading-none">+</span>
+            <span>Add New Book</span>
+          </button>
+        </div>
       </div>
+
+      <!-- 4 Stat Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+        
+        <!-- Card 1: Total -->
+        <div class="bg-gradient-to-br from-blue-50/70 via-white to-white rounded-2xl border border-blue-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-300">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
+              <BookOpenIcon class="w-5 h-5"/>
+            </div>
+            <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest bg-blue-100 px-2.5 py-1 rounded-full">Total</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.pagination.total || 0 }}</p>
+            <p class="text-[11px] font-bold text-blue-700 tracking-wide">Titles in catalog</p>
+          </div>
+        </div>
+
+        <!-- Card 2: Available -->
+        <div class="bg-gradient-to-br from-emerald-50/70 via-white to-white rounded-2xl border border-emerald-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-300">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+              <CheckCircleIcon class="w-5 h-5"/>
+            </div>
+            <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-100 px-2.5 py-1 rounded-full">Success</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ availableCount }}</p>
+            <p class="text-[11px] font-bold text-emerald-700 tracking-wide">Available now</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Trending -->
+        <div class="bg-gradient-to-br from-amber-50/70 via-white to-white rounded-2xl border border-amber-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-amber-300">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm">
+              <FireIcon class="w-5 h-5"/>
+            </div>
+            <span class="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest bg-amber-100 px-2.5 py-1 rounded-full">Live</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.popularBooks.length }}</p>
+            <p class="text-[11px] font-bold text-amber-700 tracking-wide">Trending titles</p>
+          </div>
+        </div>
+
+        <!-- Card 4: Categories -->
+        <div class="bg-gradient-to-br from-purple-50/70 via-white to-white rounded-2xl border border-purple-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-purple-300">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-sm">
+              <RectangleStackIcon class="w-5 h-5"/>
+            </div>
+            <span class="text-[10px] font-extrabold text-purple-600 uppercase tracking-widest bg-purple-100 px-2.5 py-1 rounded-full">Performance</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.categories.length }}</p>
+            <p class="text-[11px] font-bold text-purple-700 tracking-wide">Categories count</p>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- ============ STAT CARDS ============ -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-          <BookOpenIcon class="w-[18px] h-[18px] text-green-700" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ store.pagination.total || 0 }}</p>
-          <p class="text-xs text-gray-500">Titles in catalog</p>
+    <!-- ============ MOST BORROWED (CLEAN SHELF STYLE) ============ -->
+    <div v-if="store.popularBooks.length" class="space-y-3">
+      <div class="flex items-center justify-between px-1">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🔥</span>
+          <h2 class="font-serif text-base font-bold text-slate-900">Most Borrowed Books</h2>
+          <span class="text-xs font-semibold text-slate-400">• Ranked by all-time checkouts</span>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
-          <CheckCircleIcon class="w-[18px] h-[18px] text-emerald-600" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ availableCount }}</p>
-          <p class="text-xs text-gray-500">Available now</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
-          <FireIcon class="w-[18px] h-[18px] text-amber-500" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ store.popularBooks.length }}</p>
-          <p class="text-xs text-gray-500">Trending titles</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-          <RectangleStackIcon class="w-[18px] h-[18px] text-blue-600" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ store.categories.length }}</p>
-          <p class="text-xs text-gray-500">Categories</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ============ MOST BORROWED — "on the shelf" ============ -->
-    <div v-if="store.popularBooks.length" class="mb-10">
-      <div class="flex items-baseline gap-2 mb-4">
-        <span class="text-lg">🔥</span>
-        <h2 class="font-serif text-base font-bold text-gray-800">Most Borrowed</h2>
-        <span class="text-xs text-gray-400">ranked by all-time checkouts</span>
-      </div>
-
-      <div class="rounded-2xl bg-gradient-to-b from-amber-50/70 to-white border border-amber-100 p-5 pb-0 overflow-hidden">
-        <div class="flex gap-6 overflow-x-auto pb-6">
+      <div class="rounded-2xl bg-white border border-slate-300 p-5 shadow-sm relative overflow-hidden">
+        <div class="flex gap-5 overflow-x-auto pb-3 pt-2 no-scrollbar">
           <div
             v-for="(book, i) in store.popularBooks"
             :key="'pop-' + book.id"
             @click="goDetail(book.id)"
-            class="flex-shrink-0 w-28 cursor-pointer group pt-3"
+            class="flex-shrink-0 w-28 cursor-pointer group"
           >
-            <div class="relative">
-              <!-- rank medal — sits above the cover, not overlapping it -->
+            <div class="relative pt-2">
               <span
-                class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shadow-sm ring-2 ring-white"
+                class="absolute -top-1 left-1/2 -translate-x-1/2 z-20 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shadow-sm ring-2 ring-white"
                 :class="rankBadgeClass(i)"
               >
                 {{ i + 1 }}
               </span>
 
-              <div
-                class="relative rounded-md overflow-hidden shadow-md group-hover:shadow-xl group-hover:-translate-y-1.5 transition-all duration-300"
-                style="aspect-ratio: 2 / 3;"
-              >
-                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-black/15 z-10"></div>
-                <img v-if="book.cover_image" :src="coverUrl(book.cover_image)" class="w-full h-full object-cover" />
-                <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-100 via-emerald-50 to-amber-50">
-                  <span class="text-3xl opacity-60">📘</span>
+              <div class="relative rounded-xl overflow-hidden shadow-xs group-hover:shadow-lg group-hover:-translate-y-1 transition-all duration-300 bg-slate-100 aspect-[2/3]">
+                <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/15 z-10 pointer-events-none"></div>
+                <img v-if="book.cover_image" :src="coverUrl(book.cover_image)" :alt="book.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-50 to-amber-50">
+                  <span class="text-2xl opacity-60">📘</span>
                 </div>
-                <span class="absolute bottom-1.5 right-1.5 bg-amber-400 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow">
+                <div class="absolute bottom-1.5 right-1.5 bg-slate-900/90 backdrop-blur-md text-white text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs">
                   {{ book.borrows_count }}×
-                </span>
+                </div>
               </div>
             </div>
-            <p class="text-xs font-semibold text-gray-700 mt-2 line-clamp-2 leading-snug">{{ book.title }}</p>
+            <p class="text-xs font-bold text-slate-800 mt-2 line-clamp-2 leading-snug group-hover:text-emerald-700 transition-colors text-center">{{ book.title }}</p>
           </div>
         </div>
-
-        <!-- shelf edge — full-bleed inside the card, no overflow issues -->
-        <div class="h-3 -mx-5 bg-gradient-to-b from-amber-200 to-amber-300 shadow-[0_2px_4px_rgba(0,0,0,0.08)]"></div>
+        <div class="absolute bottom-0 inset-x-0 h-1 bg-slate-100"></div>
       </div>
     </div>
 
     <!-- ============ TOOLBAR ============ -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-4 mb-6">
-      <div class="flex flex-wrap gap-3">
-        <div class="relative flex-1 min-w-[220px]">
-          <MagnifyingGlassIcon class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+    <div class="bg-white rounded-2xl border border-slate-300 p-4 shadow-sm">
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="relative flex-1 min-w-[240px]">
+          <MagnifyingGlassIcon class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"/>
           <input
             v-model="store.filters.search"
             @input="debouncedSearch"
             type="text"
-            placeholder="Search title, author, ISBN..."
-            class="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-shadow"
+            placeholder="Search by title, author, or ISBN..."
+            class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:outline-emerald-600 transition-all shadow-2xs"
           />
         </div>
+
         <select
           v-model="store.filters.category_id"
           @change="store.fetchBooks()"
-          class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-600/20"
+          class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 outline-none focus:outline-emerald-600 transition-all shadow-2xs cursor-pointer"
         >
           <option value="">All Categories</option>
           <option v-for="c in store.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
         </select>
+
         <select
           v-model="store.filters.status"
           @change="store.fetchBooks()"
-          class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-600/20"
+          class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 outline-none focus:outline-emerald-600 transition-all shadow-2xs cursor-pointer"
         >
           <option value="">All Statuses</option>
           <option value="available">Available</option>
@@ -147,84 +173,103 @@
       </div>
     </div>
 
-    <!-- ============ BOOK GRID (unchanged) ============ -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-      <div v-if="store.loading" class="col-span-full text-center py-16 text-gray-400">Loading...</div>
-      <div v-else-if="!store.books.length" class="col-span-full text-center py-16 text-gray-400">No books found</div>
+    <!-- ============ BOOK GRID ============ -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <div v-if="store.loading" class="col-span-full py-20 flex flex-col items-center justify-center text-slate-400">
+        <div class="w-7 h-7 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading catalog books...</p>
+      </div>
+      
+      <div v-else-if="!store.books.length" class="col-span-full py-20 flex flex-col items-center justify-center text-slate-400 bg-white rounded-2xl border border-dashed border-slate-300">
+        <span class="text-4xl mb-2">📚</span>
+        <p class="text-xs font-black uppercase tracking-wider text-slate-900">No books found</p>
+        <p class="text-xs text-slate-400 mt-1">Try adjusting your filters or search terms.</p>
+      </div>
 
       <div
         v-for="book in store.books"
         :key="book.id"
-        class="group cursor-pointer"
+        class="bg-white rounded-2xl border border-slate-300 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer"
         @click="goDetail(book.id)"
       >
-        <div
-          class="relative rounded-lg overflow-hidden bg-gray-100 shadow-sm group-hover:shadow-2xl group-hover:-translate-y-1.5 transition-all duration-300 ease-out"
-          style="aspect-ratio: 2 / 3;"
-        >
-          <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-black/20 to-transparent z-10 pointer-events-none"></div>
+        <div class="p-3 pb-0">
+          <div class="relative rounded-xl overflow-hidden bg-slate-100 aspect-[2/3]">
+            <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/15 z-10 pointer-events-none"></div>
 
-          <img
-            v-if="book.cover_image"
-            :src="coverUrl(book.cover_image)"
-            :alt="book.title"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-          />
-          <div v-else class="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-emerald-50 via-white to-amber-50 border border-gray-100">
-            <span class="text-5xl opacity-70">📖</span>
-            <span class="text-[11px] px-3 text-center text-gray-400 line-clamp-2">{{ book.category?.name }}</span>
+            <img
+              v-if="book.cover_image"
+              :src="coverUrl(book.cover_image)"
+              :alt="book.title"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div v-else class="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-emerald-50 via-white to-slate-100">
+              <span class="text-4xl opacity-50">📖</span>
+              <span class="text-[10px] px-2 text-center text-slate-400 line-clamp-2 font-bold">{{ book.category?.name }}</span>
+            </div>
+
+            <!-- Status Badge -->
+            <span
+              class="absolute top-2.5 left-2.5 text-[10px] font-black px-2.5 py-1 rounded-lg shadow-xs z-20 uppercase tracking-wider"
+              :class="statusBadgeClass(book.status)"
+            >
+              {{ book.status }}
+            </span>
+
+            <!-- Available Quantity Indicator -->
+            <span
+              class="absolute bottom-2.5 right-2.5 text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-xs backdrop-blur-md z-20"
+              :class="book.available_qty > 0 ? 'bg-white/90 text-slate-900 border border-slate-200/50' : 'bg-slate-900/90 text-white'"
+            >
+              {{ book.available_qty }} / {{ book.total_qty }}
+            </span>
+
+            <!-- Out of stock overlay -->
+            <div v-if="book.available_qty === 0" class="absolute inset-0 bg-slate-950/50 backdrop-blur-[2px] flex items-center justify-center z-10 p-4">
+              <span class="text-white text-[10px] font-black uppercase tracking-wider border border-white/40 rounded-lg px-2.5 py-1 text-center shadow-md">Borrowed Out</span>
+            </div>
           </div>
 
-          <span
-            class="absolute top-2 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-20 capitalize"
-            :class="statusBadgeClass(book.status)"
-          >
-            {{ book.status }}
-          </span>
-
-          <span
-            class="absolute bottom-2 right-2 text-[11px] font-bold px-2 py-0.5 rounded-md shadow-sm backdrop-blur-sm z-20"
-            :class="book.available_qty > 0 ? 'bg-white/90 text-green-700' : 'bg-black/70 text-white'"
-          >
-            {{ book.available_qty }}/{{ book.total_qty }}
-          </span>
-
-          <div v-if="book.available_qty === 0" class="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
-            <span class="text-white text-xs font-bold tracking-wide border border-white/60 rounded-full px-3 py-1">All Copies Borrowed</span>
+          <div class="mt-3 px-1">
+            <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest block">{{ book.category?.name || 'General' }}</span>
+            <h3 class="font-extrabold text-sm text-slate-900 line-clamp-1 mt-0.5 group-hover:text-emerald-700 transition-colors">{{ book.title }}</h3>
           </div>
-
-          <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
         </div>
 
-        <div class="mt-2.5 px-0.5">
-          <h3 class="font-serif font-semibold text-gray-800 text-sm leading-snug line-clamp-2 group-hover:text-green-800 transition-colors">
-            {{ book.title }}
-          </h3>
-          <p class="text-xs text-gray-500 mt-0.5 truncate">{{ book.author }}</p>
-
-          <div class="flex items-center justify-between mt-1.5">
-            <div class="flex items-center gap-1">
-              <span class="text-amber-400 text-xs">★</span>
-              <span class="text-xs text-gray-600 font-medium">{{ Number(book.rating_avg || 0).toFixed(1) }}</span>
-              <span class="text-xs text-gray-400">({{ book.rating_count || 0 }})</span>
-            </div>
-            <span class="text-[11px] text-gray-400 truncate max-w-[45%]">{{ book.category?.name }}</span>
+        <div class="p-4 pt-3 flex items-center justify-between mt-2 border-t border-slate-200 bg-slate-50/70">
+          <div class="flex items-center gap-1">
+            <span class="text-amber-400 text-xs">★</span>
+            <span class="text-xs text-slate-900 font-extrabold">{{ Number(book.rating_avg || 0).toFixed(1) }}</span>
+            <span class="text-[10px] text-slate-400 font-medium">({{ book.rating_count || 0 }})</span>
           </div>
+          <span class="text-[11px] font-medium text-slate-500 truncate max-w-[50%]" :title="book.author">{{ book.author }}</span>
         </div>
       </div>
     </div>
 
-    <div class="flex justify-center gap-2 mt-8" v-if="store.pagination.last_page > 1">
-      <button v-for="p in store.pagination.last_page" :key="p" @click="store.fetchBooks(p)"
-        class="w-8 h-8 rounded-lg text-sm transition-colors" :class="p === store.pagination.current_page ? 'bg-green-700 text-white' : 'bg-white border text-gray-600 hover:bg-green-50'">
+    <!-- ============ PAGINATION ============ -->
+    <div class="flex items-center justify-center gap-2 pt-2" v-if="store.pagination.last_page > 1">
+      <button
+        v-for="p in store.pagination.last_page"
+        :key="p"
+        @click="store.fetchBooks(p)"
+        class="w-9 h-9 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+        :class="p === store.pagination.current_page ? 'bg-emerald-700 text-white shadow-md' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'"
+      >
         {{ p }}
       </button>
     </div>
 
-    <div v-if="showCreateModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <h2 class="text-lg font-bold mb-4">Add New Book</h2>
-        <BookForm :loading="store.loading" :errors="store.errors" @submit="handleCreate" @cancel="showCreateModal = false" />
+    <!-- ============ CREATE MODAL ============ -->
+    <div v-if="showCreateModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-300 space-y-4">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="font-serif text-lg font-black text-slate-900">Add New Book</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Register a new title into the library inventory catalog.</p>
+          </div>
+          <button @click="showCreateModal = false" class="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer">✕</button>
+        </div>
+        <BookForm :errors="store.errors" :loading="store.loading" @cancel="showCreateModal = false" @submit="handleCreate"/>
       </div>
     </div>
   </div>
@@ -281,19 +326,19 @@ function coverUrl(path) {
 
 function statusBadgeClass(status) {
   return {
-    available: 'bg-green-500 text-white',
-    damaged: 'bg-amber-500 text-white',
-    lost: 'bg-red-500 text-white',
-    archived: 'bg-gray-500 text-white',
-  }[status] || 'bg-gray-400 text-white'
+    available: 'bg-emerald-500 text-white shadow-xs',
+    damaged: 'bg-amber-400 text-slate-950 shadow-xs',
+    lost: 'bg-rose-500 text-white shadow-xs',
+    archived: 'bg-slate-500 text-white shadow-xs',
+  }[status] || 'bg-slate-400 text-white'
 }
 
 function rankBadgeClass(index) {
   return [
-    'bg-amber-400 text-white',
-    'bg-gray-300 text-gray-700',
+    'bg-amber-400 text-slate-950',
+    'bg-slate-200 text-slate-700',
     'bg-amber-700 text-white',
-  ][index] || 'bg-gray-100 text-gray-500'
+  ][index] || 'bg-slate-100 text-slate-600'
 }
 
 onMounted(() => {
@@ -302,3 +347,13 @@ onMounted(() => {
   store.fetchPopularBooks()
 })
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>

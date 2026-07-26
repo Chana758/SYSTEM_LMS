@@ -1,132 +1,170 @@
 <template>
-  <div>
-    <!-- Header -->
-    <div class="flex items-start justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Notifications</h1>
-      <div class="flex gap-2">
+  <div class="space-y-6 pb-12">
+    <!-- Header Banner - Redesigned matching Image 3 style -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-emerald-50 border-2 border-emerald-200 rounded-xl flex items-center justify-center text-xl shadow-2xs flex-shrink-0">
+          🔔
+        </div>
+        <div>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Notifications</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">Stay updated with alerts, announcements, and system messages</p>
+        </div>
+      </div>
+      
+      <div class="flex flex-wrap items-center gap-2">
         <button
           v-if="store.unreadCount > 0"
           @click="handleMarkAll"
-          class="border border-green-200 text-green-700 hover:bg-green-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          class="inline-flex items-center gap-2 bg-white border-2 border-slate-200 hover:border-slate-300 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-2xs"
         >
-          Mark all read ({{ store.unreadCount }})
+          <span>✨</span> Mark all read ({{ store.unreadCount }})
         </button>
         <button
           v-if="canSend"
           @click="showCompose = true"
-          class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+          class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md active:scale-95"
         >
-          + Send Notification
+          <span>+</span> Send Notification
         </button>
       </div>
     </div>
 
-    <!-- Stat cards -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-          <BellIcon class="w-[18px] h-[18px] text-gray-600" />
+    <!-- Main Container matching Digital Library, Fines & Reservations Style -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg space-y-6 border-dashed">
+      
+      <!-- Stat Cards Grid - Redesigned following Image 3 layout pattern -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm space-y-3 relative">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-slate-50 border-2 border-slate-200 flex items-center justify-center shadow-2xs">
+              <BellIcon class="w-5 h-5 text-slate-600" />
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Total</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-slate-900 tracking-tight">{{ store.pagination.total || 0 }}</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">All alerts</p>
+          </div>
         </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ store.pagination.total || 0 }}</p>
-          <p class="text-xs text-gray-500">Total</p>
+
+        <div class="bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm space-y-3 relative">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center shadow-2xs">
+              <EnvelopeIcon class="w-5 h-5 text-emerald-600" />
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Unread</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-slate-900 tracking-tight">{{ store.unreadCount || 0 }}</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">Pending review</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm space-y-3 relative">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 border-2 border-rose-200 flex items-center justify-center shadow-2xs">
+              <ExclamationTriangleIcon class="w-5 h-5 text-rose-500" />
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Overdue</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-slate-900 tracking-tight">{{ overdueCount }}</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">Overdue alerts</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm space-y-3 relative">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-sky-50 border-2 border-sky-200 flex items-center justify-center shadow-2xs">
+              <CalendarDaysIcon class="w-5 h-5 text-sky-600" />
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Reservation</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-slate-900 tracking-tight">{{ reservationCount }}</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">Reservation updates</p>
+          </div>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-          <EnvelopeIcon class="w-[18px] h-[18px] text-green-700" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ store.unreadCount || 0 }}</p>
-          <p class="text-xs text-gray-500">Unread</p>
-        </div>
+      <!-- Toolbar with filters -->
+      <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-200 p-4 shadow-2xs">
+        <NotificationFilter v-model="filters" @change="handleFilterChange" />
       </div>
 
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-          <ExclamationTriangleIcon class="w-[18px] h-[18px] text-red-500" />
+      <!-- Notifications List or Loading / Empty States -->
+      <div class="space-y-3">
+        <div v-if="store.loading" class="text-center py-20 text-slate-400 font-bold text-xs uppercase tracking-widest">
+          Loading notifications...
         </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ overdueCount }}</p>
-          <p class="text-xs text-gray-500">Overdue alerts</p>
+
+        <div v-else-if="!store.notifications.length" class="bg-slate-50/50 rounded-2xl border-2 border-slate-200 p-16 text-center space-y-3 shadow-2xs">
+          <div class="w-12 h-12 bg-emerald-50 border-2 border-emerald-200 rounded-xl flex items-center justify-center mx-auto text-xl shadow-2xs text-emerald-600">
+            <BellIcon class="w-6 h-6" />
+          </div>
+          <div>
+            <p class="text-sm font-black text-slate-900 uppercase tracking-wider">No notifications found</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">You're all caught up — new alerts will appear here.</p>
+          </div>
         </div>
+
+        <NotificationCard
+          v-for="n in store.notifications" :key="n.id"
+          :notification="n"
+          @click="goDetail(n)"
+          @delete="handleDelete(n.id)"
+        />
       </div>
 
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-          <CalendarDaysIcon class="w-[18px] h-[18px] text-blue-600" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ reservationCount }}</p>
-          <p class="text-xs text-gray-500">Reservation updates</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Toolbar with filters -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-4 mb-6">
-      <NotificationFilter v-model="filters" @change="handleFilterChange" />
-    </div>
-
-    <div class="space-y-3">
-      <div v-if="store.loading" class="text-center py-16 text-gray-400 text-sm">Loading...</div>
-
-      <div v-else-if="!store.notifications.length" class="flex flex-col items-center justify-center py-16 border border-dashed border-gray-200 rounded-2xl bg-gray-50/50">
-        <div class="w-14 h-14 rounded-full bg-white border border-gray-200 flex items-center justify-center mb-3">
-          <BellIcon class="w-6 h-6 text-gray-300" />
-        </div>
-        <p class="text-gray-700 font-semibold">No notifications found</p>
-        <p class="text-sm text-gray-400 mt-1">You're all caught up — new alerts will appear here.</p>
+      <!-- Pagination -->
+      <div class="flex justify-center gap-2 pt-4" v-if="store.pagination.last_page > 1">
+        <button
+          v-for="p in store.pagination.last_page" :key="p"
+          @click="store.fetchNotifications(p, activeParams)"
+          class="w-9 h-9 rounded-xl text-xs font-black transition-all shadow-2xs"
+          :class="p === store.pagination.current_page ? 'bg-emerald-600 text-white border-2 border-emerald-700 shadow-md' : 'bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'"
+        >
+          {{ p }}
+        </button>
       </div>
 
-      <NotificationCard
-        v-for="n in store.notifications" :key="n.id"
-        :notification="n"
-        @click="goDetail(n)"
-        @delete="handleDelete(n.id)"
-      />
-    </div>
-
-    <div class="flex justify-center gap-2 mt-8" v-if="store.pagination.last_page > 1">
-      <button
-        v-for="p in store.pagination.last_page" :key="p"
-        @click="store.fetchNotifications(p, activeParams)"
-        class="w-8 h-8 rounded-lg text-sm font-medium transition-colors"
-        :class="p === store.pagination.current_page ? 'bg-green-700 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-green-50 hover:border-green-200'"
-      >
-        {{ p }}
-      </button>
     </div>
 
     <!-- Compose modal — admin/librarian only -->
-    <div v-if="showCompose" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-2xl p-6 w-full max-w-md">
-        <h2 class="text-lg font-bold text-gray-800 mb-4">Send Notification</h2>
+    <div v-if="showCompose" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 sm:p-8 w-full max-w-md shadow-2xl space-y-6">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-700 border-2 border-emerald-200 mb-2 shadow-2xs">
+            Broadcaster
+          </span>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Send Notification</h2>
+        </div>
+
         <form @submit.prevent="handleSend" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Recipient</label>
-            <select v-model="compose.target" class="w-full border rounded-lg px-3 py-2 text-sm">
+            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Recipient</label>
+            <select v-model="compose.target" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 transition-all shadow-2xs">
               <option value="broadcast">All Members</option>
               <option value="single">Specific Member</option>
             </select>
           </div>
 
           <div v-if="compose.target === 'single'" class="relative">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Member</label>
+            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Member</label>
             <input
               v-model="memberQuery"
               type="text"
               placeholder="Search member..."
-              class="w-full border rounded-lg px-3 py-2 text-sm"
+              class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 transition-all shadow-2xs"
               @input="debouncedMemberSearch"
             />
-            <p v-if="selectedMember" class="text-xs text-green-600 mt-1">✓ {{ selectedMember.name }}</p>
-            <div v-if="memberResults.length" class="absolute z-10 mt-1 w-full bg-white border rounded-lg shadow-lg max-h-40 overflow-y-auto">
+            <p v-if="selectedMember" class="text-xs font-black text-emerald-600 mt-1.5">✓ {{ selectedMember.name }}</p>
+            <div v-if="memberResults.length" class="absolute z-10 mt-1.5 w-full bg-white border-2 border-slate-200 rounded-xl shadow-xl max-h-40 overflow-y-auto divide-y divide-slate-100">
               <button
                 v-for="m in memberResults" :key="m.id" type="button"
                 @click="selectMember(m)"
-                class="block w-full text-left px-3 py-2 text-sm hover:bg-green-50"
+                class="block w-full text-left px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-colors"
               >
                 {{ m.name }}
               </button>
@@ -134,8 +172,8 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-            <select v-model="compose.type" class="w-full border rounded-lg px-3 py-2 text-sm">
+            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Type</label>
+            <select v-model="compose.type" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 transition-all shadow-2xs">
               <option value="announcement">Announcement</option>
               <option value="system">System</option>
               <option value="overdue">Overdue</option>
@@ -145,22 +183,22 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-            <input v-model="compose.title" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" required />
+            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Title</label>
+            <input v-model="compose.title" type="text" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 transition-all shadow-2xs" required />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-            <textarea v-model="compose.message" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
+            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Message</label>
+            <textarea v-model="compose.message" rows="3" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 transition-all shadow-2xs"></textarea>
           </div>
 
-          <p v-if="composeError" class="text-red-500 text-sm">{{ composeError }}</p>
+          <p v-if="composeError" class="text-rose-500 text-xs font-bold">{{ composeError }}</p>
 
-          <div class="flex gap-2 pt-2">
-            <button type="button" @click="showCompose = false" class="flex-1 border border-gray-300 text-gray-600 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+          <div class="flex gap-3 pt-2">
+            <button type="button" @click="showCompose = false" class="flex-1 bg-white border-2 border-slate-200 text-slate-700 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider hover:bg-slate-50 hover:border-slate-300 transition-all shadow-2xs">
               Cancel
             </button>
-            <button type="submit" :disabled="sending" class="flex-1 bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-lg font-medium disabled:opacity-50 transition-colors">
+            <button type="submit" :disabled="sending" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-black uppercase tracking-wider disabled:opacity-50 transition-all shadow-md active:scale-95">
               {{ sending ? 'Sending...' : 'Send' }}
             </button>
           </div>

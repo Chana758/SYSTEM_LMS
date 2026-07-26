@@ -1,86 +1,106 @@
 <template>
-  <div>
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">My Reservations</h1>
-        <p class="text-sm text-gray-400 mt-0.5">Track your place in line and pick up books when they're ready.</p>
-      </div>
-      <button
-        @click="showCreateModal = true"
-        class="inline-flex items-center gap-1.5 bg-green-700 hover:bg-green-800 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition-colors"
-      >
-        + Reserve a Book
-      </button>
-    </div>
-
-    <div v-if="store.loading" class="text-center py-16 text-gray-400 text-sm">Loading your reservations…</div>
-
-    <!-- Empty state -->
-    <div v-else-if="!store.myReservations.length">
-      <!-- How it works — shown first, guides new members before the empty message -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
-          <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center mb-3">
-            <span class="text-sm font-bold text-amber-600">1</span>
+  <div class="space-y-6 pb-12">
+    <!-- Main Wrapper Card -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 shadow-md p-6 md:p-8 space-y-6">
+      
+      <!-- Header Banner -->
+      <div class="flex items-center justify-between pb-6 border-b border-slate-200">
+        <div class="flex items-center gap-5">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <BookmarkIcon class="w-7 h-7 text-emerald-700" />
           </div>
-          <p class="text-sm font-semibold text-gray-800 mb-1">Reserve a checked-out book</p>
-          <p class="text-xs text-gray-400 leading-relaxed">Find a title that's currently unavailable and join the queue.</p>
-        </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
-          <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center mb-3">
-            <span class="text-sm font-bold text-blue-600">2</span>
-          </div>
-          <p class="text-sm font-semibold text-gray-800 mb-1">We hold your place in line</p>
-          <p class="text-xs text-gray-400 leading-relaxed">You'll see your queue position update as copies are returned.</p>
-        </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
-          <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center mb-3">
-            <span class="text-sm font-bold text-green-700">3</span>
-          </div>
-          <p class="text-sm font-semibold text-gray-800 mb-1">Pick it up when it's ready</p>
-          <p class="text-xs text-gray-400 leading-relaxed">We'll notify you the moment your reserved copy is available.</p>
-        </div>
-      </div>
-
-      <div class="flex flex-col items-center justify-center py-16 px-6 border border-dashed border-gray-200 rounded-2xl bg-gray-50/50">
-        <div class="relative w-16 h-16 mb-4">
-          <div class="absolute inset-0 rounded-full bg-green-100/70"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <BookOpenIcon class="w-7 h-7 text-green-700" />
+          <div>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">My Reservations</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">Track your place in line and pick up books when they're ready.</p>
           </div>
         </div>
-        <p class="text-gray-800 font-semibold">Your shelf is empty</p>
-        <p class="text-sm text-gray-400 mt-1 mb-4 text-center max-w-xs">
-          Reserve a book that's currently checked out and we'll hold your spot when it's back.
-        </p>
         <button
           @click="showCreateModal = true"
-          class="text-sm font-medium text-green-700 hover:text-green-800 hover:underline"
+          class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-sm transition-colors"
         >
-          Browse and reserve a book →
+          + Reserve a Book
         </button>
       </div>
+
+      <!-- Loading State -->
+      <div v-if="store.loading" class="bg-white rounded-2xl border-2 border-slate-300 p-14 text-center text-slate-400 text-sm font-semibold shadow-2xs">
+        Loading your reservations…
+      </div>
+
+      <!-- Empty state & Onboarding Steps -->
+      <div v-else-if="!store.myReservations.length" class="space-y-6">
+        <!-- How it works (Bold & structured) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-300 p-5 shadow-2xs space-y-2">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center shadow-2xs">
+              <span class="text-xs font-black text-amber-700">1</span>
+            </div>
+            <p class="text-xs font-extrabold text-slate-900">Reserve a checked-out book</p>
+            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">Find a title that's currently unavailable and join the queue.</p>
+          </div>
+
+          <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-300 p-5 shadow-2xs space-y-2">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 border-2 border-blue-300 flex items-center justify-center shadow-2xs">
+              <span class="text-xs font-black text-blue-700">2</span>
+            </div>
+            <p class="text-xs font-extrabold text-slate-900">We hold your place in line</p>
+            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">You'll see your queue position update as copies are returned.</p>
+          </div>
+
+          <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-300 p-5 shadow-2xs space-y-2">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center shadow-2xs">
+              <span class="text-xs font-black text-emerald-700">3</span>
+            </div>
+            <p class="text-xs font-extrabold text-slate-900">Pick it up when it's ready</p>
+            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">We'll notify you the moment your reserved copy is available.</p>
+          </div>
+        </div>
+
+        <!-- Empty Box Display -->
+        <div class="flex flex-col items-center justify-center py-16 px-6 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50/50 shadow-2xs">
+          <div class="relative w-14 h-14 mb-4">
+            <div class="absolute inset-0 rounded-2xl bg-emerald-100 border-2 border-emerald-200"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <BookOpenIcon class="w-6 h-6 text-emerald-700" />
+            </div>
+          </div>
+          <p class="text-slate-900 font-extrabold text-sm">Your shelf is empty</p>
+          <p class="text-xs text-slate-500 font-bold mt-1 mb-4 text-center max-w-xs">
+            Reserve a book that's currently checked out and we'll hold your spot when it's back.
+          </p>
+          <button
+            @click="showCreateModal = true"
+            class="text-xs font-black text-emerald-700 hover:text-emerald-800 hover:underline uppercase tracking-wider"
+          >
+            Browse and reserve a book →
+          </button>
+        </div>
+      </div>
+
+      <!-- Reservations List -->
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ReservationCard
+          v-for="r in store.myReservations" :key="r.id"
+          :reservation="r"
+          @cancel="handleCancel"
+        />
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-2 pt-2" v-if="store.myPagination.last_page > 1">
+        <button
+          v-for="p in store.myPagination.last_page" :key="p"
+          @click="store.fetchMyReservations(p)"
+          class="w-8 h-8 rounded-xl text-xs font-bold transition-colors shadow-2xs"
+          :class="p === store.myPagination.current_page ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-300 text-slate-700 hover:bg-emerald-50'"
+        >
+          {{ p }}
+        </button>
+      </div>
+
     </div>
 
-    <div v-else class="space-y-3">
-      <ReservationCard
-        v-for="r in store.myReservations" :key="r.id"
-        :reservation="r"
-        @cancel="handleCancel"
-      />
-    </div>
-
-    <div class="flex justify-center gap-2 mt-8" v-if="store.myPagination.last_page > 1">
-      <button
-        v-for="p in store.myPagination.last_page" :key="p"
-        @click="store.fetchMyReservations(p)"
-        class="w-8 h-8 rounded-lg text-sm font-medium transition-colors"
-        :class="p === store.myPagination.current_page ? 'bg-green-700 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-green-50 hover:border-green-200'"
-      >
-        {{ p }}
-      </button>
-    </div>
-
+    <!-- Create Modal -->
     <ReservationCreateModal
       v-if="showCreateModal"
       @created="handleCreated"
@@ -91,7 +111,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { BookOpenIcon } from '@heroicons/vue/24/outline'
+import { BookOpenIcon, BookmarkIcon } from '@heroicons/vue/24/outline'
 import { useReservationStore } from '../store/reservationStore'
 import ReservationCard from '../components/ReservationCard.vue'
 import ReservationCreateModal from '../components/ReservationCreateModal.vue'

@@ -41,10 +41,17 @@
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Membership Type</label>
-        <select v-model="form.membership_type" class="w-full border rounded-lg px-3 py-2" :class="{ 'border-red-500': errors.membership_type }">
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-          <option value="external">External</option>
+        <!-- FIX: was a hardcoded 3-option list (student/teacher/external).
+             Now fetched live from the membership_types master table so
+             admin can add/rename/retire types from Settings →
+             Membership Types with zero code changes here. -->
+        <select
+          v-model="form.membership_type"
+          class="w-full border rounded-lg px-3 py-2"
+          :class="{ 'border-red-500': errors.membership_type }"
+          :disabled="loadingTypes"
+        >
+          <option v-for="t in membershipTypes" :key="t.code" :value="t.code">{{ t.label }}</option>
         </select>
         <p v-if="errors.membership_type" class="text-red-500 text-sm mt-1">{{ errors.membership_type }}</p>
       </div>
@@ -86,7 +93,8 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue'
+import { reactive, watch, ref, onMounted } from 'vue'
+import { membershipTypeService } from '../services/membershipTypeService'
 
 const props = defineProps({
   initialData: { type: Object, default: () => ({}) },
@@ -102,6 +110,31 @@ const form = reactive({
   phone: '', identity_card_no: '', emergency_contact: '',
   membership_type: 'student', max_borrow_limit: 3, address: '', status: 'active',
 })
+
+// FIX: dynamic membership type list, fetched from the backend master
+// table (GET /membership-types?active_only=1). Falls back to the
+// original 3 hardcoded options only if the API call fails, so the
+// form is never left completely unusable.
+const membershipTypes = ref([
+  { code: 'student', label: 'Student' },
+  { code: 'teacher', label: 'Teacher' },
+  { code: 'external', label: 'External' },
+])
+const loadingTypes = ref(false)
+
+async function loadMembershipTypes() {
+  loadingTypes.value = true
+  try {
+    const { data } = await membershipTypeService.getAll(true) // active_only=1
+    if (data.length) membershipTypes.value = data
+  } catch (e) {
+    // keep fallback list — form still usable even if this call fails
+  } finally {
+    loadingTypes.value = false
+  }
+}
+
+onMounted(loadMembershipTypes)
 
 watch(() => props.initialData, (data) => {
   if (data && Object.keys(data).length) {

@@ -68,7 +68,7 @@ import { useRoute } from 'vue-router'
 import {
   UserCircleIcon, IdentificationIcon, ShieldCheckIcon,
   AdjustmentsHorizontalIcon, Cog6ToothIcon, ArchiveBoxArrowDownIcon,
-  ChevronRightIcon,
+  RectangleStackIcon, ChevronRightIcon,
 } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/features/auth/store/authStore'
 
@@ -87,7 +87,10 @@ const personalItems = [
 const systemItems = computed(() => { 
   const items = [{ to: '/settings/system', icon: Cog6ToothIcon, label: 'System Settings' }]
   if (authStore.role === 'admin') {
-    items.push({ to: '/settings/backup', icon: ArchiveBoxArrowDownIcon, label: 'Backup & Restore' })
+    items.push(
+      { to: '/settings/membership-types', icon: RectangleStackIcon, label: 'Membership Types' },
+      { to: '/settings/backup', icon: ArchiveBoxArrowDownIcon, label: 'Backup & Restore' }
+    )
   }
   return items
 })

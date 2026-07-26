@@ -1,33 +1,49 @@
 <template>
-  <div>
-    <div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center flex-shrink-0">
-        <ExclamationTriangleIcon class="w-6 h-6 text-red-500" />
+  <div class="space-y-6 pb-12">
+    <!-- Main Wrapper Card -->
+    <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8 space-y-6">
+      
+      <!-- Header Banner -->
+      <div class="flex items-center justify-between pb-6 border-b border-slate-200">
+        <div class="flex items-center gap-5">
+          <div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <ExclamationTriangleIcon class="w-7 h-7 text-rose-600" />
+          </div>
+          <div>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Overdue Books</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">Books past their due date, with estimated fines.</p>
+          </div>
+        </div>
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-rose-600 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
+          Overdue
+        </span>
       </div>
-      <div>
-        <h1 class="text-xl font-bold text-gray-800">Overdue Books</h1>
-        <p class="text-sm text-gray-400 mt-0.5">Books past their due date, with estimated fines.</p>
+
+      <!-- Overdue Table Component Container -->
+      <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+        <OverdueTable
+          :items="store.overdueBorrows"
+          :loading="store.loading"
+          @return="returningBorrow = $event"
+          @remind="handleRemind"
+        />
       </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-2 pt-2" v-if="store.pagination.last_page > 1">
+        <button
+          v-for="p in store.pagination.last_page" :key="p"
+          @click="store.fetchOverdue(p)"
+          class="w-8 h-8 rounded-xl text-xs font-bold transition-colors shadow-2xs"
+          :class="p === store.pagination.current_page ? 'bg-rose-600 text-white' : 'bg-white border border-slate-300 text-slate-700 hover:bg-rose-50'"
+        >
+          {{ p }}
+        </button>
+      </div>
+
     </div>
 
-    <OverdueTable
-      :items="store.overdueBorrows"
-      :loading="store.loading"
-      @return="returningBorrow = $event"
-      @remind="handleRemind"
-    />
-
-    <div class="flex justify-center gap-2 mt-6" v-if="store.pagination.last_page > 1">
-      <button
-        v-for="p in store.pagination.last_page" :key="p"
-        @click="store.fetchOverdue(p)"
-        class="w-8 h-8 rounded-lg text-sm transition-colors"
-        :class="p === store.pagination.current_page ? 'bg-red-500 text-white' : 'bg-white border text-gray-600 hover:bg-red-50'"
-      >
-        {{ p }}
-      </button>
-    </div>
-
+    <!-- Return Modal Form -->
     <ReturnForm
       v-if="returningBorrow"
       :borrow="returningBorrow"

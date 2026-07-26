@@ -1,27 +1,29 @@
 <template>
-  <div class="p-6">
-    <!-- Header card -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center flex-shrink-0">
-        <UserCircleIcon class="w-6 h-6 text-green-700" />
+  <div class="space-y-6 pb-12">
+    <!-- Header Banner -->
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex items-center gap-4">
+      <div class="w-12 h-12 bg-emerald-50 border-2 border-emerald-200 rounded-xl flex items-center justify-center text-xl shadow-2xs flex-shrink-0">
+        👤
       </div>
       <div>
-        <h1 class="text-xl font-bold text-gray-800">Settings</h1>
-        <p class="text-sm text-gray-400 mt-0.5">Manage your profile, account, and system preferences.</p>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Settings</h1>
+        <p class="text-xs font-bold text-slate-500 mt-0.5">Manage your profile, account, and system preferences.</p>
       </div>
     </div>
 
-    <SettingsMenu />
-    <div class="flex gap-6">
-      <SettingsNav />
-      <div class="flex-1"><ProfileSettings /></div>
+    <!-- Layout Container -->
+    <div class="flex flex-col lg:flex-row gap-6 items-start">
+      <div class="w-full lg:w-72 flex-shrink-0">
+        <SettingsNav />
+      </div>
+      <div class="w-full flex-1 bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed">
+        <ProfileSettings class="w-full" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { UserCircleIcon } from '@heroicons/vue/24/outline'
 import SettingsNav from '@/features/settings/components/SettingsNav.vue'
-import SettingsMenu from '@/features/settings/components/SettingsMenu.vue'
 import ProfileSettings from '@/features/settings/components/ProfileSettings.vue'
 </script>

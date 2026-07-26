@@ -1,86 +1,116 @@
 <template>
-  <div v-if="store.currentMember">
-    <h1 class="text-2xl font-bold text-gray-900 tracking-tight mb-6">My Profile</h1>
+  <div v-if="store.currentMember" class="space-y-6 pb-12">
+    <!-- ============ HEADER SECTION ============ -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">My Profile</h1>
+        <p class="text-xs font-semibold text-slate-500 mt-0.5">Manage your library account information, checkouts, and preferences.</p>
+      </div>
+    </div>
 
     <div class="space-y-6">
       <MemberCard :member="store.currentMember" />
 
-      <!-- Quick stats — self-service links, no edit rights here -->
+      <!-- Quick stats — vertical layout matching the dashboard stat cards style -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- My Borrows -->
         <router-link
           :to="{ name: 'my-borrows-page' }"
-          class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 flex items-center gap-3 hover:border-green-300 transition-colors"
+          class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-4 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-300 group cursor-pointer"
         >
-          <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-            <ClockIcon class="w-5 h-5 text-green-700" />
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <ClockIcon class="w-5 h-5 text-emerald-700" />
+            </div>
+            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-emerald-600 transition-colors">Active</span>
           </div>
           <div>
-            <p class="text-sm font-semibold text-gray-800">My Borrows</p>
-            <p class="text-xs text-gray-400">View active checkouts</p>
+            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">My Borrows</p>
+            <p class="text-[11px] font-bold text-emerald-600 tracking-wide">View active checkouts</p>
           </div>
         </router-link>
 
+        <!-- My Reservations -->
         <router-link
           :to="{ name: 'my-reservations' }"
-          class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 flex items-center gap-3 hover:border-green-300 transition-colors"
+          class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-4 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-300 group cursor-pointer"
         >
-          <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-            <CalendarDaysIcon class="w-5 h-5 text-blue-600" />
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <CalendarDaysIcon class="w-5 h-5 text-blue-600" />
+            </div>
+            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Queue</span>
           </div>
           <div>
-            <p class="text-sm font-semibold text-gray-800">My Reservations</p>
-            <p class="text-xs text-gray-400">Track your queue position</p>
+            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">My Reservations</p>
+            <p class="text-[11px] font-bold text-blue-600 tracking-wide">Track your queue position</p>
           </div>
         </router-link>
 
-        <!-- FIX: was "/fines" (the admin/librarian-only Fines Management
-             page, gated by role:admin,librarian on the backend and by
-             roleGuard on the frontend) — a member clicking this always
-             got redirected to /unauthorized. Members have their own
-             dedicated read-only route at /my-fines (backend:
-             GET /my-fines -> FineController::myFines(), also linked from
-             Sidebar.vue's "My Fines" entry with permission: ['member']). -->
+        <!-- My Fines -->
         <router-link
           to="/my-fines"
-          class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 flex items-center gap-3 hover:border-green-300 transition-colors"
+          class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-4 flex flex-col justify-between transition-all hover:shadow-md hover:border-rose-300 group cursor-pointer"
         >
-          <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-            <BanknotesIcon class="w-5 h-5 text-red-500" />
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-9 h-9 rounded-lg bg-rose-50 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <BanknotesIcon class="w-5 h-5 text-rose-500" />
+            </div>
+            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-rose-500 transition-colors">Balance</span>
           </div>
           <div>
-            <p class="text-sm font-semibold text-gray-800">My Fines</p>
-            <p class="text-xs text-gray-400">Check outstanding balance</p>
+            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">My Fines</p>
+            <p class="text-[11px] font-bold text-rose-500 tracking-wide">Check outstanding balance</p>
           </div>
         </router-link>
       </div>
 
-      <div class="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 class="text-base font-bold text-gray-800 mb-4">Contact Details</h2>
+      <!-- Contact Details Card -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-2xs space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-lg font-black text-slate-900 tracking-tight">Contact Details</h2>
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">Your registered personal information on file.</p>
+          </div>
+          <span class="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase tracking-wider border border-emerald-200/60">
+            Verified Account
+          </span>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Phone Number</p>
-            <p class="text-gray-700">{{ store.currentMember.user?.phone || '—' }}</p>
+          <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Phone Number</p>
+            <p class="text-slate-900 font-bold font-mono text-sm">{{ store.currentMember.user?.phone || '—' }}</p>
           </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Identity Card No.</p>
-            <p class="text-gray-700">{{ store.currentMember.identity_card_no || '—' }}</p>
+          <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Identity Card No.</p>
+            <p class="text-slate-900 font-bold font-mono text-sm">{{ store.currentMember.identity_card_no || '—' }}</p>
           </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Emergency Contact</p>
-            <p class="text-gray-700">{{ store.currentMember.emergency_contact || '—' }}</p>
+          <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Emergency Contact</p>
+            <p class="text-slate-900 font-bold font-mono text-sm">{{ store.currentMember.emergency_contact || '—' }}</p>
           </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Address</p>
-            <p class="text-gray-700">{{ store.currentMember.address || '—' }}</p>
+          <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Address</p>
+            <p class="text-slate-900 font-bold text-sm">{{ store.currentMember.address || '—' }}</p>
           </div>
         </div>
-        <p class="text-xs text-gray-400 mt-5">
-          To update your contact details, please visit the library desk or contact a librarian.
-        </p>
+
+        <div class="bg-amber-50/80 border border-amber-200/80 rounded-xl p-4 flex items-start gap-3.5 shadow-2xs">
+          <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-sm">💡</span>
+          </div>
+          <p class="text-xs font-semibold text-amber-900 leading-relaxed">
+            To update your contact details or personal credentials, please visit the library desk or contact an authorized librarian directly.
+          </p>
+        </div>
       </div>
     </div>
   </div>
-  <div v-else class="text-center py-16 text-gray-400 text-sm">Loading...</div>
+  <div v-else class="text-center py-20 text-slate-400">
+    <div class="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading your profile...</p>
+  </div>
 </template>
 
 <script setup>

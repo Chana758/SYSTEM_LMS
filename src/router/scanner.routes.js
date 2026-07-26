@@ -17,6 +17,13 @@ export default [
         component: () => import('@/features/scanner/pages/ScanHistoryPage.vue'),
         meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
       },
+      //  Stocktake / batch inventory-audit mode
+      {
+        path: 'stocktake',
+        name: 'scanner.stocktake',
+        component: () => import('@/features/scanner/pages/StocktakePage.vue'),
+        meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
+      },
     ],
   },
 ]

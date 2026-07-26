@@ -72,7 +72,7 @@ import {
   ArrowUturnLeftIcon, BanknotesIcon, ChartBarIcon, Cog6ToothIcon,
   CpuChipIcon, SparklesIcon, QrCodeIcon, BellIcon, CalendarDaysIcon,
   DocumentTextIcon, ArchiveBoxArrowDownIcon, UserGroupIcon,
-  ArrowRightOnRectangleIcon, ExclamationTriangleIcon, ClockIcon,UserCircleIcon
+  ArrowRightOnRectangleIcon, ExclamationTriangleIcon, ClockIcon, UserCircleIcon,
 } from '@heroicons/vue/24/outline'
 import SidebarLink from './SidebarLink.vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
@@ -82,64 +82,53 @@ defineProps({ isCollapsed: Boolean })
 const router = useRouter()
 const authStore = useAuthStore()
 
-// ★ Menu permission settings — permission: ['admin', 'librarian', 'member']
-// Note: Borrow / Reservations / Fines each have 2 entries with the SAME display
-// name but DIFFERENT paths, because admin/librarian and member use separate
-// pages (management view vs. self-service view).
 const coreMenus = [
-  { name: 'Books',          path: '/books',           icon: BookOpenIcon,            permission: ['admin', 'librarian', 'member'] },
-  { name: 'My Profile',     path: '/my-profile',       icon: UserCircleIcon,          permission: ['member'] },
-  { name: 'Members',        path: '/members',         icon: UsersIcon,               permission: ['admin', 'librarian'] },
-  { name: 'Librarians',     path: '/staff',           icon: UserGroupIcon,           permission: ['admin'] },
+  { name: 'Books',             path: '/books',           icon: BookOpenIcon,            permission: ['admin', 'librarian', 'member'] },
+  { name: 'My Profile',        path: '/my-profile',      icon: UserCircleIcon,          permission: ['member'] },
+  { name: 'Members',           path: '/members',         icon: UsersIcon,               permission: ['admin'] },
+  { name: 'Librarians',        path: '/staff',           icon: UserGroupIcon,           permission: ['admin'] },
 
-  { name: 'Borrow',         path: '/borrow',          icon: ArrowsRightLeftIcon,     permission: ['admin', 'librarian'] },
-  { name: 'My Borrows',     path: '/my-borrows',      icon: ClockIcon,               permission: ['member'] },
+  { name: 'Borrow',            path: '/borrow',          icon: ArrowsRightLeftIcon,     permission: ['admin', 'librarian'] },
+  { name: 'My Borrows',        path: '/my-borrows',      icon: ClockIcon,               permission: ['member'] },
 
-  { name: 'Return',         path: '/return',          icon: ArrowUturnLeftIcon,      permission: ['admin', 'librarian'] },
-  { name: 'Overdue',        path: '/overdue',         icon: ExclamationTriangleIcon, permission: ['admin', 'librarian'] },
-  { name: 'Borrow History', path: '/borrow-history',  icon: ClockIcon,               permission: ['admin', 'librarian'] },
+  { name: 'Return',            path: '/return',          icon: ArrowUturnLeftIcon,      permission: ['admin', 'librarian'] },
+  { name: 'Overdue',           path: '/overdue',         icon: ExclamationTriangleIcon, permission: ['admin', 'librarian'] },
+  { name: 'Borrow History',    path: '/borrow-history',  icon: ClockIcon,               permission: ['admin', 'librarian'] },
 
-  { name: 'Reservations',   path: '/reservations',    icon: CalendarDaysIcon,        permission: ['admin', 'librarian'] },
+  { name: 'Reservations',      path: '/reservations',    icon: CalendarDaysIcon,        permission: ['admin', 'librarian'] },
   { name: 'My Reservations',   path: '/my-reservations', icon: CalendarDaysIcon,        permission: ['member'] },
 
-  { name: 'Fines',          path: '/fines',           icon: BanknotesIcon,           permission: ['admin', 'librarian'] },
-  { name: 'My Fines', path: '/my-fines', icon: BanknotesIcon, permission: ['member'] },,
+  { name: 'Fines',             path: '/fines',           icon: BanknotesIcon,           permission: ['admin', 'librarian'] },
+  { name: 'My Fines',          path: '/my-fines',        icon: BanknotesIcon,           permission: ['member'] },
 ]
 
 const smartMenus = [
-  { name: 'Digital Library',  path: '/digital-library',   icon: DocumentTextIcon, permission: ['admin', 'librarian', 'member'] },
-  { name: 'AI Chatbot',       path: '/chatbot',           icon: CpuChipIcon,      permission: ['admin', 'librarian', 'member'] },
-  { name: 'Recommendations',  path: '/ai-recommendation', icon: SparklesIcon,     permission: ['admin', 'librarian', 'member'] },
-
-  // FIX: Scanner store endpoint (`POST /scan`) is documented as
-  // "Any authenticated user (staff scanning at desk uses their own login)".
-  // If members are truly never meant to scan, this is fine as-is (business
-  // decision). Left unchanged here — flagged for confirmation with backend intent.
-  { name: 'Scanner',          path: '/scanner',           icon: QrCodeIcon,       permission: ['admin', 'librarian'] },
+  { name: 'Digital Library',   path: '/digital-library',   icon: DocumentTextIcon, permission: ['admin', 'librarian', 'member'] },
+  { name: 'AI Chatbot',        path: '/chatbot',           icon: CpuChipIcon,      permission: ['admin', 'librarian', 'member'] },
+  { name: 'Recommendations',   path: '/ai-recommendation', icon: SparklesIcon,     permission: ['admin', 'librarian', 'member'] },
+  { name: 'Scanner',           path: '/scanner',           icon: QrCodeIcon,       permission: ['admin', 'librarian'] },
 ]
 
 const systemMenus = [
-  { name: 'Reports',          path: '/reports',          icon: ChartBarIcon,            permission: ['admin', 'librarian'] },
-  { name: 'Notifications',    path: '/notifications',    icon: BellIcon,                permission: ['admin', 'librarian', 'member'] },
+  { name: 'Reports',           path: '/reports',           icon: ChartBarIcon,            permission: ['admin', 'librarian'] },
 
-  // FIX: Backup & Restore itself stays admin-only — correct, matches
-  // `role:admin` middleware on backup/create & backup/restore routes.
-  { name: 'Backup & Restore', path: '/settings/backup',  icon: ArchiveBoxArrowDownIcon, permission: ['admin'] },
+  //  FIX: removed the "Analytics" entry pointing to /dashboard/analytics.
+  // That page (AnalyticsPage.vue) was a duplicate of this Reports/Overview
+  // page but with hardcoded/mock data (fake circulation %, fake category
+  // breakdown, and a mislabeled "Total Revenue Collected" that actually
+  // showed unpaid fines). It has been deleted along with its route —
+  // /reports is now the single source of truth for analytics.ាច
 
-  // FIX (was ['admin'] only): `/settings/*` routes for Profile, Account,
-  // Security, and Preferences require only `auth:sanctum` — ANY authenticated
-  // user (member/librarian/admin) can reach them per backend routes/controllers.
-  // Restricting the sidebar entry to admin-only hid this menu entirely from
-  // members and librarians, even though they have valid access to their own
-  // profile, password, and preference settings. Sub-page visibility (System
-  // Settings, Backup & Restore) is still correctly gated inside
-  // SettingsNav.vue and by role-based route guards / backend middleware.
-  { name: 'Settings',         path: '/settings',         icon: Cog6ToothIcon,           permission: ['admin', 'librarian', 'member'] },
+  { name: 'Notifications',     path: '/notifications',     icon: BellIcon,                permission: ['admin', 'librarian', 'member'] },
+
+  { name: 'Card Approvals',    path: '/settings/card-approvals', icon: QrCodeIcon,        permission: ['admin', 'librarian'] },
+
+  { name: 'Backup & Restore',  path: '/settings/backup',   icon: ArchiveBoxArrowDownIcon, permission: ['admin'] },
+  { name: 'Settings',          path: '/settings',           icon: Cog6ToothIcon,          permission: ['admin', 'librarian', 'member'] },
 ]
 
 function canSee(key) {
   if (key === 'dashboard') {
-    // Matches: Route::middleware(['auth:sanctum','role:admin,librarian'])->get('dashboard', ...)
     return ['admin', 'librarian'].includes(authStore.role)
   }
   return true

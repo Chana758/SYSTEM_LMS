@@ -1,30 +1,48 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-200 p-5">
-    <div class="flex items-center justify-between mb-4">
-      <button @click="prevMonth" class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors">‹</button>
-      <h3 class="font-serif font-bold text-gray-800">{{ monthLabel }}</h3>
-      <button @click="nextMonth" class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors">›</button>
+  <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-md space-y-4">
+    <!-- Month Navigation Header -->
+    <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+      <button 
+        @click="prevMonth" 
+        class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors shadow-2xs"
+      >
+        ‹
+      </button>
+      <h3 class="font-black text-slate-900 tracking-tight text-sm uppercase">{{ monthLabel }}</h3>
+      <button 
+        @click="nextMonth" 
+        class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors shadow-2xs"
+      >
+        ›
+      </button>
     </div>
 
-    <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-medium text-gray-400 mb-1.5 uppercase tracking-wide">
+    <!-- Weekday Labels -->
+    <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
       <span v-for="d in ['Su','Mo','Tu','We','Th','Fr','Sa']" :key="d">{{ d }}</span>
     </div>
 
-    <div class="grid grid-cols-7 gap-1">
+    <!-- Calendar Grid -->
+    <div class="grid grid-cols-7 gap-1.5">
       <div v-for="n in leadingBlanks" :key="'b' + n"></div>
       <button
         v-for="day in daysInMonth" :key="day"
         @click="$emit('selectDay', dateKey(day))"
-        class="aspect-square rounded-lg text-xs flex flex-col items-center justify-center relative hover:bg-green-50 transition-colors"
-        :class="isToday(day) ? 'ring-2 ring-green-600 font-semibold text-green-800' : 'text-gray-600'"
+        class="aspect-square rounded-xl text-xs font-extrabold flex flex-col items-center justify-center relative border-2 border-transparent transition-all shadow-2xs"
+        :class="[
+          isToday(day) 
+            ? 'bg-emerald-50 border-emerald-500 text-emerald-800' 
+            : 'bg-slate-50/70 border-slate-200 hover:bg-emerald-50/50 hover:border-emerald-300 text-slate-700'
+        ]"
       >
         <span>{{ day }}</span>
-        <span v-if="countFor(day)" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+        <span v-if="countFor(day)" class="absolute bottom-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 ring-2 ring-white"></span>
       </button>
     </div>
 
-    <p class="text-xs text-gray-400 mt-3 inline-flex items-center gap-1.5">
-      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block"></span>
+    <!-- Legend Footer -->
+    <p class="text-[11px] font-bold text-slate-500 pt-2 border-t border-slate-200 inline-flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-amber-500 inline-block ring-2 ring-amber-100"></span>
       reservation(s) expiring on that day
     </p>
   </div>

@@ -1,48 +1,63 @@
 <template>
-  <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-md">
-      <h2 class="text-lg font-bold text-gray-800 mb-1">Reserve a Book</h2>
-      <p class="text-sm text-gray-500 mb-4">Search for a book that is currently out of stock.</p>
+  <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 w-full max-w-md shadow-xl space-y-5">
+      
+      <!-- Header -->
+      <div class="space-y-1">
+        <h2 class="text-xl font-black text-slate-900 tracking-tight">Reserve a Book</h2>
+        <p class="text-xs font-bold text-slate-500">Search for a book that is currently out of stock.</p>
+      </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div class="relative">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Book (Title or ISBN)</label>
+        <div class="relative space-y-1.5">
+          <label class="block text-xs font-black text-slate-700 uppercase tracking-wider">Book (Title or ISBN)</label>
+          
           <input
             v-model="bookQuery"
             type="text"
             placeholder="Search book..."
-            class="w-full border rounded-lg px-3 py-2"
+            class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-emerald-600 focus:outline-hidden transition-colors shadow-2xs"
             @input="debouncedSearch"
             @focus="showResults = true"
           />
-          <p v-if="selectedBook" class="text-xs mt-1" :class="selectedBook.available_qty > 0 ? 'text-amber-600' : 'text-green-600'">
+
+          <!-- Availability Hint -->
+          <p v-if="selectedBook" class="text-xs font-extrabold mt-1.5 p-2.5 rounded-xl border-2" :class="selectedBook.available_qty > 0 ? 'text-amber-800 bg-amber-50 border-amber-200' : 'text-emerald-800 bg-emerald-50 border-emerald-200'">
             ✓ {{ selectedBook.title }}
-            <span v-if="selectedBook.available_qty > 0"> — សៀវភៅនេះមានទំនេរ សូមខ្ចីដោយផ្ទាល់ជំនួសការកក់</span>
+            <span v-if="selectedBook.available_qty > 0" class="block font-bold text-[11px] mt-0.5">— សៀវភៅនេះមានទំនេរ សូមខ្ចីដោយផ្ទាល់ជំនួសការកក់</span>
           </p>
-          <div v-if="showResults && bookResults.length" class="absolute z-10 mt-1 w-full bg-white border rounded-lg shadow-lg max-h-48 overflow-y-auto">
+
+          <!-- Search Results Dropdown -->
+          <div v-if="showResults && bookResults.length" class="absolute z-10 mt-1 w-full bg-white border-2 border-slate-300 rounded-xl shadow-lg max-h-48 overflow-y-auto divide-y divide-slate-100">
             <button
               v-for="b in bookResults" :key="b.id" type="button"
               @click="selectBook(b)"
-              class="flex items-center justify-between w-full text-left px-3 py-2 text-sm hover:bg-green-50"
+              class="flex items-center justify-between w-full text-left px-3.5 py-2.5 text-xs font-bold hover:bg-emerald-50/70 transition-colors"
             >
-              <span>{{ b.title }} <span class="text-gray-400">— {{ b.author }}</span></span>
-              <span class="text-xs font-semibold" :class="b.available_qty > 0 ? 'text-green-600' : 'text-red-500'">
+              <span class="text-slate-900 truncate pr-2">{{ b.title }} <span class="text-slate-400 font-semibold">— {{ b.author }}</span></span>
+              <span class="text-[10px] font-black px-2 py-0.5 rounded-lg border flex-shrink-0" :class="b.available_qty > 0 ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-rose-600 bg-rose-50 border-rose-200'">
                 {{ b.available_qty }}/{{ b.total_qty }}
               </span>
             </button>
           </div>
         </div>
 
-        <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
+        <!-- Error Message -->
+        <p v-if="errorMessage" class="text-xs font-extrabold text-rose-600 bg-rose-50 border-2 border-rose-200 rounded-xl p-3 shadow-2xs">{{ errorMessage }}</p>
 
-        <div class="flex gap-2 pt-2">
-          <button type="button" @click="$emit('cancel')" class="flex-1 border border-gray-300 text-gray-600 py-2.5 rounded-lg font-medium hover:bg-gray-50">
+        <!-- Actions -->
+        <div class="flex gap-3 pt-2">
+          <button 
+            type="button" 
+            @click="$emit('cancel')" 
+            class="flex-1 border-2 border-slate-300 bg-white text-slate-700 py-2.5 rounded-xl text-xs font-extrabold hover:bg-slate-100 transition-colors shadow-2xs"
+          >
             Cancel
           </button>
           <button
             type="submit"
             :disabled="!selectedBook || loading"
-            class="flex-1 bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-lg font-medium disabled:opacity-50"
+            class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm"
           >
             {{ loading ? 'Reserving...' : 'Confirm Reservation' }}
           </button>

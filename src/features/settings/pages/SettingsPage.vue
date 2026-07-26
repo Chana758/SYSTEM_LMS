@@ -1,5 +1,7 @@
 <template>
-  <div class="p-6 flex items-center justify-center py-24 text-gray-400 text-sm">Redirecting...</div>
+  <div class="p-6 flex items-center justify-center py-24 text-slate-400 font-bold text-xs uppercase tracking-widest">
+    Redirecting to settings...
+  </div>
 </template>
 
 <script setup>

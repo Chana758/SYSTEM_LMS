@@ -1,75 +1,105 @@
 <template>
-  <div v-if="store.currentReservation">
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
-        <router-link to="/reservations" class="text-gray-400 hover:text-gray-600 text-sm">← Reservations</router-link>
-        <h1 class="text-xl font-bold text-gray-900 tracking-tight">Reservation Details</h1>
+  <div v-if="store.currentReservation" class="space-y-6 pb-12">
+    <!-- Header Banner -->
+    <div class="flex items-center justify-between pb-6 border-b border-slate-200">
+      <div class="flex items-center gap-4">
+        <router-link
+          to="/reservations"
+          class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors shadow-2xs shrink-0"
+          title="Back to Reservations"
+        >
+          ←
+        </router-link>
+        <div>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Reservation Details</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">Comprehensive view of book hold and queue status.</p>
+        </div>
       </div>
       <ReservationStatusBadge :status="store.currentReservation.status" />
     </div>
 
+    <!-- Main Grid Content -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="md:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 relative overflow-hidden">
-        <span class="absolute left-0 top-0 bottom-0 w-1.5" :class="spineClass(store.currentReservation.status)"></span>
+      
+      <!-- Details Card -->
+      <div class="md:col-span-2 bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 relative overflow-hidden shadow-md">
+        <!-- Spine Accent Bar -->
+        <span class="absolute left-0 top-0 bottom-0 w-2" :class="spineClass(store.currentReservation.status)"></span>
 
-        <div class="flex gap-5">
-          <div class="w-24 h-36 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 shadow-sm">
+        <!-- Book Info Section -->
+        <div class="flex gap-5 items-start">
+          <div class="w-24 h-36 rounded-xl overflow-hidden bg-slate-100 border-2 border-slate-200 flex-shrink-0 shadow-2xs">
             <img v-if="store.currentReservation.book?.cover_image" :src="coverUrl(store.currentReservation.book.cover_image)" class="w-full h-full object-cover" />
-            <div v-else class="w-full h-full flex items-center justify-center text-3xl text-gray-300">📖</div>
+            <div v-else class="w-full h-full flex items-center justify-center text-3xl text-slate-400">📖</div>
           </div>
-          <div>
-            <h2 class="text-lg font-bold text-gray-900">{{ store.currentReservation.book?.title }}</h2>
-            <p class="text-sm text-gray-500">{{ store.currentReservation.book?.author }}</p>
-            <p class="text-xs text-gray-400 mt-1">{{ store.currentReservation.book?.category?.name }}</p>
+          <div class="space-y-1">
+            <h2 class="text-lg font-black text-slate-900 tracking-tight">{{ store.currentReservation.book?.title }}</h2>
+            <p class="text-xs font-extrabold text-slate-600">{{ store.currentReservation.book?.author }}</p>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ store.currentReservation.book?.category?.name }}</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-5 mt-6 pt-6 border-t border-gray-100 text-sm">
-          <div>
-            <p class="text-gray-400 text-[11px] uppercase tracking-wide mb-1">Member</p>
-            <p class="text-gray-800 font-medium">{{ store.currentReservation.member?.user?.name }}</p>
-            <p class="text-xs text-gray-400">{{ store.currentReservation.member?.membership_no }}</p>
+        <!-- Meta Grid -->
+        <div class="grid grid-cols-2 gap-5 mt-6 pt-6 border-t-2 border-slate-100 text-sm">
+          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Member</p>
+            <p class="text-slate-900 font-extrabold">{{ store.currentReservation.member?.user?.name }}</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">{{ store.currentReservation.member?.membership_no }}</p>
           </div>
-          <div>
-            <p class="text-gray-400 text-[11px] uppercase tracking-wide mb-1">Queue Priority</p>
-            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-700 font-bold text-xs">
+
+          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Queue Priority</p>
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white border-2 border-slate-300 text-slate-900 font-black text-xs shadow-2xs">
               {{ store.currentReservation.priority_order }}
             </span>
           </div>
-          <div>
-            <p class="text-gray-400 text-[11px] uppercase tracking-wide mb-1">Reserved Date</p>
-            <p class="text-gray-800">{{ formatDate(store.currentReservation.reserved_date) }}</p>
+
+          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Reserved Date</p>
+            <p class="text-slate-900 font-extrabold text-xs mt-1">{{ formatDate(store.currentReservation.reserved_date) }}</p>
           </div>
-          <div>
-            <p class="text-gray-400 text-[11px] uppercase tracking-wide mb-1">Expires On</p>
-            <p class="text-gray-800">{{ formatDate(store.currentReservation.expire_date) }}</p>
+
+          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Expires On</p>
+            <p class="text-slate-900 font-extrabold text-xs mt-1">{{ formatDate(store.currentReservation.expire_date) }}</p>
           </div>
         </div>
       </div>
 
-      <div v-if="canManage" class="bg-white rounded-2xl border border-gray-200 p-6 h-fit space-y-3">
-        <h3 class="font-bold text-gray-900 mb-2">Actions</h3>
+      <!-- Action Panel -->
+      <div v-if="canManage" class="bg-white rounded-2xl border-2 border-slate-300 p-6 h-fit space-y-4 shadow-md">
+        <h3 class="font-black text-slate-900 text-sm tracking-tight">Actions</h3>
+        
         <button
           v-if="store.currentReservation.status === 'ready'"
           @click="handleFulfill"
           :disabled="actionLoading"
-          class="w-full bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-lg text-sm font-medium disabled:opacity-50 transition-colors shadow-sm"
+          class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm"
         >
           Mark as Fulfilled
         </button>
+
         <button
           v-if="['pending', 'ready'].includes(store.currentReservation.status)"
           @click="handleCancel"
           :disabled="actionLoading"
-          class="w-full border border-red-200 text-red-500 hover:bg-red-50 py-2.5 rounded-lg text-sm font-medium disabled:opacity-50 transition-colors"
+          class="w-full border-2 border-rose-200 bg-rose-50/50 text-rose-600 hover:bg-rose-100 py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-2xs"
         >
           Cancel Reservation
         </button>
-        <p v-if="actionMessage" class="text-sm" :class="actionSuccess ? 'text-emerald-600' : 'text-red-500'">{{ actionMessage }}</p>
+
+        <p v-if="actionMessage" class="text-xs font-extrabold p-3 rounded-xl border-2" :class="actionSuccess ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-rose-600 bg-rose-50 border-rose-200'">
+          {{ actionMessage }}
+        </p>
       </div>
+
     </div>
   </div>
-  <div v-else class="text-center py-16 text-gray-400 text-sm">Loading…</div>
+  
+  <!-- Loading State -->
+  <div v-else class="bg-white rounded-2xl border-2 border-slate-300 p-16 text-center text-slate-400 text-sm font-semibold shadow-2xs">
+    Loading reservation details…
+  </div>
 </template>
 
 <script setup>
@@ -93,9 +123,9 @@ function spineClass(status) {
     pending: 'bg-amber-400',
     ready: 'bg-blue-500',
     fulfilled: 'bg-emerald-500',
-    cancelled: 'bg-gray-300',
+    cancelled: 'bg-slate-300',
     expired: 'bg-rose-400',
-  }[status] || 'bg-gray-300'
+  }[status] || 'bg-slate-300'
 }
 
 async function handleFulfill() {

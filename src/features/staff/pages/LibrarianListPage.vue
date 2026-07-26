@@ -1,147 +1,189 @@
 <template>
-  <div>
-    <!-- Header -->
-    <div class="flex items-start justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Manage Librarians</h1>
-      <button
-        @click="openCreateModal"
-        class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
-      >
-        + Create New Librarian
-      </button>
-    </div>
-
-    <!-- Stat cards -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-          <UserGroupIcon class="w-[18px] h-[18px] text-blue-600" />
-        </div>
+  <div class="space-y-6 pb-12">
+    <!-- ============ MAIN CONTAINER WRAPPER ============ -->
+    <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8 space-y-8">
+      
+      <!-- Header -->
+      <div class="flex items-start justify-between pb-6 border-b border-slate-200">
         <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ store.pagination.total || 0 }}</p>
-          <p class="text-xs text-gray-500">Total librarians</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Manage Librarians</h1>
+          <p class="text-xs font-semibold text-slate-500 mt-0.5">View and manage library staff members and assignments.</p>
         </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-          <CheckCircleIcon class="w-[18px] h-[18px] text-green-700" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ activeCount }}</p>
-          <p class="text-xs text-gray-500">Active</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
-          <ClockIcon class="w-[18px] h-[18px] text-amber-600" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ onLeaveCount }}</p>
-          <p class="text-xs text-gray-500">On leave</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3.5 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-          <NoSymbolIcon class="w-[18px] h-[18px] text-gray-500" />
-        </div>
-        <div>
-          <p class="text-lg font-bold text-gray-900 leading-tight">{{ inactiveCount }}</p>
-          <p class="text-xs text-gray-500">Inactive</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Toolbar -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-4 mb-6">
-      <div class="flex flex-wrap gap-3">
-        <div class="relative flex-1 min-w-[240px]">
-          <MagnifyingGlassIcon class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            v-model="store.filters.search"
-            @input="debouncedSearch"
-            type="text"
-            placeholder="Search by name, email, employee ID..."
-            class="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-shadow"
-          />
-        </div>
-        <select
-          v-model="store.filters.status"
-          @change="store.fetchList()"
-          class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-600/20"
+        <button
+          @click="openCreateModal"
+          class="bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
         >
-          <option value="">All Statuses</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="on_leave">On Leave</option>
-        </select>
+          + Create New Librarian
+        </button>
       </div>
-    </div>
 
-    <!-- Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
-          <tr>
-            <th class="text-left px-5 py-3 font-semibold">Employee ID</th>
-            <th class="text-left px-5 py-3 font-semibold">Name</th>
-            <th class="text-left px-5 py-3 font-semibold">Department</th>
-            <th class="text-left px-5 py-3 font-semibold">Position</th>
-            <th class="text-left px-5 py-3 font-semibold">Status</th>
-            <th class="text-right px-5 py-3 font-semibold">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <tr v-if="store.loading">
-            <td colspan="6" class="text-center py-10 text-gray-400">Loading...</td>
-          </tr>
-          <tr v-else-if="!store.librarians.length">
-            <td colspan="6" class="text-center py-10 text-gray-400">No librarians found</td>
-          </tr>
-          <tr v-for="l in store.librarians" :key="l.id" class="hover:bg-gray-50 transition-colors">
-            <td class="px-5 py-3.5 font-mono text-xs text-gray-600">{{ l.employee_id }}</td>
-            <td class="px-5 py-3.5 font-medium text-gray-800">{{ l.user?.name }}</td>
-            <td class="px-5 py-3.5 text-gray-500">{{ l.department || '—' }}</td>
-            <td class="px-5 py-3.5 text-gray-500">{{ l.position || '—' }}</td>
-            <td class="px-5 py-3.5">
-              <span
-                class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold capitalize"
-                :class="statusClass(l.status)"
-              >
-                <span class="w-1.5 h-1.5 rounded-full" :class="statusDotClass(l.status)"></span>
-                {{ l.status?.replace('_', ' ') }}
-              </span>
-            </td>
-            <td class="px-5 py-3.5 text-right space-x-3">
-              <button @click="goDetail(l.id)" class="text-green-700 hover:underline text-xs font-medium">
-                View
-              </button>
-              <button @click="handleDelete(l.id)" class="text-red-500 hover:underline text-xs font-medium">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- Stat cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+        
+        <!-- Total Librarians Card -->
+        <div class="bg-gradient-to-br from-blue-50/70 via-white to-white rounded-2xl border border-blue-300 shadow-md p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-400">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md">
+              <UserGroupIcon class="w-6 h-6" />
+            </div>
+            <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest bg-blue-100 px-2.5 py-1 rounded-full">Total</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.pagination.total || 0 }}</p>
+            <p class="text-[11px] font-bold text-blue-700 tracking-wide">Total librarians</p>
+          </div>
+        </div>
 
-    <div class="flex justify-center gap-2 mt-6" v-if="store.pagination.last_page > 1">
-      <button
-        v-for="p in store.pagination.last_page" :key="p"
-        @click="store.fetchList(p)"
-        class="w-8 h-8 rounded-lg text-sm transition-colors"
-        :class="p === store.pagination.current_page ? 'bg-green-700 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-green-50'"
-      >
-        {{ p }}
-      </button>
+        <!-- Active Card -->
+        <div class="bg-gradient-to-br from-emerald-50/70 via-white to-white rounded-2xl border border-emerald-300 shadow-md p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-400">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+              <CheckCircleIcon class="w-6 h-6" />
+            </div>
+            <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-100 px-2.5 py-1 rounded-full">Active</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ activeCount }}</p>
+            <p class="text-[11px] font-bold text-emerald-700 tracking-wide">Active accounts</p>
+          </div>
+        </div>
+
+        <!-- On Leave Card -->
+        <div class="bg-gradient-to-br from-amber-50/70 via-white to-white rounded-2xl border border-amber-300 shadow-md p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-amber-400">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm">
+              <ClockIcon class="w-6 h-6" />
+            </div>
+            <span class="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest bg-amber-100 px-2.5 py-1 rounded-full">Leave</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ onLeaveCount }}</p>
+            <p class="text-[11px] font-bold text-amber-700 tracking-wide">On leave</p>
+          </div>
+        </div>
+
+        <!-- Inactive Card -->
+        <div class="bg-gradient-to-br from-slate-100/70 via-white to-white rounded-2xl border border-slate-500 shadow-md p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-slate-600">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-slate-700 text-white flex items-center justify-center shadow-sm">
+              <NoSymbolIcon class="w-5 h-5" />
+            </div>
+            <span class="text-[10px] font-extrabold text-slate-600 uppercase tracking-widest bg-slate-200 px-2.5 py-1 rounded-full">Inactive</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ inactiveCount }}</p>
+            <p class="text-[11px] font-bold text-slate-700 tracking-wide">Inactive accounts</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Toolbar -->
+      <div class="bg-slate-50/70 rounded-xl border border-slate-200 p-4">
+        <div class="flex flex-wrap gap-3">
+          <div class="relative flex-1 min-w-[240px]">
+            <MagnifyingGlassIcon class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              v-model="store.filters.search"
+              @input="debouncedSearch"
+              type="text"
+              placeholder="Search by name, email, employee ID..."
+              class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 transition-shadow shadow-2xs"
+            />
+          </div>
+          <select
+            v-model="store.filters.status"
+            @change="store.fetchList()"
+            class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-emerald-600 shadow-2xs cursor-pointer"
+          >
+            <option value="">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="on_leave">On Leave</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-white rounded-2xl border border-slate-300 shadow-sm overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-slate-100/80 text-slate-600 text-[10px] font-black uppercase tracking-wider border-b border-slate-300">
+            <tr>
+              <th class="px-5 py-3.5">Employee ID</th>
+              <th class="px-5 py-3.5">Name</th>
+              <th class="px-5 py-3.5">Department</th>
+              <th class="px-5 py-3.5">Position</th>
+              <th class="px-5 py-3.5">Status</th>
+              <th class="px-5 py-3.5 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 text-xs font-medium text-slate-700">
+            <tr v-if="store.loading">
+              <td colspan="6" class="text-center py-16 text-slate-400">
+                <div class="w-7 h-7 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading librarians...</p>
+              </td>
+            </tr>
+            <tr v-else-if="!store.librarians.length">
+              <td colspan="6" class="text-center py-16 text-slate-400">
+                <span class="text-3xl mb-2 block">👥</span>
+                <p class="text-xs font-black uppercase tracking-wider text-slate-800">No librarians found</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Try adjusting your filters or create a new librarian record.</p>
+              </td>
+            </tr>
+            <tr v-for="l in store.librarians" :key="l.id" class="hover:bg-slate-50 transition-colors">
+              <td class="px-5 py-4">
+                <span class="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-1 rounded-lg border border-slate-200">{{ l.employee_id }}</span>
+              </td>
+              <td class="px-5 py-4 font-bold text-slate-900">{{ l.user?.name }}</td>
+              <td class="px-5 py-4 text-slate-500">{{ l.department || '—' }}</td>
+              <td class="px-5 py-4 text-slate-500">{{ l.position || '—' }}</td>
+              <td class="px-5 py-4">
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border capitalize"
+                  :class="statusClass(l.status)"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full" :class="statusDotClass(l.status)"></span>
+                  {{ l.status?.replace('_', ' ') }}
+                </span>
+              </td>
+              <td class="px-5 py-4 text-right space-x-3">
+                <button @click="goDetail(l.id)" class="text-emerald-600 font-bold hover:underline cursor-pointer">
+                  View
+                </button>
+                <button @click="handleDelete(l.id)" class="text-rose-500 font-bold hover:underline cursor-pointer">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-2 pt-2" v-if="store.pagination.last_page > 1">
+        <button
+          v-for="p in store.pagination.last_page" :key="p"
+          @click="store.fetchList(p)"
+          class="w-9 h-9 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+          :class="p === store.pagination.current_page ? 'bg-emerald-700 text-white shadow-md' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'"
+        >
+          {{ p }}
+        </button>
+      </div>
+
     </div>
 
     <!-- Create modal -->
-    <div v-if="showCreateModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <h2 class="text-lg font-bold text-gray-800 mb-4">Create New Librarian</h2>
+    <div v-if="showCreateModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl border border-slate-300 shadow-2xl p-6 sm:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto space-y-4">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="font-serif text-lg font-black text-slate-900">Create New Librarian</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Register a new staff member into the system.</p>
+          </div>
+          <button @click="showCreateModal = false" class="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer">✕</button>
+        </div>
         <LibrarianForm
           :loading="store.loading"
           :errors="store.errors"
@@ -199,18 +241,18 @@ async function handleDelete(id) {
 
 function statusClass(status) {
   return {
-    active: 'bg-green-50 text-green-700',
-    inactive: 'bg-gray-100 text-gray-500',
-    on_leave: 'bg-amber-50 text-amber-700',
-  }[status] || 'bg-gray-100 text-gray-500'
+    active: 'bg-emerald-50 text-emerald-700 border-emerald-300',
+    inactive: 'bg-slate-100 text-slate-600 border-slate-300',
+    on_leave: 'bg-amber-50 text-amber-700 border-amber-300',
+  }[status] || 'bg-slate-100 text-slate-600 border-slate-300'
 }
 
 function statusDotClass(status) {
   return {
-    active: 'bg-green-500',
-    inactive: 'bg-gray-400',
+    active: 'bg-emerald-500',
+    inactive: 'bg-slate-400',
     on_leave: 'bg-amber-500',
-  }[status] || 'bg-gray-400'
+  }[status] || 'bg-slate-400'
 }
 
 onMounted(() => store.fetchList())

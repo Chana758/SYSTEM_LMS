@@ -15,10 +15,6 @@ import fineRoutes from './fine.routes'
 import reservationRoutes from './reservation.routes'
 import notificationRoutes from './notification.routes'
 import digitalLibraryRoutes from './digital-library.routes'
-// FIX: was missing — scanner.routes.js already existed on disk with
-// /scanner and /scanner/history defined, but nothing imported it here,
-// so Vue Router had no matching route and clicking "Scanner" in the
-// sidebar would fall through to a 404 / NotFound page.
 import scannerRoutes from './scanner.routes'
 import reportRoutes from './report.routes'
 
@@ -45,6 +41,13 @@ const routes = [
     name: 'unauthorized',
     component: () => import('@/features/auth/pages/UnauthorizedPage.vue'),
   },
+  // FIX: removed the duplicate top-level '/card-approvals' route.
+  // It shared the name 'card-approvals' with the nested route in
+  // setting.routes.js, so Vue Router evicted this one from the matcher
+  // as soon as ...settingsRoutes was registered below — that's why
+  // '/card-approvals' produced "No match found for location".
+  // The single source of truth for this page is now only in
+  // setting.routes.js as '/settings/card-approvals'.
   ...authRoutes,
   ...dashboardRoutes,
   ...settingsRoutes,
@@ -56,7 +59,7 @@ const routes = [
   ...reservationRoutes,
   ...notificationRoutes,
   ...digitalLibraryRoutes,
-  ...scannerRoutes, // FIX: register scanner routes
+  ...scannerRoutes,
   ...reportRoutes
 ]
 

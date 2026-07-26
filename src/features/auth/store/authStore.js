@@ -6,7 +6,6 @@ import { accountService } from '@/features/settings/services/accountService'
 import router from '@/router'
 
 export const useAuthStore = defineStore('auth', {
-  // State: Holds the data that persists across the app
   state: () => ({
     user: JSON.parse(localStorage.getItem('user')) || null,
     token: localStorage.getItem('access_token') || null,
@@ -14,13 +13,11 @@ export const useAuthStore = defineStore('auth', {
     errors: {},
   }),
 
-  // Getters: Computed properties for derived state
   getters: {
     isAuthenticated: (state) => !!state.token,
     role: (state) => state.user?.role?.name || null,
   },
 
-  // Actions: Methods to modify state and interact with APIs
   actions: {
     // 1. Authentication Actions
     async register(payload) {
@@ -53,12 +50,64 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    /**
+     * Log in by scanning a QR login card (kiosk scanner types the raw
+     * token into an input, we send it here as-is). Mirrors login()
+     * above but authenticates by token instead of email+password.
+     */
+    async loginWithQr(qrToken) {
+      this.loading = true
+      this.errors = {}
+      try {
+        const { data } = await authService.loginWithQr(qrToken)
+        this._setSession(data.user, data.access_token)
+        return true
+      } catch (error) {
+        this._handleError(error)
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * Generate (or regenerate) the CURRENTLY logged-in user's own QR
+     * login card. Requires an existing session (password login first).
+     * Returns the raw token so the caller can encode/display it as a
+     * QR image — it is never retrievable again after this call.
+     */
+    async generateQrToken() {
+      this.loading = true
+      this.errors = {}
+      try {
+        const { data } = await authService.generateQrToken()
+        return { success: true, qrToken: data.qr_token, expiresAt: data.expires_at }
+      } catch (error) {
+        this._handleError(error)
+        return { success: false, message: this.errors.general }
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async revokeQrToken() {
+      this.loading = true
+      try {
+        await authService.revokeQrToken()
+        return true
+      } catch (error) {
+        this._handleError(error)
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
     async logout() {
       try {
         await authService.logout()
       } finally {
         this._clearSession()
-        // Forces UI to update by redirecting to login page
         router.push({ name: 'login' })
       }
     },
@@ -80,10 +129,10 @@ export const useAuthStore = defineStore('auth', {
         const { data } = await profileService.uploadAvatar(file)
         this.user = data.user
         localStorage.setItem('user', JSON.stringify(data.user))
-        return data // Return data for component-level messages
+        return data
       } catch (error) {
         this._handleError(error)
-        throw error // Throw to allow component to catch and display UI error
+        throw error
       } finally {
         this.loading = false
       }
@@ -134,7 +183,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 3. Helper Methods (Internal usage)
+    // 3. Helper Methods
     _setSession(user, token) {
       this.user = user
       this.token = token
@@ -151,7 +200,6 @@ export const useAuthStore = defineStore('auth', {
 
     _handleError(error) {
       if (error.response?.status === 422) {
-        // Map Laravel validation errors to simple key-value pairs
         const backendErrors = error.response.data.errors || {}
         this.errors = Object.fromEntries(
           Object.entries(backendErrors).map(([key, msgs]) => [key, msgs[0]])

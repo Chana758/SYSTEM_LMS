@@ -35,6 +35,17 @@
           <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
           <span class="text-xs text-white font-medium">Scanning</span>
         </div>
+
+        <!-- 🆕 Torch toggle — only shown when the active camera actually supports it -->
+        <button
+          v-if="isScanning && torchSupported"
+          @click="toggleTorch"
+          class="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full backdrop-blur transition"
+          :class="torchOn ? 'bg-amber-400 text-amber-950' : 'bg-black/50 text-white hover:bg-black/60'"
+        >
+          <BoltIcon class="w-3.5 h-3.5" />
+          <span class="text-xs font-semibold">{{ torchOn ? 'Torch On' : 'Torch' }}</span>
+        </button>
       </div>
 
       <div class="flex justify-center mt-4">
@@ -63,7 +74,7 @@
 
 <script setup>
 import { ref, onBeforeUnmount } from 'vue'
-import { PlayIcon, StopIcon } from '@heroicons/vue/24/solid'
+import { PlayIcon, StopIcon, BoltIcon } from '@heroicons/vue/24/solid'
 import { barcodeService } from '../services'
 
 const emit = defineEmits(['detected'])
@@ -72,10 +83,29 @@ const supported = barcodeService.isSupported()
 const videoRef = ref(null)
 const isScanning = ref(false)
 const error = ref('')
+const torchSupported = ref(false)
+const torchOn = ref(false)
 
 let stream = null
 let detector = null
 let pollHandle = null
+
+const CAMERA_ERROR_MESSAGES = {
+  NotAllowedError: 'Camera permission was denied. Allow camera access for this site in your browser settings and try again.',
+  PermissionDeniedError: 'Camera permission was denied. Allow camera access for this site in your browser settings and try again.',
+  NotFoundError: 'No camera was found on this device. Switch to Manual / USB Scanner instead.',
+  DevicesNotFoundError: 'No camera was found on this device. Switch to Manual / USB Scanner instead.',
+  NotReadableError: 'The camera is already in use by another application or browser tab. Close it and try again.',
+  TrackStartError: 'The camera is already in use by another application or browser tab. Close it and try again.',
+  OverconstrainedError: 'No camera on this device matches the required settings.',
+  SecurityError: 'Camera access is blocked on this page. Make sure you are on a secure (HTTPS) connection.',
+  InsecureContextError: 'Camera access requires HTTPS (or localhost). This page is not running in a secure context.',
+  NotSupportedError: 'This browser does not support camera access. Switch to Manual / USB Scanner instead.',
+  AbortError: 'Camera access was interrupted. Please try again.',
+}
+
+const describeCameraError = (e) =>
+  CAMERA_ERROR_MESSAGES[e?.name] || 'Could not access the camera. Check permissions and try again.'
 
 const start = async () => {
   error.value = ''
@@ -83,9 +113,12 @@ const start = async () => {
     detector = await barcodeService.createDetector()
     stream = await barcodeService.startCamera(videoRef.value)
     isScanning.value = true
+    torchSupported.value = barcodeService.hasTorch(stream)
+    torchOn.value = false
     poll()
   } catch (e) {
-    error.value = 'Could not access the camera. Check permissions and try again.'
+    console.error('Camera start failed:', e?.name, e?.message, e)
+    error.value = describeCameraError(e)
   }
 }
 
@@ -100,10 +133,17 @@ const poll = () => {
   }, 400)
 }
 
+const toggleTorch = async () => {
+  const ok = await barcodeService.setTorch(stream, !torchOn.value)
+  if (ok) torchOn.value = !torchOn.value
+}
+
 const stop = () => {
   clearInterval(pollHandle)
   barcodeService.stopCamera(stream)
   isScanning.value = false
+  torchSupported.value = false
+  torchOn.value = false
 }
 
 onBeforeUnmount(stop)

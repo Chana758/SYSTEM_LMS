@@ -21,7 +21,6 @@
         placeholder="Scan barcode or type manually..."
         class="flex-1 border-2 border-gray-200 rounded-xl px-4 py-3 text-sm font-mono tracking-wide outline-none transition"
         :class="focusRing"
-        @blur="refocus"
       />
       <button
         type="submit"
@@ -40,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 
 const props = defineProps({
   isLoading: { type: Boolean, default: false },
@@ -67,11 +66,23 @@ const handleSubmit = () => {
   if (!value) return
   emit('scan', value)
   barcode.value = ''
-}
-
-const refocus = () => {
+  // Only re-focus after an actual scan submission — not on every blur.
+  // This lets the user freely click/type into other fields (e.g. the
+  // "Assign to Member" search box) without the focus being stolen back.
   nextTick(() => inputRef.value?.focus())
 }
+
+// Re-focus the scan field once a loading cycle finishes, so the
+// physical/USB scanner is ready for the next scan without stealing
+// focus away from whatever the user is doing in the meantime.
+watch(
+  () => props.isLoading,
+  (loading, wasLoading) => {
+    if (wasLoading && !loading) {
+      nextTick(() => inputRef.value?.focus())
+    }
+  },
+)
 
 onMounted(() => {
   inputRef.value?.focus()
