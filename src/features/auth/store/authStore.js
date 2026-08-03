@@ -184,6 +184,27 @@ export const useAuthStore = defineStore('auth', {
     },
 
     // 3. Helper Methods
+
+    /**
+     * NEW — Clear any leftover validation/general errors.
+     *
+     * Why this was needed: `errors` is only reset at the top of each
+     * async action (login, loginWithQr, register, etc.). But switching
+     * between the Password and QR tabs on the login screen does NOT
+     * fire any of those actions — it's just a local `ref` toggle in
+     * LoginPage.vue. So a failed QR scan (e.g. "invalid QR code") would
+     * leave `errors.general` set in the store, and since both
+     * LoginForm and QrLoginForm read from the same shared
+     * `authStore.errors`, switching tabs made the stale message bleed
+     * into the other form.
+     *
+     * Fix: call this whenever the UI changes context without
+     * submitting a new request (e.g. on tab switch).
+     */
+    clearErrors() {
+      this.errors = {}
+    },
+
     _setSession(user, token) {
       this.user = user
       this.token = token

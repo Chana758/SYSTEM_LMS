@@ -3,8 +3,8 @@
     <!-- Header Banner -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-purple-50 border-2 border-purple-200 flex items-center justify-center flex-shrink-0 text-xl shadow-2xs">
-          <ArchiveBoxIcon class="w-6 h-6 text-purple-600" />
+        <div class="w-12 h-12 rounded-xl bg-teal-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-teal-600/20">
+          <ArchiveBoxIcon class="w-6 h-6" />
         </div>
         <div>
           <h1 class="text-2xl font-black text-slate-900 tracking-tight">Stock Report</h1>
@@ -32,12 +32,12 @@
       <!-- Filters Section -->
       <ReportFilter @apply="onApply" status-label="Category" :status-options="categories" />
 
-      <!-- Summary Cards -->
+      <!-- Solid Colored Summary Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-        <ReportSummaryCard label="Total Books" :value="summary.total_books" color="text-slate-900"   bg="bg-slate-50" />
-        <ReportSummaryCard label="Available"   :value="summary.available"   color="text-emerald-600" bg="bg-emerald-50" />
-        <ReportSummaryCard label="Borrowed"    :value="summary.borrowed"    color="text-blue-600"    bg="bg-blue-50" />
-        <ReportSummaryCard label="Low Stock"   :value="summary.low_stock"   color="text-red-500"     bg="bg-red-50" />
+        <ReportSummaryCard label="Total Books" :value="summary.total_books" bg="bg-slate-700"   badge="TOTAL"     :icon="RectangleStackIcon" />
+        <ReportSummaryCard label="Available"   :value="summary.available"   bg="bg-teal-600"    badge="AVAILABLE" :icon="CheckCircleIcon" />
+        <ReportSummaryCard label="Borrowed"    :value="summary.borrowed"    bg="bg-blue-600"    badge="BORROWED"  :icon="ArrowsRightLeftIcon" />
+        <ReportSummaryCard label="Low Stock"   :value="summary.low_stock"   bg="bg-red-500"     badge="ALERT"     :icon="ExclamationTriangleIcon" />
       </div>
 
       <!-- Data Table -->
@@ -60,8 +60,16 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { ArchiveBoxIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { ref, reactive, onMounted } from 'vue'
+import { 
+  ArchiveBoxIcon, 
+  ArrowLeftIcon, 
+  RectangleStackIcon, 
+  CheckCircleIcon, 
+  ArrowsRightLeftIcon, 
+  ExclamationTriangleIcon 
+} from '@heroicons/vue/24/outline'
+import apiClient from '@/api/axios'
 import { reportService } from '../services/reportService'
 import ReportFilter from '../components/ReportFilter.vue'
 import ReportSummaryCard from '../components/ReportSummaryCard.vue'
@@ -95,10 +103,25 @@ const load = async (page = 1) => {
   }
 }
 
+const loadCategories = async () => {
+  try {
+    const { data } = await apiClient.get('/categories')
+    const list = data.data ?? data
+    categories.value = list.map((c) => ({ value: c.id, label: c.name }))
+  } catch (e) {
+    categories.value = []
+  }
+}
+
 const onApply = (f) => {
   Object.assign(filters, f)
   load(1)
 }
 
 const onPageChange = (page) => load(page)
+
+onMounted(() => {
+  load()
+  loadCategories()
+})
 </script>

@@ -20,6 +20,9 @@
         <QrLoginCardAdmin
           :user-id="store.currentLibrarian.user?.id"
           :user-name="store.currentLibrarian.user?.name"
+          :id-value="store.currentLibrarian.employee_id"
+          :sub-label="store.currentLibrarian.department"
+          :has-card="!!store.currentLibrarian.user?.has_qr_card"
           role="librarian"
         />
       </div>

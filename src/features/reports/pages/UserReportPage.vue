@@ -3,8 +3,8 @@
     <!-- Header Banner -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-cyan-50 border-2 border-cyan-200 flex items-center justify-center flex-shrink-0 text-xl shadow-2xs">
-          <UsersIcon class="w-6 h-6 text-cyan-600" />
+        <div class="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-purple-600/20">
+          <UsersIcon class="w-6 h-6" />
         </div>
         <div>
           <h1 class="text-2xl font-black text-slate-900 tracking-tight">User Report</h1>
@@ -12,7 +12,6 @@
         </div>
       </div>
 
-      <!-- Action Buttons Group (Back & Export) on the right -->
       <div class="flex items-center gap-3 flex-wrap">
         <RouterLink
           to="/reports"
@@ -26,25 +25,22 @@
       </div>
     </div>
 
-    <!-- Main Content Container with White Box & Dashed Border -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed space-y-6">
-      
-      <!-- Filters Section -->
+
       <ReportFilter
         :status-options="roleOptions"
         status-label="Role"
         @apply="onApply"
       />
 
-      <!-- Summary Cards -->
+      <!-- Solid Colored Summary Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-        <ReportSummaryCard label="Total Users" :value="summary.total_users" color="text-slate-900"   bg="bg-slate-50" />
-        <ReportSummaryCard label="New (period)" :value="summary.new_users" color="text-emerald-700" bg="bg-emerald-50" />
-        <ReportSummaryCard label="Members"     :value="summary.members"    color="text-blue-600"    bg="bg-blue-50" />
-        <ReportSummaryCard label="Staff"       :value="summary.staff"      color="text-orange-600"  bg="bg-orange-50" />
+        <ReportSummaryCard label="Total Users"   :value="summary.total_users" bg="bg-slate-700"   badge="TOTAL"   :icon="UserGroupIcon" />
+        <ReportSummaryCard label="New (period)"  :value="summary.new_users"   bg="bg-emerald-600" badge="NEW"     :icon="UserPlusIcon" />
+        <ReportSummaryCard label="Members"       :value="summary.members"     bg="bg-blue-600"    badge="MEMBERS" :icon="UsersIcon" />
+        <ReportSummaryCard label="Staff"         :value="summary.staff"       bg="bg-orange-500"  badge="STAFF"   :icon="ShieldCheckIcon" />
       </div>
 
-      <!-- Data Table -->
       <ReportTable
         :columns="columns"
         :rows="rows"
@@ -53,14 +49,14 @@
         @page-change="onPageChange"
       >
         <template #cell-name="{ row }">
-          <span class="font-bold text-slate-700">{{ row.name ?? '—' }}</span>
+          <span class="font-bold text-slate-700">{{ row.user?.name ?? '—' }}</span>
         </template>
         <template #cell-email="{ row }">
-          <span class="text-slate-500">{{ row.email ?? '—' }}</span>
+          <span class="text-slate-500">{{ row.user?.email ?? '—' }}</span>
         </template>
         <template #cell-role="{ row }">
           <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase border bg-slate-50 text-slate-600 border-slate-200">
-            {{ row.role }}
+            {{ row.user?.role?.name ?? 'member' }}
           </span>
         </template>
         <template #cell-total_fines="{ row }">
@@ -74,7 +70,13 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { UsersIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { 
+  UsersIcon, 
+  ArrowLeftIcon, 
+  UserGroupIcon, 
+  UserPlusIcon, 
+  ShieldCheckIcon 
+} from '@heroicons/vue/24/outline'
 import { reportService } from '../services/reportService'
 import { analyticsService } from '../services/analyticsService'
 import ReportFilter from '../components/ReportFilter.vue'

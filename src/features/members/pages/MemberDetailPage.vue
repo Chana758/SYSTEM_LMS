@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.currentMember" class="space-y-6 pb-12">
+  <div v-if="store.currentMember" class="p-6 md:p-8 max-w-[1600px] mx-auto space-y-6">
     <!-- ============ HEADER SECTION ============ -->
     <div class="flex items-center justify-between">
       <button 
@@ -11,24 +11,27 @@
       </button>
     </div>
 
-    <div class="space-y-6">
-      <MemberCard :member="store.currentMember" />
+    <!-- Main Content Layout Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      
+      <!-- Left Column: Member Card & QR Admin Card -->
+      <div class="lg:col-span-1 space-y-6">
+        <MemberCard :member="store.currentMember" />
 
-      <!-- QR Login Card — lets an admin/librarian (re)issue this member's
-           QR card at any time, e.g. after they report a card lost.
-           QrLoginCardAdmin.vue already existed (used by
-           CreateMemberModal.vue's step 2) but had nowhere to be reused
-           for an EXISTING member until now. -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-2xs">
-        <QrLoginCardAdmin
-          :user-id="store.currentMember.user?.id"
-          :user-name="store.currentMember.user?.name"
-          role="member"
-        />
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs">
+          <QrLoginCardAdmin
+            :user-id="store.currentMember.user?.id"
+            :user-name="store.currentMember.user?.name"
+            :id-value="store.currentMember.membership_no"
+            :sub-label="subLabel"
+            :has-card="!!store.currentMember.user?.has_qr_card"
+            role="member"
+          />
+        </div>
       </div>
 
-      <!-- Edit Form Card -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-2xs space-y-6">
+      <!-- Right Column: Edit Form Card -->
+      <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-2xs space-y-6">
         <div class="pb-4 border-b border-slate-100">
           <h2 class="font-serif text-lg font-black text-slate-900">Edit Member Details</h2>
           <p class="text-xs text-slate-500 mt-0.5">Update user credentials, maximum borrow limits, and active status.</p>
@@ -43,6 +46,7 @@
           @cancel="router.back()"
         />
       </div>
+
     </div>
   </div>
   <div v-else class="text-center py-20 text-slate-400">
@@ -52,7 +56,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import { useMemberStore } from '../store/memberStore'
@@ -63,6 +67,12 @@ import QrLoginCardAdmin from '@/features/settings/components/QrLoginCardAdmin.vu
 const route = useRoute()
 const router = useRouter()
 const store = useMemberStore()
+
+const subLabel = computed(() =>
+  store.currentMember?.membership_type
+    ? `${store.currentMember.membership_type} membership`
+    : ''
+)
 
 async function handleUpdate(formData) {
   const success = await store.update(route.params.id, formData)

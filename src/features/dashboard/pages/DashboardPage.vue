@@ -17,62 +17,62 @@
         </div>
       </div>
 
-      <!-- Real Stats (4 Distinct Color Themes matching Book Management) -->
+      <!-- Real Stats (4 Solid Color Themes matching Book Management) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
         <!-- Card 1: Total Books (Blue) -->
-        <div class="bg-gradient-to-br from-blue-50/70 via-white to-white rounded-2xl border border-blue-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-300 group">
+        <div class="bg-blue-600 rounded-2xl border border-blue-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-              <BookOpenIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <BookOpenIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-blue-700 uppercase tracking-widest bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">Total</span>
+            <span class="text-[10px] font-extrabold text-blue-100 uppercase tracking-widest bg-blue-700/50 px-2.5 py-1 rounded-full border border-blue-400/30">Total</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{{ store.stats.total_books }}</p>
-            <p class="text-[11px] font-bold text-blue-700 tracking-wide">Total Books</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.total_books }}</p>
+            <p class="text-[11px] font-bold text-blue-100 tracking-wide">Total Books</p>
           </div>
         </div>
 
         <!-- Card 2: Available Books (Emerald / Success) -->
-        <div class="bg-gradient-to-br from-emerald-50/70 via-white to-white rounded-2xl border border-emerald-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-300 group">
+        <div class="bg-emerald-600 rounded-2xl border border-emerald-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-11 h-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-              <CheckCircleIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <CheckCircleIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60">Stock</span>
+            <span class="text-[10px] font-extrabold text-emerald-100 uppercase tracking-widest bg-emerald-700/50 px-2.5 py-1 rounded-full border border-emerald-400/30">Stock</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{{ store.stats.available_books }}</p>
-            <p class="text-[11px] font-bold text-emerald-700 tracking-wide">Available Books</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.available_books }}</p>
+            <p class="text-[11px] font-bold text-emerald-100 tracking-wide">Available Books</p>
           </div>
         </div>
 
         <!-- Card 3: Active Members (Amber / Live) -->
-        <div class="bg-gradient-to-br from-amber-50/70 via-white to-white rounded-2xl border border-amber-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-amber-300 group">
+        <div class="bg-amber-600 rounded-2xl border border-amber-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-11 h-11 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-              <UsersIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <UsersIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-amber-700 uppercase tracking-widest bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">Users</span>
+            <span class="text-[10px] font-extrabold text-amber-100 uppercase tracking-widest bg-amber-700/50 px-2.5 py-1 rounded-full border border-amber-400/30">Users</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{{ store.stats.total_members }}</p>
-            <p class="text-[11px] font-bold text-amber-700 tracking-wide">Active Members</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.total_members }}</p>
+            <p class="text-[11px] font-bold text-amber-100 tracking-wide">Active Members</p>
           </div>
         </div>
 
         <!-- Card 4: Borrowed Today (Purple) -->
-        <div class="bg-gradient-to-br from-purple-50/70 via-white to-white rounded-2xl border border-purple-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-purple-300 group">
+        <div class="bg-purple-600 rounded-2xl border border-purple-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-11 h-11 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-              <ArrowsRightLeftIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <ArrowsRightLeftIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-purple-700 uppercase tracking-widest bg-purple-50 px-2.5 py-1 rounded-full border border-purple-200/60">Today</span>
+            <span class="text-[10px] font-extrabold text-purple-100 uppercase tracking-widest bg-purple-700/50 px-2.5 py-1 rounded-full border border-purple-400/30">Today</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{{ store.stats.borrowed_today }}</p>
-            <p class="text-[11px] font-bold text-purple-700 tracking-wide">Borrowed Today</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.borrowed_today }}</p>
+            <p class="text-[11px] font-bold text-purple-100 tracking-wide">Borrowed Today</p>
           </div>
         </div>
 

@@ -16,61 +16,61 @@
         </button>
       </div>
 
-      <!-- ============ STAT CARDS ============ -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-        <!-- Total Members -->
-        <div class="bg-gradient-to-br from-blue-50/70 via-white to-white rounded-2xl border border-blue-300 shadow-md p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-400">
+      <!-- ============ STAT CARDS (ORIGINAL BG WITH LARGER ICONS) ============ -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-1">
+        <!-- Total Members (Blue Theme) -->
+        <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl border border-blue-500 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
-              <UsersIcon class="w-6 h-6" />
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <UsersIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest bg-blue-100 px-2.5 py-1 rounded-full">Database</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-blue-500/50 px-2.5 py-1 rounded-full border border-blue-400/40">Database</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.pagination.total || 0 }}</p>
-            <p class="text-[11px] font-bold text-blue-700 tracking-wide">Total registered members</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ store.pagination.total || 0 }}</p>
+            <p class="text-[11px] font-bold text-blue-100 tracking-wide">Total registered members</p>
           </div>
         </div>
 
-        <!-- Active Members -->
-        <div class="bg-gradient-to-br from-emerald-50/70 via-white to-white rounded-2xl border border-emerald-300 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-400">
+        <!-- Active Members (Emerald Theme) -->
+        <div class="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-2xl border border-emerald-500 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
-              <CheckCircleIcon class="w-6 h-6" />
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <CheckCircleIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-100 px-2.5 py-1 rounded-full">Verified</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-emerald-500/50 px-2.5 py-1 rounded-full border border-emerald-400/40">Verified</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ activeCount }}</p>
-            <p class="text-[11px] font-bold text-emerald-700 tracking-wide">Active accounts</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ activeCount }}</p>
+            <p class="text-[11px] font-bold text-emerald-100 tracking-wide">Active accounts</p>
           </div>
         </div>
 
-        <!-- Inactive Members -->
-        <div class="bg-gradient-to-br from-slate-100/70 via-white to-white rounded-2xl border border-slate-400 shadow-md p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-slate-500">
+        <!-- Inactive Members (Slate Theme) -->
+        <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl border border-slate-600 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-slate-700 text-white flex items-center justify-center shadow-sm">
-              <NoSymbolIcon class="w-6 h-6" />
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <NoSymbolIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-extrabold text-slate-600 uppercase tracking-widest bg-slate-200 px-2.5 py-1 rounded-full">Dormant</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-slate-600/60 px-2.5 py-1 rounded-full border border-slate-500/40">Dormant</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ inactiveCount }}</p>
-            <p class="text-[11px] font-bold text-slate-700 tracking-wide">Inactive accounts</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ inactiveCount }}</p>
+            <p class="text-[11px] font-bold text-slate-200 tracking-wide">Inactive accounts</p>
           </div>
         </div>
 
-        <!-- Expired Members -->
-        <div class="bg-gradient-to-br from-rose-50/70 via-white to-white rounded-2xl border border-rose-300 shadow-md p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-rose-400">
+        <!-- Expired Members (Rose Theme) -->
+        <div class="bg-gradient-to-br from-rose-600 to-rose-700 rounded-2xl border border-rose-500 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
-              <ExclamationTriangleIcon class="w-5 h-5" />
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <ExclamationTriangleIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-extrabold text-rose-600 uppercase tracking-widest bg-rose-100 px-2.5 py-1 rounded-full">Renewal</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-rose-500/50 px-2.5 py-1 rounded-full border border-rose-400/40">Renewal</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ expiredCount }}</p>
-            <p class="text-[11px] font-bold text-rose-700 tracking-wide">Expired memberships</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ expiredCount }}</p>
+            <p class="text-[11px] font-bold text-rose-100 tracking-wide">Expired memberships</p>
           </div>
         </div>
       </div>

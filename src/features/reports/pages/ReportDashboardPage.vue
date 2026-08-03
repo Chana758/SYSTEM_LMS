@@ -25,18 +25,19 @@
       </div>
 
       <template v-else-if="dashboard">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <ReportSummaryCard label="Total Borrows"    :value="dashboard.kpis.total_borrows"    color="text-slate-900"   bg="bg-slate-50" />
-          <ReportSummaryCard label="Active Borrows"   :value="dashboard.kpis.active_borrows"   color="text-blue-600"   bg="bg-blue-50" />
-          <ReportSummaryCard label="Overdue"          :value="dashboard.kpis.overdue_borrows"  color="text-red-500"    bg="bg-red-50" />
-          <ReportSummaryCard label="New Members"      :value="dashboard.kpis.new_members"      color="text-emerald-600" bg="bg-emerald-50" />
-          <ReportSummaryCard label="Fines (period)"   :value="dashboard.kpis.total_fines"   format="currency" color="text-orange-600" bg="bg-orange-50" />
-          <ReportSummaryCard label="Outstanding Fines" :value="dashboard.kpis.unpaid_fines" format="currency" color="text-red-600" bg="bg-red-50" />
-          <ReportSummaryCard label="Total Books"      :value="dashboard.kpis.total_books"      color="text-slate-900"   bg="bg-slate-50" />
-          <ReportSummaryCard label="Available Copies" :value="dashboard.kpis.available_copies" color="text-emerald-600" bg="bg-emerald-50" />
+        <!-- Solid Colored KPI Summary Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <ReportSummaryCard label="Total Borrows"     :value="dashboard.kpis.total_borrows"     bg="bg-blue-600"   badge="TOTAL"   :icon="BookOpenIcon" />
+          <ReportSummaryCard label="Active Borrows"    :value="dashboard.kpis.active_borrows"    bg="bg-emerald-600" badge="ACTIVE"  :icon="ArrowsRightLeftIcon" />
+          <ReportSummaryCard label="Overdue"           :value="dashboard.kpis.overdue_borrows"   bg="bg-red-500"     badge="ALERT"   :icon="ExclamationTriangleIcon" />
+          <ReportSummaryCard label="New Members"       :value="dashboard.kpis.new_members"       bg="bg-purple-600"  badge="USERS"   :icon="UsersIcon" />
+          <ReportSummaryCard label="Fines (period)"    :value="dashboard.kpis.total_fines"       format="currency" bg="bg-orange-500" badge="FINES" :icon="BanknotesIcon" />
+          <ReportSummaryCard label="Outstanding Fines" :value="dashboard.kpis.unpaid_fines"     format="currency" bg="bg-rose-600"  badge="UNPAID"  :icon="CreditCardIcon" />
+          <ReportSummaryCard label="Total Books"       :value="dashboard.kpis.total_books"       bg="bg-indigo-600"  badge="CATALOG" :icon="RectangleStackIcon" />
+          <ReportSummaryCard label="Available Copies"  :value="dashboard.kpis.available_copies"  bg="bg-teal-600"    badge="STOCK"   :icon="CheckCircleIcon" />
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
           <ReportChart title="Borrows Over Time" :labels="borrowSeries.labels" :values="borrowSeries.values" type="line" color="#10b981" />
           <ReportChart title="Revenue Over Time" :labels="revenueSeries.labels" :values="revenueSeries.values" type="bar" color="#f97316" />
         </div>
@@ -47,7 +48,7 @@
             <ul class="divide-y divide-slate-200">
               <li v-for="book in dashboard.top_books" :key="book.id" class="py-3 flex items-center justify-between">
                 <span class="text-sm font-semibold text-slate-700">{{ book.title }}</span>
-                <span class="text-xs font-black text-emerald-600">{{ book.borrow_count }} borrows</span>
+                <span class="text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">{{ book.borrow_count }} borrows</span>
               </li>
               <li v-if="!dashboard.top_books.length" class="py-6 text-center text-sm text-slate-400 font-bold">No data yet</li>
             </ul>
@@ -79,6 +80,7 @@
 import { ref, computed, onMounted } from 'vue'
 import {
   ChartBarIcon, ArrowsRightLeftIcon, BanknotesIcon, UsersIcon, ChevronRightIcon,
+  BookOpenIcon, ExclamationTriangleIcon, CreditCardIcon, RectangleStackIcon, CheckCircleIcon
 } from '@heroicons/vue/24/outline'
 import { useReportStore } from '../store'
 import { analyticsService } from '../services/analyticsService'

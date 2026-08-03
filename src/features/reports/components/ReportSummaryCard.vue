@@ -1,12 +1,26 @@
 <template>
-  <div :class="[bg, 'rounded-2xl border-2 border-slate-200/80 p-5 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all hover:shadow-md']">
-    <div>
-      <p class="text-[11px] font-black uppercase tracking-wider text-slate-500">{{ label }}</p>
-      <p class="text-2xl md:text-3xl font-black mt-2 tracking-tight" :class="color">{{ displayValue }}</p>
+  <div :class="[bg, 'rounded-2xl p-5 shadow-md relative overflow-hidden flex flex-col justify-between transition-all hover:shadow-lg']">
+    
+    <!-- Top Row: Icon and Badge -->
+    <div class="flex items-center justify-between mb-3">
+      <div v-if="icon" class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20 backdrop-blur-md text-white shadow-inner">
+        <component :is="icon" class="w-5 h-5" />
+      </div>
+      <div v-if="badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/20 backdrop-blur-md text-white shadow-inner">
+        {{ badge }}
+      </div>
     </div>
+
+    <!-- Center Content: Value and Label -->
+    <div>
+      <p class="text-3xl font-black tracking-tight text-white">{{ displayValue }}</p>
+      <p class="text-[11px] font-bold uppercase tracking-wider text-white/80 mt-1">{{ label }}</p>
+    </div>
+
+    <!-- Optional Trend -->
     <div v-if="trend !== null" class="mt-3">
-      <span class="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg" :class="trend >= 0 ? 'bg-emerald-100/60 text-emerald-700' : 'bg-red-100/60 text-red-600'">
-        {{ trend >= 0 ? '▲' : '▼' }} {{ Math.abs(trend) }}% <span class="font-medium text-slate-500 text-[10px]">vs previous</span>
+      <span class="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg bg-white/20 text-white">
+        {{ trend >= 0 ? '▲' : '▼' }} {{ Math.abs(trend) }}% <span class="text-[10px] text-white/80">vs previous</span>
       </span>
     </div>
   </div>
@@ -19,9 +33,10 @@ const props = defineProps({
   label: { type: String, required: true },
   value: { type: [Number, String], default: 0 },
   format: { type: String, default: 'number' }, // 'number' | 'currency'
-  color: { type: String, default: 'text-slate-900' },
-  bg: { type: String, default: 'bg-slate-50' },
-  trend: { type: Number, default: null }, // percent, e.g. 12 or -8
+  bg: { type: String, default: 'bg-blue-600' }, // ពណ៌ផ្ទៃកាត (ឧ. bg-blue-600, bg-emerald-600, bg-orange-500, bg-red-500, bg-purple-600)
+  trend: { type: Number, default: null },
+  icon: { type: [Object, Function], default: null },
+  badge: { type: String, default: null }
 })
 
 const displayValue = computed(() => {

@@ -1,27 +1,15 @@
 <template>
   <header
-    class="bg-green-700 h-[72px] px-6 flex items-center gap-4 sticky top-0 z-20 w-full"
+    class="bg-green-800 h-[72px] px-6 flex items-center gap-4 sticky top-0 z-20 w-full border-b-2 border-amber-400/70"
   >
     <button
       @click="$emit('toggle-sidebar')"
-      class="w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-white/15 transition flex-shrink-0"
+      class="w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-amber-400/20 transition flex-shrink-0"
     >
       <div>
          <Bars3Icon class="w-10 h-9 bg-white/20 rounded-md p-1" />
       </div>
     </button>
-
-    <div class="relative w-full max-w-[400px]">
-      <MagnifyingGlassIcon
-        class="w-[15px] h-[15px] text-gray-800 font-bold absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
-      />
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search books, members..."
-        class="w-full bg-gray-100 border-none rounded-lg pl-8 pr-4 py-[7px] text-[13px] text-gray-800 placeholder-gray-600 outline-none focus:bg-white/25 transition"
-      />
-    </div>
 
     <div class="flex-1" />
 
@@ -29,7 +17,7 @@
 
       <button
         @click="$emit('toggle-theme')"
-        class="w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-white/15 transition"
+        class="w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-amber-400/20 hover:text-amber-300 transition"
         title="Toggle Theme"
       >
         <SunIcon class="w-[18px] h-[18px]" />
@@ -37,7 +25,7 @@
 
       <button
         @click="$emit('toggle-language')"
-        class="w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-white/15 transition"
+        class="w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-amber-400/20 hover:text-amber-300 transition"
         title="Language"
       >
         <GlobeAltIcon class="w-[18px] h-[18px]" />
@@ -45,7 +33,7 @@
 
       <button
         @click="toggleFullscreen"
-        class="w-9 h-9 items-center justify-center rounded-lg text-white hover:bg-white/15 transition hidden md:flex"
+        class="w-9 h-9 items-center justify-center rounded-lg text-white hover:bg-amber-400/20 hover:text-amber-300 transition hidden md:flex"
         title="Fullscreen"
       >
         <ArrowsPointingOutIcon class="w-[18px] h-[18px]" />
@@ -54,16 +42,16 @@
       <!-- ជំនួស static bell button ដោយ NotificationBell.vue -->
       <NotificationBell />
 
-      <div class="w-px h-6 bg-white/30 mx-2"></div>
+      <div class="w-px h-6 bg-amber-400/40 mx-2"></div>
 
       <button
-        class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/15 transition"
+        class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-amber-400/15 transition"
       >
         <div class="text-right hidden md:block">
           <p class="text-[12.5px] font-bold text-white leading-tight">
             {{ displayName }}
           </p>
-          <p class="text-[9.5px] text-white/70 uppercase tracking-wide">
+          <p class="text-[9.5px] text-amber-300/90 uppercase tracking-wide font-semibold">
             {{ displayRole }}
           </p>
         </div>
@@ -71,11 +59,11 @@
         <img
           v-if="avatarUrl"
           :src="avatarUrl"
-          class="w-8 h-8 rounded-full object-cover flex-shrink-0 border border-white/30"
+          class="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-amber-400/60"
         />
         <div
           v-else
-          class="w-8 h-8 rounded-full bg-white text-green-700 text-[13px] font-extrabold flex items-center justify-center flex-shrink-0"
+          class="w-8 h-8 rounded-full bg-white text-green-800 text-[13px] font-extrabold flex items-center justify-center flex-shrink-0 border-2 border-amber-400/60"
         >
           {{ initials }}
         </div>
@@ -85,10 +73,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import {
   Bars3Icon,
-  MagnifyingGlassIcon,
   SunIcon,
   GlobeAltIcon,
   ArrowsPointingOutIcon,
@@ -98,7 +85,6 @@ import NotificationBell from '@/features/notifications/components/NotificationBe
 
 defineEmits(['toggle-sidebar', 'toggle-theme', 'toggle-language'])
 
-const searchQuery = ref('')
 const authStore = useAuthStore()
 
 // Display user name, fallback if loading

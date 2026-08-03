@@ -1,50 +1,103 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
-      <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Library LMS</h1>
-        <p class="text-gray-500 text-sm mt-1">Sign in to the Library Management System</p>
+  <div class="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <!-- Main Card Container -->
+    <div class="bg-white w-full max-w-6xl min-h-[530px] rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+      
+      <!-- ================= LEFT SIDE (Green Background with Curve) ================= -->
+      <div class="bg-[#0b5235] text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden rounded-b-[80px] md:rounded-b-none md:rounded-r-[120px] z-10 shadow-[5px_0_20px_rgba(0,0,0,0.1)]">
+          
+        <!-- Decorative subtle background circle -->
+        <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-white/5 pointer-events-none blur-2xl"></div>
+
+        <!-- Top Badge -->
+        <div class="flex items-center justify-center md:justify-start z-10">
+          <span class="text-[9px] font-extrabold tracking-widest text-emerald-50 bg-black/20 px-3 py-1.5 rounded-full border border-white/10 uppercase">
+            System Portal
+          </span>
+        </div>
+
+        <!-- Center Content (Logo & Text) -->
+        <div class="my-auto py-8 z-10 flex flex-col items-center text-center space-y-4">
+          <!-- Logo -->
+          <div class="w-24 h-24 md:w-30 md:h-30 rounded-full bg-white shadow-xl border-4 border-amber-400 flex items-center justify-center p-1.5 transform hover:scale-105 transition-transform duration-300">
+            <img src="@/assets/images/logoh6.jpg" alt="Smart Nexus Logo" class="w-full h-full object-cover rounded-full" />
+          </div>
+          
+          <div>
+            <h2 class="text-3xl font-black tracking-wider text-white mb-2">Welcome Back!</h2>
+            <p class="text-[12px] text-emerald-100/90 leading-relaxed max-w-[240px] mx-auto font-medium">
+              Stay connected with your library — sign in with your account to continue.
+            </p>
+          </div>
+
+          <div class="inline-flex items-center gap-1.5 bg-black/20 border border-white/10 px-4 py-1.5 rounded-full mt-4">
+             <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+             <span class="text-[10px] font-bold text-white tracking-widest uppercase">Smart System LMS</span>
+          </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="text-[9px] tracking-wider text-emerald-200/60 font-semibold text-center md:text-left z-10 uppercase">
+          Secure Digital Library Management
+        </div>
       </div>
 
-      <!-- Tab toggle -->
-      <div class="flex gap-1 bg-gray-100 rounded-lg p-1 mb-6">
-        <button
-          type="button"
-          @click="mode = 'password'"
-          class="flex-1 text-sm font-medium py-1.5 rounded-md transition-colors"
-          :class="mode === 'password' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500'"
-        >
-          Password
-        </button>
-        <button
-          type="button"
-          @click="mode = 'qr'"
-          class="flex-1 text-sm font-medium py-1.5 rounded-md transition-colors"
-          :class="mode === 'qr' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500'"
-        >
-          Scan QR Card
-        </button>
+      <!-- ================= RIGHT SIDE (White Form Area) ================= -->
+      <div class="bg-white p-8 md:p-12 flex flex-col justify-center space-y-6 z-0 md:pl-16">
+        
+        <div class="text-center md:text-left">
+          <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-1">Sign In</h1>
+          <p class="text-[12px] font-semibold text-slate-500">Please sign in to your account to continue.</p>
+        </div>
+
+        <!-- Tab Toggle (Kept exactly from your code but refined styling) -->
+        <div class="flex gap-1 bg-slate-100/80 rounded-full p-1.5 border border-slate-200 shadow-inner">
+          <button
+            type="button"
+            @click="switchMode('password')"
+            class="flex-1 text-[11px] font-bold py-2.5 rounded-full transition-all duration-300"
+            :class="mode === 'password' ? 'bg-[#17664b] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
+          >
+            Password Login
+          </button>
+          <button
+            type="button"
+            @click="switchMode('qr')"
+            class="flex-1 text-[11px] font-bold py-2.5 rounded-full transition-all duration-300"
+            :class="mode === 'qr' ? 'bg-[#17664b] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
+          >
+            Scan QR Card
+          </button>
+        </div>
+
+        <!-- Dynamic Form Container (Your original forms) -->
+        <div class="transition-all duration-300 min-h-[180px]">
+          <LoginForm
+            v-if="mode === 'password'"
+            :loading="authStore.loading"
+            :errors="authStore.errors"
+            @submit="handleLogin"
+          />
+          <QrLoginForm
+            v-else
+            :loading="authStore.loading"
+            :errors="authStore.errors"
+            @submit="handleQrLogin"
+          />
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center pt-2">
+          <p class="text-[12px] font-semibold text-slate-500">
+            Don't have an account? 
+            <router-link :to="{ name: 'register' }" class="text-[#17664b] font-bold hover:underline ml-1">
+              sign up
+            </router-link>
+          </p>
+        </div>
+        
       </div>
-
-      <LoginForm
-        v-if="mode === 'password'"
-        :loading="authStore.loading"
-        :errors="authStore.errors"
-        @submit="handleLogin"
-      />
-      <QrLoginForm
-        v-else
-        :loading="authStore.loading"
-        :errors="authStore.errors"
-        @submit="handleQrLogin"
-      />
-
-      <p class="text-center text-sm text-gray-500 mt-6">
-        Don't have an account?
-        <router-link :to="{ name: 'register' }" class="text-green-700 font-medium">
-          Register
-        </router-link>
-      </p>
+      
     </div>
   </div>
 </template>
@@ -59,6 +112,12 @@ import { useAuthStore } from '../store/authStore'
 const router = useRouter()
 const authStore = useAuthStore()
 const mode = ref('password')
+
+function switchMode(newMode) {
+  if (mode.value === newMode) return
+  mode.value = newMode
+  authStore.clearErrors()
+}
 
 function redirectAfterLogin() {
   const isStaff = ['admin', 'librarian'].includes(authStore.role)

@@ -3,8 +3,8 @@
     <!-- Header Banner -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-orange-50 border-2 border-orange-200 flex items-center justify-center flex-shrink-0 text-xl shadow-2xs">
-          <CurrencyDollarIcon class="w-6 h-6 text-orange-600" />
+        <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-orange-600/20">
+          <CurrencyDollarIcon class="w-6 h-6" />
         </div>
         <div>
           <h1 class="text-2xl font-black text-slate-900 tracking-tight">Revenue Report</h1>
@@ -32,12 +32,12 @@
       <!-- Filters Section -->
       <ReportFilter @apply="onApply" :show-search="false" />
 
-      <!-- Summary Cards -->
+      <!-- Solid Colored Summary Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-        <ReportSummaryCard label="Total Revenue" :value="summary.total" format="currency" color="text-emerald-700" bg="bg-emerald-50" />
-        <ReportSummaryCard label="This Month"    :value="summary.this_month" format="currency" color="text-blue-600" bg="bg-blue-50" />
-        <ReportSummaryCard label="Fines"         :value="summary.fines" format="currency" color="text-orange-600" bg="bg-orange-50" />
-        <ReportSummaryCard label="Services"      :value="summary.services" format="currency" color="text-slate-900" bg="bg-slate-50" />
+        <ReportSummaryCard label="Total Revenue" :value="summary.total"      format="currency" bg="bg-emerald-600" badge="TOTAL"    :icon="BanknotesIcon" />
+        <ReportSummaryCard label="This Month"    :value="summary.this_month" format="currency" bg="bg-blue-600"    badge="MONTH"    :icon="CalendarIcon" />
+        <ReportSummaryCard label="Fines"         :value="summary.fines"      format="currency" bg="bg-orange-500" badge="FINES"    :icon="CurrencyDollarIcon" />
+        <ReportSummaryCard label="Services"      :value="summary.services"   format="currency" bg="bg-slate-700"    badge="SERVICES" :icon="RectangleStackIcon" />
       </div>
 
       <!-- Data Table -->
@@ -59,7 +59,13 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { CurrencyDollarIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { 
+  CurrencyDollarIcon, 
+  ArrowLeftIcon, 
+  BanknotesIcon, 
+  CalendarIcon, 
+  RectangleStackIcon 
+} from '@heroicons/vue/24/outline'
 import { reportService } from '../services/reportService'
 import { analyticsService } from '../services/analyticsService'
 import ReportFilter from '../components/ReportFilter.vue'

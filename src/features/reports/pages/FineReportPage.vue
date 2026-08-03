@@ -3,8 +3,8 @@
     <!-- Header Banner -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-red-50 border-2 border-red-200 flex items-center justify-center flex-shrink-0 text-xl shadow-2xs">
-          <BanknotesIcon class="w-6 h-6 text-red-500" />
+        <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-orange-600/20">
+          <BanknotesIcon class="w-6 h-6" />
         </div>
         <div>
           <h1 class="text-2xl font-black text-slate-900 tracking-tight">Fine Report</h1>
@@ -37,12 +37,12 @@
         @apply="onApply"
       />
 
-      <!-- Summary Cards -->
+      <!-- Solid Colored Summary Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-        <ReportSummaryCard label="Total Fines"  :value="summary.count"         color="text-slate-900"   bg="bg-slate-50" />
-        <ReportSummaryCard label="Total Amount" :value="summary.total_amount"  format="currency" color="text-slate-900"   bg="bg-slate-50" />
-        <ReportSummaryCard label="Collected"    :value="summary.paid_amount"   format="currency" color="text-emerald-700" bg="bg-emerald-50" />
-        <ReportSummaryCard label="Outstanding"  :value="summary.unpaid_amount" format="currency" color="text-red-500"    bg="bg-red-50" />
+        <ReportSummaryCard label="Total Fines"   :value="summary.count"         bg="bg-slate-700"   badge="TOTAL"   :icon="DocumentTextIcon" />
+        <ReportSummaryCard label="Total Amount"  :value="summary.total_amount"  format="currency" bg="bg-orange-500" badge="AMOUNT" :icon="BanknotesIcon" />
+        <ReportSummaryCard label="Collected"     :value="summary.paid_amount"   format="currency" bg="bg-emerald-600" badge="PAID"  :icon="CheckCircleIcon" />
+        <ReportSummaryCard label="Outstanding"   :value="summary.unpaid_amount" format="currency" bg="bg-rose-600"  badge="UNPAID" :icon="CreditCardIcon" />
       </div>
 
       <!-- Data Table -->
@@ -78,7 +78,13 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { BanknotesIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { 
+  BanknotesIcon, 
+  ArrowLeftIcon, 
+  DocumentTextIcon, 
+  CheckCircleIcon, 
+  CreditCardIcon 
+} from '@heroicons/vue/24/outline'
 import { reportService } from '../services/reportService'
 import { analyticsService } from '../services/analyticsService'
 import ReportFilter from '../components/ReportFilter.vue'

@@ -3,8 +3,8 @@
     <!-- Header Banner -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 shadow-lg flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-blue-50 border-2 border-blue-200 flex items-center justify-center flex-shrink-0 text-xl shadow-2xs">
-          <ArrowsRightLeftIcon class="w-6 h-6 text-blue-600" />
+        <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-600/20">
+          <ArrowsRightLeftIcon class="w-6 h-6" />
         </div>
         <div>
           <h1 class="text-2xl font-black text-slate-900 tracking-tight">Borrow Report</h1>
@@ -37,12 +37,12 @@
         @apply="onApply"
       />
 
-      <!-- Summary Cards -->
+      <!-- Solid Colored Summary Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-        <ReportSummaryCard label="Total"    :value="summary.total"    color="text-slate-900"   bg="bg-slate-50" />
-        <ReportSummaryCard label="Returned" :value="summary.returned" color="text-emerald-700" bg="bg-emerald-50" />
-        <ReportSummaryCard label="Active"   :value="summary.active"   color="text-blue-600"   bg="bg-blue-50" />
-        <ReportSummaryCard label="Overdue"  :value="summary.overdue"  color="text-red-500"    bg="bg-red-50" />
+        <ReportSummaryCard label="Total Borrows" :value="summary.total"    bg="bg-slate-700"   badge="TOTAL"    :icon="BookOpenIcon" />
+        <ReportSummaryCard label="Returned"     :value="summary.returned" bg="bg-emerald-600" badge="RETURNED" :icon="CheckCircleIcon" />
+        <ReportSummaryCard label="Active"       :value="summary.active"   bg="bg-blue-600"    badge="ACTIVE"   :icon="ArrowsRightLeftIcon" />
+        <ReportSummaryCard label="Overdue"      :value="summary.overdue"  bg="bg-red-500"     badge="ALERT"    :icon="ExclamationTriangleIcon" />
       </div>
 
       <!-- Data Table -->
@@ -78,7 +78,13 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { ArrowsRightLeftIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { 
+  ArrowsRightLeftIcon, 
+  ArrowLeftIcon, 
+  BookOpenIcon, 
+  CheckCircleIcon, 
+  ExclamationTriangleIcon 
+} from '@heroicons/vue/24/outline'
 import { reportService } from '../services/reportService'
 import ReportFilter from '../components/ReportFilter.vue'
 import ReportSummaryCard from '../components/ReportSummaryCard.vue'

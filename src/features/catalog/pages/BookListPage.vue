@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-6 pb-12">
-    <!-- ============ HEADER SECTION WITH DELIVERY-STYLE STAT CARDS INSIDE ============ -->
+    <!-- ============ HEADER SECTION ============ -->
     <div class="bg-white rounded-3xl border border-slate-300 p-6 md:p-8 shadow-sm space-y-6">
-      
+
       <!-- Top Title & Action Buttons -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -13,9 +13,9 @@
           <router-link
             v-if="canManage"
             to="/books/categories"
-            class="inline-flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs"
+            class="inline-flex items-center gap-2 bg-rose-600 border border-slate-300 hover:bg-slate-50 text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs"
           >
-            <RectangleStackIcon class="w-4 h-4 text-slate-500"/>
+            <RectangleStackIcon class="w-4 h-4 text-white"/>
             <span>Categories</span>
           </router-link>
           <button
@@ -29,62 +29,62 @@
         </div>
       </div>
 
-      <!-- 4 Stat Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-        
+      <!-- ============ 4 STAT CARDS ============ -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+
         <!-- Card 1: Total -->
-        <div class="bg-gradient-to-br from-blue-50/70 via-white to-white rounded-2xl border border-blue-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-300">
+        <div class="bg-blue-600 rounded-2xl border border-blue-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
-              <BookOpenIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <BookOpenIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest bg-blue-100 px-2.5 py-1 rounded-full">Total</span>
+            <span class="text-[10px] font-extrabold text-blue-100 uppercase tracking-widest bg-blue-700/50 px-2.5 py-1 rounded-full border border-blue-400/30">Total</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.pagination.total || 0 }}</p>
-            <p class="text-[11px] font-bold text-blue-700 tracking-wide">Titles in catalog</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.pagination.total || 0 }}</p>
+            <p class="text-[11px] font-bold text-blue-100 tracking-wide">Titles in catalog</p>
           </div>
         </div>
 
         <!-- Card 2: Available -->
-        <div class="bg-gradient-to-br from-emerald-50/70 via-white to-white rounded-2xl border border-emerald-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-300">
+        <div class="bg-emerald-600 rounded-2xl border border-emerald-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
-              <CheckCircleIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <CheckCircleIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-100 px-2.5 py-1 rounded-full">Success</span>
+            <span class="text-[10px] font-extrabold text-emerald-100 uppercase tracking-widest bg-emerald-700/50 px-2.5 py-1 rounded-full border border-emerald-400/30">Success</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ availableCount }}</p>
-            <p class="text-[11px] font-bold text-emerald-700 tracking-wide">Available now</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ availableCount }}</p>
+            <p class="text-[11px] font-bold text-emerald-100 tracking-wide">Available now</p>
           </div>
         </div>
 
         <!-- Card 3: Trending -->
-        <div class="bg-gradient-to-br from-amber-50/70 via-white to-white rounded-2xl border border-amber-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-amber-300">
+        <div class="bg-amber-600 rounded-2xl border border-amber-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm">
-              <FireIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <FireIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest bg-amber-100 px-2.5 py-1 rounded-full">Live</span>
+            <span class="text-[10px] font-extrabold text-amber-100 uppercase tracking-widest bg-amber-700/50 px-2.5 py-1 rounded-full border border-amber-400/30">Live</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.popularBooks.length }}</p>
-            <p class="text-[11px] font-bold text-amber-700 tracking-wide">Trending titles</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.popularBooks.length }}</p>
+            <p class="text-[11px] font-bold text-amber-100 tracking-wide">Trending titles</p>
           </div>
         </div>
 
         <!-- Card 4: Categories -->
-        <div class="bg-gradient-to-br from-purple-50/70 via-white to-white rounded-2xl border border-purple-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-purple-300">
+        <div class="bg-purple-600 rounded-2xl border border-purple-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-sm">
-              <RectangleStackIcon class="w-5 h-5"/>
+            <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
+              <RectangleStackIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-purple-600 uppercase tracking-widest bg-purple-100 px-2.5 py-1 rounded-full">Performance</span>
+            <span class="text-[10px] font-extrabold text-purple-100 uppercase tracking-widest bg-purple-700/50 px-2.5 py-1 rounded-full border border-purple-400/30">Performance</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.categories.length }}</p>
-            <p class="text-[11px] font-bold text-purple-700 tracking-wide">Categories count</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.categories.length }}</p>
+            <p class="text-[11px] font-bold text-purple-100 tracking-wide">Categories count</p>
           </div>
         </div>
 
@@ -162,7 +162,7 @@
         <select
           v-model="store.filters.status"
           @change="store.fetchBooks()"
-          class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 outline-none focus:outline-emerald-600 transition-all shadow-2xs cursor-pointer"
+          class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 outline-none focus:outline-emerald-600 transition-all shadow-2xs cursor-pointer min-w-[150px]"
         >
           <option value="">All Statuses</option>
           <option value="available">Available</option>
@@ -179,7 +179,7 @@
         <div class="w-7 h-7 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
         <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading catalog books...</p>
       </div>
-      
+
       <div v-else-if="!store.books.length" class="col-span-full py-20 flex flex-col items-center justify-center text-slate-400 bg-white rounded-2xl border border-dashed border-slate-300">
         <span class="text-4xl mb-2">📚</span>
         <p class="text-xs font-black uppercase tracking-wider text-slate-900">No books found</p>

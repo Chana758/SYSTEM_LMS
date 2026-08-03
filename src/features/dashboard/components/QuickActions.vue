@@ -7,75 +7,79 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       
-      <!-- Action 1: New Borrow (Emerald) -->
+      <!-- Action 1: New Borrow (Teal) -->
       <component
         :is="actions[0].to ? 'router-link' : 'button'"
         :to="actions[0].to"
-        class="bg-gradient-to-br from-emerald-50/70 via-white to-white rounded-2xl border border-emerald-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-300 group cursor-pointer text-left"
+        style="background-color: #0d9488; border-color: #0f766e;"
+        class="rounded-2xl border shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md group cursor-pointer text-left text-white"
       >
         <div class="flex items-center justify-between mb-4">
-          <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+          <div class="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
             <ArrowsRightLeftIcon class="w-5 h-5" />
           </div>
-          <span class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-full">Action</span>
+          <span style="background-color: rgba(15, 118, 110, 0.6);" class="text-[10px] font-extrabold text-teal-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-teal-300/30">Action</span>
         </div>
         <div>
-          <p class="text-sm font-black text-slate-900 tracking-tight mb-0.5">New Borrow</p>
-          <p class="text-[11px] font-bold text-emerald-700 tracking-wide">Issue a book loan</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">New Borrow</p>
+          <p class="text-[11px] font-bold text-teal-100 tracking-wide">Issue a book loan</p>
         </div>
       </component>
 
-      <!-- Action 2: New Reservation (Blue) -->
+      <!-- Action 2: New Reservation (Rose) -->
       <component
         :is="actions[1].to ? 'router-link' : 'button'"
         :to="actions[1].to"
-        class="bg-gradient-to-br from-blue-50/70 via-white to-white rounded-2xl border border-blue-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-300 group cursor-pointer text-left"
+        style="background-color: #e11d48; border-color: #be123c;"
+        class="rounded-2xl border shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md group cursor-pointer text-left text-white"
       >
         <div class="flex items-center justify-between mb-4">
-          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+          <div class="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
             <CalendarDaysIcon class="w-5 h-5" />
           </div>
-          <span class="text-[10px] font-extrabold text-blue-700 uppercase tracking-widest bg-blue-50 px-2.5 py-1 rounded-full">Reserve</span>
+          <span style="background-color: rgba(190, 18, 60, 0.6);" class="text-[10px] font-extrabold text-rose-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-rose-300/30">Reserve</span>
         </div>
         <div>
-          <p class="text-sm font-black text-slate-900 tracking-tight mb-0.5">New Reservation</p>
-          <p class="text-[11px] font-bold text-blue-700 tracking-wide">Hold a book copy</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">New Reservation</p>
+          <p class="text-[11px] font-bold text-rose-100 tracking-wide">Hold a book copy</p>
         </div>
       </component>
 
-      <!-- Action 3: Add Member (Amber) -->
+      <!-- Action 3: Add Member (Indigo) -->
       <component
         :is="actions[2].to ? 'router-link' : 'button'"
         :to="actions[2].to"
-        class="bg-gradient-to-br from-amber-50/70 via-white to-white rounded-2xl border border-amber-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-amber-300 group cursor-pointer text-left"
+        style="background-color: #4f46e5; border-color: #4338ca;"
+        class="rounded-2xl border shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md group cursor-pointer text-left text-white"
       >
         <div class="flex items-center justify-between mb-4">
-          <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+          <div class="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
             <UserPlusIcon class="w-5 h-5" />
           </div>
-          <span class="text-[10px] font-extrabold text-amber-700 uppercase tracking-widest bg-amber-50 px-2.5 py-1 rounded-full">Member</span>
+          <span style="background-color: rgba(67, 56, 202, 0.6);" class="text-[10px] font-extrabold text-indigo-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-indigo-300/30">Member</span>
         </div>
         <div>
-          <p class="text-sm font-black text-slate-900 tracking-tight mb-0.5">Add Member</p>
-          <p class="text-[11px] font-bold text-amber-700 tracking-wide">Register new user</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">Add Member</p>
+          <p class="text-[11px] font-bold text-indigo-100 tracking-wide">Register new user</p>
         </div>
       </component>
 
-      <!-- Action 4: Scan Barcode (Purple) -->
+      <!-- Action 4: Scan Barcode (Sky Blue) -->
       <component
         :is="actions[3].to ? 'router-link' : 'button'"
         :to="actions[3].to"
-        class="bg-gradient-to-br from-purple-50/70 via-white to-white rounded-2xl border border-purple-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-purple-300 group cursor-pointer text-left"
+        style="background-color: #0284c7; border-color: #0369a1;"
+        class="rounded-2xl border shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md group cursor-pointer text-left text-white"
       >
         <div class="flex items-center justify-between mb-4">
-          <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+          <div class="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
             <QrCodeIcon class="w-5 h-5" />
           </div>
-          <span class="text-[10px] font-extrabold text-purple-700 uppercase tracking-widest bg-purple-50 px-2.5 py-1 rounded-full">Scan</span>
+          <span style="background-color: rgba(3, 105, 161, 0.6);" class="text-[10px] font-extrabold text-sky-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-sky-300/30">Scan</span>
         </div>
         <div>
-          <p class="text-sm font-black text-slate-900 tracking-tight mb-0.5">Scan Barcode</p>
-          <p class="text-[11px] font-bold text-purple-700 tracking-wide">Quick lookup & audit</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">Scan Barcode</p>
+          <p class="text-[11px] font-bold text-sky-100 tracking-wide">Quick lookup & audit</p>
         </div>
       </component>
 

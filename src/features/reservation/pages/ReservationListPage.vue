@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6 pb-12">
     <!-- Main Wrapper Card -->
-    <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8 space-y-6">
+    <div class="bg-white rounded-3xl border border-slate-300 shadow-sm p-6 md:p-8 space-y-6">
       
       <!-- Header Banner -->
       <div class="flex items-center justify-between pb-6 border-b border-slate-200">
@@ -11,85 +11,86 @@
           </div>
           <div>
             <h1 class="text-2xl font-black text-slate-900 tracking-tight">Reservations</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">Manage book holds, queue priorities, and pickups.</p>
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">Manage book holds, queue priorities, and pickups.</p>
           </div>
         </div>
         <router-link
           to="/reservations/create"
-          class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-sm transition-colors"
+          class="inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95"
         >
-          + New Reservation
+          <span class="text-base leading-none">+</span>
+          <span>New Reservation</span>
         </router-link>
       </div>
 
-      <!-- Stat Cards Grid (With stronger borders & matching background/input styling) -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Stat Cards Grid (Modern Gradient Themes) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
         
-        <!-- Total Holds -->
-        <div class="bg-slate-50/80 border-2 border-slate-300 rounded-2xl p-5 flex flex-col justify-between shadow-2xs">
-          <div class="flex items-center justify-between w-full mb-3">
-            <div class="w-11 h-11 rounded-xl bg-white border-2 border-slate-300 flex items-center justify-center flex-shrink-0 shadow-2xs">
-              <CalendarDaysIcon class="w-5 h-5 text-slate-700" />
+        <!-- Total Holds (Slate Theme) -->
+        <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl border border-slate-600 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <CalendarDaysIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black uppercase tracking-widest text-slate-600">Total</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-slate-600/60 px-2.5 py-1 rounded-full border border-slate-500/40">Total</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none">{{ store.pagination.total || 0 }}</p>
-            <p class="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider mt-1.5">Total holds</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ store.pagination.total || 0 }}</p>
+            <p class="text-[11px] font-bold text-slate-200 tracking-wide">Total holds</p>
           </div>
         </div>
 
-        <!-- In Queue -->
-        <div class="bg-amber-50/70 border-2 border-amber-300 rounded-2xl p-5 flex flex-col justify-between shadow-2xs">
-          <div class="flex items-center justify-between w-full mb-3">
-            <div class="w-11 h-11 rounded-xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center flex-shrink-0 shadow-2xs">
-              <ClockIcon class="w-5 h-5 text-amber-700" />
+        <!-- In Queue (Amber Theme) -->
+        <div class="bg-gradient-to-br from-amber-600 to-amber-700 rounded-2xl border border-amber-500 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <ClockIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black uppercase tracking-widest text-amber-700">Queue</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-amber-500/50 px-2.5 py-1 rounded-full border border-amber-400/40">Queue</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none">{{ pendingCount }}</p>
-            <p class="text-[11px] font-extrabold text-amber-800 uppercase tracking-wider mt-1.5">In queue</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ pendingCount }}</p>
+            <p class="text-[11px] font-bold text-amber-100 tracking-wide">In queue</p>
           </div>
         </div>
 
-        <!-- Ready for Pickup -->
-        <div class="bg-blue-50/70 border-2 border-blue-300 rounded-2xl p-5 flex flex-col justify-between shadow-2xs">
-          <div class="flex items-center justify-between w-full mb-3">
-            <div class="w-11 h-11 rounded-xl bg-blue-100 border-2 border-blue-300 flex items-center justify-center flex-shrink-0 shadow-2xs">
-              <CheckCircleIcon class="w-5 h-5 text-blue-700" />
+        <!-- Ready for Pickup (Blue Theme) -->
+        <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl border border-blue-500 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <CheckCircleIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black uppercase tracking-widest text-blue-700">Pickup</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-blue-500/50 px-2.5 py-1 rounded-full border border-blue-400/40">Pickup</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none">{{ readyCount }}</p>
-            <p class="text-[11px] font-extrabold text-blue-800 uppercase tracking-wider mt-1.5">Ready for pickup</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ readyCount }}</p>
+            <p class="text-[11px] font-bold text-blue-100 tracking-wide">Ready for pickup</p>
           </div>
         </div>
 
-        <!-- Expired -->
-        <div class="bg-rose-50/70 border-2 border-rose-300 rounded-2xl p-5 flex flex-col justify-between shadow-2xs">
-          <div class="flex items-center justify-between w-full mb-3">
-            <div class="w-11 h-11 rounded-xl bg-rose-100 border-2 border-rose-300 flex items-center justify-center flex-shrink-0 shadow-2xs">
-              <ExclamationTriangleIcon class="w-5 h-5 text-rose-600" />
+        <!-- Expired (Rose Theme) -->
+        <div class="bg-gradient-to-br from-rose-600 to-rose-700 rounded-2xl border border-rose-500 shadow-md p-5 flex flex-col justify-between text-white transition-all hover:shadow-lg hover:scale-[1.01]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
+              <ExclamationTriangleIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black uppercase tracking-widest text-rose-700">Alert</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-rose-500/50 px-2.5 py-1 rounded-full border border-rose-400/40">Alert</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none">{{ expiredCount }}</p>
-            <p class="text-[11px] font-extrabold text-rose-700 uppercase tracking-wider mt-1.5">Expired</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ expiredCount }}</p>
+            <p class="text-[11px] font-bold text-rose-100 tracking-wide">Expired</p>
           </div>
         </div>
 
       </div>
 
-      <!-- Toolbar / Filter Bar (Updated border-2 and slate-300 to match prominent styling) -->
-      <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-300 p-4 shadow-2xs">
+      <!-- Toolbar / Filter Bar -->
+      <div class="bg-white rounded-2xl border border-slate-300 p-4 shadow-sm">
         <ReservationFilter v-model="store.filters" @change="handleFilterChange" />
       </div>
 
-      <!-- Table Component Container (Updated border-2 and slate-300 to match prominent styling) -->
-      <div class="border-2 border-slate-300 rounded-2xl overflow-hidden bg-white shadow-2xs">
+      <!-- Table Component Container -->
+      <div class="border border-slate-300 rounded-2xl overflow-hidden bg-white shadow-sm">
         <ReservationTable
           :reservations="store.reservations"
           :loading="store.loading"
@@ -104,8 +105,8 @@
         <button
           v-for="p in store.pagination.last_page" :key="p"
           @click="store.fetchReservations(p)"
-          class="w-8 h-8 rounded-xl text-xs font-bold transition-colors shadow-2xs"
-          :class="p === store.pagination.current_page ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-300 text-slate-700 hover:bg-emerald-50'"
+          class="w-9 h-9 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+          :class="p === store.pagination.current_page ? 'bg-emerald-700 text-white shadow-md' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'"
         >
           {{ p }}
         </button>

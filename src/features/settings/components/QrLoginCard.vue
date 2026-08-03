@@ -5,17 +5,51 @@
       Print this code onto your library card. Scan it at the kiosk to log in without typing a password.
     </p>
 
-    <div v-if="qrDataUrl" class="flex flex-col items-center gap-4">
-      <img :src="qrDataUrl" alt="QR login card" class="w-48 h-48 border border-gray-100 rounded-lg" />
-      <p class="text-xs text-gray-400">Expires {{ formatDate(expiresAt) }}</p>
-      <div class="flex gap-2">
-        <button @click="handleGenerate" class="text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg">
-          Regenerate
-        </button>
-        <button @click="handleRevoke" class="text-sm border border-red-300 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg">
-          Revoke
-        </button>
-      </div>
+    <!-- Same visual card used by QrLoginCardAdmin.vue and
+         PendingCardsPage.vue — previously this rendered a plain <img>,
+         which looked like a different, unrelated feature even though it
+         is the exact same QR-card concept, just self-issued instead of
+         staff-issued. -->
+    <MembershipCardDesign
+      v-if="qrDataUrl"
+      :qr-data-url="qrDataUrl"
+      :name="userName"
+      :avatar-url="avatarUrl"
+      :role="role"
+      :id-label="idLabel"
+      :id-value="idValue"
+      :sub-label="subLabel"
+      :expires-at="expiresAt"
+    />
+
+    <div v-if="qrDataUrl" class="flex gap-2 mt-4">
+      <a
+        :href="qrDataUrl"
+        download="qr-card.png"
+        class="flex-1 text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-center"
+      >
+        Download
+      </a>
+      <button
+        @click="handlePrintCard"
+        class="flex-1 text-sm bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg"
+      >
+        Print
+      </button>
+      <button
+        @click="handleGenerate"
+        :disabled="loading"
+        class="flex-1 text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg disabled:opacity-50"
+      >
+        Regenerate
+      </button>
+      <button
+        @click="handleRevoke"
+        :disabled="loading"
+        class="flex-1 text-sm border border-red-300 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg disabled:opacity-50"
+      >
+        Revoke
+      </button>
     </div>
 
     <button
@@ -32,11 +66,37 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import QRCode from 'qrcode'
 import { useAuthStore } from '@/features/auth/store/authStore'
+import MembershipCardDesign from './MembershipCardDesign.vue'
+import { printMembershipCard } from '@/utils/printMembershipCard'
 
 const authStore = useAuthStore()
+
+// Derived from the logged-in user's own profile (authStore.user is
+// loaded with role/member/librarian relations by the backend on
+// login/me) — no props needed since this card is always "about me".
+const role = computed(() => authStore.user?.role?.name || 'member')
+const userName = computed(() => authStore.user?.name || '')
+const avatarUrl = computed(() => {
+  if (!authStore.user?.avatar) return null
+  const baseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '')
+  return `${baseUrl}/storage/${authStore.user.avatar}`
+})
+const idLabel = computed(() => (role.value === 'librarian' ? 'Employee ID' : 'Membership No.'))
+const idValue = computed(() =>
+  role.value === 'librarian'
+    ? authStore.user?.librarian?.employee_id || '—'
+    : authStore.user?.member?.membership_no || '—'
+)
+const subLabel = computed(() =>
+  role.value === 'librarian'
+    ? authStore.user?.librarian?.department || ''
+    : authStore.user?.member?.membership_type
+      ? `${authStore.user.member.membership_type} membership`
+      : ''
+)
 
 const qrDataUrl = ref('')
 const expiresAt = ref(null)
@@ -77,8 +137,16 @@ async function handleRevoke() {
   }
 }
 
-function formatDate(d) {
-  if (!d) return '—'
-  return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+function handlePrintCard() {
+  printMembershipCard({
+    qrDataUrl: qrDataUrl.value,
+    name: userName.value,
+    avatarUrl: avatarUrl.value,
+    role: role.value,
+    idLabel: idLabel.value,
+    idValue: idValue.value,
+    subLabel: subLabel.value,
+    expiresAt: expiresAt.value,
+  })
 }
 </script>
