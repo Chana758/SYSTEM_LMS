@@ -1,0 +1,30 @@
+{
+  "title": "Library AI Assistant",
+  "subtitle": "Ask about books, due dates, fines, or anything else",
+  "clearChat": "Clear conversation",
+  "clearConfirm": "Clear the entire conversation?",
+  "clearError": "Could not clear the conversation.",
+  "inputPlaceholder": "Ask about books, due dates, or anything...",
+  "sendError": "Could not send the message. Please try again.",
+  "empty": {
+    "title": "Ask me anything!",
+    "description": "Find books, due dates, fines, or other general questions"
+  },
+  "suggestions": {
+    "dueDate": "When are my books due?",
+    "fines": "Do I have any fines?",
+    "cleanCode": "Do you have Clean Code?",
+    "hours": "What are the library's opening hours?"
+  },
+  "sidebar": {
+    "tipsTitle": "What you can ask",
+    "tips": {
+      "dueDate": "Your book due dates or fines",
+      "search": "Search for books by title or author",
+      "hours": "Library opening/closing hours",
+      "general": "Other general questions — ask away!"
+    },
+    "noteTitle": "Note",
+    "noteBody": "AI-generated answers may contain mistakes. Please verify important information with a librarian."
+  }
+}

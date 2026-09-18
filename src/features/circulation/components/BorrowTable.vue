@@ -4,20 +4,20 @@
       <table class="w-full text-sm">
         <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
           <tr>
-            <th class="text-left px-4 py-3 font-semibold">Book</th>
-            <th v-if="role !== 'member'" class="text-left px-4 py-3 font-semibold">Member</th>
-            <th class="text-left px-4 py-3 font-semibold">Borrowed</th>
-            <th class="text-left px-4 py-3 font-semibold">Due Date</th>
-            <th class="text-left px-4 py-3 font-semibold">Status</th>
-            <th class="text-left px-4 py-3 font-semibold">Renewed</th>
-            <th v-if="role !== 'member'" class="text-left px-4 py-3 font-semibold">Librarian</th>
-            <th class="text-right px-4 py-3 font-semibold">Action</th>
+            <th class="text-left px-4 py-3 font-semibold">{{ $t('circulation.book') }}</th>
+            <th v-if="role !== 'member'" class="text-left px-4 py-3 font-semibold">{{ $t('circulation.member') }}</th>
+            <th class="text-left px-4 py-3 font-semibold">{{ $t('circulation.borrowed') }}</th>
+            <th class="text-left px-4 py-3 font-semibold">{{ $t('circulation.dueDate') }}</th>
+            <th class="text-left px-4 py-3 font-semibold">{{ $t('common.table.status') }}</th>
+            <th class="text-left px-4 py-3 font-semibold">{{ $t('circulation.renewals') }}</th>
+            <th v-if="role !== 'member'" class="text-left px-4 py-3 font-semibold">{{ $t('circulation.librarian') }}</th>
+            <th class="text-right px-4 py-3 font-semibold">{{ $t('common.table.actions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
           <tr v-if="items.length === 0">
             <td :colspan="role === 'member' ? 6 : 8" class="text-center py-10 text-gray-400">
-              No records found
+              {{ $t('common.table.noRecordsFound') }}
             </td>
           </tr>
 
@@ -72,14 +72,14 @@
                   @click="$emit('renew', item)"
                   class="text-xs font-medium text-green-700 border border-green-200 rounded-lg px-3 py-1.5 hover:bg-green-50 transition-colors whitespace-nowrap"
                 >
-                  Renew
+                  {{ $t('circulation.renew') }}
                 </button>
                 <button
                   v-if="role !== 'member' && item.status === 'borrowed'"
                   @click="$emit('return', item)"
                   class="text-xs font-medium text-blue-700 border border-blue-200 rounded-lg px-3 py-1.5 hover:bg-blue-50 transition-colors whitespace-nowrap"
                 >
-                  Return
+                  {{ $t('circulation.return') }}
                 </button>
                 <span v-if="item.status === 'returned'" class="text-xs text-gray-300">—</span>
               </div>
@@ -92,19 +92,23 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   items: { type: Array, default: () => [] },
   role: { type: String, default: 'member' }, // 'admin' | 'librarian' | 'member'
 })
 defineEmits(['renew', 'return'])
 
+const { t } = useI18n()
+
 function isOverdue(item) {
   return item.status === 'borrowed' && item.due_date && new Date(item.due_date) < new Date()
 }
 
 function statusLabel(item) {
-  if (item.status === 'returned') return 'Returned'
-  return isOverdue(item) ? 'Overdue' : 'Active'
+  if (item.status === 'returned') return t('circulation.returnedStatus')
+  return isOverdue(item) ? t('circulation.overdue') : t('circulation.active')
 }
 
 function statusClass(item) {

@@ -10,12 +10,12 @@
             <ExclamationTriangleIcon class="w-7 h-7 text-rose-600" />
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Overdue Books</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">Books past their due date, with estimated fines.</p>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('circulation.overduePage.title') }}</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">{{ $t('circulation.overduePage.subtitle') }}</p>
           </div>
         </div>
         <span class="text-[10px] font-extrabold uppercase tracking-widest text-rose-600 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-          Overdue
+          {{ $t('circulation.overdue') }}
         </span>
       </div>
 
@@ -57,6 +57,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 import { useCirculationStore } from '../store/circulationStore'
 import OverdueTable from '../components/OverdueTable.vue'
@@ -65,6 +66,7 @@ import ReturnForm from '../components/ReturnForm.vue'
 const store = useCirculationStore()
 const returningBorrow = ref(null)
 const returnError = ref('')
+const { t } = useI18n()
 
 async function handleReturnSubmit(payload) {
   returnError.value = ''
@@ -79,7 +81,7 @@ async function handleReturnSubmit(payload) {
 }
 
 function handleRemind(borrow) {
-  alert(`Reminder sent to ${borrow.member?.user?.name} (not yet wired to backend).`)
+  alert(t('circulation.overduePage.reminderSent', { name: borrow.member?.user?.name }))
 }
 
 onMounted(() => store.fetchOverdue())

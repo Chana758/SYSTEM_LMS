@@ -48,9 +48,9 @@
       <div class="flex items-center gap-3">
         <img :src="qrDataUrl" class="w-16 h-16 rounded-lg border border-gray-100 p-1 bg-white shadow-2xs flex-shrink-0" />
         <div class="text-[10px] text-gray-500 leading-relaxed">
-          <p>Scan at kiosk for instant check-in.</p>
+          <p>{{ t('settings.cardApprovals.scanHint') }}</p>
           <p class="font-bold mt-1" :style="{ color: colors.accent }">
-            Valid until {{ formattedExpiry }}
+            {{ t('settings.cardApprovals.validUntil', { date: formattedExpiry }) }}
           </p>
         </div>
       </div>
@@ -59,7 +59,7 @@
     <!-- Card Footer -->
     <div class="border-t border-dashed border-gray-200 py-1.5 text-center">
       <p class="text-[8px] font-extrabold uppercase tracking-widest" :style="{ color: colors.accent }">
-        Official Library ID Card
+        {{ t('settings.cardApprovals.officialCard') }}
       </p>
     </div>
   </div>
@@ -67,6 +67,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   qrDataUrl: { type: String, required: true },

@@ -6,13 +6,13 @@
         <router-link
           to="/reservations"
           class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors shadow-2xs shrink-0"
-          title="Back to Reservations"
+          :title="$t('reservation.createPage.back')"
         >
           ←
         </router-link>
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Reservation Details</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Comprehensive view of book hold and queue status.</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('reservation.detailPage.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ $t('reservation.detailPage.subtitle') }}</p>
         </div>
       </div>
       <ReservationStatusBadge :status="store.currentReservation.status" />
@@ -42,25 +42,25 @@
         <!-- Meta Grid -->
         <div class="grid grid-cols-2 gap-5 mt-6 pt-6 border-t-2 border-slate-100 text-sm">
           <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Member</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.member') }}</p>
             <p class="text-slate-900 font-extrabold">{{ store.currentReservation.member?.user?.name }}</p>
             <p class="text-xs font-bold text-slate-500 mt-0.5">{{ store.currentReservation.member?.membership_no }}</p>
           </div>
 
           <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Queue Priority</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.detailPage.queuePriority') }}</p>
             <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white border-2 border-slate-300 text-slate-900 font-black text-xs shadow-2xs">
               {{ store.currentReservation.priority_order }}
             </span>
           </div>
 
           <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Reserved Date</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.detailPage.reservedDate') }}</p>
             <p class="text-slate-900 font-extrabold text-xs mt-1">{{ formatDate(store.currentReservation.reserved_date) }}</p>
           </div>
 
           <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Expires On</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.detailPage.expiresOn') }}</p>
             <p class="text-slate-900 font-extrabold text-xs mt-1">{{ formatDate(store.currentReservation.expire_date) }}</p>
           </div>
         </div>
@@ -68,7 +68,7 @@
 
       <!-- Action Panel -->
       <div v-if="canManage" class="bg-white rounded-2xl border-2 border-slate-300 p-6 h-fit space-y-4 shadow-md">
-        <h3 class="font-black text-slate-900 text-sm tracking-tight">Actions</h3>
+        <h3 class="font-black text-slate-900 text-sm tracking-tight">{{ $t('reservation.detailPage.actionsTitle') }}</h3>
         
         <button
           v-if="store.currentReservation.status === 'ready'"
@@ -76,7 +76,7 @@
           :disabled="actionLoading"
           class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm"
         >
-          Mark as Fulfilled
+          {{ $t('reservation.detailPage.markFulfilled') }}
         </button>
 
         <button
@@ -85,7 +85,7 @@
           :disabled="actionLoading"
           class="w-full border-2 border-rose-200 bg-rose-50/50 text-rose-600 hover:bg-rose-100 py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-2xs"
         >
-          Cancel Reservation
+          {{ $t('reservation.detailPage.cancelReservation') }}
         </button>
 
         <p v-if="actionMessage" class="text-xs font-extrabold p-3 rounded-xl border-2" :class="actionSuccess ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-rose-600 bg-rose-50 border-rose-200'">
@@ -98,13 +98,14 @@
   
   <!-- Loading State -->
   <div v-else class="bg-white rounded-2xl border-2 border-slate-300 p-16 text-center text-slate-400 text-sm font-semibold shadow-2xs">
-    Loading reservation details…
+    {{ $t('reservation.detailPage.loading') }}
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useReservationStore } from '../store/reservationStore'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import ReservationStatusBadge from '../components/ReservationStatusBadge.vue'
@@ -112,6 +113,7 @@ import ReservationStatusBadge from '../components/ReservationStatusBadge.vue'
 const route = useRoute()
 const store = useReservationStore()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const canManage = computed(() => ['admin', 'librarian'].includes(authStore.role))
 const actionLoading = ref(false)
@@ -137,7 +139,7 @@ async function handleFulfill() {
 }
 
 async function handleCancel() {
-  if (!confirm('Cancel this reservation?')) return
+  if (!confirm(t('reservation.confirmCancel'))) return
   actionLoading.value = true
   const result = await store.cancelReservation(route.params.id)
   actionSuccess.value = result.success

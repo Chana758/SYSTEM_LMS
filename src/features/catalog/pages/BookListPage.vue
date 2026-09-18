@@ -1,22 +1,22 @@
 <template>
   <div class="space-y-6 pb-12">
-    <!-- ============ HEADER SECTION ============ -->
+    <!-- ============ HEADER SECTION WITH MODERN DASHBOARD STAT CARDS ============ -->
     <div class="bg-white rounded-3xl border border-slate-300 p-6 md:p-8 shadow-sm space-y-6">
 
       <!-- Top Title & Action Buttons -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">Book Management</h1>
-          <p class="text-xs font-medium text-slate-500 mt-1">Manage library inventory, track checkouts, and organize book categories seamlessly.</p>
+          <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">{{ t('catalog.pageTitle') }}</h1>
+          <p class="text-xs font-medium text-slate-500 mt-1">{{ t('catalog.pageSubtitle') }}</p>
         </div>
         <div class="flex items-center gap-3">
           <router-link
             v-if="canManage"
             to="/books/categories"
-            class="inline-flex items-center gap-2 bg-rose-600 border border-slate-300 hover:bg-slate-50 text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs"
+            class="inline-flex items-center gap-2 bg-rose-600 border border-slate-300 hover:bg-rose-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs"
           >
             <RectangleStackIcon class="w-4 h-4 text-white"/>
-            <span>Categories</span>
+            <span>{{ t('catalog.categories') }}</span>
           </router-link>
           <button
             v-if="canManage"
@@ -24,7 +24,7 @@
             class="inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
           >
             <span class="text-base leading-none">+</span>
-            <span>Add New Book</span>
+            <span>{{ t('catalog.addNewBook') }}</span>
           </button>
         </div>
       </div>
@@ -38,11 +38,11 @@
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
               <BookOpenIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-blue-100 uppercase tracking-widest bg-blue-700/50 px-2.5 py-1 rounded-full border border-blue-400/30">Total</span>
+            <span class="text-[10px] font-extrabold text-blue-100 uppercase tracking-widest bg-blue-700/50 px-2.5 py-1 rounded-full border border-blue-400/30">{{ t('catalog.statTotal') }}</span>
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.pagination.total || 0 }}</p>
-            <p class="text-[11px] font-bold text-blue-100 tracking-wide">Titles in catalog</p>
+            <p class="text-[11px] font-bold text-blue-100 tracking-wide">{{ t('catalog.statTotalDesc') }}</p>
           </div>
         </div>
 
@@ -52,11 +52,11 @@
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
               <CheckCircleIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-emerald-100 uppercase tracking-widest bg-emerald-700/50 px-2.5 py-1 rounded-full border border-emerald-400/30">Success</span>
+            <span class="text-[10px] font-extrabold text-emerald-100 uppercase tracking-widest bg-emerald-700/50 px-2.5 py-1 rounded-full border border-emerald-400/30">{{ t('catalog.statAvailable') }}</span>
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ availableCount }}</p>
-            <p class="text-[11px] font-bold text-emerald-100 tracking-wide">Available now</p>
+            <p class="text-[11px] font-bold text-emerald-100 tracking-wide">{{ t('catalog.statAvailableDesc') }}</p>
           </div>
         </div>
 
@@ -66,11 +66,11 @@
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
               <FireIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-amber-100 uppercase tracking-widest bg-amber-700/50 px-2.5 py-1 rounded-full border border-amber-400/30">Live</span>
+            <span class="text-[10px] font-extrabold text-amber-100 uppercase tracking-widest bg-amber-700/50 px-2.5 py-1 rounded-full border border-amber-400/30">{{ t('catalog.statTrending') }}</span>
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.popularBooks.length }}</p>
-            <p class="text-[11px] font-bold text-amber-100 tracking-wide">Trending titles</p>
+            <p class="text-[11px] font-bold text-amber-100 tracking-wide">{{ t('catalog.statTrendingDesc') }}</p>
           </div>
         </div>
 
@@ -80,11 +80,11 @@
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
               <RectangleStackIcon class="w-7 h-7"/>
             </div>
-            <span class="text-[10px] font-extrabold text-purple-100 uppercase tracking-widest bg-purple-700/50 px-2.5 py-1 rounded-full border border-purple-400/30">Performance</span>
+            <span class="text-[10px] font-extrabold text-purple-100 uppercase tracking-widest bg-purple-700/50 px-2.5 py-1 rounded-full border border-purple-400/30">{{ t('catalog.statCategories') }}</span>
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.categories.length }}</p>
-            <p class="text-[11px] font-bold text-purple-100 tracking-wide">Categories count</p>
+            <p class="text-[11px] font-bold text-purple-100 tracking-wide">{{ t('catalog.statCategoriesDesc') }}</p>
           </div>
         </div>
 
@@ -97,8 +97,8 @@
       <div class="flex items-center justify-between px-1">
         <div class="flex items-center gap-2">
           <span class="text-base">🔥</span>
-          <h2 class="font-serif text-base font-bold text-slate-900">Most Borrowed Books</h2>
-          <span class="text-xs font-semibold text-slate-400">• Ranked by all-time checkouts</span>
+          <h2 class="font-serif text-base font-bold text-slate-900">{{ t('catalog.mostBorrowed') }}</h2>
+          <span class="text-xs font-semibold text-slate-400">• {{ t('catalog.rankedByCheckouts') }}</span>
         </div>
       </div>
 
@@ -145,7 +145,7 @@
             v-model="store.filters.search"
             @input="debouncedSearch"
             type="text"
-            placeholder="Search by title, author, or ISBN..."
+            :placeholder="t('catalog.searchPlaceholder')"
             class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:outline-emerald-600 transition-all shadow-2xs"
           />
         </div>
@@ -155,7 +155,7 @@
           @change="store.fetchBooks()"
           class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 outline-none focus:outline-emerald-600 transition-all shadow-2xs cursor-pointer"
         >
-          <option value="">All Categories</option>
+          <option value="">{{ t('catalog.allCategories') }}</option>
           <option v-for="c in store.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
         </select>
 
@@ -164,11 +164,11 @@
           @change="store.fetchBooks()"
           class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 outline-none focus:outline-emerald-600 transition-all shadow-2xs cursor-pointer min-w-[150px]"
         >
-          <option value="">All Statuses</option>
-          <option value="available">Available</option>
-          <option value="damaged">Damaged</option>
-          <option value="lost">Lost</option>
-          <option value="archived">Archived</option>
+          <option value="">{{ t('catalog.allStatuses') }}</option>
+          <option value="available">{{ t('catalog.statusAvailable') }}</option>
+          <option value="damaged">{{ t('catalog.statusDamaged') }}</option>
+          <option value="lost">{{ t('catalog.statusLost') }}</option>
+          <option value="archived">{{ t('catalog.statusArchived') }}</option>
         </select>
       </div>
     </div>
@@ -177,13 +177,13 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
       <div v-if="store.loading" class="col-span-full py-20 flex flex-col items-center justify-center text-slate-400">
         <div class="w-7 h-7 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading catalog books...</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ t('catalog.loadingBooks') }}</p>
       </div>
 
       <div v-else-if="!store.books.length" class="col-span-full py-20 flex flex-col items-center justify-center text-slate-400 bg-white rounded-2xl border border-dashed border-slate-300">
         <span class="text-4xl mb-2">📚</span>
-        <p class="text-xs font-black uppercase tracking-wider text-slate-900">No books found</p>
-        <p class="text-xs text-slate-400 mt-1">Try adjusting your filters or search terms.</p>
+        <p class="text-xs font-black uppercase tracking-wider text-slate-900">{{ t('catalog.noBooksFound') }}</p>
+        <p class="text-xs text-slate-400 mt-1">{{ t('catalog.adjustFilters') }}</p>
       </div>
 
       <div
@@ -212,7 +212,7 @@
               class="absolute top-2.5 left-2.5 text-[10px] font-black px-2.5 py-1 rounded-lg shadow-xs z-20 uppercase tracking-wider"
               :class="statusBadgeClass(book.status)"
             >
-              {{ book.status }}
+              {{ statusLabel(book.status) }}
             </span>
 
             <!-- Available Quantity Indicator -->
@@ -225,7 +225,7 @@
 
             <!-- Out of stock overlay -->
             <div v-if="book.available_qty === 0" class="absolute inset-0 bg-slate-950/50 backdrop-blur-[2px] flex items-center justify-center z-10 p-4">
-              <span class="text-white text-[10px] font-black uppercase tracking-wider border border-white/40 rounded-lg px-2.5 py-1 text-center shadow-md">Borrowed Out</span>
+              <span class="text-white text-[10px] font-black uppercase tracking-wider border border-white/40 rounded-lg px-2.5 py-1 text-center shadow-md">{{ t('catalog.borrowedOut') }}</span>
             </div>
           </div>
 
@@ -264,8 +264,8 @@
       <div class="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-300 space-y-4">
         <div class="flex items-center justify-between pb-4 border-b border-slate-200">
           <div>
-            <h2 class="font-serif text-lg font-black text-slate-900">Add New Book</h2>
-            <p class="text-xs text-slate-500 mt-0.5">Register a new title into the library inventory catalog.</p>
+            <h2 class="font-serif text-lg font-black text-slate-900">{{ t('catalog.createBookModal.title') }}</h2>
+            <p class="text-xs text-slate-500 mt-0.5">{{ t('catalog.createBookModal.subtitle') }}</p>
           </div>
           <button @click="showCreateModal = false" class="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer">✕</button>
         </div>
@@ -278,6 +278,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import {
   MagnifyingGlassIcon, BookOpenIcon, CheckCircleIcon,
   FireIcon, RectangleStackIcon,
@@ -286,6 +287,7 @@ import { useCatalogStore } from '../store/catalogStore'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import BookForm from '../components/BookForm.vue'
 
+const { t } = useI18n()
 const router = useRouter()
 const store = useCatalogStore()
 const authStore = useAuthStore()
@@ -331,6 +333,16 @@ function statusBadgeClass(status) {
     lost: 'bg-rose-500 text-white shadow-xs',
     archived: 'bg-slate-500 text-white shadow-xs',
   }[status] || 'bg-slate-400 text-white'
+}
+
+function statusLabel(status) {
+  const map = {
+    available: t('catalog.statusAvailable'),
+    damaged: t('catalog.statusDamaged'),
+    lost: t('catalog.statusLost'),
+    archived: t('catalog.statusArchived'),
+  }
+  return map[status] || status
 }
 
 function rankBadgeClass(index) {

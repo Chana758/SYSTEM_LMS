@@ -1,25 +1,25 @@
 /**
  * currencyHelper.js
  * ─────────────────────────────────────────────────────────────────
- * Single source of truth សម្រាប់ការបំលែងរូបិយប័ណ្ណក្នុង library ទាំងមូល
- * (Riel ↔ USD) ព្រមទាំង format function សម្រាប់បង្ហាញ។
+ * Single source of truth for currency conversion throughout the library
+ * (Riel ↔ USD) as well as display formatting functions.
  *
- * ត្រូវប្រើ helper ទាំងនេះនៅគ្រប់ទីកន្លែងដែលមានការបំលែងរូបិយប័ណ្ណ
- * (ReturnForm.vue, FineForm.vue, ។ល។) — កុំសរសេរ conversion logic
- * ដោយឡែកៗគ្នាតាម component នីមួយៗ ព្រោះនោះជាមូលហេតុពិតប្រាកដ
- * ដែលបណ្តាលឲ្យ fine amount ខុសឆ្គង (Riel input ត្រូវបានផ្ញើទៅ
- * backend ដោយផ្ទាល់ដូចជា USD គ្មានបំលែង)។
+ * You must use these helpers everywhere currency conversion happens
+ * (ReturnForm.vue, FineForm.vue, etc.) — do not write separate
+ * conversion logic inside individual components, as that is the exact
+ * reason why fine amounts become incorrect (e.g., Riel input being sent
+ * to the backend directly as USD without conversion).
  * ─────────────────────────────────────────────────────────────────
  */
 
-// ⚠️ TODO: ត្រូវកែជាអត្រាប្តូររូបិយប័ណ្ណពិតប្រាកដ (ធនាគារជាតិកម្ពុជា
-// ឬអត្រាថេរដែល library របស់អ្នកសម្រេចប្រើ) — 4100 ជាតម្លៃប៉ាន់ស្មានតែប៉ុណ្ណោះ
-export const KHR_TO_USD_RATE = 4100 // ៛ ក្នុង 1$
+// ⚠️ TODO: Update this to the actual exchange rate (National Bank of Cambodia
+// or a fixed rate decided by your library) — 4100 is only an estimated value
+export const KHR_TO_USD_RATE = 4100 // ៛ per 1$
 
 /**
- * បំលែងទឹកប្រាក់ពី Riel (៛) ទៅ USD ($)
- * @param {number} khrAmount - ចំនួនទឹកប្រាក់ជា Riel
- * @returns {number} ចំនួនទឹកប្រាក់ជា USD (round ទៅ 2 decimal)
+ * Convert amount from Riel (៛) to USD ($)
+ * @param {number} khrAmount - Amount in Riel
+ * @returns {number} Amount in USD (rounded to 2 decimal places)
  */
 export function khrToUsd(khrAmount) {
   const amount = Number(khrAmount) || 0
@@ -28,9 +28,9 @@ export function khrToUsd(khrAmount) {
 }
 
 /**
- * បំលែងទឹកប្រាក់ពី USD ($) ទៅ Riel (៛)
- * @param {number} usdAmount - ចំនួនទឹកប្រាក់ជា USD
- * @returns {number} ចំនួនទឹកប្រាក់ជា Riel (round ទៅលេខគត់)
+ * Convert amount from USD ($) to Riel (៛)
+ * @param {number} usdAmount - Amount in USD
+ * @returns {number} Amount in Riel (rounded to the nearest integer)
  */
 export function usdToKhr(usdAmount) {
   const amount = Number(usdAmount) || 0
@@ -38,8 +38,8 @@ export function usdToKhr(usdAmount) {
 }
 
 /**
- * Format ចំនួនទឹកប្រាក់ជា USD string សម្រាប់បង្ហាញ — "$5.00"
- * @param {number} amount - ចំនួនទឹកប្រាក់ជា USD
+ * Format an amount as a USD display string — "$5.00"
+ * @param {number} amount - Amount in USD
  * @returns {string}
  */
 export function formatUsd(amount) {
@@ -48,8 +48,8 @@ export function formatUsd(amount) {
 }
 
 /**
- * Format ចំនួនទឹកប្រាក់ជា Riel string សម្រាប់បង្ហាញ — "5,000៛"
- * @param {number} amount - ចំនួនទឹកប្រាក់ជា Riel
+ * Format an amount as a Riel display string — "5,000៛"
+ * @param {number} amount - Amount in Riel
  * @returns {string}
  */
 export function formatKhr(amount) {

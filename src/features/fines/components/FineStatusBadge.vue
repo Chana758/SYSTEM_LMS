@@ -6,7 +6,11 @@
 </template>
 
 <script setup>
-defineProps({ status: { type: String, required: true } })
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const props = defineProps({ status: { type: String, required: true } })
 
 const classMap = {
   unpaid: 'bg-red-50 text-red-600',
@@ -20,5 +24,9 @@ const dotMap = {
   waived: 'bg-gray-400',
   default: 'bg-gray-400',
 }
-const labelMap = { unpaid: 'Unpaid', paid: 'Paid', waived: 'Waived' }
+const labelMap = computed(() => ({
+  unpaid: t('fines.unpaid'),
+  paid: t('fines.paid'),
+  waived: t('fines.waived'),
+}))
 </script>

@@ -28,7 +28,7 @@ export const scannerService = {
     return api.get('/members', { params: { search } })
   },
 
-  // 🆕 Add a member to the reservation queue for a book that's
+  // Add a member to the reservation queue for a book that's
   // currently checked out — used by the scanner's "Reserve" flow.
   reserveBook(payload) {
     return api.post('/reservations', payload)

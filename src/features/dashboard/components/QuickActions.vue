@@ -1,8 +1,8 @@
 <template>
   <div class="bg-white rounded-2xl border border-slate-300 shadow-sm p-6 space-y-5">
     <div>
-      <h3 class="text-base font-black text-slate-900 tracking-tight">Quick Actions</h3>
-      <p class="text-xs font-semibold text-slate-500 mt-0.5">Jump straight into common daily tasks.</p>
+      <h3 class="text-base font-black text-slate-900 tracking-tight">{{ $t('dashboard.quickActions.title') }}</h3>
+      <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ $t('dashboard.quickActions.subtitle') }}</p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -21,8 +21,8 @@
           <span style="background-color: rgba(15, 118, 110, 0.6);" class="text-[10px] font-extrabold text-teal-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-teal-300/30">Action</span>
         </div>
         <div>
-          <p class="text-sm font-black text-white tracking-tight mb-0.5">New Borrow</p>
-          <p class="text-[11px] font-bold text-teal-100 tracking-wide">Issue a book loan</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">{{ $t('dashboard.quickActions.newBorrow') }}</p>
+          <p class="text-[11px] font-bold text-teal-100 tracking-wide">{{ $t('dashboard.quickActions.newBorrowDesc') }}</p>
         </div>
       </component>
 
@@ -40,8 +40,8 @@
           <span style="background-color: rgba(190, 18, 60, 0.6);" class="text-[10px] font-extrabold text-rose-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-rose-300/30">Reserve</span>
         </div>
         <div>
-          <p class="text-sm font-black text-white tracking-tight mb-0.5">New Reservation</p>
-          <p class="text-[11px] font-bold text-rose-100 tracking-wide">Hold a book copy</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">{{ $t('dashboard.quickActions.newReservation') }}</p>
+          <p class="text-[11px] font-bold text-rose-100 tracking-wide">{{ $t('dashboard.quickActions.newReservationDesc') }}</p>
         </div>
       </component>
 
@@ -59,8 +59,8 @@
           <span style="background-color: rgba(67, 56, 202, 0.6);" class="text-[10px] font-extrabold text-indigo-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-indigo-300/30">Member</span>
         </div>
         <div>
-          <p class="text-sm font-black text-white tracking-tight mb-0.5">Add Member</p>
-          <p class="text-[11px] font-bold text-indigo-100 tracking-wide">Register new user</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">{{ $t('dashboard.quickActions.addMember') }}</p>
+          <p class="text-[11px] font-bold text-indigo-100 tracking-wide">{{ $t('dashboard.quickActions.addMemberDesc') }}</p>
         </div>
       </component>
 
@@ -78,8 +78,8 @@
           <span style="background-color: rgba(3, 105, 161, 0.6);" class="text-[10px] font-extrabold text-sky-100 uppercase tracking-widest px-2.5 py-1 rounded-full border border-sky-300/30">Scan</span>
         </div>
         <div>
-          <p class="text-sm font-black text-white tracking-tight mb-0.5">Scan Barcode</p>
-          <p class="text-[11px] font-bold text-sky-100 tracking-wide">Quick lookup & audit</p>
+          <p class="text-sm font-black text-white tracking-tight mb-0.5">{{ $t('dashboard.quickActions.scanBarcode') }}</p>
+          <p class="text-[11px] font-bold text-sky-100 tracking-wide">{{ $t('dashboard.quickActions.scanBarcodeDesc') }}</p>
         </div>
       </component>
 

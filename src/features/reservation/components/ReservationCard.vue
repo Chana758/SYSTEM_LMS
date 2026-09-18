@@ -22,10 +22,10 @@
       <!-- Dates Metadata -->
       <div class="flex flex-wrap gap-x-5 gap-y-1 mt-2.5 text-xs font-bold text-slate-600">
         <span class="inline-flex items-center gap-1.5">
-          <span class="text-slate-400 uppercase tracking-widest text-[10px]">Reserved</span> {{ formatDate(reservation.reserved_date) }}
+          <span class="text-slate-400 uppercase tracking-widest text-[10px]">{{ $t('reservation.card.reserved') }}</span> {{ formatDate(reservation.reserved_date) }}
         </span>
         <span class="inline-flex items-center gap-1.5">
-          <span class="text-slate-400 uppercase tracking-widest text-[10px]">Expires</span> {{ formatDate(reservation.expire_date) }}
+          <span class="text-slate-400 uppercase tracking-widest text-[10px]">{{ $t('reservation.card.expires') }}</span> {{ formatDate(reservation.expire_date) }}
         </span>
       </div>
 
@@ -34,10 +34,10 @@
         <span class="inline-flex items-center justify-center w-5 h-5 rounded-lg bg-amber-100 border border-amber-300 font-black text-[10px] text-amber-800">
           {{ reservation.priority_order }}
         </span>
-        in queue for this title
+        {{ $t('reservation.card.queuePosition') }}
       </p>
       <p v-else-if="reservation.status === 'ready'" class="text-xs font-extrabold text-blue-700 mt-2.5 bg-blue-50/80 border border-blue-200 rounded-xl px-2.5 py-1 w-fit shadow-2xs">
-        Ready for pickup — collect before {{ formatDate(reservation.expire_date) }}
+        {{ $t('reservation.card.readyMsg', { date: formatDate(reservation.expire_date) }) }}
       </p>
 
       <div class="flex-1"></div>
@@ -48,7 +48,7 @@
         @click="$emit('cancel', reservation.id)"
         class="mt-2.5 self-start text-xs font-extrabold text-rose-600 hover:text-rose-700 hover:underline inline-flex items-center gap-1"
       >
-        Cancel reservation
+        {{ $t('reservation.card.cancelReservation') }}
       </button>
     </div>
   </div>

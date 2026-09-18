@@ -39,6 +39,23 @@ export function validateRegisterForm(form) {
   }
 }
 
+// NEW — Forgot Password form: just needs a valid email.
+export function validateForgotPasswordForm(form) {
+  return {
+    email: validateEmail(form.email),
+  }
+}
+
+// NEW — Reset Password form: new password + confirmation. Email/token
+// come from the URL (not user-typed), so they aren't validated here —
+// the backend rejects an invalid/expired token/email pair regardless.
+export function validateResetPasswordForm(form) {
+  return {
+    password: validatePassword(form.password),
+    password_confirmation: validatePasswordConfirmation(form.password, form.password_confirmation),
+  }
+}
+
 export function hasErrors(errors) {
   return Object.values(errors).some((msg) => msg !== '')
 }

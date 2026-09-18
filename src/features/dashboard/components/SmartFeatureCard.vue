@@ -24,35 +24,37 @@ const props = defineProps({
   description: String,
   icon: { type: [Object, Function], required: true },
   to: String,
+  // Stable, language-independent key that picks the color theme.
+  // Previously this was guessed from the (translated) `title` text,
+  // which broke as soon as the title was localized to Khmer — none of
+  // the Khmer strings contain "chatbot"/"recommendation"/"scanner", so
+  // every card silently fell through to the amber default. Pass one of:
+  // 'chatbot' | 'recommendations' | 'scanner' | 'digital-library'
+  variant: { type: String, default: 'digital-library' },
 })
 
-// កំណត់ពណ៌តាមចំណងជើង ដើម្បីឱ្យ Card នីមួយៗមានពណ៌ដាច់ដោយឡែកពីគ្នាស្អាត
-const theme = computed(() => {
-  const t = (props.title || '').toLowerCase()
-  if (t.includes('chatbot')) {
-    return {
-      iconBg: 'bg-blue-600 text-white',
-      iconColor: 'text-white',
-      badgeClass: 'bg-blue-50 text-blue-700',
-    }
-  } else if (t.includes('recommendation')) {
-    return {
-      iconBg: 'bg-emerald-600 text-white',
-      iconColor: 'text-white',
-      badgeClass: 'bg-emerald-50 text-emerald-700',
-    }
-  } else if (t.includes('scanner')) {
-    return {
-      iconBg: 'bg-purple-600 text-white',
-      iconColor: 'text-white',
-      badgeClass: 'bg-purple-50 text-purple-700',
-    }
-  } else {
-    return {
-      iconBg: 'bg-amber-600 text-white',
-      iconColor: 'text-white',
-      badgeClass: 'bg-amber-50 text-amber-700',
-    }
-  }
-})
+const THEMES = {
+  chatbot: {
+    iconBg: 'bg-blue-600 text-white',
+    iconColor: 'text-white',
+    badgeClass: 'bg-blue-50 text-blue-700',
+  },
+  recommendations: {
+    iconBg: 'bg-emerald-600 text-white',
+    iconColor: 'text-white',
+    badgeClass: 'bg-emerald-50 text-emerald-700',
+  },
+  scanner: {
+    iconBg: 'bg-purple-600 text-white',
+    iconColor: 'text-white',
+    badgeClass: 'bg-purple-50 text-purple-700',
+  },
+  'digital-library': {
+    iconBg: 'bg-amber-600 text-white',
+    iconColor: 'text-white',
+    badgeClass: 'bg-amber-50 text-amber-700',
+  },
+}
+
+const theme = computed(() => THEMES[props.variant] || THEMES['digital-library'])
 </script>

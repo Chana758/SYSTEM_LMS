@@ -12,7 +12,7 @@
         <!-- Top Badge -->
         <div class="flex items-center justify-center md:justify-start z-10">
           <span class="text-[9px] font-extrabold tracking-widest text-emerald-50 bg-black/20 px-3 py-1.5 rounded-full border border-white/10 uppercase">
-            Member Portal
+            {{ $t('auth.memberPortal') }}
           </span>
         </div>
 
@@ -20,25 +20,27 @@
         <div class="my-auto py-8 z-10 flex flex-col items-center text-center space-y-4">
           <!-- Logo -->
           <div class="w-24 h-24 md:w-30 md:h-30 rounded-full bg-white shadow-xl border-4 border-amber-400 flex items-center justify-center p-1.5 transform hover:scale-105 transition-transform duration-300">
-            <img src="@/assets/images/logoh6.jpg" alt="Smart Nexus Logo" class="w-full h-full object-cover rounded-full" />
+            <!-- CHANGED: dynamic logo -->
+            <img :src="brandingStore.logoUrl || defaultLogo" :alt="brandingStore.siteName" class="w-full h-full object-cover rounded-full" />
           </div>
           
           <div>
-            <h2 class="text-3xl font-black tracking-wider text-white mb-2">Join Library LMS</h2>
+            <h2 class="text-3xl font-black tracking-wider text-white mb-2">{{ $t('auth.joinLibraryLms') }}</h2>
             <p class="text-[12px] text-emerald-100/90 leading-relaxed max-w-[240px] mx-auto font-medium">
-              Create your new member account and start exploring our digital library collection.
+              {{ $t('auth.joinSubtitle') }}
             </p>
           </div>
 
           <div class="inline-flex items-center gap-1.5 bg-black/20 border border-white/10 px-4 py-1.5 rounded-full mt-4">
              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-             <span class="text-[10px] font-bold text-white tracking-widest uppercase">Smart System LMS</span>
+             <!-- CHANGED: dynamic tagline -->
+             <span class="text-[10px] font-bold text-white tracking-widest uppercase">{{ brandingStore.siteTagline }}</span>
           </div>
         </div>
 
         <!-- Footer Note -->
         <div class="text-[9px] tracking-wider text-emerald-200/60 font-semibold text-center md:text-left z-10 uppercase">
-          Secure Digital Library Management
+          {{ $t('auth.secureLibrary') }}
         </div>
       </div>
 
@@ -48,8 +50,8 @@
         <!-- STEP 1: Registration form -->
         <template v-if="!registered">
           <div class="text-center md:text-left">
-            <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-1">Create Account</h1>
-            <p class="text-[12px] font-semibold text-slate-500">Fill in your information to register a new member account.</p>
+            <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-1">{{ $t('auth.createAccount') }}</h1>
+            <p class="text-[12px] font-semibold text-slate-500">{{ $t('auth.fillYourInfo') }}</p>
           </div>
 
           <RegisterForm
@@ -60,8 +62,8 @@
 
           <div class="text-center pt-2">
             <p class="text-[12px] font-semibold text-slate-500">
-              Already have an account?
-              <router-link :to="{ name: 'login' }" class="text-[#17664b] font-bold hover:underline ml-1">Sign in</router-link>
+              {{ $t('auth.haveAccount') }}
+              <router-link :to="{ name: 'login' }" class="text-[#17664b] font-bold hover:underline ml-1">{{ $t('auth.signIn') }}</router-link>
             </p>
           </div>
         </template>
@@ -74,15 +76,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
               </svg>
             </div>
-            <h1 class="text-2xl font-black text-slate-900 mb-2">Registration Received!</h1>
-            <p class="text-[12px] text-slate-500 leading-relaxed mb-6">
-              Your account is active — you can already log in with your email and password. 
-              A librarian will issue your library QR card shortly; you can check its status anytime from <span class="font-bold text-slate-700">Settings → Security</span>.
-            </p>
+            <h1 class="text-2xl font-black text-slate-900 mb-2">{{ $t('auth.registrationReceived') }}</h1>
+            <p class="text-[12px] text-slate-500 leading-relaxed mb-6" v-html="$t('auth.registrationMessage')"></p>
 
             <button @click="finishAndEnter"
               class="w-full bg-[#17664b] hover:bg-emerald-800 text-white rounded-full py-3.5 font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer">
-              Continue to Library LMS
+              {{ $t('auth.continueToApp') }}
             </button>
           </div>
         </template>
@@ -98,9 +97,12 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import RegisterForm from '../components/RegisterForm.vue'
 import { useAuthStore } from '../store/authStore'
+import { useBrandingStore } from '@/stores/brandingStore' // NEW
+import defaultLogo from '@/assets/images/logoh6.jpg' // NEW
 
 const router = useRouter()
 const authStore = useAuthStore()
+const brandingStore = useBrandingStore() // NEW
 const registered = ref(false)
 
 async function handleRegister(formData) {

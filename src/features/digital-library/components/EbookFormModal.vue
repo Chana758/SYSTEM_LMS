@@ -1,16 +1,16 @@
 <template>
   <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
     <div class="bg-white rounded-2xl p-6 w-full max-w-lg">
-      <h2 class="text-lg font-bold text-gray-800 mb-1">{{ isEdit ? 'Edit E-book' : 'Add E-book' }}</h2>
-      <p class="text-sm text-gray-500 mb-4">Attach a digital file to an existing book title.</p>
+      <h2 class="text-lg font-bold text-gray-800 mb-1">{{ isEdit ? t('digitalLibrary.formModal.editTitle') : t('digitalLibrary.formModal.addTitle') }}</h2>
+      <p class="text-sm text-gray-500 mb-4">{{ t('digitalLibrary.formModal.subtitle') }}</p>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div v-if="!isEdit" class="relative">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Book</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('digitalLibrary.formModal.bookLabel') }}</label>
           <input
             v-model="bookQuery"
             type="text"
-            placeholder="Search for a book..."
+            :placeholder="t('digitalLibrary.formModal.searchBookPlaceholder')"
             class="w-full border rounded-lg px-3 py-2 text-sm"
             @input="debouncedSearch"
             @focus="showResults = true"
@@ -28,7 +28,9 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">File ({{ isEdit ? 'leave empty to keep current' : 'PDF/EPUB/MOBI, max 50MB' }})</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('digitalLibrary.formModal.fileLabel') }} ({{ isEdit ? t('digitalLibrary.formModal.fileKeepHint') : t('digitalLibrary.formModal.fileNewHint') }})
+          </label>
           <input
             type="file"
             accept=".pdf,.epub,.mobi"
@@ -39,7 +41,7 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Format</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('digitalLibrary.formModal.format') }}</label>
             <select v-model="form.format" class="w-full border rounded-lg px-3 py-2 text-sm">
               <option value="pdf">PDF</option>
               <option value="epub">EPUB</option>
@@ -47,27 +49,27 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Access</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('digitalLibrary.formModal.accessType') }}</label>
             <select v-model="form.access_type" class="w-full border rounded-lg px-3 py-2 text-sm">
-              <option value="member_only">Members Only</option>
-              <option value="public">Public</option>
+              <option value="member_only">{{ t('digitalLibrary.detail.accessMembersOnly') }}</option>
+              <option value="public">{{ t('digitalLibrary.detail.accessPublic') }}</option>
             </select>
           </div>
         </div>
 
         <label class="flex items-center gap-2 text-sm text-gray-600">
           <input type="checkbox" v-model="form.is_downloadable" />
-          Allow download
+          {{ t('digitalLibrary.formModal.allowDownload') }}
         </label>
 
         <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
 
         <div class="flex gap-2 pt-2">
           <button type="button" @click="$emit('cancel')" class="flex-1 border border-gray-300 text-gray-600 py-2.5 rounded-lg font-medium hover:bg-gray-50">
-            Cancel
+            {{ t('digitalLibrary.formModal.cancel') }}
           </button>
           <button type="submit" :disabled="loading" class="flex-1 bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-lg font-medium disabled:opacity-50">
-            {{ loading ? 'Saving...' : (isEdit ? 'Save Changes' : 'Add E-book') }}
+            {{ loading ? t('digitalLibrary.formModal.saving') : (isEdit ? t('digitalLibrary.formModal.saveChanges') : t('digitalLibrary.formModal.addEbook')) }}
           </button>
         </div>
       </form>
@@ -77,8 +79,11 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import apiClient from '@/api/axios'
 import { useLibraryStore } from '../store/libraryStore'
+
+const { t } = useI18n()
 
 const props = defineProps({
   ebook: { type: Object, default: null }, // pass for edit mode
@@ -128,11 +133,11 @@ async function handleSubmit() {
   errorMessage.value = ''
 
   if (!isEdit.value && !selectedBook.value) {
-    errorMessage.value = 'Please select a book.'
+    errorMessage.value = t('digitallibrary.formModal.selectBookError')
     return
   }
   if (!isEdit.value && !selectedFile.value) {
-    errorMessage.value = 'Please choose a file.'
+    errorMessage.value = t('digitallibrary.formModal.chooseFileError')
     return
   }
 

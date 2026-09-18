@@ -6,13 +6,13 @@
       <!-- HEADER SECTION -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200 gap-4">
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Dashboard Overview</h1>
-          <p class="text-xs font-semibold text-slate-500 mt-0.5">Welcome back! Here is what's happening in your library today.</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('dashboard.title') }}</h1>
+          <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('dashboard.subtitle') }}</p>
         </div>
         <div class="flex items-center gap-3 self-start sm:self-auto">
           <span class="px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-black uppercase tracking-wider border border-emerald-300 flex items-center gap-2 shadow-2xs">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            System Online
+            {{ t('dashboard.systemOnline') }}
           </span>
         </div>
       </div>
@@ -30,7 +30,7 @@
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.total_books }}</p>
-            <p class="text-[11px] font-bold text-blue-100 tracking-wide">Total Books</p>
+            <p class="text-[11px] font-bold text-blue-100 tracking-wide">{{ t('dashboard.totalBooks') }}</p>
           </div>
         </div>
 
@@ -44,7 +44,7 @@
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.available_books }}</p>
-            <p class="text-[11px] font-bold text-emerald-100 tracking-wide">Available Books</p>
+            <p class="text-[11px] font-bold text-emerald-100 tracking-wide">{{ t('dashboard.availableBooks') }}</p>
           </div>
         </div>
 
@@ -58,7 +58,7 @@
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.total_members }}</p>
-            <p class="text-[11px] font-bold text-amber-100 tracking-wide">Active Members</p>
+            <p class="text-[11px] font-bold text-amber-100 tracking-wide">{{ t('dashboard.activeMembers') }}</p>
           </div>
         </div>
 
@@ -72,7 +72,7 @@
           </div>
           <div>
             <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.borrowed_today }}</p>
-            <p class="text-[11px] font-bold text-purple-100 tracking-wide">Borrowed Today</p>
+            <p class="text-[11px] font-bold text-purple-100 tracking-wide">{{ t('dashboard.borrowedToday') }}</p>
           </div>
         </div>
 
@@ -89,12 +89,12 @@
           <div>
             <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-5">
               <div>
-                <h3 class="text-base font-black text-slate-900 tracking-tight">Circulation Overview</h3>
-                <p class="text-xs font-semibold text-slate-500 mt-0.5">Current borrowing activity and financial status.</p>
+                <h3 class="text-base font-black text-slate-900 tracking-tight">{{ t('dashboard.circulationOverview') }}</h3>
+                <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('dashboard.circulationSubtitle') }}</p>
               </div>
               <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase tracking-wider border border-emerald-300 shadow-2xs flex items-center gap-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                Live Data
+                {{ t('dashboard.liveData') }}
               </span>
             </div>
 
@@ -105,7 +105,7 @@
                   <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                     <BookOpenIcon class="w-4 h-4" />
                   </div>
-                  <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">Currently Borrowed</span>
+                  <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">{{ t('dashboard.currentlyBorrowed') }}</span>
                 </div>
                 <span class="font-black text-slate-900 font-mono text-base px-3 py-0.5 rounded-lg bg-slate-50 border border-slate-200">{{ store.stats.currently_borrowed }}</span>
               </div>
@@ -116,7 +116,7 @@
                   <div class="w-9 h-9 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
                     <ExclamationTriangleIcon class="w-4 h-4" />
                   </div>
-                  <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">Overdue Books</span>
+                  <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">{{ t('dashboard.overdueBooks') }}</span>
                 </div>
                 <span class="font-black text-rose-600 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 border border-rose-200">{{ store.stats.overdue_count }}</span>
               </div>
@@ -127,7 +127,7 @@
                   <div class="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
                     <BanknotesIcon class="w-4 h-4" />
                   </div>
-                  <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">Unpaid Fines</span>
+                  <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">{{ t('dashboard.unpaidFines') }}</span>
                 </div>
                 <span class="font-black text-rose-600 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 border border-rose-200">${{ store.stats.unpaid_fines_total.toFixed(2) }}</span>
               </div>
@@ -140,17 +140,17 @@
           <div>
             <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-5">
               <div>
-                <h3 class="text-base font-black text-slate-900 tracking-tight">Stock Warning</h3>
-                <p class="text-xs font-semibold text-slate-500 mt-0.5">Books running low on available quantity.</p>
+                <h3 class="text-base font-black text-slate-900 tracking-tight">{{ t('dashboard.stockWarning') }}</h3>
+                <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('dashboard.stockWarningSubtitle') }}</p>
               </div>
               <span class="px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-[10px] font-black uppercase tracking-wider border border-rose-300 shadow-2xs flex items-center gap-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-                Inventory Alert
+                {{ t('dashboard.inventoryAlert') }}
               </span>
             </div>
 
             <div v-if="!store.stats.low_stock_books.length" class="text-slate-500 text-xs font-bold py-14 text-center bg-white rounded-xl border border-dashed border-slate-300 shadow-2xs">
-              🎉 Awesome! No books are low on stock.
+              {{ t('dashboard.noLowStock') }}
             </div>
             <div v-else class="space-y-3 overflow-y-auto max-h-[240px] pr-1">
               <div v-for="b in store.stats.low_stock_books" :key="b.id" class="flex justify-between items-center text-sm bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-rose-200 transition">
@@ -160,7 +160,7 @@
                   </div>
                   <span class="font-bold text-slate-800 text-xs truncate">{{ b.title }}</span>
                 </div>
-                <span class="text-rose-600 font-black text-xs font-mono bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-200 flex-shrink-0">{{ b.available_qty }}/{{ b.total_qty }} left</span>
+                <span class="text-rose-600 font-black text-xs font-mono bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-200 flex-shrink-0">{{ b.available_qty }}/{{ b.total_qty }} {{ t('dashboard.leftSuffix') }}</span>
               </div>
             </div>
           </div>
@@ -177,32 +177,36 @@
       <!-- Smart Features Showcase -->
       <div class="pt-2">
         <div class="mb-4">
-          <h3 class="text-lg font-black text-slate-900 tracking-tight">Smart Tools</h3>
-          <p class="text-xs font-semibold text-slate-500 mt-0.5">Quick access to AI-powered modules and hardware integrations.</p>
+          <h3 class="text-lg font-black text-slate-900 tracking-tight">{{ t('dashboard.smartTools') }}</h3>
+          <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('dashboard.smartToolsSubtitle') }}</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <SmartFeatureCard
-            title="AI Chatbot"
-            description="Ask the assistant to find books, check due dates, or get help."
+            :title="t('dashboard.aiChatbot')"
+            :description="t('dashboard.aiChatbotDesc')"
             :icon="CpuChipIcon"
+            variant="chatbot"
             to="/chatbot"
           />
           <SmartFeatureCard
-            title="AI Recommendations"
-            description="Personalized book suggestions based on borrowing history."
+            :title="t('dashboard.aiRecommendations')"
+            :description="t('dashboard.aiRecommendationsDesc')"
             :icon="SparklesIcon"
+            variant="recommendations"
             to="/ai-recommendation"
           />
           <SmartFeatureCard
-            title="Barcode Scanner"
-            description="Scan book barcodes for instant borrow/return."
+            :title="t('dashboard.barcodeScanner')"
+            :description="t('dashboard.barcodeScannerDesc')"
             :icon="QrCodeIcon"
+            variant="scanner"
             to="/scanner"
           />
           <SmartFeatureCard
-            title="Digital Library"
-            description="Browse and read e-books directly online."
+            :title="t('dashboard.digitalLibrary')"
+            :description="t('dashboard.digitalLibraryDesc')"
             :icon="DocumentTextIcon"
+            variant="digital-library"
             to="/digital-library"
           />
         </div>
@@ -214,6 +218,7 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useDashboardStore } from '../store/dashboardStore'
 import QuickActions from '../components/QuickActions.vue'
 import RecentActivities from '../components/RecentActivities.vue'
@@ -233,6 +238,7 @@ import {
   ExclamationCircleIcon,
 } from '@heroicons/vue/24/outline'
 
+const { t } = useI18n()
 const store = useDashboardStore()
 
 onMounted(() => {

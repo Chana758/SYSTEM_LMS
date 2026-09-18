@@ -1,0 +1,38 @@
+{
+  "brand": {
+    "name": "ស្មាត",
+    "nameAccent": "និចសាស់",
+    "tagline": "ប្រព័ន្ធគ្រប់គ្រងឆ្លាតវៃ"
+  },
+  "dashboard": "ផ្ទាំងគ្រប់គ្រង",
+  "logout": "ចាកចេញ",
+  "sections": {
+    "management": "ការគ្រប់គ្រង",
+    "smartTools": "ឧបករណ៍ឆ្លាតវៃ",
+    "system": "ប្រព័ន្ធ"
+  },
+  "menu": {
+    "books": "សៀវភៅ",
+    "myProfile": "ប្រវត្តិរូបខ្ញុំ",
+    "members": "សមាជិក",
+    "librarians": "បណ្ណារក្ស",
+    "borrow": "ខ្ចី",
+    "myBorrows": "ការខ្ចីរបស់ខ្ញុំ",
+    "return": "សង",
+    "overdue": "ហួសកំណត់",
+    "borrowHistory": "ប្រវត្តិការខ្ចី",
+    "reservations": "ការកក់",
+    "myReservations": "ការកក់របស់ខ្ញុំ",
+    "fines": "ការពិន័យ",
+    "myFines": "ការពិន័យរបស់ខ្ញុំ",
+    "digitalLibrary": "បណ្ណាល័យឌីជីថល",
+    "aiChatbot": "ជជែក AI",
+    "recommendations": "ការណែនាំ",
+    "scanner": "ស្កេន",
+    "reports": "របាយការណ៍",
+    "notifications": "ការជូនដំណឹង",
+    "cardApprovals": "កាត",
+    "backupRestore": "បម្រុងទុក និងស្តារ",
+    "settings": "ការកំណត់"
+  }
+}

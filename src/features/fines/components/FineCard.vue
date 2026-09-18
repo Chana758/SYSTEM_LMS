@@ -8,11 +8,14 @@
       <FineStatusBadge :status="fine.status" />
     </div>
     <p class="text-lg font-bold text-gray-800">${{ Number(fine.amount).toFixed(2) }}</p>
-    <p class="text-xs text-gray-400 capitalize mt-1">Reason: {{ fine.reason }}</p>
+    <p class="text-xs text-gray-400 capitalize mt-1">{{ t('fines.reason') }}: {{ fine.reason }}</p>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import FineStatusBadge from './FineStatusBadge.vue'
+
+const { t } = useI18n()
 defineProps({ fine: { type: Object, required: true } })
 </script>

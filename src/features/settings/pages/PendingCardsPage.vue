@@ -1,10 +1,6 @@
-paddingeCardpage.vue
-
-
 <template>
   <div class="p-6 md:p-8 max-w-[1600px] mx-auto space-y-6">
-    
-    <!-- Modern Admin Header Section -->
+
     <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 flex-shrink-0">
@@ -14,12 +10,12 @@ paddingeCardpage.vue
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-bold text-gray-900 tracking-tight">Card Approvals Queue</h1>
+            <h1 class="text-xl font-bold text-gray-900 tracking-tight">{{ t('settings.cardApprovals.title') }}</h1>
             <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-100">
-              Admin Area
+              {{ t('settings.cardApprovals.adminArea') }}
             </span>
           </div>
-          <p class="text-xs text-gray-500 mt-1 font-normal">Manage and issue digital/physical QR membership cards for pending accounts.</p>
+          <p class="text-xs text-gray-500 mt-1 font-normal">{{ t('settings.cardApprovals.subtitle') }}</p>
         </div>
       </div>
 
@@ -30,23 +26,21 @@ paddingeCardpage.vue
         <svg class="w-4 h-4" :class="{ 'animate-spin': loading }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
-        <span>Refresh Queue</span>
+        <span>{{ t('settings.cardApprovals.refreshQueue') }}</span>
       </button>
     </div>
 
-    <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Pending Requests Table Section -->
+
       <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden flex flex-col">
         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
           <div class="flex items-center gap-2">
-            <h2 class="text-sm font-bold text-gray-800">Pending Requests</h2>
+            <h2 class="text-sm font-bold text-gray-800">{{ t('settings.cardApprovals.pendingRequests') }}</h2>
             <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-extrabold rounded-md">
               {{ users.length }}
             </span>
           </div>
-          <span class="text-xs text-gray-400 font-medium">Auto-updated</span>
+          <span class="text-xs text-gray-400 font-medium">{{ t('settings.cardApprovals.autoUpdated') }}</span>
         </div>
 
         <div class="flex-1 overflow-x-auto min-h-[320px]">
@@ -54,7 +48,7 @@ paddingeCardpage.vue
             <svg class="w-8 h-8 animate-spin text-emerald-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            <p class="text-xs font-medium text-gray-500">Loading requests...</p>
+            <p class="text-xs font-medium text-gray-500">{{ t('settings.cardApprovals.loadingRequests') }}</p>
           </div>
 
           <div v-else-if="users.length === 0" class="flex flex-col items-center justify-center h-52 text-gray-400">
@@ -63,16 +57,16 @@ paddingeCardpage.vue
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <p class="text-xs font-semibold text-gray-500">No pending card requests found.</p>
+            <p class="text-xs font-semibold text-gray-500">{{ t('settings.cardApprovals.noPendingRequests') }}</p>
           </div>
 
           <table v-else class="w-full text-left border-collapse">
             <thead>
               <tr class="bg-gray-50/80 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                <th class="py-3 px-6">User Details</th>
-                <th class="py-3 px-4">Role</th>
-                <th class="py-3 px-4">Identifier</th>
-                <th class="py-3 px-6 text-right">Action</th>
+                <th class="py-3 px-6">{{ t('settings.cardApprovals.userDetails') }}</th>
+                <th class="py-3 px-4">{{ t('settings.cardApprovals.role') }}</th>
+                <th class="py-3 px-4">{{ t('settings.cardApprovals.identifier') }}</th>
+                <th class="py-3 px-6 text-right">{{ t('settings.cardApprovals.action') }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 text-xs">
@@ -119,7 +113,7 @@ paddingeCardpage.vue
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Issue Card
+                    {{ t('settings.cardApprovals.issueCard') }}
                   </button>
                 </td>
               </tr>
@@ -128,12 +122,11 @@ paddingeCardpage.vue
         </div>
       </div>
 
-      <!-- Preview & Print Panel Section -->
       <div class="bg-white rounded-2xl border border-gray-100 shadow-xs p-6 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-5">
-            <h2 class="text-sm font-bold text-gray-800">Card Preview</h2>
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-0.5 rounded">Live Output</span>
+            <h2 class="text-sm font-bold text-gray-800">{{ t('settings.cardApprovals.cardPreview') }}</h2>
+            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-0.5 rounded">{{ t('settings.cardApprovals.liveOutput') }}</span>
           </div>
 
           <div v-if="!issuedCard" class="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
@@ -142,14 +135,12 @@ paddingeCardpage.vue
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
               </svg>
             </div>
-            <p class="text-xs font-bold text-gray-700">No Card Selected</p>
-            <p class="text-[11px] text-gray-400 mt-1 max-w-[180px] leading-normal">Click "Issue Card" on any user to preview their ID card.</p>
+            <p class="text-xs font-bold text-gray-700">{{ t('settings.cardApprovals.noCardSelected') }}</p>
+            <p class="text-[11px] text-gray-400 mt-1 max-w-[180px] leading-normal">{{ t('settings.cardApprovals.noCardSelectedHint') }}</p>
           </div>
 
           <div v-else class="space-y-4">
-            <!-- Membership Card Component Container -->
             <div class="border border-gray-200 rounded-xl overflow-hidden shadow-md bg-white">
-              <!-- Card Header Design -->
               <div
                 class="p-4 text-white"
                 :style="{
@@ -173,7 +164,6 @@ paddingeCardpage.vue
                 </div>
               </div>
 
-              <!-- Card Body Info -->
               <div class="px-4 pt-3 pb-4">
                 <div class="flex items-end gap-3 -mt-8 mb-3">
                   <img
@@ -213,18 +203,17 @@ paddingeCardpage.vue
                 <div class="flex items-center gap-3">
                   <img :src="issuedCard.qrDataUrl" class="w-16 h-16 rounded-lg border border-gray-100 p-1 bg-white shadow-2xs flex-shrink-0" />
                   <div class="text-[10px] text-gray-500 leading-relaxed">
-                    <p>Scan at kiosk for instant check-in.</p>
+                    <p>{{ t('settings.cardApprovals.scanHint') }}</p>
                     <p class="font-bold mt-1" :style="{ color: issuedCard.role === 'librarian' ? '#1d4ed8' : '#047857' }">
-                      Valid until {{ formatDate(issuedCard.expiresAt) }}
+                      {{ t('settings.cardApprovals.validUntil', { date: formatDate(issuedCard.expiresAt) }) }}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <!-- Card Footer -->
               <div class="border-t border-dashed border-gray-200 py-1.5 text-center">
                 <p class="text-[8px] font-extrabold uppercase tracking-widest" :style="{ color: issuedCard.role === 'librarian' ? '#1d4ed8' : '#047857' }">
-                  Official Library ID Card
+                  {{ t('settings.cardApprovals.officialCard') }}
                 </p>
               </div>
             </div>
@@ -239,7 +228,7 @@ paddingeCardpage.vue
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>
-            Print ID Card
+            {{ t('settings.cardApprovals.printIdCard') }}
           </button>
         </div>
       </div>
@@ -252,7 +241,9 @@ paddingeCardpage.vue
 import { ref, onMounted } from 'vue'
 import QRCode from 'qrcode'
 import { authService } from '@/features/auth/services/authService'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const users = ref([])
 const loading = ref(false)
 const issuedCard = ref(null)
@@ -269,7 +260,7 @@ async function loadPending() {
     const { data } = await authService.getPendingCards()
     users.value = data.data
   } catch (e) {
-    alert(e.response?.data?.message || 'Failed to load pending cards.')
+    alert(e.response?.data?.message || t('settings.cardApprovals.loadFailed'))
   } finally {
     loading.value = false
   }
@@ -296,7 +287,7 @@ async function handleIssue(user) {
 
     users.value = users.value.filter((u) => u.id !== user.id)
   } catch (e) {
-    alert(e.response?.data?.message || 'Failed to issue card.')
+    alert(e.response?.data?.message || t('settings.cardApprovals.issueFailed'))
   }
 }
 

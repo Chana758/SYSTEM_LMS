@@ -5,8 +5,8 @@
         👤
       </div>
       <div>
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Settings</h1>
-        <p class="text-xs font-bold text-slate-500 mt-0.5">Manage your profile, account, and system preferences.</p>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('settings.pageTitle') }}</h1>
+        <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('settings.pageSubtitle') }}</p>
       </div>
     </div>
 
@@ -22,6 +22,8 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import SettingsNav from '@/features/settings/components/SettingsNav.vue'
 import PreferenceSettings from '@/features/settings/components/PreferenceSettings.vue'
 </script>

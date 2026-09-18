@@ -29,19 +29,19 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5">
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Membership No.</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.membershipNo') }}</p>
             <p class="text-sm font-medium text-gray-700">{{ member.membership_no }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Phone</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.card.phone') }}</p>
             <p class="text-sm font-medium text-gray-700">{{ member.user?.phone || '—' }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Borrow Limit</p>
-            <p class="text-sm font-medium text-gray-700">{{ member.max_borrow_limit }} books</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.card.borrowLimit') }}</p>
+            <p class="text-sm font-medium text-gray-700">{{ member.max_borrow_limit }} {{ t('members.card.books') }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Joined</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.card.joined') }}</p>
             <p class="text-sm font-medium text-gray-700">{{ formatDate(member.created_at) }}</p>
           </div>
         </div>
@@ -52,7 +52,10 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MembershipBadge from './MembershipBadge.vue'
+
+const { t } = useI18n()
 
 const props = defineProps({
   member: { type: Object, required: true },

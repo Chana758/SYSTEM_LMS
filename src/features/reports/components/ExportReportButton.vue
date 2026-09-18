@@ -1,6 +1,7 @@
 <template>
-  <div class="relative">
+  <div v-if="authStore.role === 'admin'" class="relative">
     <button
+      type="button"
       @click="open = !open"
       :disabled="exporting"
       class="px-4 py-2.5 bg-[#1c2e35] text-white text-xs font-black uppercase tracking-wider rounded-xl hover:bg-[#28414a] transition-colors disabled:opacity-40 flex items-center gap-2"
@@ -9,7 +10,7 @@
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
       </svg>
-      {{ exporting ? 'Generating…' : 'Export' }}
+      {{ exporting ? t('reports.export.generating') : t('reports.export.export') }}
     </button>
 
     <div
@@ -20,39 +21,55 @@
       <button
         v-for="fmt in formats"
         :key="fmt.value"
+        type="button"
         @click="handleExport(fmt.value)"
         class="w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
       >
-        {{ fmt.label }}
+        {{ t(fmt.labelKey) }}
       </button>
+    </div>
+
+    <!-- Shows the error to the user instead of failing silently to console.error -->
+    <div
+      v-if="errorMsg"
+      class="absolute right-0 mt-2 w-64 bg-red-50 border border-red-200 text-red-600 text-xs font-semibold rounded-xl px-3.5 py-2.5 z-20 shadow-lg"
+    >
+      {{ errorMsg }}
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/features/auth/store/authStore'
 import { useReportStore } from '../store'
 
+const { t } = useI18n()
+
 const props = defineProps({
-  type: { type: String, required: true },   // 'borrow' | 'fine' | 'user' | 'revenue' | 'stock'
-  filters: { type: Object, default: () => ({}) }, // { date_from, date_to, status }
+  type: { type: String, required: true },
+  filters: { type: Object, default: () => ({}) },
 })
 
 const emit = defineEmits(['exported'])
 
+const authStore = useAuthStore()
 const store = useReportStore()
 const open = ref(false)
 const exporting = ref(false)
+const errorMsg = ref('')
 
 const formats = [
-  { value: 'pdf', label: '📄 PDF' },
-  { value: 'excel', label: '📊 Excel' },
-  { value: 'csv', label: '🗒️ CSV' },
+  { value: 'pdf', labelKey: 'reports.export.pdf' },
+  { value: 'excel', labelKey: 'reports.export.excel' },
+  { value: 'csv', labelKey: 'reports.export.csv' },
 ]
 
 const handleExport = async (format) => {
   open.value = false
   exporting.value = true
+  errorMsg.value = ''
   try {
     const result = await store.generateExport({
       type: props.type,
@@ -63,14 +80,16 @@ const handleExport = async (format) => {
     })
     if (result?.download_url) {
       window.open(result.download_url, '_blank')
+    } else {
+      errorMsg.value = t('reports.export.noFileUrl')
     }
     emit('exported', result)
   } catch (e) {
-    // surface however this project shows errors elsewhere (toast plugin is
-    // already registered globally as `app.use(toast)` in main.js)
     console.error('Export failed:', e)
+    errorMsg.value = e.response?.data?.message || t('reports.export.failed')
   } finally {
     exporting.value = false
+    setTimeout(() => { errorMsg.value = '' }, 5000)
   }
 }
 </script>

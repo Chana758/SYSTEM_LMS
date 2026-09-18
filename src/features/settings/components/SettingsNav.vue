@@ -1,7 +1,7 @@
 <template>
   <nav class="w-64 flex-shrink-0 bg-white rounded-3xl shadow-sm border border-gray-100 p-4 space-y-7 h-fit">
     <div>
-      <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-3 mb-2.5">Personal</p>
+      <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-3 mb-2.5">{{ $t('settings.nav.personal') }}</p>
       <div class="space-y-1.5">
         <router-link
           v-for="item in personalItems" :key="item.to"
@@ -21,7 +21,7 @@
               :class="isActive(item.to) ? 'text-white' : 'text-gray-400 group-hover:text-green-700'"
             />
           </span>
-          <span class="flex-1">{{ item.label }}</span>
+          <span class="flex-1">{{ $t(item.labelKey) }}</span>
           <ChevronRightIcon
             class="w-4 h-4 transition-all"
             :class="isActive(item.to) ? 'text-white/80 translate-x-0' : 'text-gray-300 -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'"
@@ -31,7 +31,7 @@
     </div>
 
     <div v-if="['admin', 'librarian'].includes(authStore.role)">
-      <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-3 mb-2.5">System</p>
+      <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-3 mb-2.5">{{ $t('settings.nav.system') }}</p>
       <div class="space-y-1.5">
         <router-link
           v-for="item in systemItems" :key="item.to"
@@ -51,7 +51,7 @@
               :class="isActive(item.to) ? 'text-white' : 'text-gray-400 group-hover:text-green-700'"
             />
           </span>
-          <span class="flex-1">{{ item.label }}</span>
+          <span class="flex-1">{{ $t(item.labelKey) }}</span>
           <ChevronRightIcon
             class="w-4 h-4 transition-all"
             :class="isActive(item.to) ? 'text-white/80 translate-x-0' : 'text-gray-300 -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'"
@@ -78,18 +78,18 @@ const authStore = useAuthStore()
 const isActive = (path) => route.path === path
 
 const personalItems = [
-  { to: '/settings/profile', icon: UserCircleIcon, label: 'Profile' },
-  { to: '/settings/account', icon: IdentificationIcon, label: 'Account' },
-  { to: '/settings/security', icon: ShieldCheckIcon, label: 'Security' },
-  { to: '/settings/preferences', icon: AdjustmentsHorizontalIcon, label: 'Preferences' },
+  { to: '/settings/profile', icon: UserCircleIcon, labelKey: 'settings.nav.profile' },
+  { to: '/settings/account', icon: IdentificationIcon, labelKey: 'settings.nav.account' },
+  { to: '/settings/security', icon: ShieldCheckIcon, labelKey: 'settings.nav.security' },
+  { to: '/settings/preferences', icon: AdjustmentsHorizontalIcon, labelKey: 'settings.nav.preferences' },
 ]
 
-const systemItems = computed(() => { 
-  const items = [{ to: '/settings/system', icon: Cog6ToothIcon, label: 'System Settings' }]
+const systemItems = computed(() => {
+  const items = [{ to: '/settings/system', icon: Cog6ToothIcon, labelKey: 'settings.nav.systemSettings' }]
   if (authStore.role === 'admin') {
     items.push(
-      { to: '/settings/membership-types', icon: RectangleStackIcon, label: 'Membership Types' },
-      { to: '/settings/backup', icon: ArchiveBoxArrowDownIcon, label: 'Backup & Restore' }
+      { to: '/settings/membership-types', icon: RectangleStackIcon, labelKey: 'settings.nav.membershipTypes' },
+      { to: '/settings/backup', icon: ArchiveBoxArrowDownIcon, labelKey: 'settings.nav.backupRestore' }
     )
   }
   return items

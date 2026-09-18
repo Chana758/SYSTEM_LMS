@@ -7,15 +7,15 @@
           ➕
         </div>
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Add New Fine</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Create and issue a new fine record for a member</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('fines.createPage.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('fines.createPage.subtitle') }}</p>
         </div>
       </div>
       <router-link 
         to="/fines" 
         class="border-2 border-slate-300 bg-white text-slate-700 hover:bg-slate-50 px-4 py-2.5 rounded-xl text-xs font-extrabold transition-colors shadow-2xs inline-flex items-center gap-1.5 flex-shrink-0"
       >
-        <span>←</span> Back
+        <span>←</span> {{ t('fines.createPage.back') }}
       </router-link>
     </div>
 
@@ -33,9 +33,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useFineStore } from '../store/fineStore'
 import FineForm from '../components/FineForm.vue'
 
+const { t } = useI18n()
 const router = useRouter()
 const store = useFineStore()
 

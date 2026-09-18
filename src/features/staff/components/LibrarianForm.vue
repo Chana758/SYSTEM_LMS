@@ -2,7 +2,7 @@
   <form @submit.prevent="handleSubmit" class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Name</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.name') }}</label>
         <input
           v-model="form.name"
           type="text"
@@ -13,7 +13,7 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.email') }}</label>
         <input
           v-model="form.email"
           type="email"
@@ -25,7 +25,7 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Department</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.department') }}</label>
         <input
           v-model="form.department"
           type="text"
@@ -34,7 +34,7 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Position</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.position') }}</label>
         <input
           v-model="form.position"
           type="text"
@@ -43,20 +43,20 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Shift</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.shift') }}</label>
         <select
           v-model="form.shift"
           class="w-full border border-gray-300 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600 transition"
         >
-          <option value="morning">Morning</option>
-          <option value="afternoon">Afternoon</option>
-          <option value="evening">Evening</option>
-          <option value="full_day">Full Day</option>
+          <option value="morning">{{ $t('staff.form.shiftMorning') }}</option>
+          <option value="afternoon">{{ $t('staff.form.shiftAfternoon') }}</option>
+          <option value="evening">{{ $t('staff.form.shiftEvening') }}</option>
+          <option value="full_day">{{ $t('staff.form.shiftFullDay') }}</option>
         </select>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.phoneNumber') }}</label>
         <input
           v-model="form.phone_number"
           type="text"
@@ -65,20 +65,20 @@
       </div>
 
       <div v-if="isEdit">
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.status') }}</label>
         <select
           v-model="form.status"
           class="w-full border border-gray-300 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600 transition"
         >
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="on_leave">On Leave</option>
+          <option value="active">{{ $t('staff.form.statusActive') }}</option>
+          <option value="inactive">{{ $t('staff.form.statusInactive') }}</option>
+          <option value="on_leave">{{ $t('staff.form.statusOnLeave') }}</option>
         </select>
       </div>
 
       <template v-if="!isEdit">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.password') }}</label>
           <input
             v-model="form.password"
             type="password"
@@ -88,7 +88,7 @@
           <p v-if="errors.password" class="text-xs text-red-600 mt-1">{{ errors.password }}</p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('staff.form.confirmPassword') }}</label>
           <input
             v-model="form.password_confirmation"
             type="password"
@@ -108,14 +108,14 @@
         @click="$emit('cancel')"
         class="px-5 py-2.5 border border-gray-200 text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition"
       >
-        Cancel
+        {{ $t('staff.form.cancel') }}
       </button>
       <button
         type="submit"
         :disabled="loading"
         class="px-5 py-2.5 bg-green-700 text-white text-sm font-medium rounded-xl hover:bg-green-800 active:scale-[0.98] transition disabled:opacity-50"
       >
-        {{ loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Librarian' }}
+        {{ loading ? $t('staff.form.saving') : isEdit ? $t('staff.form.saveChanges') : $t('staff.form.createLibrarian') }}
       </button>
     </div>
   </form>

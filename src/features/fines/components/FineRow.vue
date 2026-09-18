@@ -15,7 +15,13 @@
     <td class="px-4 py-3 capitalize text-gray-500">{{ fine.reason }}</td>
     <td class="px-4 py-3"><FineStatusBadge :status="fine.status" /></td>
     <td class="px-4 py-3 text-right">
-      <FineActionMenu :fine="fine" @pay="$emit('pay', fine)" @waive="$emit('waive', fine)" @view="$emit('view', fine)" />
+      <FineActionMenu
+        :fine="fine"
+        @pay="$emit('pay', fine)"
+        @waive="$emit('waive', fine)"
+        @view="$emit('view', fine)"
+        @edit="$emit('edit', fine)"
+      />
     </td>
   </tr>
 </template>
@@ -25,7 +31,7 @@ import FineStatusBadge from './FineStatusBadge.vue'
 import FineActionMenu from './FineActionMenu.vue'
 
 defineProps({ fine: { type: Object, required: true } })
-defineEmits(['pay', 'waive', 'view'])
+defineEmits(['pay', 'waive', 'view', 'edit'])
 
 function initials(name) {
   if (!name) return '?'

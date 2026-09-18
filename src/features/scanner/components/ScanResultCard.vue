@@ -1,16 +1,17 @@
 <template>
   <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-    <!-- status banner -->
+    <!-- Status Banner -->
     <div class="px-6 py-3 flex items-center gap-2" :class="banner.bg">
       <component :is="banner.icon" class="w-4 h-4 flex-shrink-0" :class="banner.iconColor" />
       <span class="text-xs font-semibold" :class="banner.textColor">{{ banner.label }}</span>
     </div>
 
     <div class="p-6">
+      <!-- Book Header Info -->
       <div class="flex items-start gap-4">
         <img
           v-if="result.book_copy?.book?.cover_image"
-          :src="result.book_copy.book.cover_image"
+          :src="coverUrl(result.book_copy.book.cover_image)"
           class="w-20 h-28 object-cover rounded-xl border border-gray-100 flex-shrink-0"
           alt="Book cover"
         />
@@ -29,133 +30,149 @@
             </p>
           </template>
           <template v-else>
-            <p class="text-sm text-gray-400">No book copy found for this barcode.</p>
+            <p class="text-sm text-gray-400">{{ t('scanner.result.noBookCopyFound') }}</p>
           </template>
 
           <div v-if="result.active_borrow" class="mt-3 flex items-center gap-2 text-sm rounded-xl px-3 py-2.5 bg-amber-50 border border-amber-100 text-amber-800">
             <UserCircleIcon class="w-4 h-4 flex-shrink-0 text-amber-500" />
             <span>
-              Borrowed by <span class="font-semibold">{{ result.active_borrow.member?.user?.name }}</span>
-              since {{ formatDate(result.active_borrow.borrow_date) }}
+              {{ t('scanner.result.borrowedBySince', { name: result.active_borrow.member?.user?.name, date: formatDate(result.active_borrow.borrow_date) }) }}
             </span>
           </div>
         </div>
       </div>
 
-      <!-- Borrow: free to assign -->
+      <!-- BORROW FLOW: Available to Assign -->
       <div
         v-if="scanType === 'borrow' && result.result === 'success' && !result.active_borrow"
         class="mt-5 pt-5 border-t border-dashed border-gray-200"
       >
-        <label class="block text-sm font-medium text-gray-700 mb-2">Assign to Member</label>
-        <div class="relative">
-          <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            v-model="memberSearch"
-            @input="searchMembers"
-            type="text"
-            placeholder="Search member by name or membership no…"
-            class="w-full rounded-xl pl-9 pr-3 py-2.5 text-sm outline-none border-2 border-gray-200 focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
-          />
-        </div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('scanner.result.assignToMember') }}</label>
 
-        <ul v-if="memberOptions.length" class="mt-2 rounded-xl border border-gray-200 divide-y divide-gray-100 max-h-40 overflow-y-auto">
-          <li
-            v-for="m in memberOptions" :key="m.id"
-            @click="selectedMember = m"
-            class="px-3 py-2.5 text-sm cursor-pointer transition flex items-center justify-between"
-            :class="selectedMember?.id === m.id ? 'bg-green-50' : 'hover:bg-gray-50'"
+        <div class="relative">
+          <div class="relative">
+            <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              v-model="memberSearch"
+              @input="searchMembers"
+              type="text"
+              :placeholder="t('scanner.result.searchMemberPlaceholder')"
+              class="w-full rounded-xl pl-9 pr-8 py-2.5 text-sm outline-none border-2 border-gray-200 focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
+            />
+            <button
+              v-if="selectedMember"
+              @click="clearSelectedMember"
+              type="button"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-bold"
+            >
+              ✕
+            </button>
+          </div>
+
+          <ul
+            v-if="memberOptions.length"
+            class="absolute z-30 left-0 right-0 mt-1 rounded-xl border border-gray-200 bg-white shadow-xl divide-y divide-gray-100 max-h-48 overflow-y-auto select-none"
           >
-            <span class="text-gray-700">{{ m.user?.name }}</span>
-            <span class="font-mono text-xs text-gray-400">{{ m.membership_no }}</span>
-          </li>
-        </ul>
+            <li
+              v-for="m in memberOptions"
+              :key="m.id"
+              @click="selectMember(m)"
+              class="px-3.5 py-2.5 text-sm cursor-pointer transition flex items-center justify-between hover:bg-green-50 active:bg-green-100"
+            >
+              <span class="text-gray-800 font-medium">{{ m.user?.name }}</span>
+              <span class="font-mono text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded">{{ m.membership_no }}</span>
+            </li>
+          </ul>
+        </div>
 
         <button
           @click="handleConfirmBorrow"
           :disabled="!selectedMember || isSubmitting"
-          class="mt-3 w-full px-5 py-2.5 bg-green-700 text-white text-sm font-semibold rounded-xl hover:bg-green-800 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
+          class="mt-4 w-full px-5 py-2.5 bg-green-700 text-white text-sm font-semibold rounded-xl hover:bg-green-800 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {{ isSubmitting ? 'Confirming…' : 'Confirm Borrow' }}
+          {{ isSubmitting ? t('scanner.result.confirming') : t('scanner.result.confirmBorrow') }}
         </button>
       </div>
 
-      <!-- 🆕 FIX: Borrow, but already checked out — instead of just a
-           warning text, staff can now add a member straight to the
-           reservation queue without leaving the scanner. -->
+      <!-- BORROW FLOW: Already Checked Out -->
       <div
         v-else-if="scanType === 'borrow' && result.result === 'success' && result.active_borrow"
         class="mt-5 pt-5 border-t border-dashed border-gray-200"
       >
         <p class="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-3.5 py-2.5 mb-3">
-          This copy is already checked out. You can add a member to the reservation queue instead.
+          {{ t('scanner.result.alreadyCheckedOut') }}
         </p>
 
-        <label class="block text-sm font-medium text-gray-700 mb-2">Reserve for Member</label>
-        <div class="relative">
-          <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            v-model="memberSearch"
-            @input="searchMembers"
-            type="text"
-            placeholder="Search member by name or membership no…"
-            class="w-full rounded-xl pl-9 pr-3 py-2.5 text-sm outline-none border-2 border-gray-200 focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition"
-          />
-        </div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('scanner.result.reserveForMember') }}</label>
 
-        <ul v-if="memberOptions.length" class="mt-2 rounded-xl border border-gray-200 divide-y divide-gray-100 max-h-40 overflow-y-auto">
-          <li
-            v-for="m in memberOptions" :key="m.id"
-            @click="selectedMember = m"
-            class="px-3 py-2.5 text-sm cursor-pointer transition flex items-center justify-between"
-            :class="selectedMember?.id === m.id ? 'bg-blue-50' : 'hover:bg-gray-50'"
+        <div class="relative">
+          <div class="relative">
+            <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              v-model="memberSearch"
+              @input="searchMembers"
+              type="text"
+              :placeholder="t('scanner.result.searchMemberPlaceholder')"
+              class="w-full rounded-xl pl-9 pr-8 py-2.5 text-sm outline-none border-2 border-gray-200 focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition"
+            />
+            <button
+              v-if="selectedMember"
+              @click="clearSelectedMember"
+              type="button"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-bold"
+            >
+              ✕
+            </button>
+          </div>
+
+          <ul
+            v-if="memberOptions.length"
+            class="absolute z-30 left-0 right-0 mt-1 rounded-xl border border-gray-200 bg-white shadow-xl divide-y divide-gray-100 max-h-48 overflow-y-auto select-none"
           >
-            <span class="text-gray-700">{{ m.user?.name }}</span>
-            <span class="font-mono text-xs text-gray-400">{{ m.membership_no }}</span>
-          </li>
-        </ul>
+            <li
+              v-for="m in memberOptions"
+              :key="m.id"
+              @click="selectMember(m)"
+              class="px-3.5 py-2.5 text-sm cursor-pointer transition flex items-center justify-between hover:bg-blue-50 active:bg-blue-100"
+            >
+              <span class="text-gray-800 font-medium">{{ m.user?.name }}</span>
+              <span class="font-mono text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded">{{ m.membership_no }}</span>
+            </li>
+          </ul>
+        </div>
 
         <button
           @click="handleReserve"
           :disabled="!selectedMember || isSubmitting"
-          class="mt-3 w-full px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
+          class="mt-4 w-full px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {{ isSubmitting ? 'Adding…' : 'Add to Reservation Queue' }}
+          {{ isSubmitting ? t('scanner.result.addingToQueue') : t('scanner.result.addToQueue') }}
         </button>
       </div>
 
-      <!-- Return flow -->
+      <!-- RETURN FLOW -->
       <div v-if="scanType === 'return' && result.active_borrow" class="mt-5 pt-5 border-t border-dashed border-gray-200 space-y-4">
-
-        <!-- 🆕 Overdue warning — computed before Confirm Return, so staff
-             see the fine estimate up front instead of being surprised
-             after submitting. -->
         <div v-if="daysLate > 0" class="flex items-start gap-2 text-sm rounded-xl px-3.5 py-3 bg-rose-50 border border-rose-100 text-rose-700">
           <ExclamationTriangleIcon class="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-500" />
           <span>
-            This book is <span class="font-bold">{{ daysLate }} day(s)</span> overdue.
-            Estimated overdue fine: <span class="font-bold">{{ estimatedOverdueFineKhr.toLocaleString() }}៛</span>
-            (≈ ${{ khrToUsd(estimatedOverdueFineKhr) }})
+            {{ t('scanner.result.overdueWarning', { days: daysLate, fine: estimatedOverdueFineKhr.toLocaleString(), usd: khrToUsd(estimatedOverdueFineKhr) }) }}
           </span>
         </div>
 
-        <!-- 🆕 FIX: condition selector — previously returnBook() always
-             defaulted to 'good' with no way to record damage/loss via
-             the scanner, so those fines were silently never created. -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Book Condition</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('scanner.result.bookCondition') }}</label>
           <select
             v-model="returnCondition"
             class="w-full rounded-xl px-3.5 py-2.5 text-sm border-2 border-gray-200 focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 outline-none transition"
           >
-            <option value="good">Good</option>
-            <option value="damaged">Damaged</option>
-            <option value="lost">Lost</option>
+            <option value="good">{{ t('scanner.result.conditionGood') }}</option>
+            <option value="damaged">{{ t('scanner.result.conditionDamaged') }}</option>
+            <option value="lost">{{ t('scanner.result.conditionLost') }}</option>
           </select>
         </div>
 
         <div v-if="returnCondition === 'damaged'">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Damage Fee (៛)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('scanner.result.damageFee') }}</label>
           <input
             v-model.number="damageFeeKhr"
             type="number" min="0" step="500"
@@ -165,7 +182,7 @@
         </div>
 
         <div v-if="returnCondition === 'lost'">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Lost Fee (៛)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('scanner.result.lostFee') }}</label>
           <input
             v-model.number="lostFeeKhr"
             type="number" min="0" step="1000"
@@ -175,11 +192,11 @@
         </div>
 
         <div v-if="returnCondition !== 'good'">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Notes (optional)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('scanner.result.notesOptional') }}</label>
           <textarea
             v-model="returnNotes"
             rows="2"
-            placeholder="Describe the issue…"
+            :placeholder="t('scanner.result.notesPlaceholder')"
             class="w-full rounded-xl px-3.5 py-2.5 text-sm border-2 border-gray-200 focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 outline-none transition"
           ></textarea>
         </div>
@@ -189,7 +206,7 @@
           :disabled="isSubmitting"
           class="w-full px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {{ isSubmitting ? 'Confirming…' : 'Confirm Return' }}
+          {{ isSubmitting ? t('scanner.result.confirming2') : t('scanner.result.confirmReturn') }}
         </button>
       </div>
 
@@ -211,10 +228,10 @@ import {
 } from '@heroicons/vue/24/solid'
 import { scannerService } from '../services'
 import { soundService } from '../services/soundService'
+import { useI18n } from 'vue-i18n'
 
-// ⚠️ Must match App\Support\CurrencyHelper::KHR_TO_USD_RATE on the
-// backend. Only used here for a live display estimate — the backend
-// still does the authoritative conversion when the fine is created.
+const { t } = useI18n()
+
 const KHR_TO_USD_RATE = 4100
 const khrToUsd = (khr) => ((khr || 0) / KHR_TO_USD_RATE).toFixed(2)
 
@@ -225,12 +242,12 @@ const props = defineProps({
 
 const emit = defineEmits(['completed'])
 
-const bannerMap = {
-  success:   { label: 'Found · Available', bg: 'bg-green-50', textColor: 'text-green-700', iconColor: 'text-green-500', icon: CheckCircleIcon },
-  not_found: { label: 'Not on File', bg: 'bg-gray-50', textColor: 'text-gray-600', iconColor: 'text-gray-400', icon: ExclamationTriangleIcon },
-  error:     { label: 'Action Needed', bg: 'bg-red-50', textColor: 'text-red-600', iconColor: 'text-red-500', icon: XCircleIcon },
-}
-const banner = computed(() => bannerMap[props.result.result] ?? bannerMap.not_found)
+const bannerMap = computed(() => ({
+  success:   { label: t('scanner.result.foundAvailable'), bg: 'bg-green-50', textColor: 'text-green-700', iconColor: 'text-green-500', icon: CheckCircleIcon },
+  not_found: { label: t('scanner.result.notOnFile'), bg: 'bg-gray-50', textColor: 'text-gray-600', iconColor: 'text-gray-400', icon: ExclamationTriangleIcon },
+  error:     { label: t('scanner.result.actionNeeded'), bg: 'bg-red-50', textColor: 'text-red-600', iconColor: 'text-red-500', icon: XCircleIcon },
+}))
+const banner = computed(() => bannerMap.value[props.result.result] ?? bannerMap.value.not_found)
 
 const memberSearch = ref('')
 const memberOptions = ref([])
@@ -245,7 +262,6 @@ const damageFeeKhr = ref(5000)
 const lostFeeKhr = ref(15000)
 const returnNotes = ref('')
 
-// 🆕 Overdue estimate, matching BorrowController's finePerDay (500៛/day)
 const daysLate = computed(() => {
   if (!props.result.active_borrow?.due_date) return 0
   const diff = Math.floor((new Date() - new Date(props.result.active_borrow.due_date)) / (1000 * 60 * 60 * 24))
@@ -253,8 +269,27 @@ const daysLate = computed(() => {
 })
 const estimatedOverdueFineKhr = computed(() => daysLate.value * 500)
 
+function coverUrl(path) {
+  if (!path) return ''
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+    return path
+  }
+
+  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+  const baseUrl = apiBase.replace(/\/api\/?$/, '')
+
+  let cleanPath = path.startsWith('/') ? path.slice(1) : path
+
+  if (cleanPath.startsWith('storage/')) {
+    return `${baseUrl}/${cleanPath}`
+  }
+
+  return `${baseUrl}/storage/${cleanPath}`
+}
+
 let searchTimeout = null
 const searchMembers = () => {
+  selectedMember.value = null
   clearTimeout(searchTimeout)
   searchTimeout = setTimeout(async () => {
     if (!memberSearch.value.trim()) {
@@ -270,6 +305,18 @@ const searchMembers = () => {
   }, 300)
 }
 
+const selectMember = (m) => {
+  selectedMember.value = m
+  memberSearch.value = m.user?.name || m.membership_no
+  memberOptions.value = []
+}
+
+const clearSelectedMember = () => {
+  selectedMember.value = null
+  memberSearch.value = ''
+  memberOptions.value = []
+}
+
 const formatDate = (d) => new Date(d).toLocaleDateString()
 
 const handleConfirmBorrow = async () => {
@@ -278,40 +325,37 @@ const handleConfirmBorrow = async () => {
   isSubmitting.value = true
   try {
     await scannerService.confirmBorrow({
-      book_copy_id: props.result.book_copy.id,
-      member_id: selectedMember.value.id,
+      book_copy_id: props.result.book_copy?.id,
+      book_id: props.result.book_copy?.book_id || props.result.book_copy?.book?.id,
+      member_id: selectedMember.value?.id,
     })
-    actionSuccess.value = 'Borrow confirmed successfully.'
+    actionSuccess.value = t('scanner.result.borrowConfirmedMsg')
     emit('completed')
   } catch (e) {
-    actionError.value = e.response?.data?.message || 'Failed to confirm borrow.'
+    actionError.value = e.response?.data?.message || t('scanner.result.confirmBorrowFailed')
   } finally {
     isSubmitting.value = false
   }
 }
 
-// 🆕 Reserve a member into the queue for a book that's on loan
 const handleReserve = async () => {
   actionError.value = ''
   actionSuccess.value = ''
   isSubmitting.value = true
   try {
     await scannerService.reserveBook({
-      book_id: props.result.book_copy.book_id,
-      member_id: selectedMember.value.id,
+      book_id: props.result.book_copy?.book_id || props.result.book_copy?.book?.id,
+      member_id: selectedMember.value?.id,
     })
-    actionSuccess.value = 'Member added to the reservation queue.'
+    actionSuccess.value = t('scanner.result.reservedMsg')
     emit('completed')
   } catch (e) {
-    actionError.value = e.response?.data?.message || 'Failed to reserve this book.'
+    actionError.value = e.response?.data?.message || t('scanner.result.reserveFailed')
   } finally {
     isSubmitting.value = false
   }
 }
 
-// 🆕 FIX: now sends condition/damage_fee/lost_fee/notes so the backend's
-// returnBook() actually creates damaged/lost fines when relevant —
-// previously the scanner path always fell through to the 'good' default.
 const handleConfirmReturn = async () => {
   actionError.value = ''
   actionSuccess.value = ''
@@ -327,16 +371,15 @@ const handleConfirmReturn = async () => {
       payload.notes = returnNotes.value
     }
     const { data } = await scannerService.confirmReturn(props.result.active_borrow.id, payload)
-    actionSuccess.value = data.message || 'Return confirmed successfully.'
+    actionSuccess.value = data.message || t('scanner.result.returnConfirmedMsg')
     emit('completed')
   } catch (e) {
-    actionError.value = e.response?.data?.message || 'Failed to confirm return.'
+    actionError.value = e.response?.data?.message || t('scanner.result.confirmReturnFailed')
   } finally {
     isSubmitting.value = false
   }
 }
 
-// 🆕 Sound + vibration feedback the moment a new result arrives
 watch(
   () => props.result,
   (r) => {

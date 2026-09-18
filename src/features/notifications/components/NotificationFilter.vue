@@ -12,27 +12,31 @@
     <div class="flex-1"></div>
 
     <select :value="modelValue.is_read" @change="update('is_read', $event.target.value)" class="border rounded-lg px-3 py-1.5 text-xs">
-      <option value="">All</option>
-      <option value="false">Unread</option>
-      <option value="true">Read</option>
+      <option value="">{{ t('notifications.filter.all') }}</option>
+      <option value="false">{{ t('notifications.unread') }}</option>
+      <option value="true">{{ t('notifications.filter.read') }}</option>
     </select>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const props = defineProps({
   modelValue: { type: Object, default: () => ({ type: '', is_read: '' }) },
 })
 const emit = defineEmits(['update:modelValue', 'change'])
 
-const typeOptions = [
-  { value: '', label: 'All' },
-  { value: 'overdue', label: 'Overdue' },
-  { value: 'reservation', label: 'Reservation' },
-  { value: 'fine', label: 'Fine' },
-  { value: 'announcement', label: 'Announcement' },
-  { value: 'system', label: 'System' },
-]
+const typeOptions = computed(() => [
+  { value: '', label: t('notifications.filter.all') },
+  { value: 'overdue', label: t('notifications.typeOverdue') },
+  { value: 'reservation', label: t('notifications.typeReservation') },
+  { value: 'fine', label: t('notifications.typeFine') },
+  { value: 'announcement', label: t('notifications.typeAnnouncement') },
+  { value: 'system', label: t('notifications.typeSystem') },
+])
 
 function update(key, value) {
   const next = { ...props.modelValue, [key]: value }

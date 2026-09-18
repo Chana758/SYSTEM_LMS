@@ -6,4 +6,6 @@ export const fineService = {
   summary() { return fineApi.summary() },
   create(payload) { return fineApi.create(payload) },
   show(id) { return fineApi.show(id) },
+  // NEW — completes the Edit Fine flow.
+  update(id, payload) { return fineApi.update(id, payload) },
 }

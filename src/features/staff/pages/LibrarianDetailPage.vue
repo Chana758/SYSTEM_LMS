@@ -3,19 +3,14 @@
     <!-- Back button -->
     <div class="flex items-center justify-between">
       <button @click="router.back()" class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors bg-white px-3.5 py-2 rounded-xl border border-slate-300 shadow-2xs">
-        <ArrowLeftIcon class="w-4 h-4" /> Back to Librarians
+        <ArrowLeftIcon class="w-4 h-4" /> {{ $t('staff.detail.backToLibrarians') }}
       </button>
     </div>
 
     <div class="space-y-6">
       <LibrarianCard :librarian="store.currentLibrarian" />
 
-      <!-- QR Login Card — lets an admin (re)issue this librarian's QR
-           card at any time, e.g. after they report a card lost.
-           Admin-only surface: this page is already gated to role:admin
-           in staff.routes.js, matching the backend rule that only an
-           admin (not a librarian) may issue staff cards
-           (see AuthController::generateQrTokenFor()). -->
+      <!-- QR Login Card -->
       <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8">
         <QrLoginCardAdmin
           :user-id="store.currentLibrarian.user?.id"
@@ -27,9 +22,9 @@
         />
       </div>
 
-      <!-- Edit form container matching the clean card styling -->
+      <!-- Edit form container -->
       <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8 space-y-6">
-        <h2 class="text-lg font-black text-slate-900 tracking-tight pb-4 border-b border-slate-200">Edit Librarian Details</h2>
+        <h2 class="text-lg font-black text-slate-900 tracking-tight pb-4 border-b border-slate-200">{{ $t('staff.detail.editDetails') }}</h2>
         <LibrarianForm
           :initial-data="store.currentLibrarian"
           :is-edit="true"
@@ -41,7 +36,7 @@
       </div>
     </div>
   </div>
-  <div v-else class="text-center py-20 text-slate-400 font-medium text-sm">Loading...</div>
+  <div v-else class="text-center py-20 text-slate-400 font-medium text-sm">{{ $t('staff.detail.loading') }}</div>
 </template>
 
 <script setup>

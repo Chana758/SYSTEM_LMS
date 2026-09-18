@@ -5,9 +5,9 @@
         👤
       </div>
       <div>
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Settings</h1>
-        <p class="text-xs font-bold text-slate-500 mt-0.5">Manage your profile, account, and system preferences.</p>
-      </div>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('settings.pageTitle') }}</h1>
+        <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('settings.pageSubtitle') }}</p>
+      </div>  
     </div>
 
     <div class="flex flex-col lg:flex-row gap-6 items-start">
@@ -18,9 +18,6 @@
         <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed">
           <SecuritySettings class="w-full" />
         </div>
-        <!-- FIX: was completely missing from this page — QrLoginCard.vue
-             existed as a component but was never rendered anywhere, so
-             users had no way to generate their QR login card at all. -->
         <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed">
           <QrLoginCard class="w-full" />
         </div>
@@ -33,4 +30,6 @@
 import SettingsNav from '@/features/settings/components/SettingsNav.vue'
 import SecuritySettings from '@/features/settings/components/SecuritySettings.vue'
 import QrLoginCard from '@/features/settings/components/QrLoginCard.vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 </script>

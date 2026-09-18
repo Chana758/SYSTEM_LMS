@@ -4,9 +4,9 @@
     @click.stop
   >
     <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-      <h3 class="font-bold text-gray-800 text-sm">Notifications</h3>
+      <h3 class="font-bold text-gray-800 text-sm">{{ t('notifications.pageTitle') }}</h3>
       <button v-if="store.unreadCount > 0" @click="handleMarkAll" class="text-xs text-green-700 hover:underline font-medium">
-        Mark all read
+        {{ t('notifications.markAllRead', { count: store.unreadCount }) }}
       </button>
     </div>
 
@@ -19,7 +19,7 @@
       @click="$emit('close')"
       class="block text-center text-xs font-medium text-green-700 py-2.5 border-t border-gray-100 hover:bg-gray-50"
     >
-      View all notifications
+      {{ t('notifications.viewAllNotifications') }}
     </router-link>
   </div>
 </template>
@@ -27,9 +27,11 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useNotificationStore } from '../store/notificationStore'
 import NotificationList from './NotificationList.vue'
 
+const { t } = useI18n()
 const emit = defineEmits(['close'])
 const store = useNotificationStore()
 const router = useRouter()

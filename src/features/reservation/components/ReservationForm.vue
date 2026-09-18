@@ -2,13 +2,13 @@
   <form @submit.prevent="handleSubmit" class="space-y-6">
     <!-- Member Field Section -->
     <div class="relative space-y-1.5">
-      <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Member</label>
+      <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">{{ $t('reservation.form.member') }}</label>
       <div class="relative">
         <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">👤</span>
         <input
           v-model="memberQuery"
           type="text"
-          placeholder="Search by name or membership no."
+          :placeholder="$t('reservation.form.memberPlaceholder')"
           class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-emerald-600 focus:outline-hidden transition-colors shadow-2xs"
           @input="debouncedMemberSearch"
           @focus="showMemberResults = true"
@@ -36,13 +36,13 @@
 
     <!-- Book Field Section -->
     <div class="relative space-y-1.5">
-      <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Book</label>
+      <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">{{ $t('reservation.form.book') }}</label>
       <div class="relative">
         <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">📖</span>
         <input
           v-model="bookQuery"
           type="text"
-          placeholder="Search by title or ISBN"
+          :placeholder="$t('reservation.form.bookPlaceholder')"
           class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-emerald-600 focus:outline-hidden transition-colors shadow-2xs"
           @input="debouncedBookSearch"
           @focus="showBookResults = true"
@@ -52,7 +52,7 @@
       <!-- Selected Book Pill / Availability Warning -->
       <p v-if="selectedBook" class="text-xs font-extrabold mt-2 p-2.5 rounded-xl border-2 shadow-2xs" :class="selectedBook.available_qty > 0 ? 'text-amber-800 bg-amber-50 border-amber-200' : 'text-emerald-800 bg-emerald-50 border-emerald-200'">
         <span class="inline-flex items-center gap-1.5"><span class="w-5 h-5 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-[10px] font-black">✓</span> {{ selectedBook.title }}</span>
-        <span v-if="selectedBook.available_qty > 0" class="block font-bold text-slate-600 text-[11px] mt-1">— This copy is available now — you can borrow it directly instead of reserving.</span>
+        <span v-if="selectedBook.available_qty > 0" class="block font-bold text-slate-600 text-[11px] mt-1">{{ $t('reservation.form.availableNowHint') }}</span>
       </p>
 
       <!-- Book Dropdown Results -->
@@ -80,7 +80,7 @@
       :disabled="!selectedMember || !selectedBook || loading"
       class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl text-xs font-extrabold disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm shadow-emerald-600/20"
     >
-      {{ loading ? 'Reserving…' : 'Reserve Book' }}
+      {{ loading ? $t('reservation.form.reserving') : $t('reservation.form.reserveBook') }}
     </button>
   </form>
 </template>

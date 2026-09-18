@@ -7,8 +7,8 @@
         </svg>
       </div>
       <div>
-        <h3 class="text-sm font-semibold text-gray-800">Scan or Type Barcode</h3>
-        <p class="text-xs text-gray-400">USB/Bluetooth scanners type directly into the field below</p>
+        <h3 class="text-sm font-semibold text-gray-800">{{ t('scanner.barcodeInput.title') }}</h3>
+        <p class="text-xs text-gray-400">{{ t('scanner.barcodeInput.subtitle') }}</p>
       </div>
     </div>
 
@@ -18,7 +18,7 @@
         v-model="barcode"
         type="text"
         autofocus
-        placeholder="Scan barcode or type manually..."
+        :placeholder="t('scanner.barcodeInput.placeholder')"
         class="flex-1 border-2 border-gray-200 rounded-xl px-4 py-3 text-sm font-mono tracking-wide outline-none transition"
         :class="focusRing"
       />
@@ -32,7 +32,7 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
         </svg>
-        {{ isLoading ? 'Scanning' : 'Scan' }}
+        {{ isLoading ? t('scanner.barcodeInput.scanning') : t('scanner.barcodeInput.scan') }}
       </button>
     </form>
   </div>
@@ -40,6 +40,9 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   isLoading: { type: Boolean, default: false },

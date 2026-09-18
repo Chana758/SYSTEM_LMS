@@ -10,8 +10,8 @@
             <CalendarDaysIcon class="w-7 h-7 text-emerald-700" />
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Reservations</h1>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Manage book holds, queue priorities, and pickups.</p>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('reservation.pageTitle') }}</h1>
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ $t('reservation.pageSubtitle') }}</p>
           </div>
         </div>
         <router-link
@@ -19,7 +19,7 @@
           class="inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95"
         >
           <span class="text-base leading-none">+</span>
-          <span>New Reservation</span>
+          <span>{{ $t('reservation.newReservation') }}</span>
         </router-link>
       </div>
 
@@ -32,11 +32,11 @@
             <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
               <CalendarDaysIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-slate-600/60 px-2.5 py-1 rounded-full border border-slate-500/40">Total</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-slate-600/60 px-2.5 py-1 rounded-full border border-slate-500/40">{{ $t('reservation.total') }}</span>
           </div>
           <div>
             <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ store.pagination.total || 0 }}</p>
-            <p class="text-[11px] font-bold text-slate-200 tracking-wide">Total holds</p>
+            <p class="text-[11px] font-bold text-slate-200 tracking-wide">{{ $t('reservation.totalHolds') }}</p>
           </div>
         </div>
 
@@ -46,11 +46,11 @@
             <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
               <ClockIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-amber-500/50 px-2.5 py-1 rounded-full border border-amber-400/40">Queue</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-amber-500/50 px-2.5 py-1 rounded-full border border-amber-400/40">{{ $t('reservation.queue') }}</span>
           </div>
           <div>
             <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ pendingCount }}</p>
-            <p class="text-[11px] font-bold text-amber-100 tracking-wide">In queue</p>
+            <p class="text-[11px] font-bold text-amber-100 tracking-wide">{{ $t('reservation.inQueue') }}</p>
           </div>
         </div>
 
@@ -60,11 +60,11 @@
             <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
               <CheckCircleIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-blue-500/50 px-2.5 py-1 rounded-full border border-blue-400/40">Pickup</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-blue-500/50 px-2.5 py-1 rounded-full border border-blue-400/40">{{ $t('reservation.pickup') }}</span>
           </div>
           <div>
             <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ readyCount }}</p>
-            <p class="text-[11px] font-bold text-blue-100 tracking-wide">Ready for pickup</p>
+            <p class="text-[11px] font-bold text-blue-100 tracking-wide">{{ $t('reservation.readyForPickup') }}</p>
           </div>
         </div>
 
@@ -74,11 +74,11 @@
             <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
               <ExclamationTriangleIcon class="w-6 h-6 text-white stroke-[2.2]" />
             </div>
-            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-rose-500/50 px-2.5 py-1 rounded-full border border-rose-400/40">Alert</span>
+            <span class="text-[10px] font-black text-white uppercase tracking-widest bg-rose-500/50 px-2.5 py-1 rounded-full border border-rose-400/40">{{ $t('reservation.alert') }}</span>
           </div>
           <div>
             <p class="text-3xl font-black tracking-tight leading-none mb-1.5 text-white">{{ expiredCount }}</p>
-            <p class="text-[11px] font-bold text-rose-100 tracking-wide">Expired</p>
+            <p class="text-[11px] font-bold text-rose-100 tracking-wide">{{ $t('reservation.expired') }}</p>
           </div>
         </div>
 
@@ -119,6 +119,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import {
   CalendarDaysIcon, ClockIcon, CheckCircleIcon, ExclamationTriangleIcon,
 } from '@heroicons/vue/24/outline'
@@ -128,6 +129,7 @@ import ReservationTable from '../components/ReservationTable.vue'
 
 const router = useRouter()
 const store = useReservationStore()
+const { t } = useI18n()
 
 const pendingCount = computed(() => store.reservations.filter((r) => r.status === 'pending').length)
 const readyCount = computed(() => store.reservations.filter((r) => r.status === 'ready').length)
@@ -149,7 +151,7 @@ async function handleFulfill(id) {
 }
 
 async function handleCancel(id) {
-  if (!confirm('Cancel this reservation?')) return
+  if (!confirm(t('reservation.confirmCancel'))) return
   const result = await store.cancelReservation(id)
   if (!result.success) alert(result.message)
 }

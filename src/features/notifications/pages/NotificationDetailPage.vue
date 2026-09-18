@@ -6,7 +6,7 @@
         to="/notifications"
         class="inline-flex items-center gap-2 bg-white border-2 border-slate-300 hover:border-slate-400 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md active:scale-95"
       >
-        <span>←</span> Notifications
+        <span>←</span> {{ t('notifications.detail.backToNotifications') }}
       </router-link>
     </div>
 
@@ -33,7 +33,7 @@
             :to="notification.link"
             class="inline-flex items-center gap-2 bg-emerald-50 border-2 border-emerald-200 hover:border-emerald-300 text-emerald-700 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-2xs"
           >
-            <span>View related item</span>
+            <span>{{ t('notifications.detail.viewRelatedItem') }}</span>
             <span>→</span>
           </router-link>
         </div>
@@ -43,7 +43,7 @@
             @click="handleDelete" 
             class="inline-flex items-center gap-2 bg-white border-2 border-rose-200 hover:border-rose-300 text-rose-600 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-2xs"
           >
-            <span>🗑️</span> Delete Notification
+            <span>🗑️</span> {{ t('notifications.detail.deleteNotification') }}
           </button>
         </div>
       </div>
@@ -52,7 +52,7 @@
 
   <!-- Loading State -->
   <div v-else class="text-center py-24 text-slate-400 font-bold text-xs uppercase tracking-widest">
-    Loading notification details...
+    {{ t('notifications.detail.loading') }}
   </div>
 </template>
 
@@ -60,7 +60,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useNotificationStore } from '../store/notificationStore'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const store = useNotificationStore()

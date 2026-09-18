@@ -1,47 +1,121 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Borrow Transaction ID</label>
-      <input v-model.number="form.borrow_id" type="number" class="w-full border rounded-lg px-3 py-2" :class="{ 'border-red-500': errors.borrow_id }" />
-      <p v-if="errors.borrow_id" class="text-red-500 text-xs mt-1">{{ errors.borrow_id[0] || errors.borrow_id }}</p>
+    <div v-if="!isEdit">
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('fines.form.borrowTransactionId') }}</label>
+      <input v-model.number="form.borrow_id" type="number" class="w-full border rounded-lg px-3 py-2" :class="{ 'border-red-500': displayErrors.borrow_id }" />
+      <p v-if="displayErrors.borrow_id" class="text-red-500 text-xs mt-1">{{ firstError(displayErrors.borrow_id) }}</p>
     </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Amount ($)</label>
-      <input v-model.number="form.amount" type="number" step="0.01" min="0.01" class="w-full border rounded-lg px-3 py-2" :class="{ 'border-red-500': errors.amount }" />
-      <p v-if="errors.amount" class="text-red-500 text-xs mt-1">{{ errors.amount[0] || errors.amount }}</p>
+
+    <!-- EDIT mode: borrow_id can't be changed once a fine exists (see
+         FineController::update()) — shown read-only for context instead
+         of an editable field. -->
+    <div v-else>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('fines.form.borrowTransactionId') }}</label>
+      <input :value="initialData.borrow_id ?? initialData.borrow?.id" type="text" disabled
+        class="w-full border rounded-lg px-3 py-2 bg-gray-50 text-gray-500 cursor-not-allowed" />
+      <p class="text-xs text-gray-400 mt-1">A fine's borrow record can't be changed after it's created.</p>
     </div>
+
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Reason</label>
+      
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        {{ isEdit ? t('fines.form.amountUsd') : t('fines.form.amountKhr') }}
+      </label>
+      <input
+        v-model.number="form.amount"
+        type="number"
+        :step="isEdit ? 0.01 : 100"
+        :min="isEdit ? 0.01 : 100"
+        :placeholder="isEdit ? '0.00' : 'e.g. 4000'"
+        class="w-full border rounded-lg px-3 py-2"
+        :class="{ 'border-red-500': displayErrors.amount }"
+      />
+      <p class="text-xs text-gray-400 mt-1">
+        {{ isEdit ? t('fines.form.amountUsdHint') : t('fines.form.amountKhrHint') }}
+      </p>
+      <p v-if="displayErrors.amount" class="text-red-500 text-xs mt-1">{{ firstError(displayErrors.amount) }}</p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('fines.form.reason') }}</label>
       <select v-model="form.reason" class="w-full border rounded-lg px-3 py-2">
-        <option value="overdue">Overdue</option>
-        <option value="damaged">Damaged</option>
-        <option value="lost">Lost</option>
-        <option value="other">Other</option>
+        <option value="overdue">{{ t('fines.reasonOverdue') }}</option>
+        <option value="damaged">{{ t('fines.reasonDamaged') }}</option>
+        <option value="lost">{{ t('fines.reasonLost') }}</option>
+        <option value="other">{{ t('fines.reasonOther') }}</option>
       </select>
     </div>
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('fines.form.notes') }}</label>
       <textarea v-model="form.notes" rows="3" class="w-full border rounded-lg px-3 py-2"></textarea>
     </div>
-    <p v-if="errors.general" class="text-red-500 text-sm">{{ errors.general }}</p>
+    <p v-if="displayErrors.general" class="text-red-500 text-sm">{{ firstError(displayErrors.general) }}</p>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" @click="$emit('cancel')" class="px-4 py-2 border rounded-lg text-gray-600">Cancel</button>
+      <button type="button" @click="$emit('cancel')" class="px-4 py-2 border rounded-lg text-gray-600">{{ t('fines.cancel') }}</button>
       <button type="submit" :disabled="loading" class="px-4 py-2 bg-green-700 text-white rounded-lg disabled:opacity-50">
-        {{ loading ? 'Saving...' : 'Create Fine' }}
+        {{ loading ? t('fines.form.saving') : (isEdit ? t('fines.form.saveChanges') : t('fines.form.createFine')) }}
       </button>
     </div>
   </form>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { validateFineForm } from '../validations/fineValidation'
 
-defineProps({ loading: { type: Boolean, default: false }, errors: { type: Object, default: () => ({}) } })
+const { t } = useI18n()
+
+const props = defineProps({
+  loading: { type: Boolean, default: false },
+  errors: { type: Object, default: () => ({}) },
+  // NEW — presence of initialData switches the form into Edit mode:
+  // borrow_id becomes read-only, amount switches from Riel to USD.
+  initialData: { type: Object, default: null },
+})
 const emit = defineEmits(['submit', 'cancel'])
 
-const form = reactive({ borrow_id: null, amount: null, reason: 'overdue', notes: '' })
+const isEdit = computed(() => !!props.initialData)
+
+const form = reactive(
+  isEdit.value
+    ? {
+        borrow_id: props.initialData.borrow_id ?? props.initialData.borrow?.id ?? null,
+        // Already a USD value from creation time — edited directly, not
+        // re-converted. See FineController::update().
+        amount: props.initialData.amount != null ? Number(props.initialData.amount) : null,
+        reason: props.initialData.reason || 'overdue',
+        notes: props.initialData.notes || '',
+      }
+    : { borrow_id: null, amount: null, reason: 'overdue', notes: '' }
+)
+
+// Client-side validation errors (from validateFineForm), separate from
+// server-side `props.errors` so a fresh submit attempt doesn't show
+// stale server errors alongside new client errors for the same field.
+const clientErrors = reactive({})
+const displayErrors = computed(() => ({ ...clientErrors, ...props.errors }))
+
+function firstError(e) {
+  return Array.isArray(e) ? e[0] : e
+}
 
 function handleSubmit() {
-  emit('submit', { ...form })
+  Object.keys(clientErrors).forEach((k) => delete clientErrors[k])
+
+  const validation = validateFineForm(form, { unit: isEdit.value ? 'usd' : 'khr' })
+  if (Object.keys(validation).length) {
+    Object.assign(clientErrors, validation)
+    return
+  }
+
+  // borrow_id is read-only in edit mode and not accepted by
+  // FineController::update() — omit it from the payload so an
+  // unexpected extra field never reaches that endpoint.
+  const payload = isEdit.value
+    ? { amount: form.amount, reason: form.reason, notes: form.notes }
+    : { ...form }
+
+  emit('submit', payload)
 }
 </script>

@@ -1,8 +1,14 @@
 export default [
   {
     path: '/chatbot',
-    name: 'chatbot',
-    component: () => import('@/features/ai-chatbot/pages/ChatPage.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth' },
+    children: [
+      {
+        path: '',
+        name: 'chatbot',
+        component: () => import('@/features/ai-chatbot/pages/ChatPage.vue'),
+      },
+    ],
   },
 ]

@@ -10,21 +10,21 @@
             <BookmarkIcon class="w-7 h-7 text-emerald-700" />
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">My Reservations</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">Track your place in line and pick up books when they're ready.</p>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('reservation.myReservations.title') }}</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">{{ $t('reservation.myReservations.subtitle') }}</p>
           </div>
         </div>
         <button
           @click="showCreateModal = true"
           class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-sm transition-colors"
         >
-          + Reserve a Book
+          + {{ $t('reservation.myReservations.reserveABook') }}
         </button>
       </div>
 
       <!-- Loading State -->
       <div v-if="store.loading" class="bg-white rounded-2xl border-2 border-slate-300 p-14 text-center text-slate-400 text-sm font-semibold shadow-2xs">
-        Loading your reservations…
+        {{ $t('reservation.myReservations.loading') }}
       </div>
 
       <!-- Empty state & Onboarding Steps -->
@@ -35,24 +35,24 @@
             <div class="w-10 h-10 rounded-xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center shadow-2xs">
               <span class="text-xs font-black text-amber-700">1</span>
             </div>
-            <p class="text-xs font-extrabold text-slate-900">Reserve a checked-out book</p>
-            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">Find a title that's currently unavailable and join the queue.</p>
+            <p class="text-xs font-extrabold text-slate-900">{{ $t('reservation.myReservations.step1Title') }}</p>
+            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">{{ $t('reservation.myReservations.step1Desc') }}</p>
           </div>
 
           <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-300 p-5 shadow-2xs space-y-2">
             <div class="w-10 h-10 rounded-xl bg-blue-100 border-2 border-blue-300 flex items-center justify-center shadow-2xs">
               <span class="text-xs font-black text-blue-700">2</span>
             </div>
-            <p class="text-xs font-extrabold text-slate-900">We hold your place in line</p>
-            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">You'll see your queue position update as copies are returned.</p>
+            <p class="text-xs font-extrabold text-slate-900">{{ $t('reservation.myReservations.step2Title') }}</p>
+            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">{{ $t('reservation.myReservations.step2Desc') }}</p>
           </div>
 
           <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-300 p-5 shadow-2xs space-y-2">
             <div class="w-10 h-10 rounded-xl bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center shadow-2xs">
               <span class="text-xs font-black text-emerald-700">3</span>
             </div>
-            <p class="text-xs font-extrabold text-slate-900">Pick it up when it's ready</p>
-            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">We'll notify you the moment your reserved copy is available.</p>
+            <p class="text-xs font-extrabold text-slate-900">{{ $t('reservation.myReservations.step3Title') }}</p>
+            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">{{ $t('reservation.myReservations.step3Desc') }}</p>
           </div>
         </div>
 
@@ -64,15 +64,15 @@
               <BookOpenIcon class="w-6 h-6 text-emerald-700" />
             </div>
           </div>
-          <p class="text-slate-900 font-extrabold text-sm">Your shelf is empty</p>
+          <p class="text-slate-900 font-extrabold text-sm">{{ $t('reservation.myReservations.emptyShelf') }}</p>
           <p class="text-xs text-slate-500 font-bold mt-1 mb-4 text-center max-w-xs">
-            Reserve a book that's currently checked out and we'll hold your spot when it's back.
+            {{ $t('reservation.myReservations.emptyShelfHint') }}
           </p>
           <button
             @click="showCreateModal = true"
             class="text-xs font-black text-emerald-700 hover:text-emerald-800 hover:underline uppercase tracking-wider"
           >
-            Browse and reserve a book →
+            {{ $t('reservation.myReservations.browseAndReserve') }}
           </button>
         </div>
       </div>
@@ -111,6 +111,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { BookOpenIcon, BookmarkIcon } from '@heroicons/vue/24/outline'
 import { useReservationStore } from '../store/reservationStore'
 import ReservationCard from '../components/ReservationCard.vue'
@@ -118,9 +119,10 @@ import ReservationCreateModal from '../components/ReservationCreateModal.vue'
 
 const store = useReservationStore()
 const showCreateModal = ref(false)
+const { t } = useI18n()
 
 async function handleCancel(id) {
-  if (!confirm('Cancel this reservation?')) return
+  if (!confirm(t('reservation.confirmCancel'))) return
   const result = await store.cancelReservation(id)
   if (!result.success) alert(result.message)
 }

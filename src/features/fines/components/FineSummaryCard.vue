@@ -7,10 +7,10 @@
           <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
             <ExclamationCircleIcon class="w-4 h-4 text-red-500" />
           </div>
-          <p class="text-xs text-gray-400 uppercase font-semibold">Unpaid</p>
+          <p class="text-xs text-gray-400 uppercase font-semibold">{{ t('fines.unpaid') }}</p>
         </div>
         <p class="text-2xl font-bold text-gray-800">${{ Number(summary.total_unpaid).toFixed(2) }}</p>
-        <p class="text-xs text-gray-400 mt-1">{{ summary.count_unpaid }} outstanding record(s)</p>
+        <p class="text-xs text-gray-400 mt-1">{{ summary.count_unpaid }} {{ t('fines.outstandingRecords') }}</p>
       </div>
     </div>
 
@@ -21,10 +21,10 @@
           <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
             <CheckCircleIcon class="w-4 h-4 text-green-600" />
           </div>
-          <p class="text-xs text-gray-400 uppercase font-semibold">Paid</p>
+          <p class="text-xs text-gray-400 uppercase font-semibold">{{ t('fines.paid') }}</p>
         </div>
         <p class="text-2xl font-bold text-gray-800">${{ Number(summary.total_paid).toFixed(2) }}</p>
-        <p class="text-xs text-gray-400 mt-1">Collected to date</p>
+        <p class="text-xs text-gray-400 mt-1">{{ t('fines.collectedToDate') }}</p>
       </div>
     </div>
 
@@ -35,10 +35,10 @@
           <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
             <HandRaisedIcon class="w-4 h-4 text-gray-500" />
           </div>
-          <p class="text-xs text-gray-400 uppercase font-semibold">Waived</p>
+          <p class="text-xs text-gray-400 uppercase font-semibold">{{ t('fines.waived') }}</p>
         </div>
         <p class="text-2xl font-bold text-gray-800">${{ Number(summary.total_waived).toFixed(2) }}</p>
-        <p class="text-xs text-gray-400 mt-1">Forgiven amount</p>
+        <p class="text-xs text-gray-400 mt-1">{{ t('fines.forgivenAmount') }}</p>
       </div>
     </div>
 
@@ -49,18 +49,21 @@
           <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
             <BanknotesIcon class="w-4 h-4 text-white" />
           </div>
-          <p class="text-xs text-white/70 uppercase font-semibold">Total Processed</p>
+          <p class="text-xs text-white/70 uppercase font-semibold">{{ t('fines.totalProcessed') }}</p>
         </div>
         <p class="text-2xl font-bold">
           ${{ (Number(summary.total_paid) + Number(summary.total_waived)).toFixed(2) }}
         </p>
-        <p class="text-xs text-white/70 mt-1">Paid + Waived combined</p>
+        <p class="text-xs text-white/70 mt-1">{{ t('fines.paidPlusWaived') }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ExclamationCircleIcon, CheckCircleIcon, HandRaisedIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
 defineProps({ summary: { type: Object, required: true } })
 </script>

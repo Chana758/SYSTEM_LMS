@@ -1,0 +1,24 @@
+{
+  "title": "Recommended for You",
+  "subtitle": "Books selected especially for you",
+  "allCategories": "All",
+  "empty": {
+    "title": "No recommendations yet",
+    "description": "Borrow a few books first to get personalized recommendations"
+  },
+  "similarBooks": "Similar Books",
+  "reasonLabels": {
+    "content_based": "Based on your borrowing history",
+    "popular": "Popular in the library",
+    "popular_no_member": "Popular picks — no member profile linked"
+  },
+  "genericError": "Failed to load recommendations.",
+  "sidebar": {
+    "summaryTitle": "Summary",
+    "recommendedCount": "Recommended books",
+    "categoriesShown": "Categories shown",
+    "allCategoriesLabel": "All categories",
+    "howItWorksTitle": "How recommendations work",
+    "howItWorksBody": "Recommendations are based on the categories of books you've borrowed. Borrow more books to get recommendations closer to your taste. Staff accounts without a member profile will see popular books instead."
+  }
+}

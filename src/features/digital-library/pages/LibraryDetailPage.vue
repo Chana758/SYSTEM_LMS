@@ -2,20 +2,20 @@
   <div v-if="store.currentEbook" class="space-y-6 pb-12">
     <!-- Back Link with matching badge/card box style -->
     <div class="inline-block">
-      <router-link 
-        :to="{ name: 'library-home-page' }" 
+      <router-link
+        :to="{ name: 'library-home-page' }"
         class="inline-flex items-center gap-2 bg-white border-2 border-slate-300 hover:border-slate-400 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md active:scale-95"
       >
-        <span>←</span> Digital Library
+        <span>←</span> {{ t('digitalLibrary.detail.backToLibrary') }}
       </router-link>
     </div>
 
     <!-- Main Container matching Digital Library, Fines & Reservations Style -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg space-y-8 border-dashed">
-      
+
       <!-- Top Detail Card Section -->
       <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-200 p-6 sm:p-8 shadow-2xs flex flex-col md:flex-row gap-8 items-start">
-        
+
         <!-- Book Cover Box -->
         <div class="w-full md:w-56 aspect-[3/4] rounded-xl overflow-hidden bg-white border-2 border-slate-200 flex-shrink-0 shadow-sm relative">
           <img
@@ -33,25 +33,25 @@
               {{ store.currentEbook.book?.category?.name || '—' }}
             </span>
             <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{{ store.currentEbook.book?.title }}</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wider">Author: <span class="text-slate-700">{{ store.currentEbook.book?.author }}</span></p>
+            <p class="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wider">{{ t('digitalLibrary.detail.author') }}: <span class="text-slate-700">{{ store.currentEbook.book?.author }}</span></p>
           </div>
 
           <!-- Stats Grid -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div class="bg-white rounded-xl border-2 border-slate-200 p-3 shadow-2xs">
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Format</p>
+              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ t('digitalLibrary.detail.format') }}</p>
               <p class="text-xs font-black text-slate-800 uppercase mt-0.5">{{ store.currentEbook.format }}</p>
             </div>
             <div class="bg-white rounded-xl border-2 border-slate-200 p-3 shadow-2xs">
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Access</p>
-              <p class="text-xs font-black text-slate-800 capitalize mt-0.5">{{ store.currentEbook.access_type === 'public' ? 'Public' : 'Members Only' }}</p>
+              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ t('digitalLibrary.detail.access') }}</p>
+              <p class="text-xs font-black text-slate-800 capitalize mt-0.5">{{ store.currentEbook.access_type === 'public' ? t('digitalLibrary.detail.accessPublic') : t('digitalLibrary.detail.accessMembersOnly') }}</p>
             </div>
             <div class="bg-white rounded-xl border-2 border-slate-200 p-3 shadow-2xs">
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Views</p>
+              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ t('digitalLibrary.detail.views') }}</p>
               <p class="text-xs font-black text-slate-800 mt-0.5">{{ store.currentEbook.view_count }}</p>
             </div>
             <div class="bg-white rounded-xl border-2 border-slate-200 p-3 shadow-2xs">
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Downloads</p>
+              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ t('digitalLibrary.detail.downloads') }}</p>
               <p class="text-xs font-black text-slate-800 mt-0.5">{{ store.currentEbook.download_count }}</p>
             </div>
           </div>
@@ -59,16 +59,16 @@
           <!-- Reading Progress Banner -->
           <div v-if="store.currentEbook.reading_progress" class="bg-emerald-50 rounded-xl border-2 border-emerald-200 px-4 py-3 text-xs font-black text-emerald-800 shadow-2xs flex items-center gap-2">
             <span>✨</span>
-            <span>You're {{ Math.round(store.currentEbook.reading_progress.percentage) }}% through this book.</span>
+            <span>{{ t('digitalLibrary.detail.readingProgress', { percent: Math.round(store.currentEbook.reading_progress.percentage) }) }}</span>
           </div>
 
           <!-- Description -->
           <div class="pt-2">
-            <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider mb-1">Description</h3>
+            <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider mb-1">{{ t('digitalLibrary.detail.description') }}</h3>
             <p v-if="store.currentEbook.book?.description" class="text-xs font-bold text-slate-600 leading-relaxed">
               {{ store.currentEbook.book.description }}
             </p>
-            <p v-else class="text-xs font-bold text-slate-400 italic">No description available for this e-book.</p>
+            <p v-else class="text-xs font-bold text-slate-400 italic">{{ t('digitalLibrary.detail.noDescription') }}</p>
           </div>
 
           <!-- Action Buttons -->
@@ -78,7 +78,7 @@
               class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md active:scale-95"
             >
               <BookOpenIcon class="w-4 h-4" />
-              {{ store.currentEbook.reading_progress ? 'Continue Reading' : 'Read Online' }}
+              {{ store.currentEbook.reading_progress ? t('digitalLibrary.detail.continueReading') : t('digitalLibrary.detail.readOnline') }}
             </router-link>
             <DownloadButton :ebook="store.currentEbook" />
             <FavoriteButton :ebook-id="store.currentEbook.id" :initial-favorited="store.currentEbook.is_favorited" />
@@ -92,18 +92,20 @@
 
   <!-- Loading State -->
   <div v-else class="text-center py-24 text-slate-400 font-bold text-xs uppercase tracking-widest">
-    Loading e-book details...
+    {{ t('digitalLibrary.detail.loading') }}
   </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { BookOpenIcon } from '@heroicons/vue/24/outline'
 import { useLibraryStore } from '../store/libraryStore'
 import DownloadButton from '../components/DownloadButton.vue'
 import FavoriteButton from '../components/FavoriteButton.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const store = useLibraryStore()
 

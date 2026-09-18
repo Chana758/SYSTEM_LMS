@@ -5,15 +5,17 @@
     class="flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
   >
     <ArrowDownTrayIcon class="w-4 h-4" />
-    {{ loading ? 'Preparing...' : (ebook.is_downloadable ? 'Download' : 'Download Unavailable') }}
+    {{ loading ? t('digitalLibrary.download.preparing') : (ebook.is_downloadable ? t('digitalLibrary.download.download') : t('digitalLibrary.download.downloadUnavailable')) }}
   </button>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import { useLibraryStore } from '../store/libraryStore'
 
+const { t } = useI18n()
 const props = defineProps({ ebook: { type: Object, required: true } })
 const store = useLibraryStore()
 const loading = ref(false)

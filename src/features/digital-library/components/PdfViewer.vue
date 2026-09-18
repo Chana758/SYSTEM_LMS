@@ -4,14 +4,17 @@
       v-if="fileUrl"
       :src="fileUrl"
       class="w-full h-full border-0"
-      title="PDF Viewer"
+      :title="t('digitalLibrary.reader.pdfViewerTitle')"
     ></iframe>
     <div v-else class="flex items-center justify-center h-full text-gray-400 text-sm">
-      No file available to preview.
+      {{ t('digitalLibrary.reader.noFileToPreview') }}
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 defineProps({ fileUrl: { type: String, default: '' } })
 </script>

@@ -10,12 +10,12 @@
             <ArrowUturnLeftIcon class="w-7 h-7 text-blue-700" />
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Return Book</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">Search for an active checkout to process a return.</p>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('circulation.returnPage.title') }}</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">{{ $t('circulation.returnPage.subtitle') }}</p>
           </div>
         </div>
         <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-          Returns
+          {{ $t('circulation.returnPage.title') }}
         </span>
       </div>
 
@@ -27,7 +27,7 @@
             v-model="store.filters.search"
             @input="debouncedSearch"
             type="text"
-            placeholder="Search by member name or book title..."
+            :placeholder="$t('circulation.returnPage.searchPlaceholder')"
             class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-shadow shadow-2xs"
           />
         </div>
@@ -39,27 +39,27 @@
           <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-500 text-[11px] font-extrabold uppercase tracking-wider border-b border-slate-200">
               <tr>
-                <th class="text-left px-5 py-3.5">Book</th>
-                <th class="text-left px-4 py-3.5">Category</th>
-                <th class="text-left px-4 py-3.5">Barcode</th>
-                <th class="text-left px-4 py-3.5">Member</th>
-                <th class="text-left px-4 py-3.5">Librarian</th>
-                <th class="text-left px-4 py-3.5">Borrow Date</th>
-                <th class="text-left px-4 py-3.5">Due Date</th>
-                <th class="text-left px-4 py-3.5">Status</th>
-                <th class="text-right px-5 py-3.5">Action</th>
+                <th class="text-left px-5 py-3.5">{{ $t('circulation.returnPage.book') }}</th>
+                <th class="text-left px-4 py-3.5">{{ $t('circulation.category') }}</th>
+                <th class="text-left px-4 py-3.5">{{ $t('circulation.barcode') }}</th>
+                <th class="text-left px-4 py-3.5">{{ $t('circulation.member') }}</th>
+                <th class="text-left px-4 py-3.5">{{ $t('circulation.librarian') }}</th>
+                <th class="text-left px-4 py-3.5">{{ $t('circulation.returnPage.borrowDate') }}</th>
+                <th class="text-left px-4 py-3.5">{{ $t('circulation.dueDate') }}</th>
+                <th class="text-left px-4 py-3.5">{{ $t('common.table.status') }}</th>
+                <th class="text-right px-5 py-3.5">{{ $t('common.table.actions') }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-xs font-medium">
               <tr v-if="store.loading">
-                <td colspan="9" class="text-center py-12 text-slate-400 font-semibold">Loading checkouts...</td>
+                <td colspan="9" class="text-center py-12 text-slate-400 font-semibold">{{ $t('circulation.returnPage.loadingCheckouts') }}</td>
               </tr>
               <tr v-else-if="!store.borrows.length">
                 <td colspan="9" class="py-16 text-center">
                   <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-3 shadow-2xs">
                     <ArrowUturnLeftIcon class="w-6 h-6 text-slate-400" />
                   </div>
-                  <p class="text-xs font-bold text-slate-500">No active checkouts found</p>
+                  <p class="text-xs font-bold text-slate-500">{{ $t('circulation.noActiveCheckouts') }}</p>
                 </td>
               </tr>
               <tr v-for="b in store.borrows" :key="b.id" class="hover:bg-slate-50/70 transition-colors">
@@ -74,7 +74,7 @@
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border"
                     :class="isOverdue(b.due_date) ? 'bg-rose-50 text-rose-600 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'">
                     <span class="w-1.5 h-1.5 rounded-full" :class="isOverdue(b.due_date) ? 'bg-rose-500' : 'bg-emerald-500'"></span>
-                    {{ isOverdue(b.due_date) ? 'Overdue' : 'Active' }}
+                    {{ isOverdue(b.due_date) ? $t('circulation.overdue') : $t('circulation.active') }}
                   </span>
                 </td>
                 <td class="px-5 py-4 text-right">
@@ -82,7 +82,7 @@
                     @click="returningBorrow = b"
                     class="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl px-3.5 py-1.5 hover:bg-blue-100 transition-colors shadow-2xs"
                   >
-                    Return Book
+                    {{ $t('circulation.returnBook') }}
                   </button>
                 </td>
               </tr>

@@ -3,8 +3,8 @@
     <!-- ============ HEADER SECTION ============ -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">My Profile</h1>
-        <p class="text-xs font-semibold text-slate-500 mt-0.5">Manage your library account information, checkouts, and preferences.</p>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('members.myProfile.title') }}</h1>
+        <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('members.myProfile.subtitle') }}</p>
       </div>
     </div>
 
@@ -25,8 +25,8 @@
             <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-emerald-600 transition-colors">Active</span>
           </div>
           <div>
-            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">My Borrows</p>
-            <p class="text-[11px] font-bold text-emerald-600 tracking-wide">View active checkouts</p>
+            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">{{ t('members.myProfile.myBorrows') }}</p>
+            <p class="text-[11px] font-bold text-emerald-600 tracking-wide">{{ t('members.myProfile.viewActiveCheckouts') }}</p>
           </div>
         </router-link>
 
@@ -42,8 +42,8 @@
             <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Queue</span>
           </div>
           <div>
-            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">My Reservations</p>
-            <p class="text-[11px] font-bold text-blue-600 tracking-wide">Track your queue position</p>
+            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">{{ t('members.myProfile.myReservations') }}</p>
+            <p class="text-[11px] font-bold text-blue-600 tracking-wide">{{ t('members.myProfile.trackQueue') }}</p>
           </div>
         </router-link>
 
@@ -59,8 +59,8 @@
             <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-rose-500 transition-colors">Balance</span>
           </div>
           <div>
-            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">My Fines</p>
-            <p class="text-[11px] font-bold text-rose-500 tracking-wide">Check outstanding balance</p>
+            <p class="text-base font-black text-slate-900 tracking-tight leading-none mb-1">{{ t('members.myProfile.myFines') }}</p>
+            <p class="text-[11px] font-bold text-rose-500 tracking-wide">{{ t('members.myProfile.checkBalance') }}</p>
           </div>
         </router-link>
       </div>
@@ -69,29 +69,29 @@
       <div class="bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-2xs space-y-6">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
-            <h2 class="text-lg font-black text-slate-900 tracking-tight">Contact Details</h2>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Your registered personal information on file.</p>
+            <h2 class="text-lg font-black text-slate-900 tracking-tight">{{ t('members.myProfile.contactDetails') }}</h2>
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('members.myProfile.contactDetailsSubtitle') }}</p>
           </div>
           <span class="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase tracking-wider border border-emerald-200/60">
-            Verified Account
+            {{ t('members.myProfile.verifiedAccount') }}
           </span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
           <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Phone Number</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">{{ t('members.myProfile.phoneNumber') }}</p>
             <p class="text-slate-900 font-bold font-mono text-sm">{{ store.currentMember.user?.phone || '—' }}</p>
           </div>
           <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Identity Card No.</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">{{ t('members.myProfile.identityCardNo') }}</p>
             <p class="text-slate-900 font-bold font-mono text-sm">{{ store.currentMember.identity_card_no || '—' }}</p>
           </div>
           <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Emergency Contact</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">{{ t('members.myProfile.emergencyContact') }}</p>
             <p class="text-slate-900 font-bold font-mono text-sm">{{ store.currentMember.emergency_contact || '—' }}</p>
           </div>
           <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">Address</p>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider mb-1">{{ t('members.myProfile.address') }}</p>
             <p class="text-slate-900 font-bold text-sm">{{ store.currentMember.address || '—' }}</p>
           </div>
         </div>
@@ -101,7 +101,7 @@
             <span class="text-sm">💡</span>
           </div>
           <p class="text-xs font-semibold text-amber-900 leading-relaxed">
-            To update your contact details or personal credentials, please visit the library desk or contact an authorized librarian directly.
+            {{ t('members.myProfile.contactAdminHint') }}
           </p>
         </div>
       </div>
@@ -109,16 +109,18 @@
   </div>
   <div v-else class="text-center py-20 text-slate-400">
     <div class="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading your profile...</p>
+    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ t('members.myProfile.loading') }}</p>
   </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { ClockIcon, CalendarDaysIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
 import { useMemberStore } from '../store/memberStore'
 import MemberCard from '../components/MemberCard.vue'
 
+const { t } = useI18n()
 const store = useMemberStore()
 
 onMounted(() => store.fetchMyProfile())

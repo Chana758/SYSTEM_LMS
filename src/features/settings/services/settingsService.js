@@ -1,26 +1,28 @@
 import api from '@/api/axios'
 
 export const settingService = {
-  /**
-   * Fetch all settings, optionally filtered by group.
-   * Librarian responses are automatically filtered server-side.
-   */
   getSettings(group = null) {
     return api.get('/settings', { params: group ? { group } : {} })
   },
-
-  // Admin only
   createSetting(payload) {
     return api.post('/settings', payload)
   },
-
-  // Admin only
   updateSetting(id, value) {
     return api.put(`/settings/${id}`, { value })
   },
-
-  // Admin only
   deleteSetting(id) {
     return api.delete(`/settings/${id}`)
   },
-} 
+
+  // NEW — public, no auth required
+  getBranding() {
+    return api.get('/branding')
+  },
+
+  // NEW — admin only, multipart because of optional logo file
+  updateBranding(formData) {
+    return api.post('/settings/branding', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+}

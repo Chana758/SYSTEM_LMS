@@ -7,8 +7,8 @@
           <ArchiveBoxIcon class="w-6 h-6" />
         </div>
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Stock Report</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Inventory levels and availability</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('reports.stockPage.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('reports.stockPage.subtitle') }}</p>
         </div>
       </div>
 
@@ -19,7 +19,7 @@
           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-black tracking-wider uppercase transition-all shadow-2xs"
         >
           <ArrowLeftIcon class="w-4 h-4" />
-          <span>Back to Reports</span>
+          <span>{{ t('reports.stockPage.backToReports') }}</span>
         </RouterLink>
 
         <ExportReportButton type="stock" :filters="filters" />
@@ -28,16 +28,16 @@
 
     <!-- Main Content Container with White Box & Dashed Border -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed space-y-6">
-      
+
       <!-- Filters Section -->
-      <ReportFilter @apply="onApply" status-label="Category" :status-options="categories" />
+      <ReportFilter @apply="onApply" :status-label="t('reports.stockPage.category')" :status-options="categories" />
 
       <!-- Solid Colored Summary Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-        <ReportSummaryCard label="Total Books" :value="summary.total_books" bg="bg-slate-700"   badge="TOTAL"     :icon="RectangleStackIcon" />
-        <ReportSummaryCard label="Available"   :value="summary.available"   bg="bg-teal-600"    badge="AVAILABLE" :icon="CheckCircleIcon" />
-        <ReportSummaryCard label="Borrowed"    :value="summary.borrowed"    bg="bg-blue-600"    badge="BORROWED"  :icon="ArrowsRightLeftIcon" />
-        <ReportSummaryCard label="Low Stock"   :value="summary.low_stock"   bg="bg-red-500"     badge="ALERT"     :icon="ExclamationTriangleIcon" />
+        <ReportSummaryCard :label="t('reports.stockPage.totalBooks')" :value="summary.total_books" bg="bg-slate-700" :badge="t('reports.badge.total')"     :icon="RectangleStackIcon" />
+        <ReportSummaryCard :label="t('reports.stockPage.available')"  :value="summary.available"   bg="bg-teal-600" :badge="t('reports.badge.available')" :icon="CheckCircleIcon" />
+        <ReportSummaryCard :label="t('reports.stockPage.borrowed')"   :value="summary.borrowed"    bg="bg-blue-600" :badge="t('reports.badge.borrowed')"  :icon="ArrowsRightLeftIcon" />
+        <ReportSummaryCard :label="t('reports.stockPage.lowStock')"   :value="summary.low_stock"   bg="bg-red-500"  :badge="t('reports.badge.alert')"     :icon="ExclamationTriangleIcon" />
       </div>
 
       <!-- Data Table -->
@@ -50,7 +50,7 @@
         </template>
         <template #cell-status="{ row }">
           <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase border" :class="row.available_copies > 0 ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-600 border-red-200'">
-            {{ row.available_copies > 0 ? 'Available' : 'Out of Stock' }}
+            {{ row.available_copies > 0 ? t('reports.stockPage.available') : t('reports.stockPage.outOfStock') }}
           </span>
         </template>
       </ReportTable>
@@ -60,14 +60,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { 
-  ArchiveBoxIcon, 
-  ArrowLeftIcon, 
-  RectangleStackIcon, 
-  CheckCircleIcon, 
-  ArrowsRightLeftIcon, 
-  ExclamationTriangleIcon 
+import { ref, reactive, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import {
+  ArchiveBoxIcon,
+  ArrowLeftIcon,
+  RectangleStackIcon,
+  CheckCircleIcon,
+  ArrowsRightLeftIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/vue/24/outline'
 import apiClient from '@/api/axios'
 import { reportService } from '../services/reportService'
@@ -76,12 +77,14 @@ import ReportSummaryCard from '../components/ReportSummaryCard.vue'
 import ReportTable from '../components/ReportTable.vue'
 import ExportReportButton from '../components/ExportReportButton.vue'
 
-const columns = [
-  { key: 'title', label: 'Book Title' },
-  { key: 'category.name', label: 'Category' },
-  { key: 'total_copies', label: 'Total' },
-  { key: 'available_copies', label: 'Available' },
-]
+const { t } = useI18n()
+
+const columns = computed(() => [
+  { key: 'title', label: t('reports.columns.bookTitle') },
+  { key: 'category.name', label: t('reports.columns.category') },
+  { key: 'total_copies', label: t('reports.columns.total') },
+  { key: 'available_copies', label: t('reports.columns.available') },
+])
 
 const rows = ref([])
 const summary = ref(null)

@@ -10,26 +10,26 @@
             <ArrowsRightLeftIcon class="w-7 h-7 text-emerald-700" />
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Book Checkout</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">Create a new checkout and manage currently borrowed books.</p>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('circulation.bookCheckout') }}</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">{{ $t('circulation.checkoutSubtitle') }}</p>
           </div>
         </div>
         <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-          Circulation
+          {{ $t('sidebar.menu.borrow') }}
         </span>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Create New Checkout Form -->
         <div class="bg-slate-50/50 rounded-2xl border border-slate-200 p-6 space-y-6">
-          <h2 class="text-lg font-black text-slate-900 tracking-tight pb-4 border-b border-slate-200">Create New Checkout</h2>
+          <h2 class="text-lg font-black text-slate-900 tracking-tight pb-4 border-b border-slate-200">{{ $t('circulation.createNewCheckout') }}</h2>
           <BorrowForm :loading="store.loading" :errors="store.errors" @submit="handleBorrow" />
         </div>
 
         <!-- Currently Borrowed Section -->
         <div class="bg-slate-50/50 rounded-2xl border border-slate-200 p-6 space-y-6">
           <div class="flex items-center justify-between pb-4 border-b border-slate-200">
-            <h2 class="text-lg font-black text-slate-900 tracking-tight">Currently Borrowed ({{ store.pagination.total }})</h2>
+            <h2 class="text-lg font-black text-slate-900 tracking-tight">{{ $t('circulation.currentlyBorrowed') }} ({{ store.pagination.total }})</h2>
           </div>
 
           <!-- Toolbar / Filters -->
@@ -40,7 +40,7 @@
                 <input
                   v-model="store.filters.search"
                   @input="debouncedFetch"
-                  placeholder="Search member or book title..."
+                  :placeholder="$t('circulation.searchMemberBook')"
                   class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 transition-shadow shadow-2xs"
                 />
               </div>
@@ -49,9 +49,9 @@
                 @change="store.fetchList()"
                 class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 shadow-2xs"
               >
-                <option value="">All Status</option>
-                <option value="borrowed">Borrowed</option>
-                <option value="returned">Returned</option>
+                <option value="">{{ $t('circulation.allStatus') }}</option>
+                <option value="borrowed">{{ $t('circulation.statusBorrowed') }}</option>
+                <option value="returned">{{ $t('circulation.statusReturned') }}</option>
               </select>
             </div>
           </div>
@@ -62,7 +62,7 @@
               <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mx-auto mb-3 shadow-2xs">
                 <ArrowsRightLeftIcon class="w-6 h-6 text-slate-400" />
               </div>
-              <p class="text-xs font-bold text-slate-500">No active checkouts found</p>
+              <p class="text-xs font-bold text-slate-500">{{ $t('circulation.noActiveCheckouts') }}</p>
             </div>
 
             <div v-for="b in store.borrows" :key="b.id" class="border border-slate-200 bg-white rounded-xl p-4 text-sm hover:border-slate-300 transition-colors shadow-2xs">
@@ -70,23 +70,23 @@
                 <div>
                   <p class="font-extrabold text-slate-900 leading-snug">{{ b.book_copy?.book?.title }}</p>
                   <p class="text-slate-500 text-xs font-medium mt-0.5">
-                    Category: <span class="text-slate-700">{{ b.book_copy?.book?.category?.name || '—' }}</span> ·
-                    Barcode: <span class="font-mono text-slate-700">{{ b.book_copy?.barcode || '—' }}</span>
+                    {{ $t('circulation.category') }}: <span class="text-slate-700">{{ b.book_copy?.book?.category?.name || '—' }}</span> ·
+                    {{ $t('circulation.barcode') }}: <span class="font-mono text-slate-700">{{ b.book_copy?.barcode || '—' }}</span>
                   </p>
                 </div>
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border flex-shrink-0"
                   :class="isOverdue(b.due_date) && b.status === 'borrowed' ? 'bg-rose-50 text-rose-600 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'">
                   <span class="w-1.5 h-1.5 rounded-full" :class="isOverdue(b.due_date) && b.status === 'borrowed' ? 'bg-rose-500' : 'bg-emerald-500'"></span>
-                  {{ b.status === 'returned' ? 'Returned' : (isOverdue(b.due_date) ? 'Overdue' : 'Active') }}
+                  {{ b.status === 'returned' ? $t('circulation.returnedStatus') : (isOverdue(b.due_date) ? $t('circulation.overdue') : $t('circulation.active')) }}
                 </span>
               </div>
 
               <div class="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 pt-3 border-t border-slate-100 text-xs text-slate-500 font-medium">
-                <p>Member: <span class="text-slate-800 font-bold">{{ b.member?.user?.name }}</span></p>
-                <p>Librarian: <span class="text-slate-800 font-bold">{{ b.librarian?.user?.name || '—' }}</span></p>
-                <p>Borrowed: <span class="text-slate-800 font-bold">{{ formatDate(b.borrow_date) }}</span></p>
-                <p>Due Date: <span class="text-slate-800 font-bold">{{ formatDate(b.due_date) }}</span></p>
-                <p class="col-span-2">Renewals: <span class="text-slate-800 font-bold">{{ b.renewed_count }} / 2</span></p>
+                <p>{{ $t('circulation.member') }}: <span class="text-slate-800 font-bold">{{ b.member?.user?.name }}</span></p>
+                <p>{{ $t('circulation.librarian') }}: <span class="text-slate-800 font-bold">{{ b.librarian?.user?.name || '—' }}</span></p>
+                <p>{{ $t('circulation.borrowed') }}: <span class="text-slate-800 font-bold">{{ formatDate(b.borrow_date) }}</span></p>
+                <p>{{ $t('circulation.dueDate') }}: <span class="text-slate-800 font-bold">{{ formatDate(b.due_date) }}</span></p>
+                <p class="col-span-2">{{ $t('circulation.renewals') }}: <span class="text-slate-800 font-bold">{{ b.renewed_count }} / 2</span></p>
               </div>
 
               <div v-if="b.status === 'borrowed'" class="flex gap-2 mt-4 pt-3 border-t border-slate-100">
@@ -95,13 +95,13 @@
                   @click="handleRenew(b)"
                   class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-1.5 hover:bg-emerald-100 transition-colors shadow-2xs"
                 >
-                  Renew
+                  {{ $t('circulation.renew') }}
                 </button>
                 <button
                   @click="returningBorrow = b"
                   class="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl px-3.5 py-1.5 hover:bg-blue-100 transition-colors shadow-2xs"
                 >
-                  Return
+                  {{ $t('circulation.return') }}
                 </button>
               </div>
             </div>

@@ -12,17 +12,20 @@
     <div v-else class="bg-white rounded-2xl border border-gray-200 p-10 text-center">
       <BookOpenIcon class="w-10 h-10 text-gray-300 mx-auto mb-3" />
       <p class="text-gray-500 text-sm mb-1">
-        MOBI format preview isn't supported in-browser.
+        {{ t('digitalLibrary.reader.mobiNotSupported') }}
       </p>
-      <p class="text-gray-400 text-xs">Please download the file to read it on your device.</p>
+      <p class="text-gray-400 text-xs">{{ t('digitalLibrary.reader.downloadToRead') }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { BookOpenIcon } from '@heroicons/vue/24/outline'
 import PdfViewer from './PdfViewer.vue'
 import EpubViewer from './EpubViewer.vue'
+
+const { t } = useI18n()
 
 defineProps({
   ebook: { type: Object, required: true },

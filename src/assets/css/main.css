@@ -1,15 +1,17 @@
-@import 'tailwindcss';
-
-@theme {
-  /* ពណ៌សម្រាប់ Sidebar និង Header ដូច POS */
-  --color-sidebar-bg: #10b981;    /* Emerald 500 */
-  --color-bg-body: #f1f5f9;       /* Slate 100 */
-  --color-card-bg: #ffffff;       /* White */
-  --color-text-main: #1e293b;     /* Slate 800 */
-}
+@import './tailwind.css';
+@import './fonts.css';
+@import './variables.css';
 
 body {
+  margin: 0;
   background-color: var(--color-bg-body);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  min-height: 100vh;
 }

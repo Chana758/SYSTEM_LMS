@@ -7,7 +7,7 @@
     <div class="relative" :style="{ height: height + 'px' }">
       <canvas ref="canvasRef"></canvas>
       <div v-if="!labels.length" class="absolute inset-0 flex items-center justify-center text-sm text-gray-300 font-bold">
-        No data for this range
+        {{ t('reports.chart.noDataForRange') }}
       </div>
     </div>
   </div>
@@ -16,10 +16,13 @@
 <script setup>
 // Requires: npm install chart.js
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Chart from 'chart.js/auto'
 
+const { t } = useI18n()
+
 const props = defineProps({
-  title: { type: String, default: 'Trend' },
+  title: { type: String, default: 'Trend' }, // caller passes already-translated title
   labels: { type: Array, default: () => [] },
   values: { type: Array, default: () => [] },
   type: { type: String, default: 'line' }, // 'line' | 'bar'

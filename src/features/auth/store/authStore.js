@@ -70,38 +70,41 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // 2. QR Login Card Actions
+
     /**
-     * Generate (or regenerate) the CURRENTLY logged-in user's own QR
-     * login card. Requires an existing session (password login first).
-     * Returns the raw token so the caller can encode/display it as a
-     * QR image — it is never retrievable again after this call.
+     * Read-only status check for the currently logged-in user's own QR
+     * card. Used by QrLoginCard.vue on mount to decide which UI state
+     * to show. Never returns a token — issuance is staff-only now, via
+     * generateQrTokenFor(userId) on authService directly (see
+     * QrLoginCardAdmin.vue / PendingCardsPage.vue).
      */
-    async generateQrToken() {
-      this.loading = true
-      this.errors = {}
+    async getQrCardStatus() {
       try {
-        const { data } = await authService.generateQrToken()
-        return { success: true, qrToken: data.qr_token, expiresAt: data.expires_at }
+        const { data } = await authService.getQrCardStatus()
+        return { success: true, hasCard: data.has_card, expiresAt: data.expires_at }
       } catch (error) {
-        this._handleError(error)
-        return { success: false, message: this.errors.general }
-      } finally {
-        this.loading = false
+        return { success: false, hasCard: false, expiresAt: null }
       }
     },
 
+    // Self-revoke (e.g. report lost) stays available.
     async revokeQrToken() {
       this.loading = true
       try {
         await authService.revokeQrToken()
         return true
       } catch (error) {
-        this._handleError(error)
         return false
       } finally {
         this.loading = false
       }
     },
+
+    // REMOVED: generateQrToken(). Self-service issuance no longer has
+    // a backing route. Any component still calling this will break at
+    // build/lint time, which is intentional — it forces every caller
+    // through the staff-only generateQrTokenFor(userId) flow instead.
 
     async logout() {
       try {
@@ -122,7 +125,48 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 2. Profile & Account Actions
+    /**
+     * Request a password-reset email for the given address. Always
+     * resolves { success: true } on a 200 (the backend intentionally
+     * returns a generic "if an account exists..." message regardless
+     * of whether the email is registered, so the UI can't leak which
+     * emails have accounts).
+     */
+    async forgotPassword(email) {
+      this.loading = true
+      this.errors = {}
+      try {
+        const { data } = await authService.forgotPassword(email)
+        return { success: true, message: data.message }
+      } catch (error) {
+        this._handleError(error)
+        return { success: false, message: this.errors.general || this.errors.email }
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * Submit a new password using the token + email pulled from the
+     * reset-link URL. On success the backend also revokes any existing
+     * QR login card for that user (see AuthController), so no extra
+     * cleanup is needed here.
+     */
+    async resetPassword(payload) {
+      this.loading = true
+      this.errors = {}
+      try {
+        const { data } = await authService.resetPassword(payload)
+        return { success: true, message: data.message }
+      } catch (error) {
+        this._handleError(error)
+        return { success: false, message: this.errors.general }
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // 3. Profile & Account Actions
     async uploadAvatar(file) {
       this.loading = true
       try {
@@ -183,10 +227,10 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 3. Helper Methods
+    // 4. Helper Methods
 
     /**
-     * NEW — Clear any leftover validation/general errors.
+     * Clear any leftover validation/general errors.
      *
      * Why this was needed: `errors` is only reset at the top of each
      * async action (login, loginWithQr, register, etc.). But switching
@@ -199,7 +243,8 @@ export const useAuthStore = defineStore('auth', {
      * into the other form.
      *
      * Fix: call this whenever the UI changes context without
-     * submitting a new request (e.g. on tab switch).
+     * submitting a new request (e.g. on tab switch, or navigating from
+     * Forgot Password to Login).
      */
     clearErrors() {
       this.errors = {}
@@ -225,6 +270,12 @@ export const useAuthStore = defineStore('auth', {
         this.errors = Object.fromEntries(
           Object.entries(backendErrors).map(([key, msgs]) => [key, msgs[0]])
         )
+        // Fall back to the top-level message (e.g. throttling responses
+        // from the Password broker come back as { message: "..." } with
+        // no per-field `errors` object at all).
+        if (!Object.keys(this.errors).length && error.response.data.message) {
+          this.errors = { general: error.response.data.message }
+        }
       } else {
         this.errors = {
           general: error.response?.data?.message || 'An unexpected error occurred',

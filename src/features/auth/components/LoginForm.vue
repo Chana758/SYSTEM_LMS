@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.email') }}</label>
       <input
         v-model="form.email"
         type="email"
@@ -13,7 +13,7 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.password') }}</label>
       <input
         v-model="form.password"
         type="password"
@@ -31,7 +31,7 @@
       :disabled="loading"
       class="w-full bg-green-700 hover:bg-green-800 text-white rounded-lg py-2 font-medium disabled:opacity-50"
     >
-      {{ loading ? 'Logging in...' : 'Sign in' }}
+      {{ loading ? $t('auth.signingIn') : $t('auth.signIn') }}
     </button>
   </form>
 </template>

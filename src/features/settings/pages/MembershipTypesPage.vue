@@ -1,68 +1,62 @@
 <template>
   <div class="space-y-6 pb-12">
-    <!-- ============ HEADER SECTION ============ -->
     <div class="bg-white rounded-3xl border border-slate-300 p-6 md:p-8 shadow-sm space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">Membership Types</h1>
-          <p class="text-xs font-medium text-slate-500 mt-1">Control which membership types staff can assign when creating a member.</p>
+          <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">{{ t('settings.membershipTypes.title') }}</h1>
+          <p class="text-xs font-medium text-slate-500 mt-1">{{ t('settings.membershipTypes.subtitle') }}</p>
         </div>
         <button
           @click="openCreate"
           class="inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
         >
           <span class="text-base leading-none">+</span>
-          <span>Create New Membership Type</span>
+          <span>{{ t('settings.membershipTypes.createNew') }}</span>
         </button>
       </div>
 
-      <!-- ============ STAT CARDS ============ -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-        <!-- Total -->
         <div class="bg-gradient-to-br from-blue-50/70 via-white to-white rounded-2xl border border-blue-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-blue-300">
           <div class="flex items-center justify-between mb-4">
             <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
               <RectangleStackIcon class="w-5 h-5" />
             </div>
-            <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest bg-blue-100 px-2.5 py-1 rounded-full">Total</span>
+            <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest bg-blue-100 px-2.5 py-1 rounded-full">{{ t('settings.membershipTypes.allStatuses') === 'All Statuses' ? 'Total' : t('settings.membershipTypes.totalTypes') }}</span>
           </div>
           <div>
             <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ types.length }}</p>
-            <p class="text-[11px] font-bold text-blue-700 tracking-wide">Total membership types</p>
+            <p class="text-[11px] font-bold text-blue-700 tracking-wide">{{ t('settings.membershipTypes.totalTypes') }}</p>
           </div>
         </div>
 
-        <!-- Active -->
         <div class="bg-gradient-to-br from-emerald-50/70 via-white to-white rounded-2xl border border-emerald-200 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-emerald-300">
           <div class="flex items-center justify-between mb-4">
             <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
               <CheckCircleIcon class="w-5 h-5" />
             </div>
-            <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-100 px-2.5 py-1 rounded-full">Active</span>
+            <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-100 px-2.5 py-1 rounded-full">{{ t('settings.membershipTypes.active') }}</span>
           </div>
           <div>
             <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ activeCount }}</p>
-            <p class="text-[11px] font-bold text-emerald-700 tracking-wide">Active configurations</p>
+            <p class="text-[11px] font-bold text-emerald-700 tracking-wide">{{ t('settings.membershipTypes.activeConfigs') }}</p>
           </div>
         </div>
 
-        <!-- Inactive -->
         <div class="bg-gradient-to-br from-slate-100/70 via-white to-white rounded-2xl border border-slate-300 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-slate-400">
           <div class="flex items-center justify-between mb-4">
             <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center shadow-sm">
               <NoSymbolIcon class="w-5 h-5" />
             </div>
-            <span class="text-[10px] font-extrabold text-slate-600 uppercase tracking-widest bg-slate-200 px-2.5 py-1 rounded-full">Inactive</span>
+            <span class="text-[10px] font-extrabold text-slate-600 uppercase tracking-widest bg-slate-200 px-2.5 py-1 rounded-full">{{ t('settings.membershipTypes.inactive') }}</span>
           </div>
           <div>
             <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ inactiveCount }}</p>
-            <p class="text-[11px] font-bold text-slate-700 tracking-wide">Disabled types</p>
+            <p class="text-[11px] font-bold text-slate-700 tracking-wide">{{ t('settings.membershipTypes.disabledTypes') }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ============ TOOLBAR ============ -->
     <div class="bg-white rounded-2xl border border-slate-300 p-4 shadow-sm">
       <div class="flex flex-wrap gap-3">
         <div class="relative flex-1 min-w-[240px]">
@@ -70,7 +64,7 @@
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search by code, label, or description..."
+            :placeholder="t('settings.membershipTypes.searchPlaceholder')"
             class="w-full border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs font-semibold bg-white text-slate-800 focus:outline-emerald-600 shadow-2xs"
           />
         </div>
@@ -78,58 +72,57 @@
           v-model="statusFilter"
           class="border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 bg-white focus:outline-emerald-600 shadow-2xs cursor-pointer"
         >
-          <option value="">All Statuses</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
+          <option value="">{{ t('settings.membershipTypes.allStatuses') }}</option>
+          <option value="active">{{ t('settings.membershipTypes.active') }}</option>
+          <option value="inactive">{{ t('settings.membershipTypes.inactive') }}</option>
         </select>
       </div>
     </div>
 
-    <!-- ============ TABLE CONTAINER ============ -->
     <div class="bg-white rounded-2xl border border-slate-300 overflow-hidden shadow-sm">
       <div class="overflow-x-auto">
         <div v-if="loading" class="text-center py-16 text-slate-400">
           <div class="w-7 h-7 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-          <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading membership types...</p>
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ t('settings.membershipTypes.loading') }}</p>
         </div>
 
         <div v-else-if="!filteredTypes.length" class="text-center py-16 text-slate-400">
           <span class="text-3xl mb-2 block">🏷️</span>
-          <p class="text-xs font-black uppercase tracking-wider text-slate-800">No membership types found</p>
-          <p class="text-[11px] text-slate-400 mt-0.5">Try adjusting your filters or create a new membership type.</p>
+          <p class="text-xs font-black uppercase tracking-wider text-slate-800">{{ t('settings.membershipTypes.noneFound') }}</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">{{ t('settings.membershipTypes.adjustOrCreate') }}</p>
         </div>
 
         <table v-else class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-100/80 border-b border-slate-300 text-slate-600 text-[10px] font-black uppercase tracking-wider">
-              <th class="px-5 py-3.5">Code</th>
-              <th class="px-5 py-3.5">Label</th>
-              <th class="px-5 py-3.5">Description</th>
-              <th class="px-5 py-3.5">Status</th>
-              <th class="px-5 py-3.5 text-right">Actions</th>
+              <th class="px-5 py-3.5">{{ t('settings.membershipTypes.colCode') }}</th>
+              <th class="px-5 py-3.5">{{ t('settings.membershipTypes.colLabel') }}</th>
+              <th class="px-5 py-3.5">{{ t('settings.membershipTypes.colDescription') }}</th>
+              <th class="px-5 py-3.5">{{ t('settings.membershipTypes.colStatus') }}</th>
+              <th class="px-5 py-3.5 text-right">{{ t('settings.membershipTypes.colActions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-200 text-xs font-medium text-slate-700">
-            <tr v-for="t in filteredTypes" :key="t.id" class="hover:bg-slate-50 transition-colors">
+            <tr v-for="t_ in filteredTypes" :key="t_.id" class="hover:bg-slate-50 transition-colors">
               <td class="px-5 py-4">
-                <span class="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200">{{ t.code }}</span>
+                <span class="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200">{{ t_.code }}</span>
               </td>
-              <td class="px-5 py-4 font-bold text-slate-900">{{ t.label }}</td>
-              <td class="px-5 py-4 text-slate-500 max-w-sm truncate">{{ t.description || '—' }}</td>
+              <td class="px-5 py-4 font-bold text-slate-900">{{ t_.label }}</td>
+              <td class="px-5 py-4 text-slate-500 max-w-sm truncate">{{ t_.description || '—' }}</td>
               <td class="px-5 py-4">
                 <span
                   class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border"
-                  :class="t.is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-slate-100 text-slate-500 border-slate-300'"
+                  :class="t_.is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-slate-100 text-slate-500 border-slate-300'"
                 >
-                  <span class="w-1.5 h-1.5 rounded-full" :class="t.is_active ? 'bg-emerald-500' : 'bg-slate-400'"></span>
-                  {{ t.is_active ? 'Active' : 'Inactive' }}
+                  <span class="w-1.5 h-1.5 rounded-full" :class="t_.is_active ? 'bg-emerald-500' : 'bg-slate-400'"></span>
+                  {{ t_.is_active ? t('settings.membershipTypes.active') : t('settings.membershipTypes.inactive') }}
                 </span>
               </td>
               <td class="px-5 py-4 text-right space-x-3">
-                <button @click="openEdit(t)" class="text-emerald-600 font-bold hover:underline cursor-pointer">
-                  Edit
+                <button @click="openEdit(t_)" class="text-emerald-600 font-bold hover:underline cursor-pointer">
+                  {{ t('settings.membershipTypes.modal.cancel') === 'Cancel' ? 'Edit' : 'Edit' }}
                 </button>
-                <button @click="handleDelete(t)" class="text-rose-500 font-bold hover:underline cursor-pointer">
+                <button @click="handleDelete(t_)" class="text-rose-500 font-bold hover:underline cursor-pointer">
                   Delete
                 </button>
               </td>
@@ -139,48 +132,47 @@
       </div>
     </div>
 
-    <!-- ============ CREATE/EDIT MODAL ============ -->
     <div v-if="showModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
       <div class="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-2xl border border-slate-300 space-y-4">
         <div class="flex items-center justify-between pb-4 border-b border-slate-200">
           <div>
-            <h2 class="font-serif text-lg font-black text-slate-900">{{ editing ? 'Edit Membership Type' : 'Create New Membership Type' }}</h2>
-            <p class="text-xs text-slate-500 mt-0.5">{{ editing ? 'Update this membership type\'s label and description.' : 'Add a new type staff can select when registering a member.' }}</p>
+            <h2 class="font-serif text-lg font-black text-slate-900">{{ editing ? t('settings.membershipTypes.modal.editTitle') : t('settings.membershipTypes.modal.createTitle') }}</h2>
+            <p class="text-xs text-slate-500 mt-0.5">{{ editing ? t('settings.membershipTypes.modal.editSubtitle') : t('settings.membershipTypes.modal.createSubtitle') }}</p>
           </div>
           <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer">✕</button>
         </div>
 
         <form @submit.prevent="handleSubmit" class="space-y-4 text-xs">
           <div>
-            <label class="block font-bold text-slate-700 mb-1.5">Code</label>
+            <label class="block font-bold text-slate-700 mb-1.5">{{ t('settings.membershipTypes.modal.code') }}</label>
             <input
               v-model="form.code"
               :disabled="!!editing"
               type="text"
-              placeholder="e.g. alumni"
+              :placeholder="t('settings.membershipTypes.modal.codePlaceholder')"
               class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 disabled:bg-slate-100 disabled:text-slate-400 focus:outline-emerald-600 shadow-2xs"
             />
-            <p class="text-[11px] text-slate-400 mt-1">Lowercase, no spaces — stored on records and can't be changed later.</p>
+            <p class="text-[11px] text-slate-400 mt-1">{{ t('settings.membershipTypes.modal.codeHint') }}</p>
             <p v-if="formErrors.code" class="text-rose-500 font-semibold mt-1">{{ formErrors.code }}</p>
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1.5">Label</label>
+            <label class="block font-bold text-slate-700 mb-1.5">{{ t('settings.membershipTypes.modal.label') }}</label>
             <input
               v-model="form.label"
               type="text"
-              placeholder="e.g. Alumni"
+              :placeholder="t('settings.membershipTypes.modal.labelPlaceholder')"
               class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-emerald-600 shadow-2xs"
             />
             <p v-if="formErrors.label" class="text-rose-500 font-semibold mt-1">{{ formErrors.label }}</p>
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1.5">Description</label>
+            <label class="block font-bold text-slate-700 mb-1.5">{{ t('settings.membershipTypes.modal.description') }}</label>
             <textarea
               v-model="form.description"
               rows="3"
-              placeholder="Brief summary of this membership type..."
+              :placeholder="t('settings.membershipTypes.modal.descriptionPlaceholder')"
               class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-emerald-600 resize-none shadow-2xs"
             ></textarea>
           </div>
@@ -192,7 +184,7 @@
               id="is_active"
               class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer"
             />
-            <label for="is_active" class="font-semibold text-slate-700 cursor-pointer">Active (visible in Create Member form)</label>
+            <label for="is_active" class="font-semibold text-slate-700 cursor-pointer">{{ t('settings.membershipTypes.modal.activeVisible') }}</label>
           </div>
 
           <p v-if="formErrors.general" class="text-rose-600 font-semibold">{{ formErrors.general }}</p>
@@ -203,14 +195,14 @@
               @click="showModal = false"
               class="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 font-semibold hover:bg-slate-50 cursor-pointer shadow-2xs"
             >
-              Cancel
+              {{ t('settings.membershipTypes.modal.cancel') }}
             </button>
             <button
               type="submit"
               :disabled="submitting"
               class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-semibold disabled:opacity-50 transition-all cursor-pointer shadow-md"
             >
-              {{ submitting ? 'Saving...' : 'Save Type' }}
+              {{ submitting ? t('settings.membershipTypes.modal.saving') : t('settings.membershipTypes.modal.saveType') }}
             </button>
           </div>
         </form>
@@ -225,7 +217,9 @@ import {
   MagnifyingGlassIcon, RectangleStackIcon, CheckCircleIcon, NoSymbolIcon,
 } from '@heroicons/vue/24/outline'
 import { membershipTypeService } from '@/features/members/services/membershipTypeService'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const types = ref([])
 const loading = ref(false)
 const searchQuery = ref('')
@@ -298,20 +292,20 @@ async function handleSubmit() {
         Object.entries(backendErrors).map(([key, msgs]) => [key, msgs[0]])
       )
     } else {
-      formErrors.value = { general: e.response?.data?.message || 'Failed to save.' }
+      formErrors.value = { general: e.response?.data?.message || t('settings.membershipTypes.saveFailed') }
     }
   } finally {
     submitting.value = false
   }
 }
 
-async function handleDelete(t) {
-  if (!confirm(`Delete "${t.label}"?`)) return
+async function handleDelete(t_) {
+  if (!confirm(t('settings.membershipTypes.confirmDelete', { label: t_.label }))) return
   try {
-    await membershipTypeService.delete(t.id)
+    await membershipTypeService.delete(t_.id)
     await loadTypes()
   } catch (e) {
-    alert(e.response?.data?.message || 'Failed to delete.')
+    alert(e.response?.data?.message || t('settings.membershipTypes.deleteFailed'))
   }
 }
 

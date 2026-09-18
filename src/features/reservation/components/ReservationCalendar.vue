@@ -43,22 +43,26 @@
     <!-- Legend Footer -->
     <p class="text-[11px] font-bold text-slate-500 pt-2 border-t border-slate-200 inline-flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-amber-500 inline-block ring-2 ring-amber-100"></span>
-      reservation(s) expiring on that day
+      {{ $t('reservation.card.queuePosition').includes('ជួរឈរ') ? 'ការកក់ដែលផុតកំណត់ថ្ងៃនោះ' : "reservation(s) expiring on that day" }}
     </p>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   reservations: { type: Array, default: () => [] },
 })
 defineEmits(['selectDay'])
 
+const { locale } = useI18n()
 const current = ref(new Date())
 
-const monthLabel = computed(() => current.value.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }))
+const monthLabel = computed(() =>
+  current.value.toLocaleDateString(locale.value === 'km' ? 'km-KH' : 'en-US', { month: 'long', year: 'numeric' })
+)
 
 const daysInMonth = computed(() => {
   const y = current.value.getFullYear()

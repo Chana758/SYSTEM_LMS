@@ -1,27 +1,27 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
     <h2 class="text-lg font-bold text-gray-800">
-      {{ isEdit ? 'Edit Category' : 'Add New Category' }}
+      {{ isEdit ? t('catalog.categoryForm.editTitle') : t('catalog.categoryForm.addTitle') }}
     </h2>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('catalog.categoryForm.categoryName') }}</label>
       <input v-model="form.name" type="text" class="w-full border rounded-lg px-3 py-2" />
       <p v-if="errors.name" class="text-red-500 text-xs mt-1">{{ errors.name[0] }}</p>
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('catalog.categoryForm.descriptionOptional') }}</label>
       <textarea v-model="form.description" rows="3" class="w-full border rounded-lg px-3 py-2"></textarea>
       <p v-if="errors.description" class="text-red-500 text-xs mt-1">{{ errors.description[0] }}</p>
     </div>
 
     <div class="flex gap-2">
       <button type="button" @click="$emit('cancel')" class="flex-1 border border-gray-300 text-gray-600 py-2.5 rounded-lg font-medium hover:bg-gray-50">
-        Cancel
+        {{ t('common.actions.cancel') }}
       </button>
       <button type="submit" class="flex-1 bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-lg font-medium">
-        {{ isEdit ? 'Save Changes' : 'Create' }}
+        {{ isEdit ? t('catalog.common.saveChanges') : t('common.actions.create') }}
       </button>
     </div>
   </form>
@@ -29,6 +29,9 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   modelValue: { type: Object, default: null },

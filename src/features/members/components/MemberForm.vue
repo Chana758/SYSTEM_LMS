@@ -2,13 +2,13 @@
   <form @submit.prevent="handleSubmit" class="space-y-4">
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.name') }}</label>
         <input v-model="form.name" type="text" class="w-full border rounded-lg px-3 py-2" :class="{ 'border-red-500': errors.name }" />
         <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.email') }}</label>
         <input v-model="form.email" type="email" :disabled="isEdit" class="w-full border rounded-lg px-3 py-2 disabled:bg-gray-100" :class="{ 'border-red-500': errors.email }" />
         <p v-if="errors.email" class="text-red-500 text-sm mt-1">{{ errors.email }}</p>
       </div>
@@ -16,12 +16,12 @@
 
     <div v-if="!isEdit" class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.password') }}</label>
         <input v-model="form.password" type="password" class="w-full border rounded-lg px-3 py-2" :class="{ 'border-red-500': errors.password }" />
         <p v-if="errors.password" class="text-red-500 text-sm mt-1">{{ errors.password }}</p>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.confirmPassword') }}</label>
         <input v-model="form.password_confirmation" type="password" class="w-full border rounded-lg px-3 py-2" :class="{ 'border-red-500': errors.password_confirmation }" />
         <p v-if="errors.password_confirmation" class="text-red-500 text-sm mt-1">{{ errors.password_confirmation }}</p>
       </div>
@@ -29,18 +29,18 @@
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.phoneNumber') }}</label>
         <input v-model="form.phone" type="text" class="w-full border rounded-lg px-3 py-2" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Identity Card No.</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.identityCardNo') }}</label>
         <input v-model="form.identity_card_no" type="text" class="w-full border rounded-lg px-3 py-2" />
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Membership Type</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.membershipType') }}</label>
         <!-- FIX: was a hardcoded 3-option list (student/teacher/external).
              Now fetched live from the membership_types master table so
              admin can add/rename/retire types from Settings →
@@ -51,50 +51,53 @@
           :class="{ 'border-red-500': errors.membership_type }"
           :disabled="loadingTypes"
         >
-          <option v-for="t in membershipTypes" :key="t.code" :value="t.code">{{ t.label }}</option>
+          <option v-for="t2 in membershipTypes" :key="t2.code" :value="t2.code">{{ t2.label }}</option>
         </select>
         <p v-if="errors.membership_type" class="text-red-500 text-sm mt-1">{{ errors.membership_type }}</p>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Max Borrow Limit</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.maxBorrowLimit') }}</label>
         <input v-model.number="form.max_borrow_limit" type="number" min="1" max="20" class="w-full border rounded-lg px-3 py-2" />
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Emergency Contact</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.emergencyContact') }}</label>
         <input v-model="form.emergency_contact" type="text" class="w-full border rounded-lg px-3 py-2" />
       </div>
       <div v-if="isEdit">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.status') }}</label>
         <select v-model="form.status" class="w-full border rounded-lg px-3 py-2">
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="expired">Expired</option>
+          <option value="active">{{ t('members.statusActive') }}</option>
+          <option value="inactive">{{ t('members.statusInactive') }}</option>
+          <option value="expired">{{ t('members.statusExpired') }}</option>
         </select>
       </div>
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('members.form.address') }}</label>
       <textarea v-model="form.address" rows="2" class="w-full border rounded-lg px-3 py-2"></textarea>
     </div>
 
     <p v-if="errors.general" class="text-red-500 text-sm">{{ errors.general }}</p>
 
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" @click="$emit('cancel')" class="px-4 py-2 border rounded-lg text-gray-600">Cancel</button>
+      <button type="button" @click="$emit('cancel')" class="px-4 py-2 border rounded-lg text-gray-600">{{ t('common.actions.cancel') }}</button>
       <button type="submit" :disabled="loading" class="px-4 py-2 bg-green-700 text-white rounded-lg disabled:opacity-50">
-        {{ loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Member' }}
+        {{ submitLabel }}
       </button>
     </div>
   </form>
 </template>
 
 <script setup>
-import { reactive, watch, ref, onMounted } from 'vue'
+import { reactive, watch, ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { membershipTypeService } from '../services/membershipTypeService'
+
+const { t } = useI18n()
 
 const props = defineProps({
   initialData: { type: Object, default: () => ({}) },
@@ -111,14 +114,19 @@ const form = reactive({
   membership_type: 'student', max_borrow_limit: 3, address: '', status: 'active',
 })
 
+const submitLabel = computed(() => {
+  if (props.loading) return t('members.form.saving')
+  return props.isEdit ? t('members.form.saveChanges') : t('members.form.createMember')
+})
+
 // FIX: dynamic membership type list, fetched from the backend master
 // table (GET /membership-types?active_only=1). Falls back to the
 // original 3 hardcoded options only if the API call fails, so the
 // form is never left completely unusable.
 const membershipTypes = ref([
-  { code: 'student', label: 'Student' },
-  { code: 'teacher', label: 'Teacher' },
-  { code: 'external', label: 'External' },
+  { code: 'student', label: t('members.typeStudent') },
+  { code: 'teacher', label: t('members.typeTeacher') },
+  { code: 'external', label: t('members.typeExternal') },
 ])
 const loadingTypes = ref(false)
 

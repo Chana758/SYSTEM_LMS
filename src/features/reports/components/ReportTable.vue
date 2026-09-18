@@ -1,10 +1,10 @@
 <template>
   <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-x-auto">
     <div v-if="loading" class="p-16 text-center text-gray-400 font-bold text-sm uppercase tracking-widest animate-pulse">
-      Loading…
+      {{ t('reports.table.loading') }}
     </div>
     <div v-else-if="!rows.length" class="p-16 text-center text-gray-400 font-bold text-sm uppercase tracking-widest">
-      No records found
+      {{ t('reports.table.noRecordsFound') }}
     </div>
     <table v-else class="w-full min-w-[700px]">
       <thead class="bg-gray-50 border-b border-gray-100">
@@ -44,8 +44,12 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
-  columns: { type: Array, required: true },   // [{ key: 'name', label: 'Name' }]
+  columns: { type: Array, required: true },   // [{ key: 'name', label: 'Name' }] — label is already translated by the caller
   rows: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
   pagination: { type: Object, default: null }, // { current_page, last_page }

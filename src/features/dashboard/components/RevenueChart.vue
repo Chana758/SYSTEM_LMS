@@ -2,11 +2,11 @@
   <div class="bg-white rounded-2xl border border-slate-300 shadow-sm p-6 h-full flex flex-col">
     <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-4">
       <div>
-        <h3 class="text-base font-black text-slate-900 tracking-tight">Revenue Trend</h3>
-        <p class="text-xs font-semibold text-slate-500 mt-0.5">Fine payments collected over the last few months.</p>
+        <h3 class="text-base font-black text-slate-900 tracking-tight">{{ $t('dashboard.revenueTrend.title') }}</h3>
+        <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ $t('dashboard.revenueTrend.subtitle') }}</p>
       </div>
       <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase tracking-wider border border-emerald-500">
-        Analytics
+        {{ $t('dashboard.revenueTrend.analytics') }}
       </span>
     </div>
 
@@ -15,7 +15,7 @@
     </div>
 
     <p v-else-if="!hasData" class="flex-1 flex items-center justify-center text-xs font-bold text-slate-400 py-10">
-      No revenue data yet.
+      {{ $t('dashboard.revenueTrend.noData') }}
     </p>
 
     <div v-else ref="chartRef" class="w-full flex-1 min-h-[220px]"></div>

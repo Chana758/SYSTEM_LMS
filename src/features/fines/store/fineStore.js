@@ -90,5 +90,27 @@ export const useFineStore = defineStore('fine', {
         this.loading = false
       }
     },
+
+    /**
+     * NEW — completes the Edit Fine flow. Mirrors createFine()'s error
+     * handling; also refreshes currentFine with the server's response so
+     * navigating straight back into the detail/edit view (if the caller
+     * chooses to) shows the just-saved values rather than stale ones.
+     */
+    async updateFine(id, payload) {
+      this.loading = true
+      this.errors = {}
+      try {
+        const { data } = await fineService.update(id, payload)
+        this.currentFine = data.data
+        return { success: true, message: data.message, data: data.data }
+      } catch (e) {
+        this.errors = e.response?.data?.errors
+          || (e.response?.data?.message ? { general: e.response.data.message } : {})
+        return { success: false, message: e.response?.data?.message || 'Failed to update fine' }
+      } finally {
+        this.loading = false
+      }
+    },
   },
 })

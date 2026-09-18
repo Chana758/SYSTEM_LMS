@@ -49,6 +49,7 @@ export const useCatalogStore = defineStore('catalog', {
       }
     },
 
+
     async lookupIsbn(isbn) {
       this.isbnLookupLoading = true
       try {

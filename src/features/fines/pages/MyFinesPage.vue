@@ -7,8 +7,8 @@
           💳
         </div>
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">My Fines</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Overview of your library fines and payment history</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('fines.myFines.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('fines.myFines.subtitle') }}</p>
         </div>
       </div>
     </div>
@@ -22,18 +22,18 @@
         <div class="space-y-1 relative z-10">
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest bg-green-900/80 text-white border border-green-500/40">
             <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-            Balance Overview
+            {{ t('fines.myFines.balanceOverview') }}
           </span>
-          <p class="text-xs font-bold text-emerald-100 uppercase tracking-widest pt-2">Total Outstanding Balance</p>
+          <p class="text-xs font-bold text-emerald-100 uppercase tracking-widest pt-2">{{ t('fines.myFines.totalOutstanding') }}</p>
           <p class="text-4xl sm:text-5xl font-black tracking-tight">${{ Number(store.myTotalUnpaid || 0).toFixed(2) }}</p>
         </div>
         <div class="mt-4 pt-4 border-t border-green-600/50 relative z-10 flex items-center gap-2">
           <span class="text-base">ℹ️</span>
           <p class="text-xs font-bold text-emerald-100" v-if="store.myTotalUnpaid > 0">
-            Please settle at the library front desk to continue borrowing.
+            {{ t('fines.myFines.settleHint') }}
           </p>
           <p class="text-xs font-bold text-emerald-100" v-else>
-            You have no outstanding fines. 🎉 Great job keeping your account clear!
+            {{ t('fines.myFines.allClearHint') }}
           </p>
         </div>
       </div>
@@ -41,12 +41,12 @@
       <!-- Fine Records List Section -->
       <div class="space-y-4 pt-2">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-          <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider">Fine Records</h3>
-          <span class="text-xs font-bold text-slate-400">{{ store.myFines.length }} record(s) found</span>
+          <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider">{{ t('fines.myFines.fineRecords') }}</h3>
+          <span class="text-xs font-bold text-slate-400">{{ store.myFines.length }} {{ t('fines.myFines.recordsFound') }}</span>
         </div>
 
         <div v-if="store.loading" class="text-center py-16 text-slate-400 font-bold text-xs uppercase tracking-widest">
-          Loading your fines...
+          {{ t('fines.myFines.loading') }}
         </div>
         
         <div v-else-if="!store.myFines.length" class="text-center py-16 space-y-3">
@@ -54,8 +54,8 @@
             ✨
           </div>
           <div>
-            <p class="text-sm font-black text-slate-900 uppercase tracking-wider">No Fine Records</p>
-            <p class="text-xs font-bold text-slate-500 mt-0.5">You don't have any library fine history right now.</p>
+            <p class="text-sm font-black text-slate-900 uppercase tracking-wider">{{ t('fines.myFines.noRecords') }}</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('fines.myFines.noRecordsHint') }}</p>
           </div>
         </div>
 
@@ -69,7 +69,7 @@
                 </div>
                 <div>
                   <p class="text-xs font-black text-slate-900 tracking-tight line-clamp-1">{{ fine.borrow?.book_copy?.book?.title || 'Unknown Book' }}</p>
-                  <p class="text-[11px] font-bold text-slate-500 capitalize">Reason: {{ fine.reason }}</p>
+                  <p class="text-[11px] font-bold text-slate-500 capitalize">{{ t('fines.reason') }}: {{ fine.reason }}</p>
                 </div>
               </div>
               <FineStatusBadge :status="fine.status" />
@@ -91,10 +91,12 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { BookOpenIcon } from '@heroicons/vue/24/outline'
 import { useFineStore } from '../store/fineStore'
 import FineStatusBadge from '../components/FineStatusBadge.vue'
 
+const { t } = useI18n()
 const store = useFineStore()
 
 function formatDate(d) {

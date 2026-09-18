@@ -9,27 +9,43 @@
         : 'bg-white border border-gray-200 text-gray-500 hover:bg-gray-50'"
     >
       <component :is="item.icon" class="w-4 h-4" />
-      {{ item.label }}
+      {{ t(item.labelKey) }}
     </router-link>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import {
   ChartBarIcon, ArrowsRightLeftIcon, BanknotesIcon,
   CurrencyDollarIcon, ArchiveBoxIcon, UsersIcon,
 } from '@heroicons/vue/24/outline'
+import { useAuthStore } from '@/features/auth/store/authStore'
 
+const { t } = useI18n()
 const route = useRoute()
+const authStore = useAuthStore()
 const isActive = (path) => route.path === path
 
-const items = [
-  { to: '/reports', label: 'Overview', icon: ChartBarIcon },
-  { to: '/reports/borrow', label: 'Borrow', icon: ArrowsRightLeftIcon },
-  { to: '/reports/fine', label: 'Fine', icon: BanknotesIcon },
-  { to: '/reports/revenue', label: 'Revenue', icon: CurrencyDollarIcon },
-  { to: '/reports/stock', label: 'Stock', icon: ArchiveBoxIcon },
-  { to: '/reports/user', label: 'User', icon: UsersIcon },
-]
+// 'Revenue' tab is admin-only, mirroring the backend split in
+// routes/api.php (§10 ADMIN REPORTS) — revenue is financial/sensitive
+// data, kept out of the same tier as borrow/fine/stock/user which
+// librarian needs day-to-day.
+const items = computed(() => {
+  const base = [
+    { to: '/reports', labelKey: 'reports.navOverview', icon: ChartBarIcon },
+    { to: '/reports/borrow', labelKey: 'reports.navBorrow', icon: ArrowsRightLeftIcon },
+    { to: '/reports/fine', labelKey: 'reports.navFine', icon: BanknotesIcon },
+  ]
+  if (authStore.role === 'admin') {
+    base.push({ to: '/reports/revenue', labelKey: 'reports.navRevenue', icon: CurrencyDollarIcon })
+  }
+  base.push(
+    { to: '/reports/stock', labelKey: 'reports.navStock', icon: ArchiveBoxIcon },
+    { to: '/reports/user', labelKey: 'reports.navUser', icon: UsersIcon },
+  )
+  return base
+})
 </script>

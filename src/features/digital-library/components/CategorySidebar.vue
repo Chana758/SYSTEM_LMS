@@ -1,13 +1,13 @@
 <template>
   <div class="bg-white rounded-2xl border border-gray-200 p-4">
-    <h3 class="text-xs uppercase tracking-wide text-gray-400 font-bold mb-3 px-1">Categories</h3>
+    <h3 class="text-xs uppercase tracking-wide text-gray-400 font-bold mb-3 px-1">{{ t('digitalLibrary.categories') }}</h3>
     <nav class="space-y-1">
       <button
         @click="$emit('select', '')"
         class="w-full text-left px-3 py-2 rounded-lg text-sm transition-colors"
         :class="!activeId ? 'bg-green-700 text-white font-medium' : 'text-gray-600 hover:bg-gray-50'"
       >
-        All Categories
+        {{ t('digitalLibrary.allCategories') }}
       </button>
       <button
         v-for="c in categories" :key="c.id"
@@ -29,6 +29,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   categories: { type: Array, default: () => [] },
   activeId: { type: [Number, String], default: '' },

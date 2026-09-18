@@ -10,8 +10,8 @@
             ←
           </router-link>
           <div>
-            <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">Category Management</h1>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Organize library catalog genres, descriptions, and track book distribution.</p>
+            <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">{{ t('catalog.categoryPage.title') }}</h1>
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('catalog.categoryPage.subtitle') }}</p>
           </div>
         </div>
         <button
@@ -20,37 +20,37 @@
           class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
         >
           <span class="text-base leading-none">+</span>
-          <span>Add Category</span>
+          <span>{{ t('catalog.categoryPage.addCategory') }}</span>
         </button>
       </div>
 
-      <!-- 2 Stat Cards (Clean Dashboard Metric Style) -->
+      <!-- 2 Stat Cards (Solid Filled Style) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
         <!-- Total Categories Card -->
-        <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-4 flex flex-col justify-between transition-all hover:shadow-md">
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
-              <RectangleStackIcon class="w-5 h-5 text-emerald-700"/>
+        <div class="bg-blue-600 text-white rounded-2xl shadow-md p-6 flex flex-col justify-between transition-all hover:shadow-lg">
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-white">
+              <RectangleStackIcon class="w-6 h-6"/>
             </div>
-            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Total Genres</span>
+            <span class="text-[10px] font-extrabold text-blue-100 uppercase tracking-widest bg-blue-700/60 px-3 py-1 rounded-full">{{ t('catalog.categoryPage.totalGenres') }}</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ store.categories.length }}</p>
-            <p class="text-[11px] font-bold text-emerald-600 tracking-wide">Active library categories</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-2">{{ store.categories.length }}</p>
+            <p class="text-xs font-bold text-blue-100 tracking-wide">{{ t('catalog.categoryPage.activeCategories') }}</p>
           </div>
         </div>
 
         <!-- Total Books Cataloged Card -->
-        <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-4 flex flex-col justify-between transition-all hover:shadow-md">
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-              <BookOpenIcon class="w-5 h-5 text-blue-600"/>
+        <div class="bg-emerald-600 text-white rounded-2xl shadow-md p-6 flex flex-col justify-between transition-all hover:shadow-lg">
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-white">
+              <BookOpenIcon class="w-6 h-6"/>
             </div>
-            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Cataloged</span>
+            <span class="text-[10px] font-extrabold text-emerald-100 uppercase tracking-widest bg-emerald-700/60 px-3 py-1 rounded-full">{{ t('catalog.categoryPage.cataloged') }}</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{{ totalBooksCount }}</p>
-            <p class="text-[11px] font-bold text-blue-600 tracking-wide">Total books across categories</p>
+            <p class="text-3xl font-black tracking-tight leading-none mb-2">{{ totalBooksCount }}</p>
+            <p class="text-xs font-bold text-emerald-100 tracking-wide">{{ t('catalog.categoryPage.totalBooksAcross') }}</p>
           </div>
         </div>
       </div>
@@ -63,24 +63,24 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/70 border-b border-slate-200/80 text-slate-400 text-[10px] font-black uppercase tracking-wider">
-              <th class="px-5 py-3.5">Name</th>
-              <th class="px-5 py-3.5">Description</th>
-              <th class="px-5 py-3.5">Books Count</th>
-              <th v-if="canManage" class="px-5 py-3.5 text-right">Actions</th>
+              <th class="px-5 py-3.5">{{ t('catalog.categoryPage.colName') }}</th>
+              <th class="px-5 py-3.5">{{ t('catalog.categoryPage.colDescription') }}</th>
+              <th class="px-5 py-3.5">{{ t('catalog.categoryPage.colBooksCount') }}</th>
+              <th v-if="canManage" class="px-5 py-3.5 text-right">{{ t('catalog.categoryPage.colActions') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
             <tr v-if="store.loading">
               <td :colspan="canManage ? 4 : 3" class="text-center py-16 text-slate-400">
                 <div class="w-7 h-7 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading categories...</p>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ t('catalog.categoryPage.loadingCategories') }}</p>
               </td>
             </tr>
             <tr v-else-if="!store.categories.length">
               <td :colspan="canManage ? 4 : 3" class="text-center py-16 text-slate-400">
                 <span class="text-3xl mb-2 block">📂</span>
-                <p class="text-xs font-black uppercase tracking-wider text-slate-800">No categories yet</p>
-                <p class="text-[11px] text-slate-400 mt-0.5">Click "Add Category" above to create your first genre.</p>
+                <p class="text-xs font-black uppercase tracking-wider text-slate-800">{{ t('catalog.categoryPage.noCategories') }}</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">{{ t('catalog.categoryPage.noCategoriesHint') }}</p>
               </td>
             </tr>
             <tr v-for="c in store.categories" :key="c.id" class="hover:bg-slate-50/60 transition-colors">
@@ -92,8 +92,8 @@
                 </span>
               </td>
               <td v-if="canManage" class="px-5 py-4 text-right space-x-3">
-                <button @click="openEdit(c)" class="text-emerald-600 font-bold hover:underline cursor-pointer">Edit</button>
-                <button @click="handleDelete(c)" class="text-rose-500 font-bold hover:underline cursor-pointer">Delete</button>
+                <button @click="openEdit(c)" class="text-emerald-600 font-bold hover:underline cursor-pointer">{{ t('catalog.common.edit') }}</button>
+                <button @click="handleDelete(c)" class="text-rose-500 font-bold hover:underline cursor-pointer">{{ t('catalog.common.delete') }}</button>
               </td>
             </tr>
           </tbody>
@@ -112,11 +112,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { RectangleStackIcon, BookOpenIcon } from '@heroicons/vue/24/outline'
 import { useCatalogStore } from '../store/catalogStore'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import CategoryForm from '../components/CategoryForm.vue'
 
+const { t } = useI18n()
 const store = useCatalogStore()
 const authStore = useAuthStore()
 const showModal = ref(false)
@@ -159,7 +161,7 @@ async function handleSubmit(payload) {
 
 async function handleDelete(category) {
   if (!canManage.value) return
-  if (!confirm(`Delete category "${category.name}"?`)) return
+  if (!confirm(t('catalog.categoryPage.confirmDelete', { name: category.name }))) return
   const result = await store.deleteCategory(category.id)
   if (!result.success) alert(result.message)
 }

@@ -1,11 +1,11 @@
 <template>
   <div class="bg-white rounded-2xl border border-gray-200 p-6 max-w-xl">
-    <h2 class="text-lg font-bold text-gray-800 mb-1">Account Information</h2>
-    <p class="text-sm text-gray-400 mb-6">Update your personal contact details.</p>
+    <h2 class="text-lg font-bold text-gray-800 mb-1">{{ t('settings.account.title') }}</h2>
+    <p class="text-sm text-gray-400 mb-6">{{ t('settings.account.subtitle') }}</p>
 
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('settings.account.fullName') }}</label>
         <input
           v-model="form.name" type="text" required
           class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
@@ -14,7 +14,7 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('settings.account.email') }}</label>
         <input
           v-model="form.email" type="email" required
           class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
@@ -23,9 +23,9 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('settings.account.phoneNumber') }}</label>
         <input
-          v-model="form.phone" type="text" placeholder="e.g. 012 345 678"
+          v-model="form.phone" type="text" :placeholder="t('settings.account.phonePlaceholder')"
           class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
         />
         <p v-if="authStore.errors?.phone" class="text-xs text-red-600 mt-1">{{ authStore.errors.phone }}</p>
@@ -39,7 +39,7 @@
         type="submit" :disabled="authStore.loading"
         class="px-5 py-2.5 bg-green-700 text-white text-sm font-semibold rounded-xl hover:bg-green-800 transition disabled:opacity-50"
       >
-        {{ authStore.loading ? 'Saving...' : 'Save Changes' }}
+        {{ authStore.loading ? t('settings.account.saving') : t('settings.account.saveChanges') }}
       </button>
     </form>
   </div>
@@ -48,7 +48,8 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const authStore = useAuthStore()
 const successMessage = ref('')
 
@@ -63,7 +64,7 @@ onMounted(() => {
 async function handleSubmit() {
   successMessage.value = ''
   const success = await authStore.updateAccount({ ...form })
-  if (success) successMessage.value = 'Account information updated successfully.'
+  if (success) successMessage.value = t('settings.account.updated')
 }
 </script>
 

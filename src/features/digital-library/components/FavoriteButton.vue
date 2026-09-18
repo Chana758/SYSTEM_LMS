@@ -7,15 +7,18 @@
   >
     <HeartIcon v-if="!isFav" class="w-4 h-4" />
     <HeartIconSolid v-else class="w-4 h-4" />
-    {{ isFav ? 'Favorited' : 'Add to Favorites' }}
+    {{ isFav ? t('digitalLibrary.favorite.favorited') : t('digitalLibrary.favorite.addToFavorites') }}
   </button>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { HeartIcon } from '@heroicons/vue/24/outline'
 import { HeartIcon as HeartIconSolid } from '@heroicons/vue/24/solid'
 import { useLibraryStore } from '../store/libraryStore'
+
+const { t } = useI18n()
 
 const props = defineProps({
   ebookId: { type: [Number, String], required: true },

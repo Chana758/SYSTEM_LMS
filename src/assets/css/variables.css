@@ -1,6 +1,15 @@
 @theme {
-  --color-primary: #10b981;        /* Emerald 500 (សម្រាប់ប៊ូតុង និង Icon) */
-  --color-sidebar: #064e3b;        /* Emerald 900 (ពណ៌ Sidebar) */
-  --color-header-bg: #10b981;      /* Emerald 500 (សម្រាប់ Header ដូចរូប) */
-  --color-bg-body: #f8fafc;        /* Slate 50 (ពណ៌ Background) */
+  /* ពណ៌សម្រាប់ Sidebar និង Header ដូច POS */
+  --color-sidebar-bg: #10b981;
+  --color-sidebar: #064e3b;
+  --color-header-bg: #10b981;
+  --color-primary: #10b981;
+  --color-bg-body: #f1f5f9;
+  --color-card-bg: #ffffff;
+  --color-text-main: #1e293b;
+
+  --font-sans: 'Kantumruy Pro', 'Inter', system-ui, sans-serif;
+  --font-title: 'Kantumruy Pro', 'Inter', sans-serif;
+
+  --font-report: 'KhmerOS', 'KhmerOSSiemreap', sans-serif;
 }

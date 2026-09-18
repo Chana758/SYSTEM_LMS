@@ -1,0 +1,155 @@
+{
+  "navOverview": "ទិដ្ឋភាពទូទៅ",
+  "navBorrow": "ការខ្ចី",
+  "navFine": "ការពិន័យ",
+  "navRevenue": "ចំណូល",
+  "navStock": "ស្តុក",
+  "navUser": "អ្នកប្រើប្រាស់",
+  "common": {
+    "guest": "ភ្ញៀវ"
+  },
+  "columns": {
+    "member": "សមាជិក",
+    "book": "សៀវភៅ",
+    "borrowed": "បានខ្ចី",
+    "due": "កំណត់ត្រូវប្រគល់",
+    "status": "ស្ថានភាព",
+    "amount": "ចំនួនទឹកប្រាក់",
+    "paidAt": "បានបង់ត្រឹម",
+    "description": "ការពិពណ៌នា",
+    "date": "កាលបរិច្ឆេទ",
+    "bookTitle": "ចំណងជើងសៀវភៅ",
+    "category": "ប្រភេទ",
+    "total": "សរុប",
+    "available": "មានទំនេរ",
+    "name": "ឈ្មោះ",
+    "email": "អ៊ីមែល",
+    "role": "តួនាទី",
+    "borrows": "ការខ្ចី",
+    "active": "សកម្ម",
+    "fines": "ការពិន័យ"
+  },
+  "chart": {
+    "noDataForRange": "គ្មានទិន្នន័យសម្រាប់ចន្លោះពេលនេះ"
+  },
+  "summaryCard": {
+    "vsPrevious": "បើធៀបនឹងមុន"
+  },
+  "badge": {
+    "total": "សរុប",
+    "returned": "បានប្រគល់",
+    "active": "សកម្ម",
+    "alert": "ជូនដំណឹង",
+    "users": "អ្នកប្រើប្រាស់",
+    "fines": "ការពិន័យ",
+    "unpaid": "មិនទាន់បង់",
+    "catalog": "កាតាឡុក",
+    "stock": "ស្តុក",
+    "amount": "ចំនួន",
+    "paid": "បានបង់",
+    "month": "ខែ",
+    "services": "សេវាកម្ម",
+    "available": "មានទំនេរ",
+    "borrowed": "កំពុងខ្ចី",
+    "new": "ថ្មី",
+    "members": "សមាជិក",
+    "staff": "បុគ្គលិក"
+  },
+  "dashboardPage": {
+    "title": "របាយការណ៍",
+    "subtitle": "ព័ត៌មានលម្អិតអំពីចរាចរណ៍ ចំណូល និងស្តុកជាមួយភ្នែក",
+    "loading": "កំពុងផ្ទុកផ្ទាំងគ្រប់គ្រង…",
+    "totalBorrows": "ការខ្ចីសរុប",
+    "activeBorrows": "ការខ្ចីសកម្ម",
+    "overdue": "ហួសកំណត់",
+    "newMembers": "សមាជិកថ្មី",
+    "finesPeriod": "ការពិន័យ (រយៈពេល)",
+    "outstandingFines": "ការពិន័យនៅសល់",
+    "totalBooks": "សៀវភៅសរុប",
+    "availableCopies": "ច្បាប់មានទំនេរ",
+    "borrowsOverTime": "ការខ្ចីតាមពេលវេលា",
+    "revenueOverTime": "ចំណូលតាមពេលវេលា",
+    "mostBorrowedBooks": "សៀវភៅដែលខ្ចីច្រើនបំផុត",
+    "borrowsSuffix": "ការខ្ចី",
+    "noDataYet": "មិនទាន់មានទិន្នន័យ",
+    "detailedReports": "របាយការណ៍លម្អិត",
+    "noDashboardData": "មិនទាន់មានទិន្នន័យផ្ទាំងគ្រប់គ្រងទេ។"
+  },
+  "borrowPage": {
+    "title": "របាយការណ៍ការខ្ចី",
+    "subtitle": "សកម្មភាពចរាចរណ៍សម្រាប់រយៈពេលដែលបានជ្រើសរើស",
+    "backToReports": "ត្រឡប់ទៅរបាយការណ៍",
+    "total": "សរុប",
+    "returned": "បានប្រគល់មកវិញ",
+    "active": "សកម្ម",
+    "overdue": "ហួសកំណត់"
+  },
+  "finePage": {
+    "title": "របាយការណ៍ការពិន័យ",
+    "subtitle": "ការពិន័យបានចេញ និងប្រមូលបានសម្រាប់រយៈពេលដែលបានជ្រើសរើស",
+    "backToReports": "ត្រឡប់ទៅរបាយការណ៍",
+    "totalFines": "ការពិន័យសរុប",
+    "totalAmount": "ចំនួនសរុប",
+    "collected": "បានប្រមូល",
+    "outstanding": "នៅសល់",
+    "statusUnpaid": "មិនទាន់បង់",
+    "statusPaid": "បានបង់"
+  },
+  "revenuePage": {
+    "title": "របាយការណ៍ចំណូល",
+    "subtitle": "ព័ត៌មានលម្អិតហិរញ្ញវត្ថុ និងប្រវត្តិការប្រមូល",
+    "backToReports": "ត្រឡប់ទៅរបាយការណ៍",
+    "totalRevenue": "ចំណូលសរុប",
+    "thisMonth": "ខែនេះ",
+    "fines": "ការពិន័យ",
+    "services": "សេវាកម្ម",
+    "adminsOnly": "សម្រាប់អ្នកគ្រប់គ្រងតែប៉ុណ្ណោះ",
+    "adminsOnlyHint": "របាយការណ៍ចំណូលមានទិន្នន័យហិរញ្ញវត្ថុ ដែលកម្រិតសម្រាប់តែអ្នកគ្រប់គ្រង។ សូមទាក់ទងអ្នកគ្រប់គ្រង ប្រសិនបើអ្នកត្រូវការព័ត៌មាននេះ។"
+  },
+  "stockPage": {
+    "title": "របាយការណ៍ស្តុក",
+    "subtitle": "កម្រិតស្តុក និងភាពមានទំនេរ",
+    "backToReports": "ត្រឡប់ទៅរបាយការណ៍",
+    "totalBooks": "សៀវភៅសរុប",
+    "available": "មានទំនេរ",
+    "borrowed": "កំពុងខ្ចី",
+    "lowStock": "ស្តុកតិច",
+    "category": "ប្រភេទ",
+    "outOfStock": "អស់ស្តុក"
+  },
+  "userPage": {
+    "title": "របាយការណ៍អ្នកប្រើប្រាស់",
+    "subtitle": "សកម្មភាពសមាជិក និងការចុះឈ្មោះសម្រាប់រយៈពេលដែលបានជ្រើសរើស",
+    "backToReports": "ត្រឡប់ទៅរបាយការណ៍",
+    "totalUsers": "អ្នកប្រើប្រាស់សរុប",
+    "newPeriod": "ថ្មី (រយៈពេល)",
+    "members": "សមាជិក",
+    "staff": "បុគ្គលិក",
+    "roleMember": "សមាជិក",
+    "roleLibrarian": "បណ្ណារក្ស",
+    "roleAdmin": "អ្នកគ្រប់គ្រង"
+  },
+  "filter": {
+    "from": "ពី",
+    "to": "ដល់",
+    "status": "ស្ថានភាព",
+    "search": "ស្វែងរក",
+    "searchPlaceholder": "ឈ្មោះ អ៊ីមែល ចំណងជើង…",
+    "all": "ទាំងអស់",
+    "apply": "អនុវត្ត",
+    "reset": "កំណត់ឡើងវិញ"
+  },
+  "export": {
+    "export": "នាំចេញ",
+    "generating": "កំពុងបង្កើត…",
+    "pdf": "📄 PDF",
+    "excel": "📊 Excel",
+    "csv": "🗒️ CSV",
+    "noFileUrl": "ការនាំចេញជោគជ័យ ប៉ុន្តែមិនទទួលបាន URL ឯកសារទេ។",
+    "failed": "ការនាំចេញបរាជ័យ។ សូមព្យាយាមម្តងទៀត។"
+  },
+  "table": {
+    "noRecordsFound": "រកមិនឃើញកំណត់ត្រា",
+    "loading": "កំពុងផ្ទុក…"
+  }
+}

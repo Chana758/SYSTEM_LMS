@@ -3,19 +3,19 @@
     <table class="w-full text-sm">
       <thead class="bg-gray-50/80 text-gray-400 text-[11px] uppercase tracking-wide">
         <tr>
-          <th class="text-left px-4 py-3 font-semibold">Member</th>
-          <th class="text-left px-4 py-3 font-semibold">Book</th>
-          <th class="text-left px-4 py-3 font-semibold">Reserved</th>
-          <th class="text-left px-4 py-3 font-semibold">Expires</th>
-          <th class="text-left px-4 py-3 font-semibold">Priority</th>
-          <th class="text-left px-4 py-3 font-semibold">Status</th>
-          <th class="text-right px-4 py-3 font-semibold">Actions</th>
+          <th class="text-left px-4 py-3 font-semibold">{{ $t('reservation.member') }}</th>
+          <th class="text-left px-4 py-3 font-semibold">{{ $t('reservation.book') }}</th>
+          <th class="text-left px-4 py-3 font-semibold">{{ $t('reservation.reserved') }}</th>
+          <th class="text-left px-4 py-3 font-semibold">{{ $t('reservation.expires') }}</th>
+          <th class="text-left px-4 py-3 font-semibold">{{ $t('reservation.priority') }}</th>
+          <th class="text-left px-4 py-3 font-semibold">{{ $t('reservation.status') }}</th>
+          <th class="text-right px-4 py-3 font-semibold">{{ $t('reservation.actions') }}</th>
         </tr>
       </thead>
       <tbody>
         <!-- Loading State -->
         <tr v-if="loading">
-          <td colspan="7" class="text-center py-12 text-gray-400 text-sm">Loading reservations…</td>
+          <td colspan="7" class="text-center py-12 text-gray-400 text-sm">{{ $t('reservation.loadingReservations') }}</td>
         </tr>
 
         <!-- Empty State -->
@@ -23,8 +23,8 @@
           <td colspan="7" class="py-14">
             <div class="flex flex-col items-center gap-1.5">
               <span class="text-2xl">🗂️</span>
-              <p class="text-gray-500 text-sm font-medium">No reservations found</p>
-              <p class="text-gray-400 text-xs">Try adjusting your search or status filter.</p>
+              <p class="text-gray-500 text-sm font-medium">{{ $t('reservation.noReservationsFound') }}</p>
+              <p class="text-gray-400 text-xs">{{ $t('reservation.adjustSearchOrStatus') }}</p>
             </div>
           </td>
         </tr>
@@ -78,14 +78,14 @@
               @click="$emit('fulfill', r.id)"
               class="text-green-700 hover:underline text-xs font-medium cursor-pointer"
             >
-              Fulfill
+              {{ $t('reservation.fulfill') }}
             </button>
             <button
               v-if="['pending', 'ready'].includes(r.status)"
               @click="$emit('cancel', r.id)"
               class="text-red-500 hover:underline text-xs font-medium cursor-pointer"
             >
-              Cancel
+              {{ $t('reservation.cancel') }}
             </button>
           </td>
         </tr>

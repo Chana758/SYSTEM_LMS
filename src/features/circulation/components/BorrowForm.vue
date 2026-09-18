@@ -1,8 +1,8 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Member (Membership No. or Name)</label>
-      <input v-model="memberSearch" @input="searchMembers" type="text" placeholder="Search for a member..." class="w-full border rounded-lg px-3 py-2" />
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('circulation.borrowForm.memberLabel') }}</label>
+      <input v-model="memberSearch" @input="searchMembers" type="text" :placeholder="$t('circulation.borrowForm.memberPlaceholder')" class="w-full border rounded-lg px-3 py-2" />
       <div v-if="memberResults.length" class="border rounded-lg mt-1 max-h-40 overflow-y-auto">
         <div v-for="m in memberResults" :key="m.id" @click="selectMember(m)" class="px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm">
           {{ m.user?.name }} — {{ m.membership_no }}
@@ -12,12 +12,12 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Book (Title or ISBN)</label>
-      <input v-model="bookSearch" @input="searchBooks" type="text" placeholder="Search for a book..." class="w-full border rounded-lg px-3 py-2" />
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('circulation.borrowForm.bookLabel') }}</label>
+      <input v-model="bookSearch" @input="searchBooks" type="text" :placeholder="$t('circulation.borrowForm.bookPlaceholder')" class="w-full border rounded-lg px-3 py-2" />
       <div v-if="bookResults.length" class="border rounded-lg mt-1 max-h-40 overflow-y-auto">
         <div v-for="b in bookResults" :key="b.id" @click="selectBook(b)" class="px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm flex justify-between">
           <span>{{ b.title }}</span>
-          <span class="text-xs" :class="b.available_qty > 0 ? 'text-green-600' : 'text-red-500'">{{ b.available_qty }} left</span>
+          <span class="text-xs" :class="b.available_qty > 0 ? 'text-green-600' : 'text-red-500'">{{ b.available_qty }} {{ $t('circulation.borrowForm.left') }}</span>
         </div>
       </div>
       <p v-if="selectedBook" class="text-sm text-green-700 mt-1">✓ {{ selectedBook.title }}</p>
@@ -30,7 +30,7 @@
       :disabled="loading || !selectedMember || !selectedBook"
       class="w-full bg-green-700 hover:bg-green-800 text-white py-2.5 rounded-lg font-medium disabled:opacity-50"
     >
-      {{ loading ? 'Processing...' : 'Confirm Checkout' }}
+      {{ loading ? $t('circulation.processing') : $t('circulation.borrowForm.confirmCheckout') }}
     </button>
   </form>
 </template>

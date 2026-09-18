@@ -1,11 +1,11 @@
 <template>
   <div class="bg-white rounded-2xl border border-gray-200 p-6 max-w-xl">
-    <h2 class="text-lg font-bold text-gray-800 mb-1">Change Password</h2>
-    <p class="text-sm text-gray-400 mb-6">Use a strong password you don't use elsewhere.</p>
+    <h2 class="text-lg font-bold text-gray-800 mb-1">{{ t('settings.security.title') }}</h2>
+    <p class="text-sm text-gray-400 mb-6">{{ t('settings.security.subtitle') }}</p>
 
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Current Password</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('settings.security.currentPassword') }}</label>
         <input
           v-model="form.current_password" type="password" required
           class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
@@ -14,7 +14,7 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">New Password</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('settings.security.newPassword') }}</label>
         <input
           v-model="form.password" type="password" required minlength="8"
           class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
@@ -27,13 +27,13 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Confirm New Password</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('settings.security.confirmNewPassword') }}</label>
         <input
           v-model="form.password_confirmation" type="password" required minlength="8"
           class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-600/30 focus:border-green-600 transition"
         />
         <p v-if="form.password_confirmation && form.password !== form.password_confirmation" class="text-xs text-red-600 mt-1">
-          Passwords do not match.
+          {{ t('settings.security.passwordMismatch') }}
         </p>
       </div>
 
@@ -45,7 +45,7 @@
         type="submit" :disabled="authStore.loading"
         class="px-5 py-2.5 bg-green-700 text-white text-sm font-semibold rounded-xl hover:bg-green-800 transition disabled:opacity-50"
       >
-        {{ authStore.loading ? 'Saving...' : 'Update Password' }}
+        {{ authStore.loading ? t('settings.security.saving') : t('settings.security.updatePassword') }}
       </button>
     </form>
   </div>
@@ -54,7 +54,8 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const authStore = useAuthStore()
 const successMessage = ref('')
 
@@ -69,7 +70,13 @@ const strength = computed(() => {
   if (/[^A-Za-z0-9]/.test(p)) score++
   return score
 })
-const strengthLabel = computed(() => ['Very weak', 'Weak', 'Fair', 'Good', 'Strong'][strength.value])
+const strengthLabel = computed(() => [
+  t('settings.security.strengthVeryWeak'),
+  t('settings.security.strengthWeak'),
+  t('settings.security.strengthFair'),
+  t('settings.security.strengthGood'),
+  t('settings.security.strengthStrong'),
+][strength.value])
 const strengthColor = computed(() => ['bg-red-400', 'bg-orange-400', 'bg-amber-400', 'bg-green-600'][strength.value - 1] || 'bg-red-400')
 const strengthTextClass = computed(() => (strength.value >= 3 ? 'text-green-600' : 'text-amber-600'))
 
@@ -79,7 +86,7 @@ async function handleSubmit() {
 
   const success = await authStore.changePassword({ ...form })
   if (success) {
-    successMessage.value = 'Password updated successfully.'
+    successMessage.value = t('settings.security.updated')
     form.current_password = ''
     form.password = ''
     form.password_confirmation = ''

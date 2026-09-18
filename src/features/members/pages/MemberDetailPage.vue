@@ -7,7 +7,7 @@
         class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors bg-white px-4 py-2 rounded-xl border border-slate-200/80 shadow-2xs cursor-pointer"
       >
         <ArrowLeftIcon class="w-4 h-4" /> 
-        <span>Back to Members</span>
+        <span>{{ t('members.detail.backToMembers') }}</span>
       </button>
     </div>
 
@@ -33,8 +33,8 @@
       <!-- Right Column: Edit Form Card -->
       <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-2xs space-y-6">
         <div class="pb-4 border-b border-slate-100">
-          <h2 class="font-serif text-lg font-black text-slate-900">Edit Member Details</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Update user credentials, maximum borrow limits, and active status.</p>
+          <h2 class="font-serif text-lg font-black text-slate-900">{{ t('members.detail.editDetails') }}</h2>
+          <p class="text-xs text-slate-500 mt-0.5">{{ t('members.detail.editDetailsSubtitle') }}</p>
         </div>
 
         <MemberForm
@@ -51,26 +51,28 @@
   </div>
   <div v-else class="text-center py-20 text-slate-400">
     <div class="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Loading member details...</p>
+    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ t('members.detail.loading') }}</p>
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import { useMemberStore } from '../store/memberStore'
 import MemberForm from '../components/MemberForm.vue'
 import MemberCard from '../components/MemberCard.vue'
 import QrLoginCardAdmin from '@/features/settings/components/QrLoginCardAdmin.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const store = useMemberStore()
 
 const subLabel = computed(() =>
   store.currentMember?.membership_type
-    ? `${store.currentMember.membership_type} membership`
+    ? `${store.currentMember.membership_type} ${t('members.card.membershipSuffix')}`
     : ''
 )
 

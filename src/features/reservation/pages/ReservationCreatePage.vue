@@ -1,21 +1,21 @@
 <template>
   <div class="max-w-2xl pb-12">
-    <!-- Main Wrapper Card (រុំព័ទ្ធទាំងអស់ក្នុង Card តែមួយ) -->
+    <!-- Main Wrapper Card -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 shadow-md p-6 md:p-8 space-y-6">
       
-      <!-- Header Banner ជាមួយ Back Button នៅក្នុងនេះស្រាប់ -->
+      <!-- Header Banner ជាមួយ Back Button -->
       <div class="flex items-center gap-4 pb-6 border-b border-slate-200">
         <router-link
           to="/reservations"
           class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors shadow-2xs shrink-0"
-          title="Back to Reservations"
+          :title="$t('reservation.createPage.back')"
         >
           ←
         </router-link>
 
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">New Reservation</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Hold a book for a member until it's back on the shelf.</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('reservation.createPage.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ $t('reservation.createPage.subtitle') }}</p>
         </div>
       </div>
 

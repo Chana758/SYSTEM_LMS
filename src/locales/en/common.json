@@ -1,0 +1,53 @@
+{
+  "actions": {
+    "save": "Save",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "create": "Create",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "print": "Print",
+    "download": "Download",
+    "confirm": "Confirm",
+    "back": "Back",
+    "close": "Close",
+    "submit": "Submit",
+    "reset": "Reset",
+    "apply": "Apply",
+    "refresh": "Refresh"
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "processing": "Processing...",
+    "success": "Success",
+    "failed": "Failed",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending"
+  },
+  "messages": {
+    "noDataFound": "No data found",
+    "loadingData": "Loading data...",
+    "confirmDelete": "Are you sure you want to delete this?",
+    "unexpectedError": "An unexpected error occurred",
+    "tryAgain": "Please try again"
+  },
+  "table": {
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "noRecordsFound": "No records found"
+  },
+  "pagination": {
+    "page": "Page",
+    "of": "of",
+    "next": "Next",
+    "previous": "Previous"
+  }
+}

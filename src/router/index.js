@@ -17,7 +17,8 @@ import notificationRoutes from './notification.routes'
 import digitalLibraryRoutes from './digital-library.routes'
 import scannerRoutes from './scanner.routes'
 import reportRoutes from './report.routes'
-
+import chatbotRoutes from './chatbot.routes'
+import aiRecommendationRoutes from './gamification.routes'
 const routes = [
   {
     path: '/',
@@ -41,13 +42,7 @@ const routes = [
     name: 'unauthorized',
     component: () => import('@/features/auth/pages/UnauthorizedPage.vue'),
   },
-  // FIX: removed the duplicate top-level '/card-approvals' route.
-  // It shared the name 'card-approvals' with the nested route in
-  // setting.routes.js, so Vue Router evicted this one from the matcher
-  // as soon as ...settingsRoutes was registered below — that's why
-  // '/card-approvals' produced "No match found for location".
-  // The single source of truth for this page is now only in
-  // setting.routes.js as '/settings/card-approvals'.
+
   ...authRoutes,
   ...dashboardRoutes,
   ...settingsRoutes,
@@ -60,7 +55,9 @@ const routes = [
   ...notificationRoutes,
   ...digitalLibraryRoutes,
   ...scannerRoutes,
-  ...reportRoutes
+  ...reportRoutes,
+  ...chatbotRoutes,
+  ...aiRecommendationRoutes
 ]
 
 const router = createRouter({

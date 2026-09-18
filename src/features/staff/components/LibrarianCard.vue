@@ -25,25 +25,25 @@
             :class="statusClass"
           >
             <span class="w-1.5 h-1.5 rounded-full" :class="statusDotClass"></span>
-            {{ librarian.status?.replace('_', ' ') }}
+            {{ statusLabel }}
           </span>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5">
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Employee ID</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.employeeId') }}</p>
             <p class="text-sm font-medium text-gray-700">{{ librarian.employee_id }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Department</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.department') }}</p>
             <p class="text-sm font-medium text-gray-700">{{ librarian.department || '—' }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Shift</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.shift') }}</p>
             <p class="text-sm font-medium text-gray-700 capitalize">{{ librarian.shift || '—' }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Hired</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.hired') }}</p>
             <p class="text-sm font-medium text-gray-700">{{ formatDate(librarian.hire_date) }}</p>
           </div>
         </div>
@@ -54,21 +54,33 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   librarian: { type: Object, required: true },
 })
+
+const { t } = useI18n()
 
 const initials = computed(() => {
   const name = props.librarian.user?.name || ''
   return name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase() || '?'
 })
 
-// Same avatar URL-building logic as MemberCard.vue / ProfileSettings.vue
 const avatarUrl = computed(() => {
   if (!props.librarian.user?.avatar) return null
   const baseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '')
   return `${baseUrl}/storage/${props.librarian.user.avatar}`
+})
+
+// 🆕 translated status label (replaces the raw status?.replace('_',' ') text)
+const statusLabel = computed(() => {
+  const map = {
+    active: t('staff.form.statusActive'),
+    inactive: t('staff.form.statusInactive'),
+    on_leave: t('staff.form.statusOnLeave'),
+  }
+  return map[props.librarian.status] || props.librarian.status
 })
 
 const statusClass = computed(() => ({

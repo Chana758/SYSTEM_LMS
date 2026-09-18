@@ -7,12 +7,12 @@
 
       <!-- ═══ STEP 1: Librarian form ═══ -->
       <div v-if="!createdQrDataUrl">
-        <h2 class="text-lg font-bold text-gray-800 mb-1">Register New Librarian</h2>
-        <p class="text-sm text-gray-400 mb-6">A QR login card will be issued automatically after saving.</p>
+        <h2 class="text-lg font-bold text-gray-800 mb-1">{{ $t('staff.registerModal.title') }}</h2>
+        <p class="text-sm text-gray-400 mb-6">{{ $t('staff.registerModal.subtitle') }}</p>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('staff.registerModal.fullName') }}</label>
             <input v-model="form.name" type="text" required
               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
               :class="{ 'border-red-500': errors.name }" />
@@ -20,7 +20,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('staff.registerModal.email') }}</label>
             <input v-model="form.email" type="email" required
               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
               :class="{ 'border-red-500': errors.email }" />
@@ -28,13 +28,13 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('staff.registerModal.phone') }}</label>
             <input v-model="form.phone" type="text"
               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600" />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Temporary Password</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('staff.registerModal.tempPassword') }}</label>
             <input v-model="form.password" type="text" required minlength="8"
               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
               :class="{ 'border-red-500': errors.password }" />
@@ -43,17 +43,17 @@
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('staff.registerModal.department') }}</label>
               <input v-model="form.department" type="text"
                 class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Shift</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('staff.registerModal.shift') }}</label>
               <select v-model="form.shift"
                 class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
-                <option value="morning">Morning</option>
-                <option value="afternoon">Afternoon</option>
-                <option value="evening">Evening</option>
+                <option value="morning">{{ $t('staff.form.shiftMorning') }}</option>
+                <option value="afternoon">{{ $t('staff.form.shiftAfternoon') }}</option>
+                <option value="evening">{{ $t('staff.form.shiftEvening') }}</option>
               </select>
             </div>
           </div>
@@ -62,7 +62,7 @@
 
           <button type="submit" :disabled="submitting"
             class="w-full bg-green-700 hover:bg-green-800 text-white rounded-lg py-2.5 font-medium disabled:opacity-50">
-            {{ submitting ? 'Saving...' : 'Register & Issue QR Card' }}
+            {{ submitting ? $t('staff.registerModal.saving') : $t('staff.registerModal.registerAndIssue') }}
           </button>
         </form>
       </div>
@@ -74,27 +74,27 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
         </div>
-        <h2 class="text-lg font-bold text-gray-800 mb-1">Librarian Registered!</h2>
+        <h2 class="text-lg font-bold text-gray-800 mb-1">{{ $t('staff.registerModal.registered') }}</h2>
         <p class="text-sm text-gray-400 mb-5">{{ form.name }} · {{ employeeId }}</p>
 
         <div class="flex flex-col items-center gap-3">
           <img :src="createdQrDataUrl" alt="QR login card" class="w-48 h-48 border border-gray-100 rounded-lg" />
-          <p class="text-xs text-gray-400">Expires {{ formatDate(createdQrExpiresAt) }}</p>
+          <p class="text-xs text-gray-400">{{ $t('staff.registerModal.expires', { date: formatDate(createdQrExpiresAt) }) }}</p>
         </div>
 
         <div class="flex gap-2 mt-5">
           <a :href="createdQrDataUrl" :download="`qr-${employeeId}.png`"
             class="flex-1 text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2.5 rounded-lg">
-            Download
+            {{ $t('staff.registerModal.download') }}
           </a>
           <button @click="handlePrint"
             class="flex-1 text-sm bg-green-700 text-white hover:bg-green-800 px-4 py-2.5 rounded-lg">
-            Print
+            {{ $t('staff.registerModal.print') }}
           </button>
         </div>
 
         <button @click="$emit('created')" class="w-full mt-3 text-sm text-gray-500 hover:text-gray-700">
-          Done
+          {{ $t('staff.registerModal.done') }}
         </button>
       </div>
     </div>
@@ -104,10 +104,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import QRCode from 'qrcode'
-// staffService.create() → POST /librarians → LibrarianController::store()
-// (ខុសពី AuthController::createLibrarian — /auth/create-librarian —
-// ដែលជា endpoint ចាស់ ប្រើ RegisterRequest។ ទីនេះប្រើ LibrarianController
-// ព្រោះ staffService.js ភ្ជាប់ទៅ ENDPOINTS.LIBRARIANS ដែលចង្អុលទៅផ្លូវនោះ)
 import { staffService } from '../services/staffService'
 import { authService } from '@/features/auth/services/authService'
 
@@ -134,15 +130,10 @@ async function handleSubmit() {
   errors.value = {}
 
   try {
-    // 1. បង្កើត librarian — LibrarianController::store() មិន issue
-    //    token ត្រឡប់មកទេ ដូច្នេះ session admin ដែលកំពុង login
-    //    មិនប៉ះពាល់ទាល់តែសោះ
     const { data } = await staffService.create(form)
     const newUserId = data.librarian.user.id
     employeeId.value = data.librarian.employee_id
 
-    // 2. ភ្លាមៗ issue QR card — admin ប៉ុណ្ណោះទើបហៅ endpoint នេះបាន
-    //    សម្រាប់ target role = librarian (backend enforce រួចហើយ)
     const qrRes = await authService.generateQrTokenFor(newUserId)
 
     createdQrDataUrl.value = await QRCode.toDataURL(qrRes.data.qr_token, {

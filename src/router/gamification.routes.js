@@ -1,20 +1,14 @@
 export default [
   {
-    path: '/gamification',
-    name: 'gamification.dashboard',
-    component: () => import('@/features/gamification/pages/GamificationDashboard.vue'),
+    path: '/ai-recommendation',
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth' },
-  },
-  {
-    path: '/gamification/achievements',
-    name: 'gamification.achievements',
-    component: () => import('@/features/gamification/pages/AchievementPage.vue'),
-    meta: { middleware: 'auth' },
-  },
-  {
-    path: '/gamification/leaderboard',
-    name: 'gamification.leaderboard',
-    component: () => import('@/features/gamification/pages/LeaderboardPage.vue'),
-    meta: { middleware: 'auth' },
+    children: [
+      {
+        path: '',
+        name: 'ai-recommendation',
+        component: () => import('@/features/ai-recommendation/pages/RecommendationPage.vue'),
+      },
+    ],
   },
 ]

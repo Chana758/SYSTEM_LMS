@@ -7,8 +7,8 @@
           <UsersIcon class="w-6 h-6" />
         </div>
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">User Report</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Member activity and registrations for the selected period</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('reports.userPage.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('reports.userPage.subtitle') }}</p>
         </div>
       </div>
 
@@ -18,7 +18,7 @@
           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-black tracking-wider uppercase transition-all shadow-2xs"
         >
           <ArrowLeftIcon class="w-4 h-4" />
-          <span>Back to Reports</span>
+          <span>{{ t('reports.userPage.backToReports') }}</span>
         </RouterLink>
 
         <ExportReportButton type="user" :filters="filters" />
@@ -29,16 +29,16 @@
 
       <ReportFilter
         :status-options="roleOptions"
-        status-label="Role"
+        :status-label="t('reports.columns.role')"
         @apply="onApply"
       />
 
       <!-- Solid Colored Summary Cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
-        <ReportSummaryCard label="Total Users"   :value="summary.total_users" bg="bg-slate-700"   badge="TOTAL"   :icon="UserGroupIcon" />
-        <ReportSummaryCard label="New (period)"  :value="summary.new_users"   bg="bg-emerald-600" badge="NEW"     :icon="UserPlusIcon" />
-        <ReportSummaryCard label="Members"       :value="summary.members"     bg="bg-blue-600"    badge="MEMBERS" :icon="UsersIcon" />
-        <ReportSummaryCard label="Staff"         :value="summary.staff"       bg="bg-orange-500"  badge="STAFF"   :icon="ShieldCheckIcon" />
+        <ReportSummaryCard :label="t('reports.userPage.totalUsers')"  :value="summary.total_users" bg="bg-slate-700"   :badge="t('reports.badge.total')"   :icon="UserGroupIcon" />
+        <ReportSummaryCard :label="t('reports.userPage.newPeriod')"   :value="summary.new_users"   bg="bg-emerald-600" :badge="t('reports.badge.new')"     :icon="UserPlusIcon" />
+        <ReportSummaryCard :label="t('reports.userPage.members')"     :value="summary.members"     bg="bg-blue-600"    :badge="t('reports.badge.members')" :icon="UsersIcon" />
+        <ReportSummaryCard :label="t('reports.userPage.staff')"       :value="summary.staff"       bg="bg-orange-500"  :badge="t('reports.badge.staff')"   :icon="ShieldCheckIcon" />
       </div>
 
       <ReportTable
@@ -56,7 +56,7 @@
         </template>
         <template #cell-role="{ row }">
           <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase border bg-slate-50 text-slate-600 border-slate-200">
-            {{ row.user?.role?.name ?? 'member' }}
+            {{ roleLabel(row.user?.role?.name) }}
           </span>
         </template>
         <template #cell-total_fines="{ row }">
@@ -69,13 +69,14 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { 
-  UsersIcon, 
-  ArrowLeftIcon, 
-  UserGroupIcon, 
-  UserPlusIcon, 
-  ShieldCheckIcon 
+import { ref, reactive, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import {
+  UsersIcon,
+  ArrowLeftIcon,
+  UserGroupIcon,
+  UserPlusIcon,
+  ShieldCheckIcon
 } from '@heroicons/vue/24/outline'
 import { reportService } from '../services/reportService'
 import { analyticsService } from '../services/analyticsService'
@@ -84,21 +85,34 @@ import ReportSummaryCard from '../components/ReportSummaryCard.vue'
 import ReportTable from '../components/ReportTable.vue'
 import ExportReportButton from '../components/ExportReportButton.vue'
 
-const roleOptions = [
-  { value: 'member', label: 'Member' },
-  { value: 'librarian', label: 'Librarian' },
-  { value: 'admin', label: 'Admin' },
-]
+const { t } = useI18n()
 
-const columns = [
+const roleOptions = computed(() => [
+  { value: 'member', label: t('reports.userPage.roleMember') },
+  { value: 'librarian', label: t('reports.userPage.roleLibrarian') },
+  { value: 'admin', label: t('reports.userPage.roleAdmin') },
+])
+
+// row.user.role.name raw values (member/librarian/admin) come from the
+// database — map to the same labels used in the role filter above,
+// falling back to "Member" when no role is set (matches the previous
+// hardcoded default).
+const roleLabelMap = computed(() => ({
+  member: t('reports.userPage.roleMember'),
+  librarian: t('reports.userPage.roleLibrarian'),
+  admin: t('reports.userPage.roleAdmin'),
+}))
+const roleLabel = (role) => roleLabelMap.value[role] || t('reports.userPage.roleMember')
+
+const columns = computed(() => [
   { key: 'id', label: '#' },
-  { key: 'name', label: 'Name' },
-  { key: 'email', label: 'Email' },
-  { key: 'role', label: 'Role' },
-  { key: 'total_borrows', label: 'Borrows' },
-  { key: 'active_borrows', label: 'Active' },
-  { key: 'total_fines', label: 'Fines' },
-]
+  { key: 'name', label: t('reports.columns.name') },
+  { key: 'email', label: t('reports.columns.email') },
+  { key: 'role', label: t('reports.columns.role') },
+  { key: 'total_borrows', label: t('reports.columns.borrows') },
+  { key: 'active_borrows', label: t('reports.columns.active') },
+  { key: 'total_fines', label: t('reports.columns.fines') },
+])
 
 const rows = ref([])
 const summary = ref(null)

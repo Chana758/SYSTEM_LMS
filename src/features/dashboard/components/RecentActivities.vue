@@ -2,8 +2,8 @@
   <div class="bg-white rounded-2xl border border-slate-300 shadow-sm p-6 h-full flex flex-col">
     <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-4">
       <div>
-        <h3 class="text-base font-black text-slate-900 tracking-tight">Recent Activity</h3>
-        <p class="text-xs font-semibold text-slate-500 mt-0.5">Latest borrow, return, and reservation events.</p>
+        <h3 class="text-base font-black text-slate-900 tracking-tight">{{ $t('dashboard.recentActivity.title') }}</h3>
+        <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ $t('dashboard.recentActivity.subtitle') }}</p>
       </div>
     </div>
 
@@ -12,7 +12,7 @@
     </div>
 
     <div v-else-if="!items.length" class="flex-1 flex items-center justify-center py-10 text-center">
-      <p class="text-xs font-bold text-slate-400">No recent activity yet.</p>
+      <p class="text-xs font-bold text-slate-400">{{ $t('dashboard.recentActivity.noActivity') }}</p>
     </div>
 
     <ul v-else class="space-y-3 overflow-y-auto max-h-[380px] pr-1">
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import {
   ArrowsRightLeftIcon,
   ArrowUturnLeftIcon,
@@ -49,6 +50,8 @@ defineProps({
   items: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
 })
+
+const { t } = useI18n()
 
 const STYLE_MAP = {
   borrow: { icon: ArrowsRightLeftIcon, bg: 'bg-emerald-100', color: 'text-emerald-700' },
@@ -66,11 +69,11 @@ function formatTime(d) {
   if (!d) return '—'
   const diffMs = Date.now() - new Date(d).getTime()
   const mins = Math.floor(diffMs / 60000)
-  if (mins < 1) return 'Just now'
-  if (mins < 60) return `${mins}m ago`
+  if (mins < 1) return t('dashboard.recentActivity.justNow')
+  if (mins < 60) return t('dashboard.recentActivity.minAgo', { n: mins })
   const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
+  if (hrs < 24) return t('dashboard.recentActivity.hourAgo', { n: hrs })
   const days = Math.floor(hrs / 24)
-  return `${days}d ago`
+  return t('dashboard.recentActivity.dayAgo', { n: days })
 }
 </script>

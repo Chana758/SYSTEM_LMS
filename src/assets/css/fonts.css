@@ -1,0 +1,25 @@
+/* ===== Inter (latin/UI text) ===== */
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== KhmerOS / KhmerOSSiemreap (legacy — save for export report/print) ===== */
+@font-face {
+  font-family: 'KhmerOS';
+  src: url('../fonts/KhmerOS.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KhmerOSSiemreap';
+  src: url('../fonts/KhmerOSSiemreap.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

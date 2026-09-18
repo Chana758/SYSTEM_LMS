@@ -1,0 +1,155 @@
+{
+  "navOverview": "Overview",
+  "navBorrow": "Borrow",
+  "navFine": "Fine",
+  "navRevenue": "Revenue",
+  "navStock": "Stock",
+  "navUser": "User",
+  "common": {
+    "guest": "Guest"
+  },
+  "columns": {
+    "member": "Member",
+    "book": "Book",
+    "borrowed": "Borrowed",
+    "due": "Due",
+    "status": "Status",
+    "amount": "Amount",
+    "paidAt": "Paid At",
+    "description": "Description",
+    "date": "Date",
+    "bookTitle": "Book Title",
+    "category": "Category",
+    "total": "Total",
+    "available": "Available",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "borrows": "Borrows",
+    "active": "Active",
+    "fines": "Fines"
+  },
+  "chart": {
+    "noDataForRange": "No data for this range"
+  },
+  "summaryCard": {
+    "vsPrevious": "vs previous"
+  },
+  "badge": {
+    "total": "TOTAL",
+    "returned": "RETURNED",
+    "active": "ACTIVE",
+    "alert": "ALERT",
+    "users": "USERS",
+    "fines": "FINES",
+    "unpaid": "UNPAID",
+    "catalog": "CATALOG",
+    "stock": "STOCK",
+    "amount": "AMOUNT",
+    "paid": "PAID",
+    "month": "MONTH",
+    "services": "SERVICES",
+    "available": "AVAILABLE",
+    "borrowed": "BORROWED",
+    "new": "NEW",
+    "members": "MEMBERS",
+    "staff": "STAFF"
+  },
+  "dashboardPage": {
+    "title": "Reports",
+    "subtitle": "Circulation, revenue, and stock insights at a glance",
+    "loading": "Loading dashboard…",
+    "totalBorrows": "Total Borrows",
+    "activeBorrows": "Active Borrows",
+    "overdue": "Overdue",
+    "newMembers": "New Members",
+    "finesPeriod": "Fines (period)",
+    "outstandingFines": "Outstanding Fines",
+    "totalBooks": "Total Books",
+    "availableCopies": "Available Copies",
+    "borrowsOverTime": "Borrows Over Time",
+    "revenueOverTime": "Revenue Over Time",
+    "mostBorrowedBooks": "Most Borrowed Books",
+    "borrowsSuffix": "borrows",
+    "noDataYet": "No data yet",
+    "detailedReports": "Detailed Reports",
+    "noDashboardData": "No dashboard data available yet."
+  },
+  "borrowPage": {
+    "title": "Borrow Report",
+    "subtitle": "Circulation activity for the selected period",
+    "backToReports": "Back to Reports",
+    "total": "Total",
+    "returned": "Returned",
+    "active": "Active",
+    "overdue": "Overdue"
+  },
+  "finePage": {
+    "title": "Fine Report",
+    "subtitle": "Fines issued and collected for the selected period",
+    "backToReports": "Back to Reports",
+    "totalFines": "Total Fines",
+    "totalAmount": "Total Amount",
+    "collected": "Collected",
+    "outstanding": "Outstanding",
+    "statusUnpaid": "Unpaid",
+    "statusPaid": "Paid"
+  },
+  "revenuePage": {
+    "title": "Revenue Report",
+    "subtitle": "Financial insights and collection history",
+    "backToReports": "Back to Reports",
+    "totalRevenue": "Total Revenue",
+    "thisMonth": "This Month",
+    "fines": "Fines",
+    "services": "Services",
+    "adminsOnly": "Admins only",
+    "adminsOnlyHint": "Revenue reports contain financial data restricted to administrators. Contact an admin if you need this information."
+  },
+  "stockPage": {
+    "title": "Stock Report",
+    "subtitle": "Inventory levels and availability",
+    "backToReports": "Back to Reports",
+    "totalBooks": "Total Books",
+    "available": "Available",
+    "borrowed": "Borrowed",
+    "lowStock": "Low Stock",
+    "category": "Category",
+    "outOfStock": "Out of Stock"
+  },
+  "userPage": {
+    "title": "User Report",
+    "subtitle": "Member activity and registrations for the selected period",
+    "backToReports": "Back to Reports",
+    "totalUsers": "Total Users",
+    "newPeriod": "New (period)",
+    "members": "Members",
+    "staff": "Staff",
+    "roleMember": "Member",
+    "roleLibrarian": "Librarian",
+    "roleAdmin": "Admin"
+  },
+  "filter": {
+    "from": "From",
+    "to": "To",
+    "status": "Status",
+    "search": "Search",
+    "searchPlaceholder": "Name, email, title…",
+    "all": "All",
+    "apply": "Apply",
+    "reset": "Reset"
+  },
+  "export": {
+    "export": "Export",
+    "generating": "Generating…",
+    "pdf": "📄 PDF",
+    "excel": "📊 Excel",
+    "csv": "🗒️ CSV",
+    "noFileUrl": "Export succeeded but no file URL was returned.",
+    "failed": "Export failed. Please try again."
+  },
+  "table": {
+    "noRecordsFound": "No records found",
+    "loading": "Loading…"
+  }
+}

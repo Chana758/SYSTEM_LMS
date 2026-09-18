@@ -1,0 +1,9 @@
+{
+  "aliases": {
+    "@": "src"
+  },
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "src/features/reports/components/ReportFilter.vue"
+  ]
+}

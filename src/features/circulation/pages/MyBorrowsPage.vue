@@ -10,12 +10,12 @@
             <BookOpenIcon class="w-7 h-7 text-emerald-700" />
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">My Borrowed Books</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">Track your active loans and renewal history.</p>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('circulation.myBorrows.title') }}</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">{{ $t('circulation.myBorrows.subtitle') }}</p>
           </div>
         </div>
         <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-          My Loans
+          {{ $t('circulation.myBorrows.myLoans') }}
         </span>
       </div>
 
@@ -25,7 +25,7 @@
           <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-3 shadow-2xs">
             <BookOpenIcon class="w-6 h-6 text-slate-400" />
           </div>
-          <p class="text-xs font-bold text-slate-500">You have no borrow history yet</p>
+          <p class="text-xs font-bold text-slate-500">{{ $t('circulation.myBorrows.noHistory') }}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -35,7 +35,7 @@
                 <div>
                   <p class="font-extrabold text-slate-900 leading-snug">{{ b.book_copy?.book?.title }}</p>
                   <p class="text-slate-500 text-xs font-medium mt-0.5">
-                    Category: <span class="text-slate-700">{{ b.book_copy?.book?.category?.name || '—' }}</span>
+                    {{ $t('circulation.category') }}: <span class="text-slate-700">{{ b.book_copy?.book?.category?.name || '—' }}</span>
                   </p>
                 </div>
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border flex-shrink-0"
@@ -46,11 +46,11 @@
               </div>
 
               <div class="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 pt-3 border-t border-slate-100 text-xs text-slate-500 font-medium">
-                <p>Borrowed: <span class="text-slate-800 font-bold">{{ formatDate(b.borrow_date) }}</span></p>
-                <p>Due Date: <span class="text-slate-800 font-bold">{{ formatDate(b.due_date) }}</span></p>
-                <p>Renewals: <span class="text-slate-800 font-bold">{{ b.renewed_count }} / 2</span></p>
+                <p>{{ $t('circulation.borrowed') }}: <span class="text-slate-800 font-bold">{{ formatDate(b.borrow_date) }}</span></p>
+                <p>{{ $t('circulation.dueDate') }}: <span class="text-slate-800 font-bold">{{ formatDate(b.due_date) }}</span></p>
+                <p>{{ $t('circulation.renewals') }}: <span class="text-slate-800 font-bold">{{ b.renewed_count }} / 2</span></p>
                 <p v-if="b.fines?.length">
-                  Fines: <span class="text-rose-600 font-bold">{{ totalFine(b) }}៛</span>
+                  {{ $t('circulation.myBorrows.fines') }}: <span class="text-rose-600 font-bold">{{ totalFine(b) }}៛</span>
                 </p>
               </div>
             </div>
@@ -61,12 +61,12 @@
                 @click="handleRenew(b)"
                 class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-1.5 hover:bg-emerald-100 transition-colors shadow-2xs"
               >
-                Renew Book
+                {{ $t('circulation.myBorrows.renewBook') }}
               </button>
               <span v-else-if="isOverdue(b.due_date)" class="text-xs font-bold text-rose-600">
-                Overdue — please return in person.
+                {{ $t('circulation.myBorrows.overdueMsg') }}
               </span>
-              <span v-else class="text-xs font-bold text-slate-400">Max renewals reached</span>
+              <span v-else class="text-xs font-bold text-slate-400">{{ $t('circulation.myBorrows.maxRenewals') }}</span>
             </div>
           </div>
         </div>
@@ -78,10 +78,12 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { BookOpenIcon } from '@heroicons/vue/24/outline'
 import { useCirculationStore } from '../store/circulationStore'
 
 const store = useCirculationStore()
+const { t } = useI18n()
 
 async function handleRenew(b) {
   const result = await store.renew(b.id, true)
@@ -96,8 +98,8 @@ function isOverdue(dueDate) {
   return new Date(dueDate) < new Date()
 }
 function statusLabel(b) {
-  if (b.status === 'returned') return 'Returned'
-  return isOverdue(b.due_date) ? 'Overdue' : 'Active'
+  if (b.status === 'returned') return t('circulation.returnedStatus')
+  return isOverdue(b.due_date) ? t('circulation.overdue') : t('circulation.active')
 }
 function badgeClass(b) {
   if (b.status === 'returned') return 'bg-slate-100 text-slate-600 border-slate-200'

@@ -5,13 +5,13 @@
       
       <!-- Header Banner -->
       <div class="pb-6 border-b border-slate-200">
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Reservation History</h1>
-        <p class="text-xs font-bold text-slate-500 mt-0.5">Every book you've reserved, past and present.</p>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('reservation.historyPage.title') }}</h1>
+        <p class="text-xs font-bold text-slate-500 mt-0.5">{{ $t('reservation.historyPage.subtitle') }}</p>
       </div>
 
       <!-- Loading State -->
       <div v-if="store.loading" class="bg-white rounded-2xl border-2 border-slate-300 p-14 text-center text-slate-400 text-sm font-semibold shadow-2xs">
-        Loading…
+        {{ $t('reservation.historyPage.loading') }}
       </div>
 
       <!-- Empty State -->
@@ -19,8 +19,8 @@
         <div class="w-14 h-14 rounded-2xl bg-white border-2 border-slate-300 flex items-center justify-center text-2xl mb-3 shadow-2xs">
           🗂️
         </div>
-        <p class="text-slate-900 font-extrabold text-sm">No history yet</p>
-        <p class="text-xs text-slate-500 font-bold mt-1 text-center">Reservations you make will show up here.</p>
+        <p class="text-slate-900 font-extrabold text-sm">{{ $t('reservation.historyPage.noHistory') }}</p>
+        <p class="text-xs text-slate-500 font-bold mt-1 text-center">{{ $t('reservation.historyPage.noHistoryHint') }}</p>
       </div>
 
       <!-- Reservations List Grid -->
@@ -50,13 +50,15 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useReservationStore } from '../store/reservationStore'
 import ReservationCard from '../components/ReservationCard.vue'
 
 const store = useReservationStore()
+const { t } = useI18n()
 
 async function handleCancel(id) {
-  if (!confirm('Cancel this reservation?')) return
+  if (!confirm(t('reservation.confirmCancel'))) return
   const result = await store.cancelReservation(id)
   if (!result.success) alert(result.message)
 }

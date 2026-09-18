@@ -1,14 +1,31 @@
 <template>
   <div>
-    <div v-if="loading" class="text-center py-8 text-gray-400 text-sm">Loading...</div>
-    <div v-else-if="!items.length" class="text-center py-8 text-gray-400 text-sm">No notifications</div>
-    <template v-else>
+    <!-- Loading State: show only on the very first load, before any items exist -->
+    <div
+      v-if="loading && !items.length"
+      class="text-center py-10 text-slate-400 font-bold text-xs uppercase tracking-widest"
+    >
+      Loading notifications...
+    </div>
+
+    <!-- Empty State -->
+    <div
+      v-else-if="!loading && !items.length"
+      class="text-center py-10 text-slate-400"
+    >
+      <p class="text-xs font-bold uppercase tracking-wider">No notifications yet</p>
+      <p class="text-[11px] text-slate-400 mt-1">You're all caught up.</p>
+    </div>
+
+    <!-- List of notification items -->
+    <div v-else>
       <NotificationItem
-        v-for="item in items" :key="item.id"
+        v-for="item in items"
+        :key="item.id"
         :item="item"
         @click="$emit('item-click', item)"
       />
-    </template>
+    </div>
   </div>
 </template>
 
@@ -19,5 +36,6 @@ defineProps({
   items: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
 })
+
 defineEmits(['item-click'])
 </script>

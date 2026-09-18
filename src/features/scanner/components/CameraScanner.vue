@@ -6,13 +6,13 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
         </svg>
       </div>
-      <p class="text-sm font-medium text-gray-600">Camera scanning isn't supported</p>
-      <p class="text-xs text-gray-400 mt-1">Please switch to Manual / USB Scanner instead</p>
+      <p class="text-sm font-medium text-gray-600">{{ t('scanner.camera.notSupported') }}</p>
+      <p class="text-xs text-gray-400 mt-1">{{ t('scanner.camera.switchToManual') }}</p>
     </div>
 
     <template v-else>
       <div class="relative rounded-2xl overflow-hidden bg-gray-900 aspect-video">
-        <video ref="videoRef" class="w-full h-full object-cover" muted playsinline></video>
+        <video ref="videoRef" class="w-full h-full object-cover" muted playsinline autoplay></video>
 
         <div v-if="!isScanning" class="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
           <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
@@ -21,7 +21,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
             </svg>
           </div>
-          <p class="text-xs text-white/70">Camera preview will appear here</p>
+          <p class="text-xs text-white/70">{{ t('scanner.camera.cameraPreview') }}</p>
         </div>
 
         <div class="absolute inset-8 border-2 border-green-400/80 rounded-xl pointer-events-none">
@@ -33,10 +33,12 @@
 
         <div v-if="isScanning" class="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur px-2.5 py-1 rounded-full">
           <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-          <span class="text-xs text-white font-medium">Scanning</span>
+          <span class="text-xs text-white font-medium">{{ t('scanner.camera.scanning') }}</span>
         </div>
 
-        <!-- 🆕 Torch toggle — only shown when the active camera actually supports it -->
+        <!-- Torch toggle — only shown when the active camera actually
+             supports it. iOS Safari never reports torch support, so this
+             button simply won't render there, which is expected. -->
         <button
           v-if="isScanning && torchSupported"
           @click="toggleTorch"
@@ -44,7 +46,7 @@
           :class="torchOn ? 'bg-amber-400 text-amber-950' : 'bg-black/50 text-white hover:bg-black/60'"
         >
           <BoltIcon class="w-3.5 h-3.5" />
-          <span class="text-xs font-semibold">{{ torchOn ? 'Torch On' : 'Torch' }}</span>
+          <span class="text-xs font-semibold">{{ torchOn ? t('scanner.camera.torchOn') : t('scanner.camera.torch') }}</span>
         </button>
       </div>
 
@@ -55,7 +57,7 @@
           class="inline-flex items-center gap-2 px-6 py-2.5 bg-green-700 text-white text-sm font-semibold rounded-xl hover:bg-green-800 active:scale-[0.98] transition"
         >
           <PlayIcon class="w-4 h-4" />
-          Start Camera
+          {{ t('scanner.camera.startCamera') }}
         </button>
         <button
           v-else
@@ -63,7 +65,7 @@
           class="inline-flex items-center gap-2 px-6 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 active:scale-[0.98] transition"
         >
           <StopIcon class="w-4 h-4" />
-          Stop Camera
+          {{ t('scanner.camera.stopCamera') }}
         </button>
       </div>
 
@@ -76,6 +78,9 @@
 import { ref, onBeforeUnmount } from 'vue'
 import { PlayIcon, StopIcon, BoltIcon } from '@heroicons/vue/24/solid'
 import { barcodeService } from '../services'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const emit = defineEmits(['detected'])
 
@@ -87,50 +92,53 @@ const torchSupported = ref(false)
 const torchOn = ref(false)
 
 let stream = null
-let detector = null
-let pollHandle = null
+let reader = null
+let decodingControls = null
 
 const CAMERA_ERROR_MESSAGES = {
-  NotAllowedError: 'Camera permission was denied. Allow camera access for this site in your browser settings and try again.',
-  PermissionDeniedError: 'Camera permission was denied. Allow camera access for this site in your browser settings and try again.',
-  NotFoundError: 'No camera was found on this device. Switch to Manual / USB Scanner instead.',
-  DevicesNotFoundError: 'No camera was found on this device. Switch to Manual / USB Scanner instead.',
-  NotReadableError: 'The camera is already in use by another application or browser tab. Close it and try again.',
-  TrackStartError: 'The camera is already in use by another application or browser tab. Close it and try again.',
-  OverconstrainedError: 'No camera on this device matches the required settings.',
-  SecurityError: 'Camera access is blocked on this page. Make sure you are on a secure (HTTPS) connection.',
-  InsecureContextError: 'Camera access requires HTTPS (or localhost). This page is not running in a secure context.',
-  NotSupportedError: 'This browser does not support camera access. Switch to Manual / USB Scanner instead.',
-  AbortError: 'Camera access was interrupted. Please try again.',
+  NotAllowedError: () => t('scanner.cameraErrors.permissionDenied'),
+  PermissionDeniedError: () => t('scanner.cameraErrors.permissionDenied'),
+  NotFoundError: () => t('scanner.cameraErrors.noCameraFound'),
+  DevicesNotFoundError: () => t('scanner.cameraErrors.noCameraFound'),
+  NotReadableError: () => t('scanner.cameraErrors.inUse'),
+  TrackStartError: () => t('scanner.cameraErrors.inUse'),
+  OverconstrainedError: () => t('scanner.cameraErrors.overconstrained'),
+  SecurityError: () => t('scanner.cameraErrors.security'),
+  InsecureContextError: () => t('scanner.cameraErrors.insecureContext'),
+  NotSupportedError: () => t('scanner.cameraErrors.notSupported'),
+  AbortError: () => t('scanner.cameraErrors.aborted'),
 }
 
 const describeCameraError = (e) =>
-  CAMERA_ERROR_MESSAGES[e?.name] || 'Could not access the camera. Check permissions and try again.'
+  (CAMERA_ERROR_MESSAGES[e?.name]?.()) || t('scanner.cameraErrors.generic')
 
 const start = async () => {
   error.value = ''
   try {
-    detector = await barcodeService.createDetector()
     stream = await barcodeService.startCamera(videoRef.value)
     isScanning.value = true
     torchSupported.value = barcodeService.hasTorch(stream)
     torchOn.value = false
-    poll()
+
+    // FIX: ZXing (@zxing/browser) decodes cross-browser, including iOS
+    // Safari, unlike the old native BarcodeDetector which Safari never
+    // implemented. This replaces the old setInterval + detectFromVideoFrame
+    // polling loop — ZXing handles its own per-frame decode loop and just
+    // calls back the moment it finds a barcode.
+    reader = barcodeService.createReader()
+    // FIX: must be awaited — startDecoding() is now async (see
+    // barcodeService.js). Without this, decodingControls held a
+    // pending Promise instead of the real controls object, so
+    // decodingControls?.stop() in stop() below silently did nothing
+    // and the camera/decode loop never actually stopped.
+    decodingControls = await barcodeService.startDecoding(reader, videoRef.value, (barcode) => {
+      emit('detected', barcode)
+      stop()
+    })
   } catch (e) {
     console.error('Camera start failed:', e?.name, e?.message, e)
     error.value = describeCameraError(e)
   }
-}
-
-const poll = () => {
-  pollHandle = setInterval(async () => {
-    if (!videoRef.value || !detector) return
-    const barcode = await barcodeService.detectFromVideoFrame(detector, videoRef.value)
-    if (barcode) {
-      emit('detected', barcode)
-      stop()
-    }
-  }, 400)
 }
 
 const toggleTorch = async () => {
@@ -139,7 +147,9 @@ const toggleTorch = async () => {
 }
 
 const stop = () => {
-  clearInterval(pollHandle)
+  decodingControls?.stop()
+  decodingControls = null
+  reader = null
   barcodeService.stopCamera(stream)
   isScanning.value = false
   torchSupported.value = false

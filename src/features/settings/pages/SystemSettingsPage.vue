@@ -5,8 +5,8 @@
         👤
       </div>
       <div>
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Settings</h1>
-        <p class="text-xs font-bold text-slate-500 mt-0.5">Manage your profile, account, and system preferences.</p>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('settings.pageTitle') }}</h1>
+        <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('settings.pageSubtitle') }}</p>
       </div>
     </div>
 
@@ -14,8 +14,15 @@
       <div class="w-full lg:w-72 flex-shrink-0">
         <SettingsNav />
       </div>
-      <div class="w-full flex-1 bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed">
-        <SystemSettings class="w-full" />
+      <div class="w-full flex-1 space-y-6">
+    
+        <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed">
+          <BrandingSettings class="w-full" />
+        </div>
+
+        <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg border-dashed">
+          <SystemSettings class="w-full" />
+        </div>
       </div>
     </div>
   </div>
@@ -24,4 +31,7 @@
 <script setup>
 import SettingsNav from '@/features/settings/components/SettingsNav.vue'
 import SystemSettings from '@/features/settings/components/SystemSettings.vue'
+import BrandingSettings from '@/features/settings/components/BrandingSettings.vue' 
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 </script>

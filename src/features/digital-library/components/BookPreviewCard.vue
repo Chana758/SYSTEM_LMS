@@ -13,7 +13,7 @@
 
       <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide"
         :class="ebook.access_type === 'public' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'">
-        {{ ebook.access_type === 'public' ? 'Public' : 'Members' }}
+        {{ ebook.access_type === 'public' ? t('digitalLibrary.card.public') : t('digitalLibrary.card.members') }}
       </span>
       <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-black/60 text-white">
         {{ ebook.format }}
@@ -34,7 +34,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
 
 defineProps({ ebook: { type: Object, required: true } })
 

@@ -6,8 +6,8 @@
           <CircleStackIcon class="w-5 h-5 text-green-700" />
         </div>
         <div>
-          <h2 class="text-lg font-bold text-gray-800">Create Backup</h2>
-          <p class="text-sm text-gray-400">Generate a full database backup file for download.</p>
+          <h2 class="text-lg font-bold text-gray-800">{{ t('settings.backup.createTitle') }}</h2>
+          <p class="text-sm text-gray-400">{{ t('settings.backup.createSubtitle') }}</p>
         </div>
       </div>
       <button
@@ -15,7 +15,7 @@
         class="mt-4 px-5 py-2.5 bg-green-700 text-white text-sm font-semibold rounded-xl hover:bg-green-800 transition disabled:opacity-50 inline-flex items-center gap-2"
       >
         <span v-if="isCreating" class="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
-        {{ isCreating ? 'Creating...' : 'Create & Download Backup' }}
+        {{ isCreating ? t('settings.backup.creating') : t('settings.backup.createDownload') }}
       </button>
       <p v-if="createError" class="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 mt-3">{{ createError }}</p>
     </div>
@@ -26,10 +26,10 @@
           <ArrowUpTrayIcon class="w-5 h-5 text-red-600" />
         </div>
         <div>
-          <h2 class="text-lg font-bold text-gray-800">Restore Backup</h2>
+          <h2 class="text-lg font-bold text-gray-800">{{ t('settings.backup.restoreTitle') }}</h2>
           <p class="text-sm text-gray-400">
-            Upload a previously downloaded backup file to restore the system.
-            <span class="text-red-600 font-medium">This will overwrite current data.</span>
+            {{ t('settings.backup.restoreSubtitle') }}
+            <span class="text-red-600 font-medium">{{ t('settings.backup.overwriteWarning') }}</span>
           </p>
         </div>
       </div>
@@ -40,7 +40,7 @@
           :class="{ 'opacity-50 pointer-events-none': isRestoring }"
         >
           <DocumentArrowUpIcon class="w-4 h-4" />
-          {{ selectedFile ? selectedFile.name : 'Choose Backup File' }}
+          {{ selectedFile ? selectedFile.name : t('settings.backup.chooseFile') }}
           <input type="file" accept=".sql" class="hidden" :disabled="isRestoring" @change="handleFileSelect" />
         </label>
 
@@ -48,7 +48,7 @@
           v-if="selectedFile" @click="openConfirmModal" :disabled="isRestoring"
           class="px-5 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 transition disabled:opacity-50"
         >
-          {{ isRestoring ? 'Restoring...' : 'Confirm Restore' }}
+          {{ isRestoring ? t('settings.backup.restoring') : t('settings.backup.confirmRestore') }}
         </button>
       </div>
 
@@ -57,15 +57,15 @@
     </div>
 
     <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-      <h2 class="text-lg font-bold text-gray-800 px-6 pt-6 pb-3">Backup History</h2>
+      <h2 class="text-lg font-bold text-gray-800 px-6 pt-6 pb-3">{{ t('settings.backup.historyTitle') }}</h2>
       <table class="w-full text-sm">
         <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
           <tr>
-            <th class="text-left px-6 py-3">File Name</th>
-            <th class="text-left px-6 py-3">Performed By</th>
-            <th class="text-left px-6 py-3">Type</th>
-            <th class="text-left px-6 py-3">Status</th>
-            <th class="text-left px-6 py-3">Date</th>
+            <th class="text-left px-6 py-3">{{ t('settings.backup.colFileName') }}</th>
+            <th class="text-left px-6 py-3">{{ t('settings.backup.colPerformedBy') }}</th>
+            <th class="text-left px-6 py-3">{{ t('settings.backup.colType') }}</th>
+            <th class="text-left px-6 py-3">{{ t('settings.backup.colStatus') }}</th>
+            <th class="text-left px-6 py-3">{{ t('settings.backup.colDate') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -81,7 +81,7 @@
             <td class="px-6 py-3 text-gray-500">{{ formatDate(item.created_at) }}</td>
           </tr>
           <tr v-if="!history.length">
-            <td colspan="5" class="py-8 text-center text-gray-400">No backup history yet.</td>
+            <td colspan="5" class="py-8 text-center text-gray-400">{{ t('settings.backup.noHistory') }}</td>
           </tr>
         </tbody>
       </table>
@@ -93,15 +93,12 @@
       @click.self="closeConfirmModal"
     >
       <div class="bg-white rounded-2xl p-6 max-w-md w-full">
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Confirm Database Restore</h3>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">{{ t('settings.backup.confirmModal.title') }}</h3>
         <p class="text-sm text-gray-600 mb-4">
-          This will <span class="font-semibold text-red-600">permanently overwrite</span>
-          all current data with the contents of
-          <span class="font-medium">{{ selectedFile?.name }}</span>.
-          This action cannot be undone.
+          {{ t('settings.backup.confirmModal.warning', { filename: selectedFile?.name }) }}
         </p>
         <p class="text-sm text-gray-700 mb-2">
-          Type <span class="font-mono font-semibold bg-gray-100 px-1.5 py-0.5 rounded">RESTORE</span> to confirm:
+          {{ t('settings.backup.confirmModal.typeToConfirm') }}
         </p>
         <input
           v-model="confirmText" type="text" placeholder="RESTORE"
@@ -109,14 +106,14 @@
         />
         <div class="flex justify-end gap-3">
           <button @click="closeConfirmModal" class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-xl transition">
-            Cancel
+            {{ t('settings.backup.confirmModal.cancel') }}
           </button>
           <button
             @click="confirmAndRestore"
             :disabled="confirmText !== 'RESTORE' || isRestoring"
             class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {{ isRestoring ? 'Restoring...' : 'Yes, Overwrite Data' }}
+            {{ isRestoring ? t('settings.backup.restoring') : t('settings.backup.confirmModal.yesOverwrite') }}
           </button>
         </div>
       </div>
@@ -128,7 +125,8 @@
 import { ref, onMounted } from 'vue'
 import { CircleStackIcon, ArrowUpTrayIcon, DocumentArrowUpIcon } from '@heroicons/vue/24/outline'
 import { backupService } from '@/features/settings/services/backupService'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const isCreating = ref(false)
 const createError = ref('')
 const selectedFile = ref(null)
@@ -169,7 +167,7 @@ async function handleCreateBackup() {
     link.remove()
     await loadHistory()
   } catch (error) {
-    createError.value = error.response?.data?.message || 'Failed to create backup.'
+    createError.value = error.response?.data?.message || t('settings.backup.createError')
   } finally {
     isCreating.value = false
   }
@@ -201,13 +199,13 @@ async function confirmAndRestore() {
 
   try {
     await backupService.restoreBackup(selectedFile.value)
-    restoreSuccess.value = 'Database restored successfully.'
+    restoreSuccess.value = t('settings.backup.restoreSuccessMsg')
     selectedFile.value = null
     showConfirmModal.value = false
     confirmText.value = ''
     await loadHistory()
   } catch (error) {
-    restoreError.value = error.response?.data?.message || 'Failed to restore backup.'
+    restoreError.value = error.response?.data?.message || t('settings.backup.restoreError')
   } finally {
     isRestoring.value = false
   }

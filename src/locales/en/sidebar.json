@@ -1,0 +1,38 @@
+{
+  "brand": {
+    "name": "SMART",
+    "nameAccent": "NEXUS",
+    "tagline": "Smart System LMS"
+  },
+  "dashboard": "Dashboard",
+  "logout": "Logout",
+  "sections": {
+    "management": "Management",
+    "smartTools": "Smart Tools",
+    "system": "System"
+  },
+  "menu": {
+    "books": "Books",
+    "myProfile": "My Profile",
+    "members": "Members",
+    "librarians": "Librarians",
+    "borrow": "Borrow",
+    "myBorrows": "My Borrows",
+    "return": "Return",
+    "overdue": "Overdue",
+    "borrowHistory": "Borrow History",
+    "reservations": "Reservations",
+    "myReservations": "My Reservations",
+    "fines": "Fines",
+    "myFines": "My Fines",
+    "digitalLibrary": "Digital Library",
+    "aiChatbot": "AI Chatbot",
+    "recommendations": "Recommendations",
+    "scanner": "Scanner",
+    "reports": "Reports",
+    "notifications": "Notifications",
+    "cardApprovals": "Card Approvals",
+    "backupRestore": "Backup&Restore",
+    "settings": "Settings"
+  }
+}

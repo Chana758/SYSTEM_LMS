@@ -7,8 +7,8 @@
           📚
         </div>
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Digital Library</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Browse and read e-books directly online</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('digitalLibrary.pageTitle') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('digitalLibrary.pageSubtitle') }}</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -17,32 +17,29 @@
           :to="{ name: 'my-favorites-page' }"
           class="flex items-center gap-2 bg-slate-50 border-2 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-2xs"
         >
-          <HeartIcon class="w-4 h-4 text-rose-500" /> My Favorites
+          <HeartIcon class="w-4 h-4 text-rose-500" /> {{ t('digitalLibrary.myFavorites') }}
         </router-link>
         <button
           v-if="isStaff"
           @click="showAddModal = true"
           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md active:scale-95"
         >
-          + Add E-book
+          {{ t('digitalLibrary.addEbook') }}
         </button>
       </div>
     </div>
 
-    <!-- Main Container with Dashed Inner Border matching Reservations & My Fines Style -->
+    <!-- Main Container -->
     <div class="bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 shadow-lg space-y-6 border-dashed">
-      
-      <!-- Search Bar Inside Container -->
+
       <div>
         <LibrarySearch @search="handleSearch" />
       </div>
 
-      <!-- Layout Grid: Category Sidebar & Books Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6 items-start pt-2">
-        
-        <!-- Category Sidebar Box -->
+
         <div class="bg-slate-50/70 rounded-2xl border-2 border-slate-200 p-4 space-y-3 shadow-2xs">
-          <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider px-2">Categories</h3>
+          <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider px-2">{{ t('digitalLibrary.categories') }}</h3>
           <CategorySidebar
             :categories="store.categories"
             :active-id="store.filters.category_id"
@@ -50,10 +47,9 @@
           />
         </div>
 
-        <!-- Books Section -->
         <div class="space-y-6">
           <div v-if="store.loading" class="text-center py-20 text-slate-400 font-bold text-xs uppercase tracking-widest">
-            Loading e-books...
+            {{ t('digitalLibrary.loadingEbooks') }}
           </div>
 
           <div v-else-if="!store.ebooks.length" class="bg-slate-50/50 rounded-2xl border-2 border-slate-200 p-16 text-center space-y-3 shadow-2xs">
@@ -61,15 +57,15 @@
               📖
             </div>
             <div>
-              <p class="text-sm font-black text-slate-900 uppercase tracking-wider">No e-books found</p>
-              <p class="text-xs font-bold text-slate-500 mt-0.5">Try searching with a different keyword or category.</p>
+              <p class="text-sm font-black text-slate-900 uppercase tracking-wider">{{ t('digitalLibrary.noEbooksFound') }}</p>
+              <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('digitalLibrary.adjustSearchOrCategory') }}</p>
             </div>
             <button
               v-if="isStaff"
               @click="showAddModal = true"
               class="mt-2 inline-flex items-center gap-1.5 text-xs font-black text-emerald-600 hover:text-emerald-700 uppercase tracking-wider hover:underline"
             >
-              + Add your first e-book
+              {{ t('digitalLibrary.addFirstEbook') }}
             </button>
           </div>
 
@@ -77,7 +73,6 @@
             <BookPreviewCard v-for="e in store.ebooks" :key="e.id" :ebook="e" />
           </div>
 
-          <!-- Pagination -->
           <div class="flex justify-center gap-2 pt-4" v-if="store.pagination.last_page > 1">
             <button
               v-for="p in store.pagination.last_page" :key="p"
@@ -103,6 +98,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { BookOpenIcon, HeartIcon } from '@heroicons/vue/24/outline'
 import { useLibraryStore } from '../store/libraryStore'
 import { useAuthStore } from '@/features/auth/store/authStore'
@@ -111,6 +107,7 @@ import CategorySidebar from '../components/CategorySidebar.vue'
 import BookPreviewCard from '../components/BookPreviewCard.vue'
 import EbookFormModal from '../components/EbookFormModal.vue'
 
+const { t } = useI18n()
 const store = useLibraryStore()
 const authStore = useAuthStore()
 const showAddModal = ref(false)

@@ -5,7 +5,7 @@
       v-model="query"
       @input="debouncedEmit"
       type="text"
-      placeholder="Search e-books by title, author..."
+      :placeholder="t('digitalLibrary.searchPlaceholder')"
       class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600"
     />
   </div>
@@ -13,9 +13,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { debounce } from 'lodash'
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
+const { t } = useI18n()
 const emit = defineEmits(['search'])
 const query = ref('')
 

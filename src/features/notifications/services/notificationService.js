@@ -1,3 +1,4 @@
+
 import notificationApi from './notificationApi'
 
 function extractError(error) {
@@ -18,6 +19,7 @@ export const notificationService = {
       return extractError(error)
     }
   },
+
   async getUnreadCount() {
     try {
       const { data } = await notificationApi.unreadCount()
@@ -26,6 +28,7 @@ export const notificationService = {
       return extractError(error)
     }
   },
+
   async getNotification(id) {
     try {
       const { data } = await notificationApi.show(id)
@@ -34,6 +37,7 @@ export const notificationService = {
       return extractError(error)
     }
   },
+
   async markRead(id) {
     try {
       const { data } = await notificationApi.markRead(id)
@@ -42,6 +46,7 @@ export const notificationService = {
       return extractError(error)
     }
   },
+
   async markAllRead() {
     try {
       const { data } = await notificationApi.markAllRead()
@@ -50,6 +55,7 @@ export const notificationService = {
       return extractError(error)
     }
   },
+
   async deleteNotification(id) {
     try {
       const { data } = await notificationApi.destroy(id)
@@ -58,10 +64,13 @@ export const notificationService = {
       return extractError(error)
     }
   },
+
   async sendNotification(payload) {
     try {
       const { data } = await notificationApi.send(payload)
-      return { success: true, message: data.message }
+      // data.data only exists for single-recipient sends (not broadcast),
+      // matching NotificationController@store's response shape.
+      return { success: true, message: data.message, data: data.data ?? null }
     } catch (error) {
       return extractError(error)
     }

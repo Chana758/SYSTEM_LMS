@@ -1,24 +1,23 @@
+import { BrowserMultiFormatReader } from '@zxing/browser'
+
 export const barcodeService = {
+  // FIX: camera scanning now works cross-browser. Previously this checked
+  // for `window.BarcodeDetector`, a native API that Chrome/Edge (Chromium)
+  // support but Safari never implemented — meaning camera scanning was
+  // silently unusable on every iPhone (Safari AND Chrome-for-iOS, since
+  // iOS Chrome is just Safari's WebKit engine under the hood).
+  //
+  // We now decode barcodes ourselves via ZXing (@zxing/browser), which
+  // reads pixels off a <canvas> instead of relying on a native detector,
+  // so the only real requirement left is basic camera access — supported
+  // on iOS Safari, Android Chrome, desktop browsers, etc.
   isSupported() {
-    return typeof window !== 'undefined' && 'BarcodeDetector' in window
+    return typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia
   },
 
-  async createDetector() {
-    if (!this.isSupported()) {
-      throw new Error('BarcodeDetector is not supported in this browser.')
-    }
-    return new window.BarcodeDetector({
-      formats: ['ean_13', 'upc_a', 'code_128', 'code_39', 'qr_code'],
-    })
-  },
-
-  async detectFromVideoFrame(detector, videoElement) {
-    try {
-      const barcodes = await detector.detect(videoElement)
-      return barcodes.length > 0 ? barcodes[0].rawValue : null
-    } catch (e) {
-      return null
-    }
+  // Replaces createDetector(). One reader instance per scan session.
+  createReader() {
+    return new BrowserMultiFormatReader()
   },
 
   async startCamera(videoElement) {
@@ -36,8 +35,11 @@ export const barcodeService = {
       throw err
     }
 
+    // `ideal` (not a hard constraint) so it still falls back gracefully
+    // on devices/browsers that don't expose facingMode at all (e.g. some
+    // desktop webcams), instead of throwing OverconstrainedError.
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' },
+      video: { facingMode: { ideal: 'environment' } },
     })
 
     videoElement.srcObject = stream
@@ -49,10 +51,39 @@ export const barcodeService = {
     stream?.getTracks().forEach((track) => track.stop())
   },
 
-  // 🆕 FIX: torch (flashlight) support. Not every device/camera exposes
-  // this capability, so we detect first and no-op silently when absent
-  // instead of throwing — CameraScanner.vue only shows the toggle button
-  // when hasTorch() returns true.
+  // Replaces detectFromVideoFrame(). ZXing decodes continuously off the
+  // already-playing <video> element and calls onDetected(text) the moment
+  // it finds a barcode. Returns "controls" — call controls.stop() to
+  // cancel decoding (do this in your cleanup / stop() handler).
+  //
+  // NOTE: the callback also fires repeatedly with a NotFoundException
+  // while no barcode is in frame — that's normal per-frame "nothing found
+  // yet" noise from ZXing, not an error to show the user, so we simply
+  // ignore it here.
+  // FIX: @zxing/browser's decodeFromVideoElement() returns a
+  // Promise<IScannerControls>, NOT the controls object directly. The
+  // previous version did `return reader.decodeFromVideoElement(...)`
+  // without awaiting it, so callers stored a pending Promise in
+  // `decodingControls`. Calling `decodingControls?.stop()` later then
+  // silently did nothing — Promise has no `.stop()` method, and
+  // optional chaining swallows that instead of throwing — so the
+  // decode loop (and the camera hardware itself) never actually
+  // stopped, even after switching tabs or clicking "Stop Camera".
+  // Marking this async + awaiting fixes it: callers now get the real
+  // controls object once decoding has actually started.
+  async startDecoding(reader, videoElement, onDetected) {
+    return await reader.decodeFromVideoElement(videoElement, (result) => {
+      if (result) {
+        onDetected(result.getText())
+      }
+    })
+  },
+
+  // Torch (flashlight) control. Supported on most Android Chrome cameras
+  // via MediaStreamTrack capabilities. iOS Safari does not expose torch
+  // control to web pages at all — hasTorch() simply returns false there,
+  // which the UI already handles gracefully (torch button just doesn't
+  // render, per the existing v-if="isScanning && torchSupported" guard).
   hasTorch(stream) {
     const track = stream?.getVideoTracks?.()[0]
     const capabilities = track?.getCapabilities?.()

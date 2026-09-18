@@ -2,7 +2,7 @@
   <div class="space-y-6 pb-12">
     <!-- ============ MAIN CONTAINER WRAPPER ============ -->
     <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8 space-y-8">
-      
+
       <!-- HEADER CARD -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200">
         <div class="flex items-center gap-4">
@@ -10,19 +10,19 @@
             <QrCodeIcon class="w-6 h-6 text-emerald-700" />
           </div>
           <div>
-            <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">Scanner</h1>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Scan a barcode to check out, return, or look up a book instantly.</p>
+            <h1 class="font-serif text-2xl font-black text-slate-900 tracking-tight">{{ t('scanner.pageTitle') }}</h1>
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">{{ t('scanner.pageSubtitle') }}</p>
           </div>
         </div>
 
-        <!-- 🆕 Stocktake link added alongside Scan History -->
+        <!-- Stocktake link added alongside Scan History -->
         <div class="flex items-center gap-2 flex-shrink-0">
           <RouterLink
             to="/scanner/stocktake"
             class="inline-flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs"
           >
             <ClipboardDocumentCheckIcon class="w-4 h-4 text-slate-500" />
-            <span>Stocktake</span>
+            <span>{{ t('scanner.stocktake') }}</span>
           </RouterLink>
 
           <RouterLink
@@ -30,7 +30,7 @@
             class="inline-flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs"
           >
             <ClockIcon class="w-4 h-4 text-slate-500" />
-            <span>View Scan History</span>
+            <span>{{ t('scanner.viewHistory') }}</span>
             <ArrowRightIcon class="w-3.5 h-3.5 text-slate-400" />
           </RouterLink>
         </div>
@@ -47,28 +47,28 @@
             : 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
         >
           <component :is="type.icon" class="w-4 h-4" />
-          {{ type.label }}
+          {{ t(type.labelKey) }}
         </button>
       </div>
 
       <!-- MAIN CONTENT GRID -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start pt-2">
         <div class="space-y-4">
-          <!-- Input Mode Selector -->
+          <!-- Input Mode Selector: Manual typing vs USB Scan (camera) -->
           <div class="inline-flex gap-1 bg-slate-100 border border-slate-200 rounded-xl p-1 shadow-inner">
             <button
               @click="mode = 'manual'"
               class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer"
               :class="mode === 'manual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'"
             >
-              Manual / USB Scanner
+              {{ t('scanner.modeManualShort') }}
             </button>
             <button
               @click="mode = 'camera'"
               class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer"
               :class="mode === 'camera' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'"
             >
-              Camera
+              {{ t('scanner.modeUsbScan') }}
             </button>
           </div>
 
@@ -94,8 +94,8 @@
               <div class="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mx-auto mb-4 shadow-2xs">
                 <QrCodeIcon class="w-8 h-8 text-slate-400" />
               </div>
-              <p class="text-xs font-black uppercase tracking-wider text-slate-900">Scan a barcode to see the result here</p>
-              <p class="text-xs font-semibold text-slate-500 mt-1">Results appear instantly as staff scan books</p>
+              <p class="text-xs font-black uppercase tracking-wider text-slate-900">{{ t('scanner.scanToSee') }}</p>
+              <p class="text-xs font-semibold text-slate-500 mt-1">{{ t('scanner.resultsAppear') }}</p>
             </div>
           </transition>
         </div>
@@ -107,24 +107,27 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
   ArrowRightIcon, QrCodeIcon, ArrowsRightLeftIcon,
   ArrowUturnLeftIcon, MagnifyingGlassIcon, ClockIcon,
-  ClipboardDocumentCheckIcon, // 🆕
+  ClipboardDocumentCheckIcon,
 } from '@heroicons/vue/24/outline'
 import BarcodeScanner from '../components/BarcodeScanner.vue'
 import CameraScanner from '../components/CameraScanner.vue'
 import ScanResultCard from '../components/ScanResultCard.vue'
 import { scannerService } from '../services'
 
+const { t } = useI18n()
+
 const scanTypes = [
-  { value: 'borrow', label: 'Borrow', icon: ArrowsRightLeftIcon, activeBg: 'bg-emerald-700', accent: 'green' },
-  { value: 'return', label: 'Return', icon: ArrowUturnLeftIcon, activeBg: 'bg-blue-600', accent: 'blue' },
-  { value: 'lookup', label: 'Lookup', icon: MagnifyingGlassIcon, activeBg: 'bg-purple-600', accent: 'purple' },
+  { value: 'borrow', labelKey: 'scanner.typeBorrow', icon: ArrowsRightLeftIcon, activeBg: 'bg-emerald-700', accent: 'green' },
+  { value: 'return', labelKey: 'scanner.typeReturn', icon: ArrowUturnLeftIcon, activeBg: 'bg-blue-600', accent: 'blue' },
+  { value: 'lookup', labelKey: 'scanner.typeLookup', icon: MagnifyingGlassIcon, activeBg: 'bg-purple-600', accent: 'purple' },
 ]
 
 const scanType = ref('borrow')
-const activeType = computed(() => scanTypes.find((t) => t.value === scanType.value))
+const activeType = computed(() => scanTypes.find((s) => s.value === scanType.value))
 
 const mode = ref('manual')
 const isScanning = ref(false)
@@ -150,8 +153,7 @@ const handleScan = async (barcode) => {
       lastResult.value = payload
     } else {
       lastResult.value = null
-      scanError.value =
-        payload?.message || 'Failed to process scan. Check your connection and try again.'
+      scanError.value = payload?.message || t('scanner.scanFailed')
     }
   } finally {
     isScanning.value = false

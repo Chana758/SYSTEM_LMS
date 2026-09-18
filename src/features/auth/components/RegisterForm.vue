@@ -1,11 +1,11 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.name') }}</label>
       <input
         v-model="form.name"
         type="text"
-        placeholder="Full name"
+        :placeholder="$t('auth.namePlaceholder')"
         class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
         :class="{ 'border-red-500': errors.name }"
       />
@@ -13,11 +13,11 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.email') }}</label>
       <input
         v-model="form.email"
         type="email"
-        placeholder="you@example.com"
+        placeholder="example@gmail.com"
         class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
         :class="{ 'border-red-500': errors.email }"
       />
@@ -25,17 +25,17 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number (Optional)</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.phoneOptional') }}</label>
       <input
         v-model="form.phone"
         type="text"
-        placeholder="012 345 678"
+        :placeholder="$t('auth.phonePlaceholder')"
         class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
       />
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.password') }}</label>
       <input
         v-model="form.password"
         type="password"
@@ -47,7 +47,7 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.confirmPassword') }}</label>
       <input
         v-model="form.password_confirmation"
         type="password"
@@ -67,7 +67,7 @@
       :disabled="loading"
       class="w-full bg-green-700 hover:bg-green-800 text-white rounded-lg py-2 font-medium disabled:opacity-50"
     >
-      {{ loading ? 'Signing up...' : 'Sign up' }}
+      {{ loading ? $t('auth.signingUp') : $t('auth.signUp') }}
     </button>
   </form>
 </template>

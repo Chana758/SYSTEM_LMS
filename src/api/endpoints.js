@@ -12,8 +12,6 @@ export const ENDPOINTS = {
     LOGIN_QR: '/auth/login/qr',
     QR_TOKEN_GENERATE: '/auth/qr-token/generate',
     QR_TOKEN_REVOKE: '/auth/qr-token/revoke',
-    // FIX: were missing — used by generateQrTokenFor() / pendingCards()
-    // in authService.js for staff-issued QR cards.
     QR_TOKEN_GENERATE_FOR: (userId) => `/auth/users/${userId}/qr-token/generate`,
     PENDING_CARDS: '/auth/pending-cards',
   },
@@ -52,10 +50,6 @@ export const ENDPOINTS = {
     UPDATE: (id) => `/categories/${id}`,
     DELETE: (id) => `/categories/${id}`,
   },
-  // FIX: entire section was missing even though membershipTypeService.js
-  // already calls these paths as hardcoded strings — centralizing here
-  // avoids typo drift, matching the pattern used everywhere else in
-  // this file.
   MEMBERSHIP_TYPES: {
     LIST: '/membership-types',
     CREATE: '/membership-types',
@@ -139,14 +133,36 @@ export const ENDPOINTS = {
     HISTORY: '/scan/history',
     SUMMARY: '/scan/summary',
   },
-  // FIX: entire section was missing — dashboardStore.js's fetchStats(),
-  // fetchRecentActivities(), and fetchRevenueChart() currently call these
-  // three paths as hardcoded apiClient.get(...) strings; adding them here
-  // for consistency (dashboardStore.js itself doesn't need to change
-  // unless you want to swap it over to using ENDPOINTS.DASHBOARD.*).
   DASHBOARD: {
     STATS: '/dashboard',
     RECENT_ACTIVITIES: '/dashboard/recent-activities',
     REVENUE_CHART: '/dashboard/revenue-chart',
   },
+  REMOTE_SCAN: {
+    CREATE_SESSION: '/remote-scan/session',
+    STATUS: (sessionId) => `/remote-scan/${sessionId}/status`,
+    SUBMIT: (sessionId) => `/remote-scan/${sessionId}/submit`,
+  },
+  // 
+  REMOTE_LOGIN: {
+    CREATE_SESSION: '/remote-login/session',
+    STATUS: (sessionId) => `/remote-login/${sessionId}/status`,
+    SUBMIT: (sessionId) => `/remote-login/${sessionId}/submit`,
+  },
+  REMOTE_LOGIN: {
+    CREATE_SESSION: '/remote-login/session',
+    STATUS: (sessionId) => `/remote-login/${sessionId}/status`,
+    SUBMIT: (sessionId) => `/remote-login/${sessionId}/submit`,
+  },
+
+  CHATBOT: {
+    HISTORY: '/chatbot/history',
+    SEND: '/chatbot',
+    CLEAR_HISTORY: '/chatbot/history',
+  },
+  RECOMMENDATIONS: {
+    LIST: '/recommendations',
+    MARK_CLICKED: (bookId) => `/recommendations/${bookId}/click`,
+  },
+  
 }

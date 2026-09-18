@@ -35,20 +35,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
 import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 
-const props = defineProps({ item: Object, isCollapsed: Boolean })
-
-const route = useRoute()
-
-// Active if current path matches exactly, or is a sub-route
-// (e.g. /books/create should still highlight "Books")
-const isActive = computed(() => {
-  return (
-    route.path === props.item.path ||
-    route.path.startsWith(props.item.path + '/')
-  )
+defineProps({
+  item: Object,
+  isCollapsed: Boolean,
+  isActive: { type: Boolean, default: false },
 })
 </script>

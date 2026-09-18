@@ -1,6 +1,6 @@
 <template>
   <div :class="[bg, 'rounded-2xl p-5 shadow-md relative overflow-hidden flex flex-col justify-between transition-all hover:shadow-lg']">
-    
+
     <!-- Top Row: Icon and Badge -->
     <div class="flex items-center justify-between mb-3">
       <div v-if="icon" class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20 backdrop-blur-md text-white shadow-inner">
@@ -20,7 +20,7 @@
     <!-- Optional Trend -->
     <div v-if="trend !== null" class="mt-3">
       <span class="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg bg-white/20 text-white">
-        {{ trend >= 0 ? '▲' : '▼' }} {{ Math.abs(trend) }}% <span class="text-[10px] text-white/80">vs previous</span>
+        {{ trend >= 0 ? '▲' : '▼' }} {{ Math.abs(trend) }}% <span class="text-[10px] text-white/80">{{ t('reports.summaryCard.vsPrevious') }}</span>
       </span>
     </div>
   </div>
@@ -28,15 +28,18 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
-  label: { type: String, required: true },
+  label: { type: String, required: true },  // caller passes already-translated text
   value: { type: [Number, String], default: 0 },
   format: { type: String, default: 'number' }, // 'number' | 'currency'
-  bg: { type: String, default: 'bg-blue-600' }, // ពណ៌ផ្ទៃកាត (ឧ. bg-blue-600, bg-emerald-600, bg-orange-500, bg-red-500, bg-purple-600)
+  bg: { type: String, default: 'bg-blue-600' },
   trend: { type: Number, default: null },
   icon: { type: [Object, Function], default: null },
-  badge: { type: String, default: null }
+  badge: { type: String, default: null }, // badges (TOTAL, ACTIVE, etc.) are short status codes, kept as-is
 })
 
 const displayValue = computed(() => {

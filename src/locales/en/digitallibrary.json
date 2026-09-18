@@ -1,0 +1,85 @@
+{
+  "pageTitle": "Digital Library",
+  "pageSubtitle": "Browse and read e-books directly online",
+  "myFavorites": "My Favorites",
+  "addEbook": "+ Add E-book",
+  "categories": "Categories",
+  "allCategories": "All Categories",
+  "searchPlaceholder": "Search e-books by title, author...",
+  "loadingEbooks": "Loading e-books...",
+  "noEbooksFound": "No e-books found",
+  "adjustSearchOrCategory": "Try searching with a different keyword or category.",
+  "addFirstEbook": "+ Add your first e-book",
+  "card": {
+    "members": "Members",
+    "public": "Public"
+  },
+  "detail": {
+    "backToLibrary": "Digital Library",
+    "author": "Author",
+    "format": "Format",
+    "access": "Access",
+    "accessPublic": "Public",
+    "accessMembersOnly": "Members Only",
+    "views": "Views",
+    "downloads": "Downloads",
+    "readingProgress": "You're {percent}% through this book.",
+    "description": "Description",
+    "noDescription": "No description available for this e-book.",
+    "continueReading": "Continue Reading",
+    "readOnline": "Read Online",
+    "loading": "Loading e-book details..."
+  },
+  "reader": {
+    "backToDetails": "Back to details",
+    "loading": "Loading e-book reader...",
+    "mobiNotSupported": "MOBI format preview isn't supported in-browser.",
+    "downloadToRead": "Please download the file to read it on your device.",
+    "previous": "Previous",
+    "next": "Next",
+    "read": "read",
+    "pdfViewerTitle": "PDF Viewer",
+    "noFileToPreview": "No file available to preview."
+  },
+  "download": {
+    "download": "Download",
+    "preparing": "Preparing...",
+    "downloadUnavailable": "Download Unavailable"
+  },
+  "favorite": {
+    "addToFavorites": "Add to Favorites",
+    "favorited": "Favorited"
+  },
+  "categoryPage": {
+    "browseByCategory": "Browse e-books filtered by this category",
+    "backToLibrary": "Back to Library",
+    "noEbooksInCategory": "There are no e-books available in this category right now."
+  },
+  "myFavoritesPage": {
+    "title": "My Favorites",
+    "subtitle": "Quick access to your saved favorite e-books",
+    "backToLibrary": "Back to Library",
+    "loading": "Loading favorites...",
+    "noFavorites": "No Favorites Yet",
+    "noFavoritesHint": "You haven't added any e-books to your favorites list."
+  },
+  "formModal": {
+    "editTitle": "Edit E-book",
+    "addTitle": "Add E-book",
+    "subtitle": "Attach a digital file to an existing book title.",
+    "bookLabel": "Book",
+    "searchBookPlaceholder": "Search for a book...",
+    "fileLabel": "File",
+    "fileKeepHint": "leave empty to keep current",
+    "fileNewHint": "PDF/EPUB/MOBI, max 50MB",
+    "format": "Format",
+    "accessType": "Access",
+    "allowDownload": "Allow download",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "addEbook": "Add E-book",
+    "selectBookError": "Please select a book.",
+    "chooseFileError": "Please choose a file."
+  }
+}

@@ -10,12 +10,12 @@
             <ClockIcon class="w-7 h-7 text-purple-700" />
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Borrow History</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">{{ store.pagination.total }} record(s) total</p>
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('circulation.borrowHistory.title') }}</h1>
+            <p class="text-xs font-bold text-slate-500 mt-1">{{ store.pagination.total }} {{ $t('circulation.borrowHistory.recordsTotal') }}</p>
           </div>
         </div>
         <span class="text-[10px] font-extrabold uppercase tracking-widest text-purple-600 bg-purple-50 border border-purple-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-          History
+          {{ $t('circulation.borrowHistory.title') }}
         </span>
       </div>
 
@@ -28,7 +28,7 @@
               v-model="store.filters.search"
               @input="debouncedFetch"
               type="text"
-              placeholder="Search member or book title..."
+              :placeholder="$t('circulation.borrowHistory.searchPlaceholder')"
               class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 transition-shadow shadow-2xs"
             />
           </div>
@@ -38,9 +38,9 @@
             @change="store.fetchList(1)"
             class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
           >
-            <option value="">All Status</option>
-            <option value="borrowed">Borrowed</option>
-            <option value="returned">Returned</option>
+            <option value="">{{ $t('circulation.allStatus') }}</option>
+            <option value="borrowed">{{ $t('circulation.statusBorrowed') }}</option>
+            <option value="returned">{{ $t('circulation.statusReturned') }}</option>
           </select>
 
           <div class="flex items-center gap-2">
@@ -50,7 +50,7 @@
               type="date"
               class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
             />
-            <span class="text-slate-400 text-xs font-bold">to</span>
+            <span class="text-slate-400 text-xs font-bold">{{ $t('circulation.borrowHistory.to') }}</span>
             <input
               v-model="store.filters.to"
               @change="store.fetchList(1)"
@@ -64,14 +64,14 @@
             @click="clearFilters"
             class="text-xs font-bold text-slate-500 hover:text-rose-600 px-3 py-2 transition-colors ml-auto"
           >
-            Clear filters
+            {{ $t('circulation.borrowHistory.clearFilters') }}
           </button>
         </div>
       </div>
 
       <!-- Loading / Table Container -->
       <div v-if="store.loading" class="bg-white rounded-2xl border border-slate-200 p-14 text-center text-slate-400 text-sm font-semibold shadow-2xs">
-        Loading records...
+        {{ $t('circulation.borrowHistory.loadingRecords') }}
       </div>
 
       <div v-else class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">

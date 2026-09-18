@@ -7,15 +7,15 @@
           ✏️
         </div>
         <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Edit Fine</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">Modify and update existing fine information</p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ t('fines.editPage.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ t('fines.editPage.subtitle') }}</p>
         </div>
       </div>
       <router-link 
         to="/fines" 
         class="border-2 border-slate-300 bg-white text-slate-700 hover:bg-slate-50 px-4 py-2.5 rounded-xl text-xs font-extrabold transition-colors shadow-2xs inline-flex items-center gap-1.5 flex-shrink-0"
       >
-        <span>←</span> Back
+        <span>←</span> {{ t('fines.createPage.back') }}
       </router-link>
     </div>
 
@@ -24,30 +24,44 @@
       <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 flex items-start gap-3 shadow-2xs">
         <span class="text-amber-600 text-base font-black">⚠️</span>
         <p class="text-xs font-bold text-amber-800 leading-relaxed">
-          Only unpaid fines can be edited. Use Pay/Waive actions from the list page to finalize.
+          {{ t('fines.editPage.onlyUnpaidHint') }}
         </p>
       </div>
 
+      <!-- FIX: was previously missing entirely — the form rendered with
+           no way to submit changes. Also, :initial-data is now an actual
+           prop on FineForm.vue (it silently did nothing before), so the
+           form correctly pre-fills from the loaded fine. -->
       <FineForm 
         :initial-data="store.currentFine" 
         :loading="store.loading" 
         :errors="store.errors" 
+        @submit="handleSubmit"
         @cancel="router.back()" 
       />
     </div>
   </div>
-  <div v-else class="text-center py-16 text-slate-400 font-bold text-xs uppercase tracking-widest">Loading edit form...</div>
+  <div v-else class="text-center py-16 text-slate-400 font-bold text-xs uppercase tracking-widest">{{ t('fines.editPage.loading') }}</div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useFineStore } from '../store/fineStore'
 import FineForm from '../components/FineForm.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const store = useFineStore()
 
 onMounted(() => store.fetchFine(route.params.id))
+
+async function handleSubmit(payload) {
+  const result = await store.updateFine(route.params.id, payload)
+  if (result.success) {
+    router.push({ name: 'fine-list' })
+  }
+}
 </script>

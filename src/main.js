@@ -9,6 +9,8 @@ import i18n from './plugins/i18n'
 import toast from './plugins/toast'
 import { setupInterceptors } from '@/api/interceptors'
 import { vClickOutside } from '@/directives/clickOutside'
+import { useLanguageStore } from '@/stores/languageStore'
+import { useBrandingStore } from '@/stores/brandingStore' 
 
 setupInterceptors()
 
@@ -22,3 +24,7 @@ app.use(toast)
 app.directive('click-outside', vClickOutside)
 
 app.mount('#app')
+
+// Initialize global settings on first app load.
+useLanguageStore().init()
+useBrandingStore().init() 

@@ -1,17 +1,20 @@
 <template>
   <div class="inline-flex items-center gap-1.5">
     <span v-if="!hideType" class="px-2 py-0.5 rounded-full text-xs font-semibold capitalize" :class="typeClass">
-      {{ type }}
+      {{ typeLabel }}
     </span>
     <span v-if="status" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold capitalize" :class="statusClass">
       <span class="w-1.5 h-1.5 rounded-full" :class="statusDotClass"></span>
-      {{ status }}
+      {{ statusLabel }}
     </span>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   type: { type: String, default: 'student' },
@@ -36,4 +39,19 @@ const statusDotClass = computed(() => ({
   inactive: 'bg-gray-400',
   expired: 'bg-red-500',
 }[props.status] || 'bg-gray-400'))
+
+// Translate the dynamic type/status codes coming from the backend
+// (student/teacher/external, active/inactive/expired) into the
+// localized labels defined in members.json.
+const typeLabel = computed(() => ({
+  student: t('members.typeStudent'),
+  teacher: t('members.typeTeacher'),
+  external: t('members.typeExternal'),
+}[props.type] || props.type))
+
+const statusLabel = computed(() => ({
+  active: t('members.statusActive'),
+  inactive: t('members.statusInactive'),
+  expired: t('members.statusExpired'),
+}[props.status] || props.status))
 </script>

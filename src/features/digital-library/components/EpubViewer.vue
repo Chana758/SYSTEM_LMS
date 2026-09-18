@@ -2,18 +2,21 @@
   <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
     <div ref="viewerEl" style="height: 75vh;"></div>
     <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-      <button @click="prev" class="text-sm text-gray-500 hover:text-green-700">‹ Previous</button>
-      <span class="text-xs text-gray-400">{{ Math.round(percentage) }}% read</span>
-      <button @click="next" class="text-sm text-gray-500 hover:text-green-700">Next ›</button>
+      <button @click="prev" class="text-sm text-gray-500 hover:text-green-700">‹ {{ t('digitalLibrary.reader.previous') }}</button>
+      <span class="text-xs text-gray-400">{{ Math.round(percentage) }}% {{ t('digitalLibrary.reader.read') }}</span>
+      <button @click="next" class="text-sm text-gray-500 hover:text-green-700">{{ t('digitalLibrary.reader.next') }} ›</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ePub from 'epubjs'
 import { debounce } from 'lodash'
 import { useLibraryStore } from '../store/libraryStore'
+
+const { t } = useI18n()
 
 const props = defineProps({
   fileUrl: { type: String, required: true },
