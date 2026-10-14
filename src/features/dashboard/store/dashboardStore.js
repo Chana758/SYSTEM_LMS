@@ -34,7 +34,13 @@ export const useDashboardStore = defineStore('dashboard', {
       this.error = ''
       try {
         const { data } = await apiClient.get('/dashboard')
-        Object.assign(this.stats, data)
+        const s = data.data ?? data
+        this.stats = {
+          ...this.stats,
+          ...s,
+          unpaid_fines_total: Number(s.unpaid_fines_total) || 0,
+          low_stock_books: Array.isArray(s.low_stock_books) ? s.low_stock_books : [],
+        }
       } catch (e) {
         this.error = 'Failed to load dashboard stats.'
       } finally {

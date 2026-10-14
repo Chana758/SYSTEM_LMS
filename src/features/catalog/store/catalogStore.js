@@ -16,13 +16,15 @@ export const useCatalogStore = defineStore('catalog', {
   }),
 
   actions: {
-    async fetchBooks() {
+    async fetchBooks(page) {
+      if (page) this.pagination.current_page = page
       this.loading = true
       this.errors = {}
       try {
         const { data } = await catalogService.listBooks({
           search: this.filters.search || undefined,
           category_id: this.filters.category_id || undefined,
+          status: this.filters.status || undefined,
           page: this.pagination.current_page,
           per_page: this.pagination.per_page,
         })

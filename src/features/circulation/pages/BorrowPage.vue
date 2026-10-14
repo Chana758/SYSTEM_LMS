@@ -137,7 +137,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { ArrowsRightLeftIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { useCirculationStore } from '../store/circulationStore'
 import BorrowForm from '../components/BorrowForm.vue'

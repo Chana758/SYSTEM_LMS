@@ -24,7 +24,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import * as echarts from 'echarts'
+import echarts from '@/plugins/echarts'
 
 const props = defineProps({
   data: { type: Array, default: () => [] },

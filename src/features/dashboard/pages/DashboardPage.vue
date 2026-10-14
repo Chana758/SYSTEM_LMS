@@ -17,6 +17,21 @@
         </div>
       </div>
 
+      <!-- Error banner (stats failed to load) -->
+      <div
+        v-if="store.error"
+        class="flex items-center justify-between gap-3 rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-700"
+      >
+        <span>{{ store.error }}</span>
+        <button
+          type="button"
+          class="px-3 py-1 rounded-lg bg-white border border-rose-300 text-rose-700 hover:bg-rose-100 transition"
+          @click="store.fetchAll()"
+        >
+          Retry
+        </button>
+      </div>
+
       <!-- Real Stats (4 Solid Color Themes matching Book Management) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
@@ -24,12 +39,12 @@
         <div class="bg-blue-600 rounded-2xl border border-blue-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
-              <BookOpenIcon class="w-7 h-7"/>
+              <BookOpenIcon class="w-7 h-7" />
             </div>
             <span class="text-[10px] font-extrabold text-blue-100 uppercase tracking-widest bg-blue-700/50 px-2.5 py-1 rounded-full border border-blue-400/30">Total</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.total_books }}</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ stats.total_books }}</p>
             <p class="text-[11px] font-bold text-blue-100 tracking-wide">{{ t('dashboard.totalBooks') }}</p>
           </div>
         </div>
@@ -38,12 +53,12 @@
         <div class="bg-emerald-600 rounded-2xl border border-emerald-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
-              <CheckCircleIcon class="w-7 h-7"/>
+              <CheckCircleIcon class="w-7 h-7" />
             </div>
             <span class="text-[10px] font-extrabold text-emerald-100 uppercase tracking-widest bg-emerald-700/50 px-2.5 py-1 rounded-full border border-emerald-400/30">Stock</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.available_books }}</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ stats.available_books }}</p>
             <p class="text-[11px] font-bold text-emerald-100 tracking-wide">{{ t('dashboard.availableBooks') }}</p>
           </div>
         </div>
@@ -52,12 +67,12 @@
         <div class="bg-amber-600 rounded-2xl border border-amber-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
-              <UsersIcon class="w-7 h-7"/>
+              <UsersIcon class="w-7 h-7" />
             </div>
             <span class="text-[10px] font-extrabold text-amber-100 uppercase tracking-widest bg-amber-700/50 px-2.5 py-1 rounded-full border border-amber-400/30">Users</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.total_members }}</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ stats.total_members }}</p>
             <p class="text-[11px] font-bold text-amber-100 tracking-wide">{{ t('dashboard.activeMembers') }}</p>
           </div>
         </div>
@@ -66,12 +81,12 @@
         <div class="bg-purple-600 rounded-2xl border border-purple-500 shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md text-white">
           <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm">
-              <ArrowsRightLeftIcon class="w-7 h-7"/>
+              <ArrowsRightLeftIcon class="w-7 h-7" />
             </div>
             <span class="text-[10px] font-extrabold text-purple-100 uppercase tracking-widest bg-purple-700/50 px-2.5 py-1 rounded-full border border-purple-400/30">Today</span>
           </div>
           <div>
-            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ store.stats.borrowed_today }}</p>
+            <p class="text-2xl font-black text-white tracking-tight leading-none mb-1.5">{{ stats.borrowed_today }}</p>
             <p class="text-[11px] font-bold text-purple-100 tracking-wide">{{ t('dashboard.borrowedToday') }}</p>
           </div>
         </div>
@@ -83,7 +98,7 @@
 
       <!-- Circulation Summary -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         <!-- Circulation Overview Card -->
         <div class="bg-gradient-to-br from-slate-50/50 via-white to-white rounded-2xl border border-slate-300 shadow-sm p-6 flex flex-col justify-between">
           <div>
@@ -107,7 +122,7 @@
                   </div>
                   <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">{{ t('dashboard.currentlyBorrowed') }}</span>
                 </div>
-                <span class="font-black text-slate-900 font-mono text-base px-3 py-0.5 rounded-lg bg-slate-50 border border-slate-200">{{ store.stats.currently_borrowed }}</span>
+                <span class="font-black text-slate-900 font-mono text-base px-3 py-0.5 rounded-lg bg-slate-50 border border-slate-200">{{ stats.currently_borrowed }}</span>
               </div>
 
               <!-- Overdue Books -->
@@ -118,7 +133,7 @@
                   </div>
                   <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">{{ t('dashboard.overdueBooks') }}</span>
                 </div>
-                <span class="font-black text-rose-600 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 border border-rose-200">{{ store.stats.overdue_count }}</span>
+                <span class="font-black text-rose-600 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 border border-rose-200">{{ stats.overdue_count }}</span>
               </div>
 
               <!-- Unpaid Fines -->
@@ -129,7 +144,7 @@
                   </div>
                   <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wide">{{ t('dashboard.unpaidFines') }}</span>
                 </div>
-                <span class="font-black text-rose-600 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 border border-rose-200">${{ store.stats.unpaid_fines_total.toFixed(2) }}</span>
+                <span class="font-black text-rose-600 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 border border-rose-200">${{ unpaidFines }}</span>
               </div>
             </div>
           </div>
@@ -149,18 +164,27 @@
               </span>
             </div>
 
-            <div v-if="!store.stats.low_stock_books.length" class="text-slate-500 text-xs font-bold py-14 text-center bg-white rounded-xl border border-dashed border-slate-300 shadow-2xs">
+            <div
+              v-if="!lowStockBooks.length"
+              class="text-slate-500 text-xs font-bold py-14 text-center bg-white rounded-xl border border-dashed border-slate-300 shadow-2xs"
+            >
               {{ t('dashboard.noLowStock') }}
             </div>
             <div v-else class="space-y-3 overflow-y-auto max-h-[240px] pr-1">
-              <div v-for="b in store.stats.low_stock_books" :key="b.id" class="flex justify-between items-center text-sm bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-rose-200 transition">
+              <div
+                v-for="b in lowStockBooks"
+                :key="b.id"
+                class="flex justify-between items-center text-sm bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-rose-200 transition"
+              >
                 <div class="flex items-center gap-3 min-w-0 pr-2">
                   <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
                     <ExclamationCircleIcon class="w-4 h-4" />
                   </div>
                   <span class="font-bold text-slate-800 text-xs truncate">{{ b.title }}</span>
                 </div>
-                <span class="text-rose-600 font-black text-xs font-mono bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-200 flex-shrink-0">{{ b.available_qty }}/{{ b.total_qty }} {{ t('dashboard.leftSuffix') }}</span>
+                <span class="text-rose-600 font-black text-xs font-mono bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-200 flex-shrink-0">
+                  {{ b.available_qty }}/{{ b.total_qty }} {{ t('dashboard.leftSuffix') }}
+                </span>
               </div>
             </div>
           </div>
@@ -217,7 +241,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDashboardStore } from '../store/dashboardStore'
 import QuickActions from '../components/QuickActions.vue'
@@ -240,6 +264,18 @@ import {
 
 const { t } = useI18n()
 const store = useDashboardStore()
+
+// Safe accessors: the API may send decimals as strings ("12.50") or null lists,
+// which would otherwise crash the whole page during render.
+const stats = computed(() => store.stats ?? {})
+
+const unpaidFines = computed(() =>
+  (Number(stats.value.unpaid_fines_total) || 0).toFixed(2)
+)
+
+const lowStockBooks = computed(() =>
+  Array.isArray(stats.value.low_stock_books) ? stats.value.low_stock_books : []
+)
 
 onMounted(() => {
   store.fetchAll()

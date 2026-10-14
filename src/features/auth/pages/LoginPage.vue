@@ -27,8 +27,8 @@
           </div>
 
           <div class="inline-flex items-center gap-1.5 bg-black/20 border border-white/10 px-4 py-1.5 rounded-full mt-4">
-             <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-             <span class="text-[10px] font-bold text-white tracking-widest uppercase">{{ brandingStore.siteTagline }}</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <span class="text-[10px] font-bold text-white tracking-widest uppercase">{{ brandingStore.siteTagline }}</span>
           </div>
         </div>
 
@@ -45,7 +45,7 @@
           <p class="text-[12px] font-semibold text-slate-500">{{ $t('auth.loginSubtitle') }}</p>
         </div>
 
-        <!-- Tab Toggle: Password / Scan QR (Use Phone removed — Scan QR covers it) -->
+        <!-- Tab Toggle: Password / Scan QR -->
         <div class="flex gap-1 bg-slate-100/80 rounded-full p-1.5 border border-slate-200 shadow-inner">
           <button
             type="button"
@@ -79,6 +79,16 @@
             :errors="authStore.errors"
             @submit="handleQrLogin"
           />
+        </div>
+
+        <!-- Forgot Password Link (password mode only) -->
+        <div v-if="mode === 'password'" class="text-right -mt-3">
+          <router-link
+            :to="{ name: 'forgot-password' }"
+            class="text-[12px] font-bold text-[#17664b] hover:underline"
+          >
+            {{ $t('auth.forgotPassword') }}
+          </router-link>
         </div>
 
         <!-- Register Link -->

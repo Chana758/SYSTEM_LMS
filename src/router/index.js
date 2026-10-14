@@ -18,7 +18,7 @@ import digitalLibraryRoutes from './digital-library.routes'
 import scannerRoutes from './scanner.routes'
 import reportRoutes from './report.routes'
 import chatbotRoutes from './chatbot.routes'
-import aiRecommendationRoutes from './gamification.routes'
+import aiRecommendationRoutes from './ai-recommendation.routes'
 const routes = [
   {
     path: '/',

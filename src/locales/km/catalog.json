@@ -116,5 +116,10 @@
   "delete": "លុប",
   "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
   "saving": "កំពុងរក្សាទុក..."
+},
+"confirmDeleteBook": "លុបសៀវភៅ \"{title}\"?",
+"table": {
+  "title": "ចំណងជើង", "author": "អ្នកនិពន្ធ", "isbn": "ISBN", "category": "ប្រភេទ",
+  "copies": "ច្បាប់", "status": "ស្ថានភាព", "actions": "សកម្មភាព"
 }
 }

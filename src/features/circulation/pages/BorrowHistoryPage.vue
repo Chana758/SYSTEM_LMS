@@ -111,7 +111,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { MagnifyingGlassIcon, ClockIcon } from '@heroicons/vue/24/outline'
 import { useCirculationStore } from '../store/circulationStore'
 import BorrowTable from '../components/BorrowTable.vue'

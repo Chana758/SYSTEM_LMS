@@ -13,7 +13,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ePub from 'epubjs'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { useLibraryStore } from '../store/libraryStore'
 
 const { t } = useI18n()

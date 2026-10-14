@@ -115,5 +115,10 @@
   "delete": "Delete",
   "saveChanges": "Save Changes",
   "saving": "Saving..."
+},
+"confirmDeleteBook": "Delete book \"{title}\"?",
+"table": {
+  "title": "Title", "author": "Author", "isbn": "ISBN", "category": "Category",
+  "copies": "Copies", "status": "Status", "actions": "Actions"
 }
 }

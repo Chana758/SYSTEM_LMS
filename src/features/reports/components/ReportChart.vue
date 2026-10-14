@@ -5,7 +5,7 @@
       <slot name="actions" />
     </div>
     <div class="relative" :style="{ height: height + 'px' }">
-      <canvas ref="canvasRef"></canvas>
+      <div ref="chartEl" class="w-full h-full"></div>
       <div v-if="!labels.length" class="absolute inset-0 flex items-center justify-center text-sm text-gray-300 font-bold">
         {{ t('reports.chart.noDataForRange') }}
       </div>
@@ -14,15 +14,14 @@
 </template>
 
 <script setup>
-// Requires: npm install chart.js
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Chart from 'chart.js/auto'
+import echarts from '@/plugins/echarts'
 
 const { t } = useI18n()
 
 const props = defineProps({
-  title: { type: String, default: 'Trend' }, // caller passes already-translated title
+  title: { type: String, default: 'Trend' },
   labels: { type: Array, default: () => [] },
   values: { type: Array, default: () => [] },
   type: { type: String, default: 'line' }, // 'line' | 'bar'
@@ -30,39 +29,54 @@ const props = defineProps({
   height: { type: Number, default: 260 },
 })
 
-const canvasRef = ref(null)
-let chartInstance = null
+const chartEl = ref(null)
+let chart = null
+let observer = null
 
-const buildChart = () => {
-  if (chartInstance) chartInstance.destroy()
-  if (!canvasRef.value) return
+const buildOption = () => ({
+  grid: { left: 40, right: 16, top: 16, bottom: 28 },
+  tooltip: { trigger: 'axis' },
+  xAxis: {
+    type: 'category',
+    data: props.labels,
+    axisTick: { show: false },
+    splitLine: { show: false },
+  },
+  yAxis: {
+    type: 'value',
+    min: 0,
+    splitLine: { lineStyle: { color: '#f1f5f9' } },
+  },
+  series: [
+    {
+      type: props.type,
+      data: props.values,
+      smooth: props.type === 'line' ? 0.35 : false,
+      showSymbol: false,
+      lineStyle: { color: props.color, width: 2 },
+      itemStyle: { color: props.color, borderRadius: props.type === 'bar' ? [6, 6, 0, 0] : 0 },
+      areaStyle: props.type === 'line' ? { color: `${props.color}22` } : undefined,
+    },
+  ],
+})
 
-  chartInstance = new Chart(canvasRef.value, {
-    type: props.type,
-    data: {
-      labels: props.labels,
-      datasets: [{
-        data: props.values,
-        borderColor: props.color,
-        backgroundColor: props.type === 'bar' ? props.color : `${props.color}22`,
-        fill: props.type === 'line',
-        tension: 0.35,
-        borderRadius: props.type === 'bar' ? 6 : 0,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { display: false } },
-        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
-      },
-    },
-  })
+const render = () => {
+  if (!chartEl.value) return
+  if (!chart) chart = echarts.init(chartEl.value)
+  chart.setOption(buildOption(), true)
 }
 
-onMounted(buildChart)
-onBeforeUnmount(() => chartInstance?.destroy())
-watch(() => [props.labels, props.values], buildChart, { deep: true })
+onMounted(() => {
+  render()
+  observer = new ResizeObserver(() => chart?.resize())
+  observer.observe(chartEl.value)
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  chart?.dispose()
+  chart = null
+})
+
+watch(() => [props.labels, props.values, props.type, props.color], render, { deep: true })
 </script>

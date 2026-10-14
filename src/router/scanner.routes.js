@@ -1,9 +1,8 @@
-import AdminLayout from '@/layouts/AdminLayout.vue'
 
 export default [
   {
     path: '/scanner',
-    component: AdminLayout,
+    component: () => import('@/layouts/AdminLayout.vue'),
     children: [
       {
         path: '',
