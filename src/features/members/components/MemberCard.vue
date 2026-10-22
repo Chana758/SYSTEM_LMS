@@ -1,50 +1,47 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-200 p-6">
-    <div class="flex items-start gap-5">
-      <!-- FIX: show the real uploaded avatar (same source the Navbar/Header
-           uses) when one exists, falling back to the initials circle only
-           when the member has no avatar set. Previously this always
-           rendered initials regardless of whether an avatar existed. -->
+  <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-300 dark:border-white/10 p-4 sm:p-6 shadow-sm">
+    <div class="flex items-start gap-3.5 sm:gap-5">
       <img
         v-if="avatarUrl"
         :src="avatarUrl"
         alt="Profile avatar"
-        class="w-16 h-16 rounded-full object-cover border border-gray-200 flex-shrink-0"
+        class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border border-slate-200 dark:border-white/10 flex-shrink-0"
       />
       <div
         v-else
-        class="w-16 h-16 rounded-full bg-green-700 text-white text-xl font-bold flex items-center justify-center flex-shrink-0"
+        class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-600 dark:bg-emerald-500 text-white text-lg sm:text-xl font-bold flex items-center justify-center flex-shrink-0 shadow-sm"
       >
         {{ initials }}
       </div>
 
       <div class="flex-1 min-w-0">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <h2 class="text-lg font-bold text-gray-900">{{ member.user?.name }}</h2>
-            <p class="text-sm text-gray-500">{{ member.user?.email }}</p>
+        <!-- Phones: badges drop below the name. sm+: badges sit on the right. -->
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3">
+          <div class="min-w-0">
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate">{{ member.user?.name }}</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 truncate">{{ member.user?.email }}</p>
           </div>
-          <MembershipBadge :type="member.membership_type" :status="member.status" />
+          <MembershipBadge :type="member.membership_type" :status="member.status" class="flex-wrap" />
         </div>
+      </div>
+    </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5">
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.membershipNo') }}</p>
-            <p class="text-sm font-medium text-gray-700">{{ member.membership_no }}</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.card.phone') }}</p>
-            <p class="text-sm font-medium text-gray-700">{{ member.user?.phone || '—' }}</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.card.borrowLimit') }}</p>
-            <p class="text-sm font-medium text-gray-700">{{ member.max_borrow_limit }} {{ t('members.card.books') }}</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ t('members.card.joined') }}</p>
-            <p class="text-sm font-medium text-gray-700">{{ formatDate(member.created_at) }}</p>
-          </div>
-        </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3.5 sm:gap-4 mt-4 sm:mt-5 pt-4 border-t border-slate-100 dark:border-white/10">
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ t('members.membershipNo') }}</p>
+        <p class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 font-mono break-all">{{ member.membership_no }}</p>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ t('members.card.phone') }}</p>
+        <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 break-words">{{ member.user?.phone || '—' }}</p>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ t('members.card.borrowLimit') }}</p>
+        <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">{{ member.max_borrow_limit }} {{ t('members.card.books') }}</p>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ t('members.card.joined') }}</p>
+        <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">{{ formatDate(member.created_at) }}</p>
       </div>
     </div>
   </div>
@@ -66,10 +63,6 @@ const initials = computed(() => {
   return name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase() || '?'
 })
 
-// FIX: same URL-building logic as ProfileSettings.vue's `previewUrl`
-// computed — backend only returns a relative path like
-// "avatars/example.jpg", so it needs to be prefixed with the API's
-// storage base URL to become a loadable <img src>.
 const avatarUrl = computed(() => {
   if (!props.member.user?.avatar) {
     return null

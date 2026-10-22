@@ -3,7 +3,7 @@
     <!-- Main Card Container -->
     <div class="bg-white w-full max-w-6xl min-h-[530px] rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
-      <!-- ================= LEFT SIDE (Green Background with Curve) ================= -->
+      <!-- LEFT SIDE (Green Background with Curve)  -->
       <div class="bg-[#0b5235] text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden rounded-b-[80px] md:rounded-b-none md:rounded-r-[120px] z-10 shadow-[5px_0_20px_rgba(0,0,0,0.1)]">
 
         <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-white/5 pointer-events-none blur-2xl"></div>
@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <!-- ================= RIGHT SIDE (Form Area) ================= -->
+      <!--  RIGHT SIDE (Form Area) -->
       <div class="bg-white p-8 md:p-12 flex flex-col justify-center space-y-6 z-0 md:pl-16">
 
         <!-- STEP 1: Email form -->

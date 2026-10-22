@@ -21,34 +21,28 @@ export const authService = {
 
   // 2. Forgot / reset password
   forgotPassword(email) {
-    return apiClient.post('/auth/forgot-password', { email })
+    return apiClient.post(ENDPOINTS.AUTH.FORGOT_PASSWORD, { email })
   },
   resetPassword(payload) {
     // payload: { token, email, password, password_confirmation }
-    return apiClient.post('/auth/reset-password', payload)
+    return apiClient.post(ENDPOINTS.AUTH.RESET_PASSWORD, payload)
   },
 
   // 3. QR Login Card
-  // Self, read-only. Returns { has_card, expires_at } only, never a
-  // token. Replaces the old self-service generate() call.
+  // Self, read-only. Returns { has_card, expires_at } only, never a token.
   getQrCardStatus() {
-    return apiClient.get('/auth/qr-token/status')
+    return apiClient.get(ENDPOINTS.AUTH.QR_TOKEN_STATUS)
   },
   // Self, revoke own card (e.g. report lost).
   revokeQrToken() {
-    return apiClient.post('/auth/qr-token/revoke')
+    return apiClient.post(ENDPOINTS.AUTH.QR_TOKEN_REVOKE)
   },
-  // Admin/librarian only — issues/reissues a card for a specific user.
-  // This is now the ONLY way any QR card gets created.
+  // Admin/librarian only: issues/reissues a card for a specific user.
   generateQrTokenFor(userId) {
-    return apiClient.post(`/auth/users/${userId}/qr-token/generate`)
+    return apiClient.post(ENDPOINTS.AUTH.QR_TOKEN_GENERATE_FOR(userId))
   },
-  // Admin/librarian only — front-desk approval queue.
+  // Admin/librarian only: front-desk approval queue.
   getPendingCards(params = {}) {
-    return apiClient.get('/auth/pending-cards', { params })
+    return apiClient.get(ENDPOINTS.AUTH.PENDING_CARDS, { params })
   },
-
-  // REMOVED: generateQrToken() (self-service issuance). The backing
-  // route POST /auth/qr-token/generate has been deleted from
-  // routes/api.php on purpose — do not re-add a call to it.
 }

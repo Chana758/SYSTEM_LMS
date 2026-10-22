@@ -5,12 +5,13 @@ import {
   TooltipComponent,
   LegendComponent,
   TitleComponent,
+  GraphicComponent,
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
 echarts.use([
   LineChart, BarChart, PieChart,
-  GridComponent, TooltipComponent, LegendComponent, TitleComponent,
+  GridComponent, TooltipComponent, LegendComponent, TitleComponent, GraphicComponent,
   CanvasRenderer,
 ])
 

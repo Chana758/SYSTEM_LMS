@@ -8,15 +8,18 @@
   "typeLookup": "ស្វែងរក",
   "modeManual": "ដោយដៃ / ម៉ាស៊ីនស្កេន USB",
   "modeCamera": "កាមេរ៉ា",
+  "modeRemote": "ទូរស័ព្ទ",
+  "modeManualShort": "ដោយដៃ",
+  "modeUsbScan": "ស្កេន USB",
   "scanToSee": "ស្កេនបាកូដដើម្បីមើលលទ្ធផលនៅទីនេះ",
   "resultsAppear": "លទ្ធផលបង្ហាញភ្លាមៗ ពេលបុគ្គលិកស្កេនសៀវភៅ",
   "scanFailed": "បរាជ័យក្នុងការដំណើរការស្កេន។ សូមពិនិត្យការតភ្ជាប់ និងព្យាយាមម្តងទៀត។",
-  "borrowConfirmedMsg": "បញ្ជាក់ការខ្ចីបានជោគជ័យ។",
-  "confirmBorrowFailed": "បរាជ័យក្នុងការបញ្ជាក់ការខ្ចី។",
-  "reservedMsg": "សមាជិកត្រូវបានបន្ថែមទៅជួរឈរកក់។",
-  "reserveFailed": "បរាជ័យក្នុងការកក់សៀវភៅនេះ។",
-  "returnConfirmedMsg": "បញ្ជាក់ការប្រគល់បានជោគជ័យ។",
-  "confirmReturnFailed": "បរាជ័យក្នុងការបញ្ជាក់ការប្រគល់។",
+  "confirmClear": "តើអ្នកប្រាកដថាចង់សម្អាត session ត្រួតពិនិត្យនេះមែនទេ?",
+
+  "foundBorrowed": "រកឃើញ · កំពុងខ្ចី",
+  "copiesAvailable": "មានទំនេរ {available}/{total} ច្បាប់",
+  "otherCopiesAvailable":" ច្បាប់នេះកំពុងខ្ចី ប៉ុន្តែមានច្បាប់ផ្សេងទំនេរ {n} ច្បាប់។ សូមខ្ចីដោយផ្ទាល់។",
+  "borrowAvailableCopy":"ខ្ចីច្បាប់ទំនេរ",
   "barcodeInput": {
     "title": "ស្កេន ឬវាយបាកូដ",
     "subtitle": "ម៉ាស៊ីនស្កេន USB/Bluetooth វាយចូលដោយផ្ទាល់ក្នុងប្រអប់ខាងក្រោម",
@@ -48,7 +51,7 @@
   "result": {
     "foundAvailable": "រកឃើញ · មានទំនេរ",
     "notOnFile": "មិនមានក្នុងឯកសារ",
-    "actionNeeded": "ត្រូវការសកម្មភាព",
+    "actionNeeded": "មានបញ្ហា",
     "noBookCopyFound": "រកមិនឃើញច្បាប់សៀវភៅសម្រាប់បាកូដនេះទេ។",
     "borrowedBySince": "កំពុងខ្ចីដោយ {name} តាំងពី {date}",
     "assignToMember": "កំណត់ទៅសមាជិក",
@@ -69,7 +72,16 @@
     "notesOptional": "កំណត់ចំណាំ (ស្រេចចិត្ត)",
     "notesPlaceholder": "ពិពណ៌នាបញ្ហា…",
     "confirmReturn": "បញ្ជាក់ការប្រគល់",
-    "confirming2": "កំពុងបញ្ជាក់…"
+    "confirming2": "កំពុងបញ្ជាក់…",
+    "borrowConfirmedMsg": "បញ្ជាក់ការខ្ចីបានជោគជ័យ។",
+    "confirmBorrowFailed": "បរាជ័យក្នុងការបញ្ជាក់ការខ្ចី។",
+    "reservedMsg": "សមាជិកត្រូវបានបន្ថែមទៅជួរឈរកក់។",
+    "reserveFailed": "បរាជ័យក្នុងការកក់សៀវភៅនេះ។",
+    "returnConfirmedMsg": "បញ្ជាក់ការប្រគល់បានជោគជ័យ។",
+    "confirmReturnFailed": "បរាជ័យក្នុងការបញ្ជាក់ការប្រគល់។",
+    "copyStatus": "ស្ថានភាពច្បាប់សៀវភៅ៖ {status}",
+    "copiesAvailable": "មានទំនេរ {available}/{total} ច្បាប់"
+    
   },
   "historyPage": {
     "title": "ប្រវត្តិការស្កេន",
@@ -117,6 +129,8 @@
     "unknownBarcodes": "បាកូដមិនស្គាល់",
     "sessionLog": "កំណត់ត្រា Session",
     "exportSession": "នាំចេញ Session (CSV)",
+    "clearSession": "សម្អាត Session",
+    "confirmClear": "តើអ្នកប្រាកដថាចង់សម្អាត session ត្រួតពិនិត្យនេះមែនទេ?",
     "colBarcode": "បាកូដ",
     "colBook": "សៀវភៅ",
     "colStatus": "ស្ថានភាព",
@@ -126,22 +140,29 @@
     "statusCheckedOut": "កំពុងខ្ចី",
     "statusDamaged": "ខូចខាត",
     "statusLost": "បាត់បង់",
-    "statusNotRecognized": "មិនស្គាល់"
+    "statusNotRecognized": "មិនស្គាល់",
+    "duplicate": "{barcode} បានស្កេនរួចហើយ",
+    "networkError": "បណ្តាញមានបញ្ហា សូមស្កេនម្តងទៀត"
   },
-  "modeManualShort": "ដោយដៃ",
-  "modeUsbScan": "ស្កេន USB",
-  "confirmClear": "តើអ្នកប្រាកដថាចង់សម្អាត session ត្រួតពិនិត្យនេះមែនទេ?",
-"remoteScan": {
-  "generating": "កំពុងបង្កើតកូដ QR…",
-  "qrAlt": "ស្កេនជាមួយទូរស័ព្ទរបស់អ្នក",
-  "instructions": "បើកកាមេរ៉ាទូរស័ព្ទរបស់អ្នក ឬកម្មវិធី QR ណាមួយ ហើយចង្អុលទៅកូដនេះ ដើម្បីប្រែក្លាយទូរស័ព្ទរបស់អ្នកទៅជាម៉ាស៊ីនស្កេនបាកូដសម្រាប់ session នេះ។",
-  "sessionExpired": "Session ផុតកំណត់ហើយ",
-  "readyWaiting": "រួចរាល់ — កំពុងរង់ចាំទូរស័ព្ទ",
-  "received": "បានទទួល: {barcode}",
-  "generateNew": "បង្កើតកូដ QR ថ្មី",
-  "generateError": "មិនអាចបង្កើតកូដ QR បានទេ។ សូមព្យាយាមម្តងទៀត។",
-  "checkingSession": "កំពុងពិនិត្យ session...",
-  "invalidSession": "Session ស្កេននេះមិនត្រឹមត្រូវ ឬបានផុតកំណត់ហើយ។ សូម refresh កូដ QR នៅលើអេក្រង់ desktop ហើយស្កេនម្តងទៀត។",
-  "sentScanNext": "បានផ្ញើ — ស្កេនបន្ទាប់"
-}
+  "remoteScan": {
+    "generating": "កំពុងបង្កើតកូដ QR…",
+    "qrAlt": "ស្កេនជាមួយទូរស័ព្ទរបស់អ្នក",
+    "instructions": "បើកកាមេរ៉ាទូរស័ព្ទរបស់អ្នក ឬកម្មវិធី QR ណាមួយ ហើយចង្អុលទៅកូដនេះ ដើម្បីប្រែក្លាយទូរស័ព្ទរបស់អ្នកទៅជាម៉ាស៊ីនស្កេនបាកូដសម្រាប់ session នេះ។",
+    "sessionExpired": "Session ផុតកំណត់ហើយ",
+    "readyWaiting": "រួចរាល់ — កំពុងរង់ចាំទូរស័ព្ទ",
+    "received": "បានទទួល: {barcode}",
+    "generateNew": "បង្កើតកូដ QR ថ្មី",
+    "generateError": "មិនអាចបង្កើតកូដ QR បានទេ។ សូមព្យាយាមម្តងទៀត។",
+    "checkingSession": "កំពុងពិនិត្យ session...",
+    "invalidSession": "Session ស្កេននេះមិនត្រឹមត្រូវ ឬបានផុតកំណត់ហើយ។ សូម refresh កូដ QR នៅលើអេក្រង់ desktop ហើយស្កេនម្តងទៀត។",
+    "sentScanNext": "បានផ្ញើ — ស្កេនបន្ទាប់",
+    "sentCount": "បានផ្ញើ {count} ដង",
+    "tooFast": "ស្កេនលឿនពេក សូមរង់ចាំបន្តិច",
+    "networkError": "បណ្តាញមានបញ្ហា",
+    "sendFailed": "ផ្ញើមិនបាន"
+  },
+  "errors": {
+  "not_borrowed": "សៀវភៅនេះមិនមានកំណត់ត្រាខ្ចីដែលកំពុងដំណើរការទេ ដូច្នេះមិនអាចយកមកប្រគល់វិញបានឡើយ។",
+  "copy_unavailable": "ច្បាប់សៀវភៅនេះត្រូវបានខូចខាត ឬមិនមានសម្រាប់ខ្ចីទេ។"
+  }
 }

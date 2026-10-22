@@ -1,3 +1,5 @@
+// Each validator returns an error message, or '' when the value is valid.
+
 export function validateEmail(email) {
   if (!email) return 'សូមបញ្ចូលអ៊ីមែល'
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -39,16 +41,13 @@ export function validateRegisterForm(form) {
   }
 }
 
-// NEW — Forgot Password form: just needs a valid email.
 export function validateForgotPasswordForm(form) {
   return {
     email: validateEmail(form.email),
   }
 }
 
-// NEW — Reset Password form: new password + confirmation. Email/token
-// come from the URL (not user-typed), so they aren't validated here —
-// the backend rejects an invalid/expired token/email pair regardless.
+// Email/token come from the reset-link URL, so only the passwords are validated
 export function validateResetPasswordForm(form) {
   return {
     password: validatePassword(form.password),
@@ -56,6 +55,7 @@ export function validateResetPasswordForm(form) {
   }
 }
 
+/** True if any field has an error message. */
 export function hasErrors(errors) {
   return Object.values(errors).some((msg) => msg !== '')
 }

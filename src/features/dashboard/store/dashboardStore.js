@@ -1,6 +1,13 @@
-
 import { defineStore } from 'pinia'
 import apiClient from '@/api/axios'
+
+// The API may answer with a plain array, or {data: [...]}.
+// Anything else becomes an empty list so components can safely call .map / .length.
+const toArray = (v) => {
+  if (Array.isArray(v)) return v
+  if (Array.isArray(v?.data)) return v.data
+  return []
+}
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
@@ -25,9 +32,7 @@ export const useDashboardStore = defineStore('dashboard', {
 
   actions: {
     /**
-     * GET /dashboard — the same endpoint DashboardPage.vue already called
-     * directly via apiClient before. Moved here so stats live in one
-     * shared place instead of being fetched ad-hoc from the page.
+     * GET /dashboard
      */
     async fetchStats() {
       this.statsLoading = true
@@ -49,20 +54,17 @@ export const useDashboardStore = defineStore('dashboard', {
     },
 
     /**
-     * GET /dashboard/recent-activities — NEW endpoint (added to
-     * routes/api.php). Expected shape: an array (or {data: array}) of
-     * { id, type: 'borrow'|'return'|'reservation'|'fine'|'member',
-     *   description, created_at }. Backend method still needs to be
-     * added to DashboardController — see the note in the chat response.
+     * GET /dashboard/recent-activities
+     * Expected: array (or {data: array}) of
+     * { id, type: 'borrow'|'return'|'reservation'|'fine'|'member', description, created_at }
      */
     async fetchRecentActivities() {
       this.activitiesLoading = true
       try {
         const { data } = await apiClient.get('/dashboard/recent-activities')
-        this.recentActivities = data.data ?? data
+        this.recentActivities = toArray(data)
       } catch (e) {
-        // Fail soft — a missing/broken activity feed shouldn't break the
-        // rest of the dashboard.
+        // Fail soft — a broken activity feed shouldn't break the rest of the dashboard.
         this.recentActivities = []
       } finally {
         this.activitiesLoading = false
@@ -70,17 +72,14 @@ export const useDashboardStore = defineStore('dashboard', {
     },
 
     /**
-     * GET /dashboard/revenue-chart — NEW endpoint (added to
-     * routes/api.php). Expected shape: an array (or {data: array}) of
-     * { month: 'Jan', total: 123.45 } covering the last several months
-     * of fine payments collected. Backend method still needs to be
-     * added to DashboardController — see the note in the chat response.
+     * GET /dashboard/revenue-chart
+     * Expected: array (or {data: array}) of { month: 'Jan', total: 123.45 }
      */
     async fetchRevenueChart() {
       this.revenueLoading = true
       try {
         const { data } = await apiClient.get('/dashboard/revenue-chart')
-        this.revenueChart = data.data ?? data
+        this.revenueChart = toArray(data)
       } catch (e) {
         this.revenueChart = []
       } finally {
@@ -89,8 +88,7 @@ export const useDashboardStore = defineStore('dashboard', {
     },
 
     /**
-     * Convenience action — fetches everything the dashboard page needs
-     * in parallel on mount.
+     * Fetches everything the dashboard page needs in parallel.
      */
     async fetchAll() {
       await Promise.all([

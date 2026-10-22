@@ -5,8 +5,8 @@ export default {
   index(params = {}) {
     return apiClient.get('/notifications', { params })
   },
-  unreadCount() {
-    return apiClient.get('/notifications/unread-count')
+  unreadCount(params = {}) {
+  return apiClient.get('/notifications/unread-count', { params })
   },
   show(id) {
     return apiClient.get(`/notifications/${id}`)

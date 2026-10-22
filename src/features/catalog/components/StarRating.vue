@@ -7,11 +7,14 @@
       :disabled="readonly"
       @click="!readonly && $emit('update:modelValue', i)"
       class="text-lg leading-none"
-      :class="[readonly ? 'cursor-default' : 'cursor-pointer hover:scale-110 transition', i <= modelValue ? 'text-amber-400' : 'text-gray-200']"
+      :class="[
+        readonly ? 'cursor-default' : 'cursor-pointer hover:scale-110 transition',
+        i <= modelValue ? 'text-amber-400' : 'text-gray-200 dark:text-slate-600',
+      ]"
     >
       ★
     </button>
-    <span v-if="showCount && count !== undefined" class="text-xs text-gray-400 ml-1">({{ count }})</span>
+    <span v-if="showCount && count !== undefined" class="text-xs text-gray-400 dark:text-slate-500 ml-1">({{ count }})</span>
   </div>
 </template>
 

@@ -9,8 +9,36 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+
+  /* No pull-to-refresh bounce when installed as an app */
+  overscroll-behavior-y: none;
 }
 
 #app {
-  min-height: 100vh;
+  min-height: 100vh;   /* fallback for old browsers */
+  min-height: 100dvh;  /* real visible height on phones (address bar aware) */
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* iOS zooms the page when an input is smaller than 16px; stop that on phones */
+@media (max-width: 1023px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* When installed as an app, avoid selecting UI text by accident */
+@media (display-mode: standalone) {
+  button,
+  nav,
+  header {
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }

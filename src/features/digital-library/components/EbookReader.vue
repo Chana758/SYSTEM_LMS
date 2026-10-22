@@ -9,12 +9,12 @@
       :initial-location="ebook.reading_progress ? null : null"
     />
 
-    <div v-else class="bg-white rounded-2xl border border-gray-200 p-10 text-center">
-      <BookOpenIcon class="w-10 h-10 text-gray-300 mx-auto mb-3" />
-      <p class="text-gray-500 text-sm mb-1">
+    <div v-else class="bg-white dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-white/10 p-10 text-center">
+      <BookOpenIcon class="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
+      <p class="text-gray-500 dark:text-slate-300 text-sm mb-1">
         {{ t('digitalLibrary.reader.mobiNotSupported') }}
       </p>
-      <p class="text-gray-400 text-xs">{{ t('digitalLibrary.reader.downloadToRead') }}</p>
+      <p class="text-gray-400 dark:text-slate-500 text-xs">{{ t('digitalLibrary.reader.downloadToRead') }}</p>
     </div>
   </div>
 </template>

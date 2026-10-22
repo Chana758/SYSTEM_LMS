@@ -1,31 +1,80 @@
 <template>
-  <div>
-    <div v-if="supported" class="relative rounded-xl overflow-hidden bg-gray-900 aspect-square mb-4">
+  <div class="space-y-4">
+    <!-- Camera -->
+    <div
+      v-if="supported && !cameraError"
+      class="relative mx-auto w-full max-w-xs aspect-square rounded-2xl overflow-hidden bg-slate-900 border-2 border-slate-200 shadow-md"
+    >
       <video ref="videoRef" class="w-full h-full object-cover" muted playsinline autoplay></video>
-      <div class="absolute inset-8 border-2 border-green-400 rounded-xl pointer-events-none">
-        <span class="absolute -top-0.5 -left-0.5 w-5 h-5 border-t-2 border-l-2 border-green-300 rounded-tl-lg"></span>
-        <span class="absolute -top-0.5 -right-0.5 w-5 h-5 border-t-2 border-r-2 border-green-300 rounded-tr-lg"></span>
-        <span class="absolute -bottom-0.5 -left-0.5 w-5 h-5 border-b-2 border-l-2 border-green-300 rounded-bl-lg"></span>
-        <span class="absolute -bottom-0.5 -right-0.5 w-5 h-5 border-b-2 border-r-2 border-green-300 rounded-br-lg"></span>
+
+      <!-- starting overlay -->
+      <div v-if="!scanning" class="absolute inset-0 flex items-center justify-center bg-slate-900 text-slate-300 text-xs font-bold animate-pulse">
+        {{ $t('auth.qrStartingCamera') }}
       </div>
-      <div v-if="scanning" class="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur px-2.5 py-1 rounded-full">
-        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-        <span class="text-xs text-white font-medium">Scanning</span>
+
+      <!-- scan frame -->
+      <div class="absolute inset-8 pointer-events-none">
+        <span class="absolute top-0 left-0 w-6 h-6 border-t-[3px] border-l-[3px] border-amber-400 rounded-tl-xl"></span>
+        <span class="absolute top-0 right-0 w-6 h-6 border-t-[3px] border-r-[3px] border-amber-400 rounded-tr-xl"></span>
+        <span class="absolute bottom-0 left-0 w-6 h-6 border-b-[3px] border-l-[3px] border-amber-400 rounded-bl-xl"></span>
+        <span class="absolute bottom-0 right-0 w-6 h-6 border-b-[3px] border-r-[3px] border-amber-400 rounded-br-xl"></span>
+
+        <!-- moving scan line -->
+        <span
+          v-if="scanning && !loading"
+          class="scan-line absolute left-1 right-1 h-0.5 rounded-full bg-emerald-400 shadow-[0_0_12px_2px_rgba(52,211,153,0.7)]"
+        ></span>
+      </div>
+
+      <!-- status pill -->
+      <div
+        v-if="scanning"
+        class="absolute top-3 right-3 flex items-center gap-1.5 bg-black/55 backdrop-blur px-2.5 py-1 rounded-full"
+      >
+        <span class="w-1.5 h-1.5 rounded-full animate-pulse" :class="loading ? 'bg-amber-400' : 'bg-emerald-400'"></span>
+        <span class="text-[11px] text-white font-bold">
+          {{ loading ? $t('auth.qrVerifying') : $t('auth.qrScanning') }}
+        </span>
       </div>
     </div>
 
-    <div v-else class="rounded-xl bg-amber-50 border border-amber-100 p-6 mb-4 text-sm text-amber-700 text-center">
-      Camera scanning isn't supported on this device. Please allow camera access or use email/password instead.
+    <!-- Camera unavailable / denied -->
+    <div
+      v-else
+      class="rounded-2xl bg-amber-50 border-2 border-amber-200 p-5 text-center space-y-3"
+    >
+      <div class="w-11 h-11 mx-auto rounded-xl bg-amber-100 flex items-center justify-center">
+        <VideoCameraSlashIcon class="w-6 h-6 text-amber-600" />
+      </div>
+      <p class="text-xs font-semibold text-amber-800 leading-relaxed">
+        {{ cameraError || $t('auth.qrUnsupported') }}
+      </p>
+      <button
+        v-if="supported"
+        type="button"
+        @click="retry"
+        class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#17664b] hover:bg-[#0f5139] text-white text-xs font-bold transition-all cursor-pointer"
+      >
+        <ArrowPathIcon class="w-4 h-4" />
+        {{ $t('auth.qrRetry') }}
+      </button>
     </div>
 
-    <p class="text-xs text-gray-400 text-center mb-2">
-      Point your library QR card at the camera above.
+    <p class="text-[11px] font-semibold text-slate-400 text-center">
+      {{ $t('auth.qrHint') }}
     </p>
 
-    <p v-if="loading" class="text-sm text-green-700 bg-green-50 rounded-lg px-3 py-2 text-center">
-      Verifying...
+    <!-- Messages -->
+    <p
+      v-if="loading"
+      class="text-xs font-semibold text-[#17664b] bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2.5 text-center"
+    >
+      {{ $t('auth.qrVerifying') }}
     </p>
-    <p v-else-if="errors.general" class="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 text-center">
+    <p
+      v-else-if="errors.general"
+      class="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-xl px-3.5 py-2.5 text-center"
+    >
       {{ errors.general }}
     </p>
   </div>
@@ -33,37 +82,35 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { BrowserQRCodeReader } from '@zxing/browser'
+import { VideoCameraSlashIcon, ArrowPathIcon } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
 
 const props = defineProps({
   loading: { type: Boolean, default: false },
   errors: { type: Object, default: () => ({}) },
 })
-
 const emit = defineEmits(['submit'])
 
 const videoRef = ref(null)
 const scanning = ref(false)
+const cameraError = ref('')
 
-// FIX: camera QR scanning now works on iPhone too. This previously
-// checked `'BarcodeDetector' in window` — a Chrome/Edge-only native API
-// that Safari has never implemented, so `supported` was always false on
-// every iPhone (Safari and Chrome-for-iOS alike, since iOS Chrome runs
-// on WebKit under the hood). Camera-based QR login was effectively
-// iPhone-unusable before this change; only email/password worked there.
-//
-// We now decode QR codes ourselves with ZXing (@zxing/browser), reading
-// pixels off a canvas instead of relying on a native detector, so the
-// only real requirement is basic camera access — supported everywhere.
+// ZXing decodes frames itself, so the only requirement is camera access
+// (works on iPhone too — BarcodeDetector is Chrome-only).
 const supported = typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia
 
 let stream = null
 let reader = null
 let decodingControls = null
 let locked = false
+let unmounted = false
 
 async function start() {
   if (!supported) return
+  cameraError.value = ''
   try {
     if (typeof window !== 'undefined' && !window.isSecureContext) {
       throw Object.assign(new Error('Insecure context'), { name: 'InsecureContextError' })
@@ -72,53 +119,90 @@ async function start() {
     stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: { ideal: 'environment' } },
     })
+
+    // Component was closed (tab switched) while the permission prompt was open.
+    if (unmounted || !videoRef.value) {
+      stream.getTracks().forEach((tr) => tr.stop())
+      stream = null
+      return
+    }
+
     videoRef.value.srcObject = stream
     await videoRef.value.play()
     scanning.value = true
 
     reader = new BrowserQRCodeReader()
-    // FIX: decodeFromVideoElement() returns a Promise<IScannerControls>,
-    // not the controls object itself. The previous version stored the
-    // unresolved Promise directly, so `decodingControls?.stop()` in
-    // stopCamera() silently no-op'd (Promise has no .stop() method) —
-    // the QR decode loop (and camera hardware) kept running even after
-    // switching back to the Password tab, which is exactly the "camera
-    // won't turn off" symptom being reported.
+    // decodeFromVideoElement returns a Promise<IScannerControls> — await it,
+    // otherwise stop() would silently do nothing and the camera stays on.
     decodingControls = await reader.decodeFromVideoElement(videoRef.value, (result) => {
-      // ZXing keeps calling this repeatedly (including with "not found"
-      // noise every frame it doesn't see a code) until controls.stop()
-      // is called, so we guard with `locked` exactly like the previous
-      // implementation did.
       if (result && !locked && !props.loading) {
         locked = true
         emit('submit', result.getText())
       }
     })
+
+    // Closed while the decoder was starting.
+    if (unmounted) stopCamera()
   } catch (e) {
     scanning.value = false
+    stopCamera()
+    cameraError.value = errorMessage(e)
   }
 }
 
-// FIX: unlock scanning again once a failed attempt finishes — otherwise
-// after one wrong/expired card, the form would silently stop scanning
-// forever since `locked` was never reset.
+function errorMessage(e) {
+  switch (e?.name) {
+    case 'NotAllowedError':
+    case 'SecurityError':
+      return t('auth.qrPermissionDenied')
+    case 'NotFoundError':
+    case 'OverconstrainedError':
+      return t('auth.qrNoCamera')
+    case 'InsecureContextError':
+      return t('auth.qrInsecure')
+    default:
+      return t('auth.qrCameraFailed')
+  }
+}
+
+function retry() {
+  locked = false
+  cameraError.value = ''
+  start()
+}
+
+// Unlock scanning again after a failed attempt, otherwise one wrong/expired
+// card would stop the scanner forever.
 watch(
   () => props.loading,
   (isLoading, wasLoading) => {
-    if (wasLoading && !isLoading) {
-      locked = false
-    }
-  }
+    if (wasLoading && !isLoading) locked = false
+  },
 )
 
 function stopCamera() {
   decodingControls?.stop()
   decodingControls = null
   reader = null
-  stream?.getTracks().forEach((t) => t.stop())
+  stream?.getTracks().forEach((tr) => tr.stop())
+  stream = null
   scanning.value = false
 }
 
 onMounted(start)
-onBeforeUnmount(stopCamera)
+onBeforeUnmount(() => {
+  unmounted = true
+  stopCamera()
+})
 </script>
+
+<style scoped>
+.scan-line {
+  top: 0;
+  animation: scan 2.2s ease-in-out infinite alternate;
+}
+@keyframes scan {
+  from { top: 0; }
+  to   { top: calc(100% - 2px); }
+}
+</style>

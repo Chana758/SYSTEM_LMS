@@ -7,10 +7,8 @@
         <img :src="qrImageUrl" :alt="'Scan with your phone'" class="w-44 h-44" />
       </div>
 
-      <!-- 🆕 PIN — shown ONLY here, on the laptop screen. Never encoded
-           in the QR itself. The phone user must read this and type it
-           in after scanning, which is what actually authorizes the
-           login (not just knowledge of the pairing URL/QR). -->
+      <!-- PIN is shown only on this screen, never encoded in the QR.
+           The phone user must type it after scanning to authorize the login. -->
       <div class="mt-4">
         <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
           {{ $t('auth.enterThisPin') }}
@@ -64,13 +62,13 @@ const props = defineProps({
 const emit = defineEmits(['scan'])
 
 const sessionId = ref(null)
-const pin = ref('') // 🆕
+const pin = ref('')
 const qrImageUrl = ref('')
 const loadingSession = ref(false)
 const expired = ref(false)
 const error = ref('')
 
-// 🆕 Split into individual boxes for the "digit tile" display.
+// One box per digit for the PIN tiles
 const pinDigits = computed(() => pin.value.split(''))
 
 let echo = null
@@ -81,6 +79,7 @@ function buildQrImageUrl(mobileUrl) {
   return `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encoded}`
 }
 
+// Create a login session, show its QR + PIN, and wait for the phone to scan
 async function startSession() {
   error.value = ''
   expired.value = false
@@ -91,7 +90,7 @@ async function startSession() {
   try {
     const { data } = await apiClient.post(ENDPOINTS.REMOTE_LOGIN.CREATE_SESSION)
     sessionId.value = data.session_id
-    pin.value = data.pin // 🆕 — backend now returns this alongside session_id
+    pin.value = data.pin
 
     const mobileUrl = `${window.location.origin}/remote-login/${data.session_id}`
     qrImageUrl.value = buildQrImageUrl(mobileUrl)
@@ -109,6 +108,7 @@ async function startSession() {
   }
 }
 
+// Listen for the phone's scan event and pass the QR token to the parent
 function listenForScan(id) {
   echo = createEcho()
   echo.channel(`remote-login.${id}`).listen('.RemoteQrScanned', (payload) => {
@@ -116,6 +116,7 @@ function listenForScan(id) {
   })
 }
 
+// Mark the QR as expired when the parent reports an auth error
 watch(
   () => props.authError,
   (val) => {

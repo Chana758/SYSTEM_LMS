@@ -1,24 +1,43 @@
 import { defineStore } from 'pinia'
 import i18n from '@/plugins/i18n'
 
+const SUPPORTED_LOCALES = ['en', 'km']
+const DEFAULT_LOCALE = 'km'
+
+function readStoredLocale() {
+  const saved = localStorage.getItem('locale')
+  return SUPPORTED_LOCALES.includes(saved) ? saved : DEFAULT_LOCALE
+}
+
+// Works for legacy mode (string) and composition mode (ref)
+function applyToI18n(locale) {
+  const current = i18n.global.locale
+  if (typeof current === 'string') {
+    if (current !== locale) i18n.global.locale = locale
+  } else if (current.value !== locale) {
+    current.value = locale
+  }
+}
+
+function applyToDocument(locale) {
+  document.documentElement.lang = locale
+  document.documentElement.setAttribute('dir', 'ltr')
+}
+
 export const useLanguageStore = defineStore('language', {
   state: () => ({
-    locale: localStorage.getItem('locale') || 'km',
+    locale: readStoredLocale(),
   }),
 
   actions: {
     setLocale(locale) {
-      if (!['en', 'km'].includes(locale)) return
+      if (!SUPPORTED_LOCALES.includes(locale)) return
+      if (locale === this.locale) return // nothing to do
 
       this.locale = locale
-      i18n.global.locale.value = locale
+      applyToI18n(locale)
       localStorage.setItem('locale', locale)
-
-      document.documentElement.lang = locale
-      document.documentElement.setAttribute(
-        'dir',
-        'ltr' // Both Khmer and English use left-to-right (LTR) text direction.
-      )
+      applyToDocument(locale)
     },
 
     toggleLocale() {
@@ -26,9 +45,8 @@ export const useLanguageStore = defineStore('language', {
     },
 
     init() {
-      // Called when the app is mounted to ensure the correct language
-      // is applied from the initial page load.
-      document.documentElement.lang = this.locale
+      applyToI18n(this.locale)
+      applyToDocument(this.locale)
     },
   },
 })

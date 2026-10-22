@@ -43,6 +43,7 @@
   "reasonLabel": "Reason",
   "waiveReasonPlaceholder": "Reason for waiving (optional)",
   "confirmWaive": "Confirm Waive",
+  "editFine": "Edit",
   "form": {
     "borrowTransactionId": "Borrow Transaction ID",
     "amount": "Amount ($)",

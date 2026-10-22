@@ -19,13 +19,8 @@
       <p class="text-slate-500 text-xs mt-4">You can close this tab now.</p>
     </div>
 
-    <!-- 🆕 PIN entry step. Shown after the camera has detected a QR
-         code but BEFORE anything is submitted to the backend. The
-         camera is already stopped/unmounted by this point (we switch
-         out of the `v-else` camera branch below), so nothing keeps
-         recording while the person is typing. This is the step that
-         actually authorizes the login — just having scanned the QR
-         is not enough on its own. -->
+    <!-- PIN entry: shown after a QR is detected, before anything is sent.
+         The camera is already unmounted here, and the PIN is what authorizes the login. -->
     <div v-else-if="pendingToken" class="text-center">
       <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
@@ -86,8 +81,7 @@ const sessionId = route.params.sessionId
 const status = ref('checking') // 'checking' | 'ready' | 'invalid'
 const sent = ref(false)
 
-// 🆕 Two-step submit state: the camera hands us a token, we hold onto
-// it locally (never sent yet) while the PIN screen is shown.
+// The scanned token is held locally (not sent) while the PIN screen is shown
 const pendingToken = ref('')
 const pinInput = ref('')
 const pinError = ref('')
@@ -95,6 +89,7 @@ const submitting = ref(false)
 
 let pollTimer = null
 
+// Check that the session is still valid
 async function checkStatus() {
   try {
     const { data } = await apiClient.get(ENDPOINTS.REMOTE_LOGIN.STATUS(sessionId))
@@ -122,9 +117,7 @@ function stopPolling() {
   }
 }
 
-// Camera detected a QR — stop the camera (by leaving the `v-else`
-// branch) and move to PIN entry. Nothing has been sent to the server
-// yet at this point.
+// QR detected: hold the token and switch to PIN entry (nothing sent yet)
 function onDetected(qrToken) {
   if (pendingToken.value || sent.value) return
   pendingToken.value = qrToken
@@ -132,12 +125,14 @@ function onDetected(qrToken) {
   pinInput.value = ''
 }
 
+// Discard the scanned token and go back to the camera
 function cancelPending() {
   pendingToken.value = ''
   pinInput.value = ''
   pinError.value = ''
 }
 
+// Submit the token + PIN; handle invalid session, wrong PIN and lockout
 async function confirmPin() {
   if (pinInput.value.length !== 6 || submitting.value) return
   pinError.value = ''
@@ -156,8 +151,7 @@ async function confirmPin() {
       status.value = 'invalid'
       stopPolling()
     } else if (status_code === 422) {
-      // Wrong PIN (or too many attempts — backend's `locked` flag
-      // tells us the session itself is now dead, not just this guess).
+      // Wrong PIN; `locked` means too many attempts and the session is dead
       pinError.value = e.response?.data?.message || 'Incorrect PIN.'
       if (e.response?.data?.locked) {
         status.value = 'invalid'

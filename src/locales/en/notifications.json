@@ -2,7 +2,9 @@
   "pageTitle": "Notifications",
   "pageSubtitle": "Stay updated with alerts, announcements, and system messages.",
   "markAllRead": "Mark all read ({count})",
+  "markRead": "Mark as read",
   "sendNotification": "Send Notification",
+  "settings": "Settings",
   "total": "Total",
   "allAlerts": "All alerts",
   "unread": "Unread",
@@ -12,8 +14,33 @@
   "loadingNotifications": "Loading notifications...",
   "updating": "Updating...",
   "noNotificationsFound": "No notifications found",
+  "noNotifications": "No notifications",
   "allCaughtUp": "You're all caught up — new alerts will appear here.",
   "confirmDelete": "Delete this notification?",
+  "deleteNotification": "Delete notification",
+  "viewAllNotifications": "View all notifications",
+  "new": "New",
+  "viewDetails": "View details",
+
+  "typeOverdue": "Overdue",
+  "typeReservation": "Reservation",
+  "typeFine": "Fine",
+  "typeSystem": "System",
+  "typeAnnouncement": "Announcement",
+
+  "timeJustNow": "Just now",
+  "timeMinAgo": "{n}m ago",
+  "timeHourAgo": "{n}h ago",
+  "timeDayAgo": "{n}d ago",
+
+  "filter": {
+    "all": "All",
+    "read": "Read",
+    "status": "Status",
+    "reset": "Reset",
+    "searchPlaceholder": "Search notifications…"
+  },
+
   "composeModal": {
     "broadcaster": "Broadcaster",
     "title": "Send Notification",
@@ -33,11 +60,16 @@
     "messageLabel": "Message",
     "cancel": "Cancel",
     "sending": "Sending...",
-    "send": "Send",
-    "filter": {
-    "all": "All",
-    "read": "Read"
-}
+    "send": "Send"
+  },
+
+  "detail": {
+    "backToNotifications": "Notifications",
+    "viewRelatedItem": "View related item",
+    "deleteNotification": "Delete Notification",
+    "loading": "Loading notification details...",
+    "notFound": "Notification not found.",
+    "confirmDelete": "Delete this notification?"
   },
   "detailPage": {
     "backToNotifications": "Notifications",
@@ -46,11 +78,13 @@
     "loading": "Loading notification details...",
     "confirmDelete": "Delete this notification?"
   },
+
   "settingsPage": {
     "title": "Notification Settings",
     "subtitle": "Manage how and when you receive alerts",
     "browserPushAlerts": "Browser Push Alerts",
     "browserPushDesc": "Show a system popup when a new notification arrives while this tab is open.",
+    "pushBlocked": "Notifications are blocked. Allow them in your browser's site settings.",
     "muteByType": "Mute by type",
     "typeOverdueReminders": "Overdue reminders",
     "typeReservationUpdates": "Reservation updates",
@@ -58,17 +92,5 @@
     "typeAnnouncements": "Announcements",
     "typeSystemMessages": "System messages",
     "savedNote": "These preferences are saved on this device only."
-  },
-  "typeOverdue": "Overdue",
-  "typeReservation": "Reservation",
-  "typeFine": "Fine",
-  "typeSystem": "System",
-  "typeAnnouncement": "Announcement",
-  "new": "New",
-  "viewAllNotifications": "View all notifications",
-  "timeJustNow": "Just now",
-  "timeMinAgo": "{n}m ago",
-  "timeHourAgo": "{n}h ago",
-  "timeDayAgo": "{n}d ago",
-  "noNotifications": "No notifications"
+  }
 }

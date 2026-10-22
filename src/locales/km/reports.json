@@ -11,17 +11,20 @@
   "columns": {
     "member": "សមាជិក",
     "book": "សៀវភៅ",
-    "borrowed": "បានខ្ចី",
-    "due": "កំណត់ត្រូវប្រគល់",
+    "borrowed": "ថ្ងៃខ្ចី",
+    "due": "ថ្ងៃកំណត់សង",
+    "returnedOn": "ថ្ងៃសង",
     "status": "ស្ថានភាព",
     "amount": "ចំនួនទឹកប្រាក់",
-    "paidAt": "បានបង់ត្រឹម",
+    "paidAt": "ថ្ងៃបង់",
     "description": "ការពិពណ៌នា",
     "date": "កាលបរិច្ឆេទ",
     "bookTitle": "ចំណងជើងសៀវភៅ",
     "category": "ប្រភេទ",
     "total": "សរុប",
     "available": "មានទំនេរ",
+    "borrowedCopies": "កំពុងខ្ចី",
+    "availability": "ភាពទំនេរ",
     "name": "ឈ្មោះ",
     "email": "អ៊ីមែល",
     "role": "តួនាទី",
@@ -53,12 +56,16 @@
     "borrowed": "កំពុងខ្ចី",
     "new": "ថ្មី",
     "members": "សមាជិក",
-    "staff": "បុគ្គលិក"
+    "staff": "បុគ្គលិក",
+    "inactive": "អសកម្ម"
   },
   "dashboardPage": {
     "title": "របាយការណ៍",
-    "subtitle": "ព័ត៌មានលម្អិតអំពីចរាចរណ៍ ចំណូល និងស្តុកជាមួយភ្នែក",
+    "subtitle": "ទិដ្ឋភាពរួមនៃចរាចរណ៍ ចំណូល និងស្តុក",
     "loading": "កំពុងផ្ទុកផ្ទាំងគ្រប់គ្រង…",
+    "borrowsToday": "ខ្ចីថ្ងៃនេះ",
+    "returnsToday": "សងថ្ងៃនេះ",
+    "borrowedNow": "កំពុងខ្ចី",
     "totalBorrows": "ការខ្ចីសរុប",
     "activeBorrows": "ការខ្ចីសកម្ម",
     "overdue": "ហួសកំណត់",
@@ -69,8 +76,33 @@
     "availableCopies": "ច្បាប់មានទំនេរ",
     "borrowsOverTime": "ការខ្ចីតាមពេលវេលា",
     "revenueOverTime": "ចំណូលតាមពេលវេលា",
+    "borrowReturnTrend": "ខ្ចី និង សង តាមថ្ងៃ",
+    "borrows": "ខ្ចី",
+    "returns": "សង",
+    "borrowsByCategory": "ខ្ចីតាមប្រភេទ",
+    "copyStatus": "ស្ថានភាពច្បាប់ចម្លង",
+    "copyAvailable": "ទំនេរ",
+    "copyBorrowed": "កំពុងខ្ចី",
+    "copyLost": "បាត់",
+    "copyDamaged": "ខូចខាត",
     "mostBorrowedBooks": "សៀវភៅដែលខ្ចីច្រើនបំផុត",
+    "topMembers": "សមាជិកសកម្មបំផុត",
+    "overdueAging": "ហួសកំណត់តាមអាយុ",
+    "days": "ថ្ងៃ",
     "borrowsSuffix": "ការខ្ចី",
+    "recentActivity": "សកម្មភាពថ្មីៗ",
+    "actBorrow": "ខ្ចី",
+    "actReturn": "សង",
+    "actFine": "ពិន័យ",
+    "actReservation": "កក់",
+    "dueSoon": "ជិតដល់កំណត់",
+    "dueSoonHint": "ក្នុង ៣ ថ្ងៃ",
+    "dueToday": "ដល់កំណត់ថ្ងៃនេះ",
+    "daysLeft": "នៅសល់ {n} ថ្ងៃ",
+    "waitingReservations": "ជួរកក់ដែលរង់ចាំ",
+    "waitingHint": "សៀវភៅអស់ស្តុក",
+    "waitingCount": "{n} នាក់រង់ចាំ",
+    "inStock": "នៅក្នុងស្តុក {n}",
     "noDataYet": "មិនទាន់មានទិន្នន័យ",
     "detailedReports": "របាយការណ៍លម្អិត",
     "noDashboardData": "មិនទាន់មានទិន្នន័យផ្ទាំងគ្រប់គ្រងទេ។"
@@ -82,7 +114,9 @@
     "total": "សរុប",
     "returned": "បានប្រគល់មកវិញ",
     "active": "សកម្ម",
-    "overdue": "ហួសកំណត់"
+    "overdue": "ហួសកំណត់",
+    "trend": "ការខ្ចីតាមពេលវេលា",
+    "statusSplit": "ស្ថានភាពការខ្ចី"
   },
   "finePage": {
     "title": "របាយការណ៍ការពិន័យ",
@@ -93,7 +127,10 @@
     "collected": "បានប្រមូល",
     "outstanding": "នៅសល់",
     "statusUnpaid": "មិនទាន់បង់",
-    "statusPaid": "បានបង់"
+    "statusPaid": "បានបង់",
+    "statusWaived": "លើកលែង",
+    "statusSplit": "ស្ថានភាពពិន័យ",
+    "topDebtors": "សមាជិកជំពាក់ច្រើនបំផុត"
   },
   "revenuePage": {
     "title": "របាយការណ៍ចំណូល",
@@ -103,6 +140,7 @@
     "thisMonth": "ខែនេះ",
     "fines": "ការពិន័យ",
     "services": "សេវាកម្ម",
+    "trend": "ចំណូលតាមពេលវេលា",
     "adminsOnly": "សម្រាប់អ្នកគ្រប់គ្រងតែប៉ុណ្ណោះ",
     "adminsOnlyHint": "របាយការណ៍ចំណូលមានទិន្នន័យហិរញ្ញវត្ថុ ដែលកម្រិតសម្រាប់តែអ្នកគ្រប់គ្រង។ សូមទាក់ទងអ្នកគ្រប់គ្រង ប្រសិនបើអ្នកត្រូវការព័ត៌មាននេះ។"
   },
@@ -115,7 +153,12 @@
     "borrowed": "កំពុងខ្ចី",
     "lowStock": "ស្តុកតិច",
     "category": "ប្រភេទ",
-    "outOfStock": "អស់ស្តុក"
+    "outOfStock": "អស់ស្តុក",
+    "byCategory": "ស្តុកតាមប្រភេទ",
+    "lowOnly": "ស្តុកទាបតែប៉ុណ្ណោះ",
+    "deadOnly": "មិនធ្លាប់ត្រូវខ្ចី",
+    "lowBadge": "ស្តុកទាប",
+    "lost": "បាត់"
   },
   "userPage": {
     "title": "របាយការណ៍អ្នកប្រើប្រាស់",
@@ -125,9 +168,12 @@
     "newPeriod": "ថ្មី (រយៈពេល)",
     "members": "សមាជិក",
     "staff": "បុគ្គលិក",
+    "inactive": "សមាជិកអសកម្ម (៣០ ថ្ងៃ)",
     "roleMember": "សមាជិក",
     "roleLibrarian": "បណ្ណារក្ស",
-    "roleAdmin": "អ្នកគ្រប់គ្រង"
+    "roleAdmin": "អ្នកគ្រប់គ្រង",
+    "newMembersTrend": "សមាជិកថ្មីតាមពេលវេលា",
+    "topBorrowers": "អ្នកខ្ចីច្រើនបំផុត"
   },
   "filter": {
     "from": "ពី",
@@ -137,7 +183,15 @@
     "searchPlaceholder": "ឈ្មោះ អ៊ីមែល ចំណងជើង…",
     "all": "ទាំងអស់",
     "apply": "អនុវត្ត",
-    "reset": "កំណត់ឡើងវិញ"
+    "reset": "កំណត់ឡើងវិញ",
+    "presets": {
+      "today": "ថ្ងៃនេះ",
+      "days7": "៧ ថ្ងៃ",
+      "days30": "៣០ ថ្ងៃ",
+      "thisMonth": "ខែនេះ",
+      "thisYear": "ឆ្នាំនេះ",
+      "all": "ទាំងអស់"
+    }
   },
   "export": {
     "export": "នាំចេញ",

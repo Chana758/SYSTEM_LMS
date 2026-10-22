@@ -49,5 +49,14 @@
     "of": "of",
     "next": "Next",
     "previous": "Previous"
+  },
+  "header": {
+    "toggleTheme": "Toggle theme",
+    "fullscreen": "Fullscreen",
+    "roles": {
+      "admin": "Administrator",
+      "librarian": "Librarian",
+      "member": "Member"
+    }
   }
 }

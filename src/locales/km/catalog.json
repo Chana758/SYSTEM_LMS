@@ -25,6 +25,8 @@
   "noBooksFound": "រកមិនឃើញសៀវភៅ",
   "adjustFilters": "សូមព្យាយាមកែសម្រួលតម្រង ឬពាក្យស្វែងរក។",
   "borrowedOut": "ត្រូវបានខ្ចីអស់",
+  "isbnHint": "វាយ ឬស្កេនលេខ ISBN ដែលបោះពុម្ពលើសៀវភៅ។ ទុកទទេបើសៀវភៅគ្មាន ISBN។",
+  "isbnInvalid": "លេខ ISBN មិនត្រឹមត្រូវ។ សូមពិនិត្យលេខ (១០ ឬ ១៣ ខ្ទង់)។",
   "createBookModal": {
     "title": "បន្ថែមសៀវភៅថ្មី",
     "subtitle": "ចុះឈ្មោះចំណងជើងថ្មីចូលកាតាឡុកស្តុកបណ្ណាល័យ។"
@@ -121,5 +123,13 @@
 "table": {
   "title": "ចំណងជើង", "author": "អ្នកនិពន្ធ", "isbn": "ISBN", "category": "ប្រភេទ",
   "copies": "ច្បាប់", "status": "ស្ថានភាព", "actions": "សកម្មភាព"
+},
+"copy": {
+  "manage": "គ្រប់គ្រង", "manageTitle": "គ្រប់គ្រងច្បាប់សៀវភៅ", "status": "ស្ថានភាព",
+  "shelfLocation": "ទីតាំងធ្នើ", "reason": "មូលហេតុ (ស្រេចចិត្ត)",
+  "reasonPlaceholder": "ឧ. ខូចដោយទឹក, អ្នកអានធ្វើបាត់",
+  "withdraw": "ដកច្បាប់ចេញ", "confirmWithdraw": "ដកច្បាប់ \"{barcode}\" ចេញពីបណ្ណាល័យ?",
+  "borrowedLocked": "ច្បាប់នេះកំពុងត្រូវបានខ្ចី។ អាចប្តូរស្ថានភាពបានតែក្រោយសងវិញ។",
+  "status_available": "មានទំនេរ", "status_damaged": "ខូចខាត", "status_lost": "បាត់បង់", "status_archived": "ទុកស្តុក"
 }
 }

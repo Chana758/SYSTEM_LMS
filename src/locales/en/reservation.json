@@ -61,7 +61,10 @@
     "step3Desc": "We'll notify you the moment your reserved copy is available.",
     "emptyShelf": "Your shelf is empty",
     "emptyShelfHint": "Reserve a book that's currently checked out and we'll hold your spot when it's back.",
-    "browseAndReserve": "Browse and reserve a book →"
+    "browseAndReserve": "Browse and reserve a book →",
+    "tabActive": "Active",
+    "tabHistory": "History",
+    "emptyHistory": "No reservation history yet"
   },
   "createPage": {
     "title": "New Reservation",
@@ -77,7 +80,13 @@
     "actionsTitle": "Actions",
     "markFulfilled": "Mark as Fulfilled",
     "cancelReservation": "Cancel Reservation",
-    "loading": "Loading reservation details…"
+    "loading": "Loading reservation details…",
+    "timeline": "Timeline",
+    "timelineReserved": "Reserved",
+    "timelineReady": "Ready for pickup",
+    "timelineFulfilled": "Picked up",
+    "timelineCancelled": "Cancelled",
+    "timelineExpired": "Expired"
   },
   "historyPage": {
     "title": "Reservation History",
@@ -92,5 +101,12 @@
     "queuePosition": "in queue for this title",
     "readyMsg": "Ready for pickup — collect before {date}",
     "cancelReservation": "Cancel reservation"
-  }
+  },
+  "hint": {
+  "queue": "{count} waiting in the queue (you will be priority #{priority})",
+  "outOfStock": "This book is out of stock — you can reserve it",
+  "queueShort": "Queue: {count}",
+  "noResults": "No books found"
+}
+  
 }

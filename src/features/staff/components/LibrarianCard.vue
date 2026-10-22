@@ -1,52 +1,53 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-200 p-6">
-    <div class="flex items-start gap-5">
+  <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-300 dark:border-white/10 p-4 sm:p-6 shadow-sm">
+    <div class="flex items-start gap-3.5 sm:gap-5">
       <img
         v-if="avatarUrl"
         :src="avatarUrl"
         alt="Profile avatar"
-        class="w-16 h-16 rounded-full object-cover border border-gray-200 flex-shrink-0"
+        class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border border-slate-200 dark:border-white/10 flex-shrink-0"
       />
       <div
         v-else
-        class="w-16 h-16 rounded-full bg-green-700 text-white text-xl font-bold flex items-center justify-center flex-shrink-0"
+        class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-600 dark:bg-emerald-500 text-white text-lg sm:text-xl font-bold flex items-center justify-center flex-shrink-0 shadow-sm"
       >
         {{ initials }}
       </div>
 
       <div class="flex-1 min-w-0">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <h2 class="text-lg font-bold text-gray-900">{{ librarian.user?.name }}</h2>
-            <p class="text-sm text-gray-500">{{ librarian.user?.email }}</p>
+        <!-- Phones: status badge drops below the name. sm+: sits on the right. -->
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3">
+          <div class="min-w-0">
+            <h2 class="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight truncate">{{ librarian.user?.name }}</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 truncate">{{ librarian.user?.email }}</p>
           </div>
           <span
-            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold capitalize"
+            class="self-start inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border flex-shrink-0"
             :class="statusClass"
           >
             <span class="w-1.5 h-1.5 rounded-full" :class="statusDotClass"></span>
             {{ statusLabel }}
           </span>
         </div>
+      </div>
+    </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5">
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.employeeId') }}</p>
-            <p class="text-sm font-medium text-gray-700">{{ librarian.employee_id }}</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.department') }}</p>
-            <p class="text-sm font-medium text-gray-700">{{ librarian.department || '—' }}</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.shift') }}</p>
-            <p class="text-sm font-medium text-gray-700 capitalize">{{ librarian.shift || '—' }}</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{{ $t('staff.detail.hired') }}</p>
-            <p class="text-sm font-medium text-gray-700">{{ formatDate(librarian.hire_date) }}</p>
-          </div>
-        </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3.5 sm:gap-4 mt-4 sm:mt-5 pt-4 border-t border-slate-100 dark:border-white/10">
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ $t('staff.detail.employeeId') }}</p>
+        <p class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 font-mono break-all">{{ librarian.employee_id }}</p>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ $t('staff.detail.department') }}</p>
+        <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 break-words">{{ librarian.department || '—' }}</p>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ $t('staff.detail.shift') }}</p>
+        <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 capitalize">{{ librarian.shift || '—' }}</p>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-extrabold tracking-wider mb-0.5">{{ $t('staff.detail.hired') }}</p>
+        <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">{{ formatDate(librarian.hire_date) }}</p>
       </div>
     </div>
   </div>
@@ -73,7 +74,6 @@ const avatarUrl = computed(() => {
   return `${baseUrl}/storage/${props.librarian.user.avatar}`
 })
 
-// 🆕 translated status label (replaces the raw status?.replace('_',' ') text)
 const statusLabel = computed(() => {
   const map = {
     active: t('staff.form.statusActive'),
@@ -84,16 +84,16 @@ const statusLabel = computed(() => {
 })
 
 const statusClass = computed(() => ({
-  active: 'bg-green-50 text-green-700',
-  inactive: 'bg-gray-100 text-gray-500',
-  on_leave: 'bg-amber-50 text-amber-700',
-}[props.librarian.status] || 'bg-gray-100 text-gray-500'))
+  active: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200/50 dark:border-emerald-500/20',
+  inactive: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700',
+  on_leave: 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200/50 dark:border-amber-500/20',
+}[props.librarian.status] || 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700'))
 
 const statusDotClass = computed(() => ({
-  active: 'bg-green-500',
-  inactive: 'bg-gray-400',
+  active: 'bg-emerald-500',
+  inactive: 'bg-slate-400',
   on_leave: 'bg-amber-500',
-}[props.librarian.status] || 'bg-gray-400'))
+}[props.librarian.status] || 'bg-slate-400'))
 
 function formatDate(d) {
   if (!d) return '—'

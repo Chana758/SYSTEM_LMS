@@ -20,10 +20,11 @@ export const notificationService = {
     }
   },
 
-  async getUnreadCount() {
-    try {
-      const { data } = await notificationApi.unreadCount()
-      return { success: true, data }
+  // notificationService.js
+ async getUnreadCount(params = {}) {
+  try {
+    const { data } = await notificationApi.unreadCount(params)
+    return { success: true, data }
     } catch (error) {
       return extractError(error)
     }

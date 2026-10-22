@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    // 1. Authentication Actions
+    // 1. Authentication
     async register(payload) {
       this.loading = true
       this.errors = {}
@@ -50,11 +50,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /**
-     * Log in by scanning a QR login card (kiosk scanner types the raw
-     * token into an input, we send it here as-is). Mirrors login()
-     * above but authenticates by token instead of email+password.
-     */
+    // Log in with the raw token from a scanned QR card
     async loginWithQr(qrToken) {
       this.loading = true
       this.errors = {}
@@ -70,15 +66,9 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 2. QR Login Card Actions
+    // 2. QR login card
 
-    /**
-     * Read-only status check for the currently logged-in user's own QR
-     * card. Used by QrLoginCard.vue on mount to decide which UI state
-     * to show. Never returns a token — issuance is staff-only now, via
-     * generateQrTokenFor(userId) on authService directly (see
-     * QrLoginCardAdmin.vue / PendingCardsPage.vue).
-     */
+    // Read-only status of the current user's QR card (never returns the token)
     async getQrCardStatus() {
       try {
         const { data } = await authService.getQrCardStatus()
@@ -88,7 +78,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Self-revoke (e.g. report lost) stays available.
+    // Self-revoke (e.g. card lost)
     async revokeQrToken() {
       this.loading = true
       try {
@@ -100,11 +90,6 @@ export const useAuthStore = defineStore('auth', {
         this.loading = false
       }
     },
-
-    // REMOVED: generateQrToken(). Self-service issuance no longer has
-    // a backing route. Any component still calling this will break at
-    // build/lint time, which is intentional — it forces every caller
-    // through the staff-only generateQrTokenFor(userId) flow instead.
 
     async logout() {
       try {
@@ -125,13 +110,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /**
-     * Request a password-reset email for the given address. Always
-     * resolves { success: true } on a 200 (the backend intentionally
-     * returns a generic "if an account exists..." message regardless
-     * of whether the email is registered, so the UI can't leak which
-     * emails have accounts).
-     */
+    // Request a reset email; the backend returns a generic message so emails can't be enumerated
     async forgotPassword(email) {
       this.loading = true
       this.errors = {}
@@ -146,12 +125,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /**
-     * Submit a new password using the token + email pulled from the
-     * reset-link URL. On success the backend also revokes any existing
-     * QR login card for that user (see AuthController), so no extra
-     * cleanup is needed here.
-     */
+    // Set a new password using the token + email from the reset link
     async resetPassword(payload) {
       this.loading = true
       this.errors = {}
@@ -166,7 +140,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 3. Profile & Account Actions
+    // 3. Profile & account
     async uploadAvatar(file) {
       this.loading = true
       try {
@@ -227,25 +201,9 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 4. Helper Methods
+    // 4. Helpers
 
-    /**
-     * Clear any leftover validation/general errors.
-     *
-     * Why this was needed: `errors` is only reset at the top of each
-     * async action (login, loginWithQr, register, etc.). But switching
-     * between the Password and QR tabs on the login screen does NOT
-     * fire any of those actions — it's just a local `ref` toggle in
-     * LoginPage.vue. So a failed QR scan (e.g. "invalid QR code") would
-     * leave `errors.general` set in the store, and since both
-     * LoginForm and QrLoginForm read from the same shared
-     * `authStore.errors`, switching tabs made the stale message bleed
-     * into the other form.
-     *
-     * Fix: call this whenever the UI changes context without
-     * submitting a new request (e.g. on tab switch, or navigating from
-     * Forgot Password to Login).
-     */
+    // Clear stale errors when the UI changes context without a request (e.g. tab switch)
     clearErrors() {
       this.errors = {}
     },
@@ -270,9 +228,7 @@ export const useAuthStore = defineStore('auth', {
         this.errors = Object.fromEntries(
           Object.entries(backendErrors).map(([key, msgs]) => [key, msgs[0]])
         )
-        // Fall back to the top-level message (e.g. throttling responses
-        // from the Password broker come back as { message: "..." } with
-        // no per-field `errors` object at all).
+        // Fall back to the top-level message when there are no per-field errors
         if (!Object.keys(this.errors).length && error.response.data.message) {
           this.errors = { general: error.response.data.message }
         }

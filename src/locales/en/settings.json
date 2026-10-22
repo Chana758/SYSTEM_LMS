@@ -54,7 +54,26 @@
     "strengthStrong": "Strong",
     "saving": "Saving...",
     "updatePassword": "Update Password",
-    "updated": "Password updated successfully."
+    "updated": "Password updated successfully.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "roleChange": {
+    "title": "Change role",
+    "subtitle": "Promote or demote this user. They will be signed out and must log in again.",
+    "currentRole": "Current role",
+    "newRole": "New role",
+    "selectRole": "Select a role…",
+    "note": "Note (optional)",
+    "submit": "Change role",
+    "saving": "Saving…",
+    "confirmPrefix": "Change role of",
+    "failed": "Failed to change role.",
+    "roles": {
+      "admin": "Admin",
+      "librarian": "Librarian",
+      "member": "Member"
+    }
   },
   "preferences": {
     "title": "Preferences",
@@ -168,6 +187,14 @@
     "confirmDelete": "Delete \"{label}\"?",
     "saveFailed": "Failed to save.",
     "deleteFailed": "Failed to delete.",
+    "back": "Back to Settings",
+    "total": "Total",
+    "edit": "Edit",
+    "delete": "Delete",
+    "colLoanDays": "Loan days",
+    "colMaxBooks": "Max books",
+    "colRenewals": "Renewals × days",
+    "colFine": "Fine / day",
     "modal": {
       "editTitle": "Edit Membership Type",
       "createTitle": "Create New Membership Type",
@@ -183,7 +210,13 @@
       "activeVisible": "Active (visible in Create Member form)",
       "cancel": "Cancel",
       "saving": "Saving...",
-      "saveType": "Save Type"
+      "saveType": "Save Type",
+      "loanRules": "Loan rules",
+      "loanDays": "Loan days",
+      "maxBooks": "Max books",
+      "maxRenewals": "Max renewals",
+      "renewDays": "Days per renewal",
+      "finePerDay": "Fine per day (៛)"
     }
   },
   "cardApprovals": {

@@ -1,23 +1,34 @@
 <template>
+  <!--
+    Phone: pinned to the screen (fixed, 12px from both edges, just under the 64px navbar)
+    so it can never overflow, whatever is next to the bell.
+    sm and up: original dropdown anchored under the bell.
+  -->
   <div
-    class="absolute right-0 mt-2 w-80 max-h-[28rem] bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 flex flex-col"
+    class="fixed inset-x-3 top-[4.25rem] max-h-[70dvh]
+           sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 sm:max-h-[28rem]
+           bg-white dark:bg-slate-800 rounded-xl shadow-xl dark:shadow-black/40 border border-gray-100 dark:border-white/10 overflow-hidden z-50 flex flex-col"
     @click.stop
   >
-    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-      <h3 class="font-bold text-gray-800 text-sm">{{ t('notifications.pageTitle') }}</h3>
-      <button v-if="store.unreadCount > 0" @click="handleMarkAll" class="text-xs text-green-700 hover:underline font-medium">
+    <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-gray-100 dark:border-white/10">
+      <h3 class="font-bold text-gray-800 dark:text-white text-sm">{{ t('notifications.pageTitle') }}</h3>
+      <button
+        v-if="store.unreadCount > 0"
+        @click="handleMarkAll"
+        class="text-xs text-green-700 dark:text-emerald-400 hover:underline font-medium cursor-pointer"
+      >
         {{ t('notifications.markAllRead', { count: store.unreadCount }) }}
       </button>
     </div>
 
-    <div class="overflow-y-auto flex-1">
-      <NotificationList :items="store.notifications" :loading="store.loading" @item-click="handleItemClick" />
+    <div class="overflow-y-auto flex-1 overscroll-contain">
+      <NotificationList :items="store.recent" :loading="store.recentLoading" @item-click="handleItemClick" />
     </div>
 
     <router-link
       to="/notifications"
       @click="$emit('close')"
-      class="block text-center text-xs font-medium text-green-700 py-2.5 border-t border-gray-100 hover:bg-gray-50"
+      class="block text-center text-xs font-medium text-green-700 dark:text-emerald-400 py-3 sm:py-2.5 border-t border-gray-100 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5"
     >
       {{ t('notifications.viewAllNotifications') }}
     </router-link>
@@ -36,9 +47,7 @@ const emit = defineEmits(['close'])
 const store = useNotificationStore()
 const router = useRouter()
 
-async function handleMarkAll() {
-  await store.markAllRead()
-}
+const handleMarkAll = () => store.markAllRead()
 
 async function handleItemClick(item) {
   if (!item.is_read) await store.markRead(item.id)
@@ -46,5 +55,5 @@ async function handleItemClick(item) {
   router.push(item.link || { name: 'notification-detail', params: { id: item.id } })
 }
 
-onMounted(() => store.fetchNotifications(1, { per_page: 8 }))
+onMounted(() => store.fetchRecent())
 </script>

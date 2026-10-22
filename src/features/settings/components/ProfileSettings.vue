@@ -1,19 +1,20 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-200 p-6 max-w-xl">
-    <h2 class="text-lg font-bold text-gray-800 mb-1">{{ t('settings.profile.title') }}</h2>
-    <p class="text-sm text-gray-400 mb-6">{{ t('settings.profile.subtitle') }}</p>
+  <!-- No outer card: SettingsCard already provides the surface -->
+  <div>
+    <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-1">{{ t('settings.profile.title') }}</h2>
+    <p class="text-sm text-gray-400 dark:text-slate-400 mb-6">{{ t('settings.profile.subtitle') }}</p>
 
-    <div class="flex items-center gap-6">
-      <div class="relative">
+    <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
+      <div class="relative flex-shrink-0">
         <img
           v-if="previewUrl"
           :src="previewUrl"
           alt="Profile Avatar"
-          class="w-24 h-24 rounded-full object-cover border-4 border-green-50 shadow-sm"
+          class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-green-50 dark:border-emerald-500/30 shadow-sm"
         />
         <div
           v-else
-          class="w-24 h-24 rounded-full bg-gradient-to-br from-green-600 to-green-800 text-white text-2xl font-extrabold flex items-center justify-center border-4 border-green-50 shadow-sm"
+          class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-green-600 to-green-800 text-white text-2xl font-extrabold flex items-center justify-center border-4 border-green-50 dark:border-emerald-500/30 shadow-sm"
         >
           {{ initials }}
         </div>
@@ -23,9 +24,9 @@
         </div>
       </div>
 
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 min-w-0 w-full sm:w-auto">
         <label
-          class="cursor-pointer inline-flex items-center gap-2 justify-center px-4 py-2 bg-green-700 text-white text-sm font-medium rounded-xl hover:bg-green-800 transition"
+          class="cursor-pointer inline-flex items-center gap-2 justify-center px-4 py-2.5 bg-green-700 text-white text-sm font-medium rounded-xl hover:bg-green-800 transition"
           :class="{ 'opacity-50 pointer-events-none': authStore.loading }"
         >
           <ArrowUpTrayIcon class="w-4 h-4" />
@@ -41,23 +42,24 @@
 
         <button
           v-if="authStore.user?.avatar"
+          type="button"
           @click="handleRemove"
           :disabled="authStore.loading"
-          class="inline-flex items-center gap-2 justify-center px-4 py-2 border border-red-200 text-red-600 text-sm font-medium rounded-xl hover:bg-red-50 transition disabled:opacity-50"
+          class="inline-flex items-center gap-2 justify-center px-4 py-2.5 border border-red-200 dark:border-rose-400/30 text-red-600 dark:text-rose-300 text-sm font-medium rounded-xl hover:bg-red-50 dark:hover:bg-rose-500/10 transition disabled:opacity-50 cursor-pointer"
         >
           <TrashIcon class="w-4 h-4" />
           {{ t('settings.profile.removePhoto') }}
         </button>
 
-        <p class="text-xs text-gray-400">{{ t('settings.profile.fileHint') }}</p>
+        <p class="text-xs text-gray-400 dark:text-slate-500">{{ t('settings.profile.fileHint') }}</p>
       </div>
     </div>
 
     <transition name="fade">
-      <p v-if="errorMessage" class="text-sm text-red-600 mt-4 bg-red-50 rounded-lg px-3 py-2">{{ errorMessage }}</p>
+      <p v-if="errorMessage" class="text-sm text-red-600 dark:text-rose-300 mt-4 bg-red-50 dark:bg-rose-500/10 rounded-lg px-3 py-2">{{ errorMessage }}</p>
     </transition>
     <transition name="fade">
-      <p v-if="successMessage" class="text-sm text-green-700 mt-4 bg-green-50 rounded-lg px-3 py-2">{{ successMessage }}</p>
+      <p v-if="successMessage" class="text-sm text-green-700 dark:text-emerald-300 mt-4 bg-green-50 dark:bg-emerald-500/10 rounded-lg px-3 py-2">{{ successMessage }}</p>
     </transition>
   </div>
 </template>
@@ -67,6 +69,7 @@ import { ref, computed } from 'vue'
 import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 const authStore = useAuthStore()
 const successMessage = ref('')

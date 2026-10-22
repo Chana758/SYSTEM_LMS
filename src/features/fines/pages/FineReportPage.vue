@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 flex items-center justify-center py-24 text-slate-400 font-bold text-xs uppercase tracking-widest">
+  <div class="p-6 flex items-center justify-center py-24 text-slate-400 dark:text-slate-500 font-bold text-xs uppercase tracking-widest">
     Redirecting to the full Fine Report...
   </div>
 </template>

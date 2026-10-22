@@ -8,6 +8,7 @@
   "statusBorrowed": "Borrowed",
   "statusReturned": "Returned",
   "noActiveCheckouts": "No active checkouts found",
+  "book": "Book",
   "category": "Category",
   "barcode": "Barcode",
   "member": "Member",
@@ -74,6 +75,26 @@
     "estFine": "Est. Fine",
     "sendReminder": "Send Reminder",
     "noOverdueFound": "No overdue books found",
-    "reminderSent": "Reminder sent to {name} (not yet wired to backend)."
+    "reminderSent": "Reminder sent to {name} (not yet wired to backend).",
+    "table": {
+      "book": "Book",
+      "member": "Member",
+      "dueDate": "Due Date",
+      "daysLate": "Days Late",
+      "estFine": "Est. Fine",
+      "action": "Action",
+      "loading": "Loading...",
+      "empty": "No overdue books found",
+      "days": "{n} day | {n} days",
+      "sendReminder": "Send Reminder",
+      "returnBook": "Return Book"
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "saveChanges": "Save Changes",
+    "saving": "Saving..."
   }
 }

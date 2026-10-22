@@ -6,8 +6,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.5v3m0-3h3m-3 0 3.75 3.75M20.25 4.5v3m0-3h-3m3 0-3.75 3.75M3.75 19.5v-3m0 3h3m-3 0 3.75-3.75M20.25 19.5v-3m0 3h-3m3 0-3.75-3.75M9 8.25v7.5M12 8.25v7.5M15 8.25v7.5" />
         </svg>
       </div>
-      <h1 class="text-xl font-bold text-gray-800 mb-1">Scan to Log In</h1>
-      <p class="text-sm text-gray-400 mb-6">Dedicated kiosk mode — point your library QR card at the camera.</p>
+      <h1 class="text-xl font-bold text-gray-800 mb-1">{{ $t('auth.scanToLogin') }}</h1>
+      <p class="text-sm text-gray-400 mb-6">{{ $t('auth.scanSubtitle') }}</p>
 
       <QrLoginForm
         :loading="authStore.loading"
@@ -16,7 +16,7 @@
       />
 
       <router-link :to="{ name: 'login' }" class="text-sm text-green-700 hover:underline mt-4 inline-block">
-        Use email and password instead
+        {{ $t('auth.useEmailInstead') }}
       </router-link>
     </div>
   </div>

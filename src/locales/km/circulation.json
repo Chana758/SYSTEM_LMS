@@ -8,6 +8,7 @@
   "statusBorrowed": "កំពុងខ្ចី",
   "statusReturned": "បានប្រគល់មកវិញ",
   "noActiveCheckouts": "រកមិនឃើញការខ្ចីសកម្ម",
+  "book": "សៀវភៅ",
   "category": "ប្រភេទ",
   "barcode": "បាកូដ",
   "member": "សមាជិក",
@@ -74,13 +75,26 @@
     "estFine": "ការពិន័យប៉ាន់ស្មាន",
     "sendReminder": "ផ្ញើការរំលឹក",
     "noOverdueFound": "រកមិនឃើញសៀវភៅហួសកំណត់",
-    "reminderSent": "បានផ្ញើការរំលឹកទៅ {name} (មិនទាន់ភ្ជាប់ជាមួយ backend)។"
+    "reminderSent": "បានផ្ញើការរំលឹកទៅ {name} (មិនទាន់ភ្ជាប់ជាមួយ backend)។",
+    "table": {
+      "book": "សៀវភៅ",
+      "member": "សមាជិក",
+      "dueDate": "ថ្ងៃកំណត់សង",
+      "daysLate": "ចំនួនថ្ងៃយឺត",
+      "estFine": "ប្រាក់ពិន័យប៉ាន់ស្មាន",
+      "action": "សកម្មភាព",
+      "loading": "កំពុងផ្ទុក...",
+      "empty": "រកមិនឃើញសៀវភៅហួសកំណត់ទេ",
+      "days": "{n} ថ្ងៃ | {n} ថ្ងៃ",
+      "sendReminder": "ផ្ញើការរំលឹក",
+      "returnBook": "សងសៀវភៅ"
+    }
   },
   "common": {
-  "cancel": "បោះបង់",
-  "edit": "កែសម្រួល",
-  "delete": "លុប",
-  "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
-  "saving": "កំពុងរក្សាទុក..."
-}
+    "cancel": "បោះបង់",
+    "edit": "កែសម្រួល",
+    "delete": "លុប",
+    "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
+    "saving": "កំពុងរក្សាទុក..."
+  }
 }

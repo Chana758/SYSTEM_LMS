@@ -1,23 +1,17 @@
 <template>
   <div>
-    <!-- Loading State: show only on the very first load, before any items exist -->
     <div
       v-if="loading && !items.length"
-      class="text-center py-10 text-slate-400 font-bold text-xs uppercase tracking-widest"
+      class="text-center py-10 text-slate-400 dark:text-slate-500 font-bold text-xs uppercase tracking-widest"
     >
-      Loading notifications...
+      {{ t('notifications.loadingNotifications') }}
     </div>
 
-    <!-- Empty State -->
-    <div
-      v-else-if="!loading && !items.length"
-      class="text-center py-10 text-slate-400"
-    >
-      <p class="text-xs font-bold uppercase tracking-wider">No notifications yet</p>
-      <p class="text-[11px] text-slate-400 mt-1">You're all caught up.</p>
+    <div v-else-if="!loading && !items.length" class="text-center py-10 text-slate-400 dark:text-slate-500">
+      <p class="text-xs font-bold uppercase tracking-wider">{{ t('notifications.noNotificationsFound') }}</p>
+      <p class="text-[11px] mt-1">{{ t('notifications.allCaughtUp') }}</p>
     </div>
 
-    <!-- List of notification items -->
     <div v-else>
       <NotificationItem
         v-for="item in items"
@@ -30,12 +24,14 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import NotificationItem from './NotificationItem.vue'
+
+const { t } = useI18n()
 
 defineProps({
   items: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
 })
-
 defineEmits(['item-click'])
 </script>

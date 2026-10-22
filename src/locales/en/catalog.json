@@ -24,6 +24,8 @@
   "noBooksFound": "No books found",
   "adjustFilters": "Try adjusting your filters or search terms.",
   "borrowedOut": "Borrowed Out",
+  "isbnHint": "Type or scan the ISBN printed on the book. Leave empty if the book has none.",
+  "isbnInvalid": "Invalid ISBN. Please check the number (10 or 13 digits).",
   "createBookModal": {
     "title": "Add New Book",
     "subtitle": "Register a new title into the library inventory catalog."
@@ -120,5 +122,13 @@
 "table": {
   "title": "Title", "author": "Author", "isbn": "ISBN", "category": "Category",
   "copies": "Copies", "status": "Status", "actions": "Actions"
+},
+"copy": {
+  "manage": "Manage", "manageTitle": "Manage Copy", "status": "Status",
+  "shelfLocation": "Shelf Location", "reason": "Reason (optional)",
+  "reasonPlaceholder": "e.g. water damage, lost by reader",
+  "withdraw": "Withdraw copy", "confirmWithdraw": "Withdraw copy \"{barcode}\" from the library?",
+  "borrowedLocked": "This copy is currently borrowed. Status can change only after it is returned.",
+  "status_available": "Available", "status_damaged": "Damaged", "status_lost": "Lost", "status_archived": "Archived"
 }
 }

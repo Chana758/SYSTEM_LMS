@@ -13,6 +13,7 @@
     "book": "Book",
     "borrowed": "Borrowed",
     "due": "Due",
+    "returnedOn": "Returned",
     "status": "Status",
     "amount": "Amount",
     "paidAt": "Paid At",
@@ -22,6 +23,8 @@
     "category": "Category",
     "total": "Total",
     "available": "Available",
+    "borrowedCopies": "Borrowed",
+    "availability": "Availability",
     "name": "Name",
     "email": "Email",
     "role": "Role",
@@ -53,12 +56,16 @@
     "borrowed": "BORROWED",
     "new": "NEW",
     "members": "MEMBERS",
-    "staff": "STAFF"
+    "staff": "STAFF",
+    "inactive": "INACTIVE"
   },
   "dashboardPage": {
     "title": "Reports",
     "subtitle": "Circulation, revenue, and stock insights at a glance",
     "loading": "Loading dashboard…",
+    "borrowsToday": "Borrowed today",
+    "returnsToday": "Returned today",
+    "borrowedNow": "Currently borrowed",
     "totalBorrows": "Total Borrows",
     "activeBorrows": "Active Borrows",
     "overdue": "Overdue",
@@ -69,8 +76,33 @@
     "availableCopies": "Available Copies",
     "borrowsOverTime": "Borrows Over Time",
     "revenueOverTime": "Revenue Over Time",
+    "borrowReturnTrend": "Borrows & returns per day",
+    "borrows": "Borrowed",
+    "returns": "Returned",
+    "borrowsByCategory": "Borrows by category",
+    "copyStatus": "Copy status",
+    "copyAvailable": "Available",
+    "copyBorrowed": "Borrowed",
+    "copyLost": "Lost",
+    "copyDamaged": "Damaged",
     "mostBorrowedBooks": "Most Borrowed Books",
+    "topMembers": "Most active members",
+    "overdueAging": "Overdue by age",
+    "days": "days",
     "borrowsSuffix": "borrows",
+    "recentActivity": "Recent activity",
+    "actBorrow": "Borrow",
+    "actReturn": "Return",
+    "actFine": "Fine",
+    "actReservation": "Reserve",
+    "dueSoon": "Due soon",
+    "dueSoonHint": "within 3 days",
+    "dueToday": "Due today",
+    "daysLeft": "{n} days left",
+    "waitingReservations": "Reservation queue",
+    "waitingHint": "books out of stock",
+    "waitingCount": "{n} waiting",
+    "inStock": "{n} in stock",
     "noDataYet": "No data yet",
     "detailedReports": "Detailed Reports",
     "noDashboardData": "No dashboard data available yet."
@@ -82,7 +114,9 @@
     "total": "Total",
     "returned": "Returned",
     "active": "Active",
-    "overdue": "Overdue"
+    "overdue": "Overdue",
+    "trend": "Borrows over time",
+    "statusSplit": "Borrow status"
   },
   "finePage": {
     "title": "Fine Report",
@@ -93,7 +127,10 @@
     "collected": "Collected",
     "outstanding": "Outstanding",
     "statusUnpaid": "Unpaid",
-    "statusPaid": "Paid"
+    "statusPaid": "Paid",
+    "statusWaived": "Waived",
+    "statusSplit": "Fine status",
+    "topDebtors": "Members owing the most"
   },
   "revenuePage": {
     "title": "Revenue Report",
@@ -103,6 +140,7 @@
     "thisMonth": "This Month",
     "fines": "Fines",
     "services": "Services",
+    "trend": "Revenue over time",
     "adminsOnly": "Admins only",
     "adminsOnlyHint": "Revenue reports contain financial data restricted to administrators. Contact an admin if you need this information."
   },
@@ -115,7 +153,12 @@
     "borrowed": "Borrowed",
     "lowStock": "Low Stock",
     "category": "Category",
-    "outOfStock": "Out of Stock"
+    "outOfStock": "Out of Stock",
+    "byCategory": "Stock by category",
+    "lowOnly": "Low stock only",
+    "deadOnly": "Never borrowed",
+    "lowBadge": "Low",
+    "lost": "Lost"
   },
   "userPage": {
     "title": "User Report",
@@ -125,9 +168,12 @@
     "newPeriod": "New (period)",
     "members": "Members",
     "staff": "Staff",
+    "inactive": "Inactive members (30d)",
     "roleMember": "Member",
     "roleLibrarian": "Librarian",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Admin",
+    "newMembersTrend": "New members over time",
+    "topBorrowers": "Top borrowers"
   },
   "filter": {
     "from": "From",
@@ -137,7 +183,15 @@
     "searchPlaceholder": "Name, email, title…",
     "all": "All",
     "apply": "Apply",
-    "reset": "Reset"
+    "reset": "Reset",
+    "presets": {
+      "today": "Today",
+      "days7": "7 days",
+      "days30": "30 days",
+      "thisMonth": "This month",
+      "thisYear": "This year",
+      "all": "All time"
+    }
   },
   "export": {
     "export": "Export",

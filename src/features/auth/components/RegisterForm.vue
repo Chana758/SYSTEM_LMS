@@ -1,72 +1,72 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="space-y-4">
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.name') }}</label>
-      <input
-        v-model="form.name"
-        type="text"
-        :placeholder="$t('auth.namePlaceholder')"
-        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-        :class="{ 'border-red-500': errors.name }"
-      />
-      <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
-    </div>
+  <form @submit.prevent="handleSubmit" class="space-y-3.5">
+    <AuthField
+      v-model="form.name"
+      :label="$t('auth.name')"
+      :placeholder="$t('auth.namePlaceholder')"
+      autocomplete="name"
+      :icon="UserIcon"
+      :error="errors.name"
+    />
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.email') }}</label>
-      <input
-        v-model="form.email"
-        type="email"
-        placeholder="example@gmail.com"
-        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-        :class="{ 'border-red-500': errors.email }"
-      />
-      <p v-if="errors.email" class="text-red-500 text-sm mt-1">{{ errors.email }}</p>
-    </div>
+    <AuthField
+      v-model="form.email"
+      :label="$t('auth.email')"
+      type="email"
+      placeholder="example@gmail.com"
+      autocomplete="email"
+      :icon="EnvelopeIcon"
+      :error="errors.email"
+    />
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.phoneOptional') }}</label>
-      <input
-        v-model="form.phone"
-        type="text"
-        :placeholder="$t('auth.phonePlaceholder')"
-        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-      />
-    </div>
+    <AuthField
+      v-model="form.phone"
+      :label="$t('auth.phoneOptional')"
+      type="tel"
+      :placeholder="$t('auth.phonePlaceholder')"
+      autocomplete="tel"
+      :icon="PhoneIcon"
+      :error="errors.phone"
+    />
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.password') }}</label>
-      <input
+    <!-- password + confirm side by side on wide screens -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <AuthField
         v-model="form.password"
+        :label="$t('auth.password')"
         type="password"
         placeholder="••••••••"
-        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-        :class="{ 'border-red-500': errors.password }"
+        autocomplete="new-password"
+        :icon="LockClosedIcon"
+        :error="errors.password"
       />
-      <p v-if="errors.password" class="text-red-500 text-sm mt-1">{{ errors.password }}</p>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('auth.confirmPassword') }}</label>
-      <input
+      <AuthField
         v-model="form.password_confirmation"
+        :label="$t('auth.confirmPassword')"
         type="password"
         placeholder="••••••••"
-        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-        :class="{ 'border-red-500': errors.password_confirmation }"
+        autocomplete="new-password"
+        :icon="LockClosedIcon"
+        :error="errors.password_confirmation"
       />
-      <p v-if="errors.password_confirmation" class="text-red-500 text-sm mt-1">
-        {{ errors.password_confirmation }}
-      </p>
     </div>
 
-    <p v-if="errors.general" class="text-red-500 text-sm">{{ errors.general }}</p>
+    <p
+      v-if="errors.general"
+      class="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-xl px-3.5 py-2.5"
+    >
+      {{ errors.general }}
+    </p>
 
     <button
       type="submit"
       :disabled="loading"
-      class="w-full bg-green-700 hover:bg-green-800 text-white rounded-lg py-2 font-medium disabled:opacity-50"
+      class="w-full h-12 rounded-xl bg-[#17664b] hover:bg-[#0f5139] text-white text-sm font-bold shadow-md shadow-emerald-900/20 transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer inline-flex items-center justify-center gap-2"
     >
+      <span
+        v-if="loading"
+        class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"
+      ></span>
       {{ loading ? $t('auth.signingUp') : $t('auth.signUp') }}
     </button>
   </form>
@@ -74,12 +74,13 @@
 
 <script setup>
 import { reactive } from 'vue'
+import { UserIcon, EnvelopeIcon, PhoneIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
+import AuthField from './AuthField.vue'
 
-const props = defineProps({
+defineProps({
   loading: { type: Boolean, default: false },
   errors: { type: Object, default: () => ({}) },
 })
-
 const emit = defineEmits(['submit'])
 
 const form = reactive({
@@ -90,7 +91,5 @@ const form = reactive({
   password_confirmation: '',
 })
 
-function handleSubmit() {
-  emit('submit', { ...form })
-}
+const handleSubmit = () => emit('submit', { ...form })
 </script>

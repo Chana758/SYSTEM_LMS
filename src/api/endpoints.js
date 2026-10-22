@@ -2,15 +2,17 @@ export const ENDPOINTS = {
   AUTH: {
     REGISTER: '/auth/register',
     LOGIN: '/auth/login',
+    LOGIN_QR: '/auth/login/qr',
     LOGOUT: '/auth/logout',
     ME: '/auth/me',
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: '/auth/reset-password',
     CREATE_LIBRARIAN: '/auth/create-librarian',
     UPDATE_AVATAR: '/auth/profile/avatar',
     REMOVE_AVATAR: '/auth/profile/avatar',
     UPDATE_ACCOUNT: '/auth/profile/account',
     CHANGE_PASSWORD: '/auth/change-password',
-    LOGIN_QR: '/auth/login/qr',
-    QR_TOKEN_GENERATE: '/auth/qr-token/generate',
+    QR_TOKEN_STATUS: '/auth/qr-token/status',
     QR_TOKEN_REVOKE: '/auth/qr-token/revoke',
     QR_TOKEN_GENERATE_FOR: (userId) => `/auth/users/${userId}/qr-token/generate`,
     PENDING_CARDS: '/auth/pending-cards',
@@ -25,13 +27,16 @@ export const ENDPOINTS = {
     RESTORE: (id) => `/members/${id}/restore`,
     MY_PROFILE: '/member/profile',
   },
+
   LIBRARIANS: {
     LIST: '/librarians',
     CREATE: '/librarians',
     SHOW: (id) => `/librarians/${id}`,
     UPDATE: (id) => `/librarians/${id}`,
     DELETE: (id) => `/librarians/${id}`,
-    RESTORE: (id) => `/librarians/${id}/restore`,
+  },
+  USERS: {
+    CHANGE_ROLE: (userId) => `/users/${userId}/role`,
   },
   BOOKS: {
     LIST: '/books',
@@ -41,21 +46,27 @@ export const ENDPOINTS = {
     DELETE: (id) => `/books/${id}`,
     ADD_COPIES: (id) => `/books/${id}/add-copies`,
     POPULAR: '/books/popular',
-    LOOKUP_ISBN: '/books/lookup-isbn',
     REVIEWS: (id) => `/books/${id}/reviews`,
   },
+  BOOK_COPIES: {
+    UPDATE: (id) => `/book-copies/${id}`,
+    DELETE: (id) => `/book-copies/${id}`,
+  },
+
   CATEGORIES: {
     LIST: '/categories',
     CREATE: '/categories',
     UPDATE: (id) => `/categories/${id}`,
     DELETE: (id) => `/categories/${id}`,
   },
+
   MEMBERSHIP_TYPES: {
     LIST: '/membership-types',
     CREATE: '/membership-types',
     UPDATE: (id) => `/membership-types/${id}`,
     DELETE: (id) => `/membership-types/${id}`,
   },
+
   BORROWS: {
     LIST: '/borrows',
     OVERDUE: '/borrows/overdue',
@@ -65,22 +76,28 @@ export const ENDPOINTS = {
     RENEW: (id) => `/borrows/${id}/renew`,
     MY_BORROWS: '/my-borrows',
   },
+
   RESERVATIONS: {
     LIST: '/reservations',
+    STATS: '/reservations/stats',
     MY_LIST: '/reservations/my-list',
     CREATE: '/reservations',
     SHOW: (id) => `/reservations/${id}`,
     CANCEL: (id) => `/reservations/${id}/cancel`,
     FULFILL: (id) => `/reservations/${id}/fulfill`,
   },
+
   FINES: {
     LIST: '/fines',
     SUMMARY: '/fines/summary',
     CREATE: '/fines',
     SHOW: (id) => `/fines/${id}`,
+    UPDATE: (id) => `/fines/${id}`,
     PAY: (id) => `/fines/${id}/pay`,
     WAIVE: (id) => `/fines/${id}/waive`,
+    MY_FINES: '/my-fines',
   },
+
   NOTIFICATIONS: {
     LIST: '/notifications',
     UNREAD_COUNT: '/notifications/unread-count',
@@ -90,6 +107,7 @@ export const ENDPOINTS = {
     DELETE: (id) => `/notifications/${id}`,
     SEND: '/notifications',
   },
+
   EBOOKS: {
     LIST: '/ebooks',
     CREATE: '/ebooks',
@@ -102,21 +120,27 @@ export const ENDPOINTS = {
     TOGGLE_FAVORITE: (id) => `/ebooks/${id}/favorite`,
     MY_FAVORITES: '/my-favorites',
   },
+
   PREFERENCES: {
     SHOW: '/auth/profile/preferences',
     UPDATE: '/auth/profile/preferences',
   },
+
   SETTINGS: {
+    BRANDING: '/branding',
+    UPDATE_BRANDING: '/settings/branding',
     LIST: '/settings',
     CREATE: '/settings',
     UPDATE: (id) => `/settings/${id}`,
     DELETE: (id) => `/settings/${id}`,
   },
+
   BACKUP: {
     HISTORY: '/settings/backup/history',
     CREATE: '/settings/backup/create',
     RESTORE: '/settings/backup/restore',
   },
+
   REPORTS: {
     DASHBOARD: '/admin/reports/dashboard',
     BORROW: '/admin/reports/borrow',
@@ -128,31 +152,17 @@ export const ENDPOINTS = {
     LIST: '/admin/reports',
     DELETE: (id) => `/admin/reports/${id}`,
   },
+
   SCAN: {
     STORE: '/scan',
     HISTORY: '/scan/history',
     SUMMARY: '/scan/summary',
   },
+
   DASHBOARD: {
     STATS: '/dashboard',
     RECENT_ACTIVITIES: '/dashboard/recent-activities',
     REVENUE_CHART: '/dashboard/revenue-chart',
-  },
-  REMOTE_SCAN: {
-    CREATE_SESSION: '/remote-scan/session',
-    STATUS: (sessionId) => `/remote-scan/${sessionId}/status`,
-    SUBMIT: (sessionId) => `/remote-scan/${sessionId}/submit`,
-  },
-  // 
-  REMOTE_LOGIN: {
-    CREATE_SESSION: '/remote-login/session',
-    STATUS: (sessionId) => `/remote-login/${sessionId}/status`,
-    SUBMIT: (sessionId) => `/remote-login/${sessionId}/submit`,
-  },
-  REMOTE_LOGIN: {
-    CREATE_SESSION: '/remote-login/session',
-    STATUS: (sessionId) => `/remote-login/${sessionId}/status`,
-    SUBMIT: (sessionId) => `/remote-login/${sessionId}/submit`,
   },
 
   CHATBOT: {
@@ -160,9 +170,9 @@ export const ENDPOINTS = {
     SEND: '/chatbot',
     CLEAR_HISTORY: '/chatbot/history',
   },
+
   RECOMMENDATIONS: {
     LIST: '/recommendations',
     MARK_CLICKED: (bookId) => `/recommendations/${bookId}/click`,
   },
-  
 }

@@ -1,72 +1,72 @@
 <template>
-  <div class="flex h-screen bg-gray-50">
-    <Sidebar :isCollapsed="isSidebarCollapsed" />
+  <div class="flex h-dvh bg-gray-50 dark:bg-slate-900">
+    <!-- Desktop sidebar (hidden on phones) -->
+    <div class="hidden lg:block h-full flex-shrink-0">
+      <Sidebar :is-collapsed="isSidebarCollapsed" />
+    </div>
 
-    <div class="flex-1 flex flex-col overflow-hidden">
-      <header class="bg-green-800 h-16 flex items-center justify-between px-6 flex-shrink-0">
-        <div class="flex items-center gap-4 flex-1">
-          <button @click="isSidebarCollapsed = !isSidebarCollapsed" class="text-white">
-            <Bars3Icon class="w-6 h-6" />
-          </button>
+    <!-- Mobile drawer backdrop -->
+    <Transition
+      enter-active-class="transition-opacity duration-300"
+      leave-active-class="transition-opacity duration-300"
+      enter-from-class="opacity-0"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="drawerOpen"
+        class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+        @click="drawerOpen = false"
+      ></div>
+    </Transition>
 
-          <div class="relative flex-1 max-w-md">
-            <MagnifyingGlassIcon class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search books, members..."
-              class="w-full bg-white rounded-lg pl-9 pr-3 py-2 text-sm outline-none"
-            />
-          </div>
-        </div>
+    <!-- Mobile drawer (with X close button) -->
+    <div
+      class="fixed inset-y-0 left-0 z-50 w-64 max-w-[85vw] transition-transform duration-300 ease-out lg:hidden"
+      :class="drawerOpen ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <Sidebar :is-collapsed="false" closable @close="drawerOpen = false" />
+    </div>
 
-        <div class="flex items-center gap-4">
-          <button class="text-white/90 hover:text-white">
-            <SunIcon class="w-5 h-5" />
-          </button>
-          <button class="text-white/90 hover:text-white">
-            <GlobeAltIcon class="w-5 h-5" />
-          </button>
-          <button class="text-white/90 hover:text-white">
-            <ArrowsPointingOutIcon class="w-5 h-5" />
-          </button>
-          <button class="relative text-white/90 hover:text-white">
-            <BellIcon class="w-5 h-5" />
-            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
+    <div class="flex-1 min-w-0 flex flex-col overflow-hidden">
+      <!-- Shared top bar: working theme toggle, language switch, notifications, profile -->
+      <Navbar @toggle-sidebar="onToggleSidebar" />
 
-          <div class="flex items-center gap-2 pl-2 border-l border-white/20">
-            <div class="text-right leading-tight">
-              <p class="text-white text-sm font-semibold">{{ authStore.user?.name }}</p>
-              <p class="text-white/70 text-[10px] uppercase tracking-wide">{{ authStore.role }}</p>
-            </div>
-            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-sm font-bold">
-              {{ userInitial }}
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main class="flex-1 overflow-y-auto p-6">
+      <!-- Extra bottom padding on phones so the bottom nav never covers content -->
+      <main class="flex-1 overflow-y-auto p-4 sm:p-6 pb-28 lg:pb-6">
         <router-view />
       </main>
     </div>
+
+    <!-- Bottom navigation (phones only) -->
+    <MobileBottomNav @more="drawerOpen = true" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import {
-  Bars3Icon, MagnifyingGlassIcon, SunIcon, GlobeAltIcon,
-  ArrowsPointingOutIcon, BellIcon,
-} from '@heroicons/vue/24/outline'
+import { ref, watch, onBeforeUnmount } from 'vue'
+import { useRoute } from 'vue-router'
 import Sidebar from '@/components/layout/Sidebar.vue'
-import { useAuthStore } from '@/features/auth/store/authStore'
+import Navbar from '@/components/layout/Navbar.vue'
+import MobileBottomNav from '@/components/layout/MobileBottomNav.vue'
 
-const authStore = useAuthStore()
+const route = useRoute()
+
+// Desktop: collapsed sidebar (icons only). Phone: drawer open/closed.
 const isSidebarCollapsed = ref(false)
+const drawerOpen = ref(false)
 
-const userInitial = computed(() => {
-  const name = authStore.user?.name || ''
-  return name.charAt(0).toUpperCase() || '?'
-})
+function onToggleSidebar() {
+  if (window.matchMedia('(min-width: 1024px)').matches) {
+    isSidebarCollapsed.value = !isSidebarCollapsed.value
+  } else {
+    drawerOpen.value = !drawerOpen.value
+  }
+}
+
+// Close the drawer after navigating
+watch(() => route.fullPath, () => { drawerOpen.value = false })
+
+// Lock page scroll while the drawer is open
+watch(drawerOpen, (open) => document.body.classList.toggle('overflow-hidden', open))
+onBeforeUnmount(() => document.body.classList.remove('overflow-hidden'))
 </script>

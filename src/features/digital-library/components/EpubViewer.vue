@@ -1,10 +1,11 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-    <div ref="viewerEl" style="height: 75vh;"></div>
-    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-      <button @click="prev" class="text-sm text-gray-500 hover:text-green-700">‹ {{ t('digitalLibrary.reader.previous') }}</button>
-      <span class="text-xs text-gray-400">{{ Math.round(percentage) }}% {{ t('digitalLibrary.reader.read') }}</span>
-      <button @click="next" class="text-sm text-gray-500 hover:text-green-700">{{ t('digitalLibrary.reader.next') }} ›</button>
+  <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
+    <!-- EPUB pages render on a white sheet, so keep the reading area light for contrast -->
+    <div ref="viewerEl" class="bg-white" style="height: 70dvh;"></div>
+    <div class="flex items-center justify-between px-2 sm:px-4 py-1 border-t border-gray-100 dark:border-white/10">
+      <button @click="prev" class="px-3 py-3 text-sm text-gray-500 dark:text-slate-300 hover:text-green-700 dark:hover:text-emerald-300 transition-colors cursor-pointer">‹ {{ t('digitalLibrary.reader.previous') }}</button>
+      <span class="text-xs text-gray-400 dark:text-slate-500">{{ Math.round(percentage) }}% {{ t('digitalLibrary.reader.read') }}</span>
+      <button @click="next" class="px-3 py-3 text-sm text-gray-500 dark:text-slate-300 hover:text-green-700 dark:hover:text-emerald-300 transition-colors cursor-pointer">{{ t('digitalLibrary.reader.next') }} ›</button>
     </div>
   </div>
 </template>

@@ -43,6 +43,7 @@
   "reasonLabel": "មូលហេតុ",
   "waiveReasonPlaceholder": "មូលហេតុនៃការលើកលែង (ស្រេចចិត្ត)",
   "confirmWaive": "បញ្ជាក់ការលើកលែង",
+  "editFine": "កែសម្រួល",
   "form": {
     "borrowTransactionId": "លេខប្រតិបត្តិការខ្ចី",
     "amount": "ចំនួន ($)",

@@ -61,7 +61,10 @@
     "step3Desc": "យើងនឹងជូនដំណឹងអ្នកភ្លាមៗនៅពេលច្បាប់ដែលអ្នកកក់មានទំនេរ។",
     "emptyShelf": "ធ្នើរបស់អ្នកទទេ",
     "emptyShelfHint": "កក់សៀវភៅដែលបច្ចុប្បន្នកំពុងខ្ចី ហើយយើងនឹងទុកកន្លែងឲ្យអ្នកនៅពេលវាមកវិញ។",
-    "browseAndReserve": "រុករក និងកក់សៀវភៅ →"
+    "browseAndReserve": "រុករក និងកក់សៀវភៅ →",
+    "tabActive": "កំពុងដំណើរការ",
+    "tabHistory": "ប្រវត្តិ",
+    "emptyHistory": "មិនទាន់មានប្រវត្តិការកក់នៅឡើយ"
   },
   "createPage": {
     "title": "ការកក់ថ្មី",
@@ -77,7 +80,13 @@
     "actionsTitle": "សកម្មភាព",
     "markFulfilled": "កត់ត្រាថាបានបំពេញ",
     "cancelReservation": "លុបចោលការកក់",
-    "loading": "កំពុងផ្ទុកព័ត៌មានលម្អិតការកក់…"
+    "loading": "កំពុងផ្ទុកព័ត៌មានលម្អិតការកក់…",
+     "timeline": "ដំណើរការ",
+    "timelineReserved": "បានកក់",
+    "timelineReady": "រួចរាល់សម្រាប់មកយក",
+    "timelineFulfilled": "បានមកយក",
+    "timelineCancelled": "បានលុបចោល",
+    "timelineExpired": "ផុតកំណត់"
   },
   "historyPage": {
     "title": "ប្រវត្តិការកក់",
@@ -92,5 +101,11 @@
     "queuePosition": "ក្នុងជួរឈរសម្រាប់ចំណងជើងនេះ",
     "readyMsg": "ត្រៀមរួចសម្រាប់មកយក — សូមមកយកមុនថ្ងៃទី {date}",
     "cancelReservation": "លុបចោលការកក់"
-  }
+  },
+  "hint": {
+  "queue": "មានអ្នកកំពុងតម្រង់ជួរ {count} នាក់ (អ្នកនឹងទទួលបាន Priority #{priority})",
+  "outOfStock": "សៀវភៅនេះអស់ពីស្តុកហើយ — អ្នកអាចធ្វើការកក់បាន",
+  "queueShort": "ជួរ: {count}",
+  "noResults": "រកមិនឃើញសៀវភៅ"
+}
 }

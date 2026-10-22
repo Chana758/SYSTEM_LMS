@@ -8,9 +8,18 @@
   "typeLookup": "Lookup",
   "modeManual": "Manual / USB Scanner",
   "modeCamera": "Camera",
+  "modeRemote": "Phone",
+  "modeManualShort": "Manual",
+  "modeUsbScan": "USB Scan",
   "scanToSee": "Scan a barcode to see the result here",
   "resultsAppear": "Results appear instantly as staff scan books",
   "scanFailed": "Failed to process scan. Check your connection and try again.",
+  "confirmClear": "Are you sure you want to clear this audit session?",
+
+  "foundBorrowed": "Found · Currently borrowed",
+  "copiesAvailable":"{available}/{total} copies available",
+  "otherCopiesAvailable":"This copy is checked out, but {n} other copy(ies) are available. Borrow one directly.",
+ " borrowAvailableCopy": "Borrow an available copy",
   "barcodeInput": {
     "title": "Scan or Type Barcode",
     "subtitle": "USB/Bluetooth scanners type directly into the field below",
@@ -42,7 +51,7 @@
   "result": {
     "foundAvailable": "Found · Available",
     "notOnFile": "Not on File",
-    "actionNeeded": "Action Needed",
+    "actionNeeded": "Issue Detected",
     "noBookCopyFound": "No book copy found for this barcode.",
     "borrowedBySince": "Borrowed by {name} since {date}",
     "assignToMember": "Assign to Member",
@@ -69,7 +78,9 @@
     "reservedMsg": "Member added to the reservation queue.",
     "reserveFailed": "Failed to reserve this book.",
     "returnConfirmedMsg": "Return confirmed successfully.",
-    "confirmReturnFailed": "Failed to confirm return."
+    "confirmReturnFailed": "Failed to confirm return.",
+    "copyStatus": "Copy status: {status}",
+    "copiesAvailable": "{available}/{total} copies available"
   },
   "historyPage": {
     "title": "Scan History",
@@ -117,6 +128,8 @@
     "unknownBarcodes": "Unknown barcodes",
     "sessionLog": "Session Log",
     "exportSession": "Export Session (CSV)",
+    "clearSession": "Clear Session",
+    "confirmClear": "Are you sure you want to clear this audit session?",
     "colBarcode": "Barcode",
     "colBook": "Book",
     "colStatus": "Status",
@@ -127,11 +140,9 @@
     "statusDamaged": "Damaged",
     "statusLost": "Lost",
     "statusNotRecognized": "Not Recognized",
-    "clearSession": "Clear Session"
+    "duplicate": "{barcode} already scanned",
+    "networkError": "Network error, please scan again"
   },
-  "modeManualShort": "Manual",
-  "modeUsbScan": "USB Scan",
-  "confirmClear": "Are you sure you want to clear this audit session?",
   "remoteScan": {
     "generating": "Generating QR code…",
     "qrAlt": "Scan with your phone",
@@ -143,6 +154,14 @@
     "generateError": "Could not generate a QR code. Please try again.",
     "checkingSession": "Checking session...",
     "invalidSession": "This scan session is invalid or expired. Refresh the QR code on the desktop screen and re-scan.",
-    "sentScanNext": "Sent — scan the next one"
+    "sentScanNext": "Sent — scan the next one",
+    "sentCount": "Sent {count} scans",
+    "tooFast": "Too fast, please wait a moment",
+    "networkError": "Network error",
+    "sendFailed": "Failed to send"
+  },
+  "errors": {
+  "not_borrowed": "This copy has no active borrowing record.",
+  "copy_unavailable": "This copy is damaged or unavailable for borrowing."
   }
 }

@@ -9,13 +9,15 @@ export const useCatalogStore = defineStore('catalog', {
     currentBook: null,
     reviews: [],
     loading: false,
-    isbnLookupLoading: false,
     errors: {},
-    filters: { search: '', category_id: '' },
+    filters: { search: '', category_id: '', status: '' },
     pagination: { current_page: 1, per_page: 15, total: 0, last_page: 1 },
   }),
 
   actions: {
+    // ---- Books ----
+
+    // Fetch a page of books using the current filters
     async fetchBooks(page) {
       if (page) this.pagination.current_page = page
       this.loading = true
@@ -51,19 +53,6 @@ export const useCatalogStore = defineStore('catalog', {
       }
     },
 
-
-    async lookupIsbn(isbn) {
-      this.isbnLookupLoading = true
-      try {
-        const { data } = await catalogService.lookupIsbn(isbn)
-        return { success: true, data }
-      } catch (e) {
-        return { success: false, message: e.response?.data?.message || 'ISBN lookup failed' }
-      } finally {
-        this.isbnLookupLoading = false
-      }
-    },
-
     async fetchBook(id) {
       this.loading = true
       try {
@@ -72,24 +61,6 @@ export const useCatalogStore = defineStore('catalog', {
         this.reviews = data.reviews || []
       } finally {
         this.loading = false
-      }
-    },
-
-    async fetchReviews(bookId) {
-      try {
-        const { data } = await catalogService.listReviews(bookId)
-        this.reviews = data.data
-      } catch (e) {
-        console.error('fetchReviews failed:', e.response?.data || e.message)
-      }
-    },
-
-    async submitReview(bookId, payload) {
-      try {
-        const { data } = await catalogService.submitReview(bookId, payload)
-        return { success: true, message: data.message, data: data.review }
-      } catch (e) {
-        return { success: false, message: e.response?.data?.message || 'Failed to submit review', errors: e.response?.data?.errors }
       }
     },
 
@@ -131,6 +102,28 @@ export const useCatalogStore = defineStore('catalog', {
       }
     },
 
+    // ---- Reviews ----
+
+    async fetchReviews(bookId) {
+      try {
+        const { data } = await catalogService.listReviews(bookId)
+        this.reviews = data.data
+      } catch (e) {
+        console.error('fetchReviews failed:', e.response?.data || e.message)
+      }
+    },
+
+    async submitReview(bookId, payload) {
+      try {
+        const { data } = await catalogService.submitReview(bookId, payload)
+        return { success: true, message: data.message, data: data.review }
+      } catch (e) {
+        return { success: false, message: e.response?.data?.message || 'Failed to submit review', errors: e.response?.data?.errors }
+      }
+    },
+
+    // ---- Book copies ----
+
     async addCopies(id, quantity) {
       try {
         const { data } = await catalogService.addCopies(id, quantity)
@@ -140,11 +133,32 @@ export const useCatalogStore = defineStore('catalog', {
       }
     },
 
+    async updateCopy(id, payload) {
+      try {
+        const { data } = await catalogService.updateCopy(id, payload)
+        return { success: true, message: data.message, data: data.data }
+      } catch (e) {
+        return { success: false, message: e.response?.data?.message || 'Failed to update copy' }
+      }
+    },
+
+    async deleteCopy(id) {
+      try {
+        const { data } = await catalogService.deleteCopy(id)
+        return { success: true, message: data.message }
+      } catch (e) {
+        return { success: false, message: e.response?.data?.message || 'Failed to remove copy' }
+      }
+    },
+
+    // ---- Categories ----
+
     async fetchCategories() {
       this.loading = true
       this.errors = {}
       try {
         const { data } = await catalogService.listCategories()
+        // Accept either a plain array or a paginated { data: [] } response
         this.categories = Array.isArray(data) ? data : (data.data ?? [])
       } catch (e) {
         console.error('fetchCategories failed:', e.response?.status, e.response?.data || e.message)

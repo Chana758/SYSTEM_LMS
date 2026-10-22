@@ -1,5 +1,4 @@
 @theme {
-  /* ពណ៌សម្រាប់ Sidebar និង Header ដូច POS */
   --color-sidebar-bg: #10b981;
   --color-sidebar: #064e3b;
   --color-header-bg: #10b981;
@@ -10,6 +9,12 @@
 
   --font-sans: 'Kantumruy Pro', 'Inter', system-ui, sans-serif;
   --font-title: 'Kantumruy Pro', 'Inter', sans-serif;
-
   --font-report: 'Kantumruy Pro', sans-serif;
+}
+
+/* Dark mode overrides for the shared variables */
+.dark {
+  --color-bg-body: #0f172a;
+  --color-card-bg: #1e293b;
+  --color-text-main: #e2e8f0;
 }

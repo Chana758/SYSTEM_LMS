@@ -1,69 +1,43 @@
 import reservationApi from './reservationApi'
 
-/**
- * Utility to extract standardized error messages from API responses.
- */
+/** Turn any axios error into one predictable shape. */
 function extractError(error) {
   const response = error?.response
+  const errors = response?.data?.errors || {}
+
+  // Laravel validation (422) puts the first message inside errors; business
+  // rules (ReservationException) only send { message }.
+  const firstValidation = Object.values(errors)[0]?.[0]
+
   return {
     success: false,
-    message: response?.data?.message || 'An unexpected error occurred. Please try again.',
-    errors: response?.data?.errors || {},
+    status: response?.status,
+    message: firstValidation || response?.data?.message || 'An unexpected error occurred. Please try again.',
+    errors,
+  }
+}
+
+async function run(call, mapSuccess = (data) => ({ data })) {
+  try {
+    const { data } = await call()
+    return { success: true, ...mapSuccess(data) }
+  } catch (error) {
+    return extractError(error)
   }
 }
 
 export const reservationService = {
-  async getReservations(params) {
-    try {
-      const { data } = await reservationApi.index(params)
-      return { success: true, data }
-    } catch (error) {
-      return extractError(error)
-    }
-  },
+  getReservations: (params) => run(() => reservationApi.index(params)),
+  getStats: () => run(() => reservationApi.stats()),
+  getMyReservations: (params) => run(() => reservationApi.myReservations(params)),
+  getReservation: (id) => run(() => reservationApi.show(id)),
 
-  async getMyReservations(params) {
-    try {
-      const { data } = await reservationApi.myReservations(params)
-      return { success: true, data }
-    } catch (error) {
-      return extractError(error)
-    }
-  },
+  createReservation: (payload) =>
+    run(() => reservationApi.store(payload), (d) => ({ message: d.message, data: d.data })),
 
-  async getReservation(id) {
-    try {
-      const { data } = await reservationApi.show(id)
-      return { success: true, data }
-    } catch (error) {
-      return extractError(error)
-    }
-  },
+  cancelReservation: (id) =>
+    run(() => reservationApi.cancel(id), (d) => ({ message: d.message, data: d.data })),
 
-  async createReservation(payload) {
-    try {
-      const { data } = await reservationApi.store(payload)
-      return { success: true, message: data.message, data: data.data }
-    } catch (error) {
-      return extractError(error)
-    }
-  },
-
-  async cancelReservation(id) {
-    try {
-      const { data } = await reservationApi.cancel(id)
-      return { success: true, message: data.message, data: data.data }
-    } catch (error) {
-      return extractError(error)
-    }
-  },
-
-  async fulfillReservation(id) {
-    try {
-      const { data } = await reservationApi.fulfill(id)
-      return { success: true, message: data.message, data: data.data }
-    } catch (error) {
-      return extractError(error)
-    }
-  },
+  fulfillReservation: (id) =>
+    run(() => reservationApi.fulfill(id), (d) => ({ message: d.message, data: d.data })),
 }

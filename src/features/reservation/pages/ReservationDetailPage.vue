@@ -1,103 +1,99 @@
 <template>
-  <div v-if="store.currentReservation" class="space-y-6 pb-12">
-    <!-- Header Banner -->
-    <div class="flex items-center justify-between pb-6 border-b border-slate-200">
-      <div class="flex items-center gap-4">
+  <!-- Bottom padding keeps the last card clear of the member bottom nav on phones (64px + safe area) -->
+  <div v-if="store.currentReservation" class="space-y-5 sm:space-y-6 pb-[calc(6rem+env(safe-area-inset-bottom,0px))] lg:pb-12">
+    <!-- Header -->
+    <div class="flex items-center justify-between gap-3 pb-5 sm:pb-6 border-b border-slate-200 dark:border-white/10">
+      <div class="flex items-center gap-3 sm:gap-4 min-w-0">
         <router-link
-          to="/reservations"
-          class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors shadow-2xs shrink-0"
+          :to="backTo"
+          class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border-2 border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-200 flex items-center justify-center font-bold text-sm transition-colors shadow-2xs shrink-0"
           :title="$t('reservation.createPage.back')"
-        >
-          ←
-        </router-link>
-        <div>
-          <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('reservation.detailPage.title') }}</h1>
-          <p class="text-xs font-bold text-slate-500 mt-0.5">{{ $t('reservation.detailPage.subtitle') }}</p>
+        >←</router-link>
+        <div class="min-w-0">
+          <h1 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ $t('reservation.detailPage.title') }}</h1>
+          <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">{{ $t('reservation.detailPage.subtitle') }}</p>
         </div>
       </div>
-      <ReservationStatusBadge :status="store.currentReservation.status" />
+      <ReservationStatusBadge :status="r.status" class="flex-shrink-0" />
     </div>
 
-    <!-- Main Grid Content -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      
-      <!-- Details Card -->
-      <div class="md:col-span-2 bg-white rounded-2xl border-2 border-slate-300 p-6 md:p-8 relative overflow-hidden shadow-md">
-        <!-- Spine Accent Bar -->
-        <span class="absolute left-0 top-0 bottom-0 w-2" :class="spineClass(store.currentReservation.status)"></span>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
 
-        <!-- Book Info Section -->
-        <div class="flex gap-5 items-start">
-          <div class="w-24 h-36 rounded-xl overflow-hidden bg-slate-100 border-2 border-slate-200 flex-shrink-0 shadow-2xs">
-            <img v-if="store.currentReservation.book?.cover_image" :src="coverUrl(store.currentReservation.book.cover_image)" class="w-full h-full object-cover" />
-            <div v-else class="w-full h-full flex items-center justify-center text-3xl text-slate-400">📖</div>
+      <!-- Details -->
+      <div class="md:col-span-2 space-y-5 sm:space-y-6">
+        <div class="bg-white dark:bg-slate-800/50 rounded-2xl border-2 border-slate-300 dark:border-white/10 p-4 pl-6 sm:p-6 sm:pl-8 md:p-8 relative overflow-hidden shadow-md">
+          <span class="absolute left-0 top-0 bottom-0 w-2" :class="spineClass(r.status)"></span>
+
+          <div class="flex gap-4 sm:gap-5 items-start">
+            <div class="w-20 h-28 sm:w-24 sm:h-36 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-700/40 border-2 border-slate-200 dark:border-white/10 flex-shrink-0 shadow-2xs">
+              <img v-if="r.book?.cover_image" :src="coverUrl(r.book.cover_image)" class="w-full h-full object-cover" />
+              <div v-else class="w-full h-full flex items-center justify-center text-3xl text-slate-400 dark:text-slate-500">📖</div>
+            </div>
+            <div class="space-y-1 min-w-0">
+              <h2 class="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight break-words">{{ r.book?.title }}</h2>
+              <p class="text-xs font-extrabold text-slate-600 dark:text-slate-300">{{ r.book?.author }}</p>
+              <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ r.book?.category?.name }}</p>
+            </div>
           </div>
-          <div class="space-y-1">
-            <h2 class="text-lg font-black text-slate-900 tracking-tight">{{ store.currentReservation.book?.title }}</h2>
-            <p class="text-xs font-extrabold text-slate-600">{{ store.currentReservation.book?.author }}</p>
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ store.currentReservation.book?.category?.name }}</p>
+
+          <div class="grid grid-cols-2 gap-3 sm:gap-5 mt-5 sm:mt-6 pt-5 sm:pt-6 border-t-2 border-slate-100 dark:border-white/10 text-sm">
+            <div :class="metaBox">
+              <p :class="metaLabel">{{ $t('reservation.member') }}</p>
+              <p class="text-slate-900 dark:text-white font-extrabold break-words">{{ r.member?.user?.name }}</p>
+              <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5 break-words">{{ r.member?.membership_no }}</p>
+            </div>
+            <div :class="metaBox + ' flex flex-col justify-between'">
+              <p :class="metaLabel">{{ $t('reservation.detailPage.queuePriority') }}</p>
+              <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white dark:bg-slate-900/60 border-2 border-slate-300 dark:border-white/15 text-slate-900 dark:text-white font-black text-xs shadow-2xs">
+                {{ r.priority_order }}
+              </span>
+            </div>
+            <div :class="metaBox">
+              <p :class="metaLabel">{{ $t('reservation.detailPage.reservedDate') }}</p>
+              <p class="text-slate-900 dark:text-white font-extrabold text-xs mt-1">{{ formatDate(r.reserved_date) }}</p>
+            </div>
+            <div :class="metaBox">
+              <p :class="metaLabel">{{ $t('reservation.detailPage.expiresOn') }}</p>
+              <p class="text-slate-900 dark:text-white font-extrabold text-xs mt-1">{{ formatDate(r.expire_date) }}</p>
+            </div>
           </div>
         </div>
 
-        <!-- Meta Grid -->
-        <div class="grid grid-cols-2 gap-5 mt-6 pt-6 border-t-2 border-slate-100 text-sm">
-          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.member') }}</p>
-            <p class="text-slate-900 font-extrabold">{{ store.currentReservation.member?.user?.name }}</p>
-            <p class="text-xs font-bold text-slate-500 mt-0.5">{{ store.currentReservation.member?.membership_no }}</p>
-          </div>
-
-          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.detailPage.queuePriority') }}</p>
-            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white border-2 border-slate-300 text-slate-900 font-black text-xs shadow-2xs">
-              {{ store.currentReservation.priority_order }}
-            </span>
-          </div>
-
-          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.detailPage.reservedDate') }}</p>
-            <p class="text-slate-900 font-extrabold text-xs mt-1">{{ formatDate(store.currentReservation.reserved_date) }}</p>
-          </div>
-
-          <div class="bg-slate-50/70 border-2 border-slate-200 rounded-xl p-4 shadow-2xs">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{{ $t('reservation.detailPage.expiresOn') }}</p>
-            <p class="text-slate-900 font-extrabold text-xs mt-1">{{ formatDate(store.currentReservation.expire_date) }}</p>
-          </div>
+        <!-- Timeline (audit trail) -->
+        <div class="bg-white dark:bg-slate-800/50 rounded-2xl border-2 border-slate-300 dark:border-white/10 p-4 sm:p-6 shadow-md">
+          <h3 class="font-black text-slate-900 dark:text-white text-sm tracking-tight mb-4">{{ $t('reservation.detailPage.timeline') }}</h3>
+          <ol class="relative border-l-2 border-slate-200 dark:border-white/10 ml-2 space-y-5">
+            <li v-for="item in timeline" :key="item.key" class="pl-5 relative">
+              <span class="absolute -left-[7px] top-1 w-3 h-3 rounded-full ring-4 ring-white dark:ring-slate-800" :class="item.dot"></span>
+              <p class="text-xs font-extrabold text-slate-900 dark:text-white">{{ item.label }}</p>
+              <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400">{{ formatDateTime(item.at) }}</p>
+            </li>
+          </ol>
         </div>
       </div>
 
-      <!-- Action Panel -->
-      <div v-if="canManage" class="bg-white rounded-2xl border-2 border-slate-300 p-6 h-fit space-y-4 shadow-md">
-        <h3 class="font-black text-slate-900 text-sm tracking-tight">{{ $t('reservation.detailPage.actionsTitle') }}</h3>
-        
+      <!-- Actions (member: cancel own · staff: fulfill + cancel) -->
+      <div v-if="canFulfill || canCancel" class="bg-white dark:bg-slate-800/50 rounded-2xl border-2 border-slate-300 dark:border-white/10 p-4 sm:p-6 h-fit space-y-4 shadow-md">
+        <h3 class="font-black text-slate-900 dark:text-white text-sm tracking-tight">{{ $t('reservation.detailPage.actionsTitle') }}</h3>
+
         <button
-          v-if="store.currentReservation.status === 'ready'"
+          v-if="canFulfill"
           @click="handleFulfill"
           :disabled="actionLoading"
-          class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm"
-        >
-          {{ $t('reservation.detailPage.markFulfilled') }}
-        </button>
+          class="w-full bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white py-3 sm:py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm cursor-pointer"
+        >{{ $t('reservation.detailPage.markFulfilled') }}</button>
 
         <button
-          v-if="['pending', 'ready'].includes(store.currentReservation.status)"
+          v-if="canCancel"
           @click="handleCancel"
           :disabled="actionLoading"
-          class="w-full border-2 border-rose-200 bg-rose-50/50 text-rose-600 hover:bg-rose-100 py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-2xs"
-        >
-          {{ $t('reservation.detailPage.cancelReservation') }}
-        </button>
-
-        <p v-if="actionMessage" class="text-xs font-extrabold p-3 rounded-xl border-2" :class="actionSuccess ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-rose-600 bg-rose-50 border-rose-200'">
-          {{ actionMessage }}
-        </p>
+          class="w-full border-2 border-rose-200 dark:border-rose-400/30 bg-rose-50/50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-500/20 py-3 sm:py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-2xs cursor-pointer"
+        >{{ $t('reservation.detailPage.cancelReservation') }}</button>
       </div>
-
     </div>
   </div>
-  
-  <!-- Loading State -->
-  <div v-else class="bg-white rounded-2xl border-2 border-slate-300 p-16 text-center text-slate-400 text-sm font-semibold shadow-2xs">
+
+  <div v-else class="bg-white dark:bg-slate-800/50 rounded-2xl border-2 border-slate-300 dark:border-white/10 p-10 sm:p-16 text-center text-slate-400 dark:text-slate-500 text-sm font-semibold shadow-2xs">
     {{ $t('reservation.detailPage.loading') }}
   </div>
 </template>
@@ -106,45 +102,67 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'vue-toastification'
 import { useReservationStore } from '../store/reservationStore'
 import { useAuthStore } from '@/features/auth/store/authStore'
+import { coverUrl } from '@/utils/coverUrl'
 import ReservationStatusBadge from '../components/ReservationStatusBadge.vue'
 
 const route = useRoute()
 const store = useReservationStore()
 const authStore = useAuthStore()
+const toast = useToast()
 const { t } = useI18n()
 
-const canManage = computed(() => ['admin', 'librarian'].includes(authStore.role))
+const r = computed(() => store.currentReservation)
+const isStaff = computed(() => ['admin', 'librarian'].includes(authStore.role))
+const isActive = computed(() => ['pending', 'ready'].includes(r.value?.status))
+const canFulfill = computed(() => isStaff.value && r.value?.status === 'ready')
+const canCancel = computed(() => isActive.value)
+const backTo = computed(() => (isStaff.value ? '/reservations' : '/my-reservations'))
+
 const actionLoading = ref(false)
-const actionMessage = ref('')
-const actionSuccess = ref(false)
+
+const metaBox = 'bg-slate-50/70 dark:bg-white/5 border-2 border-slate-200 dark:border-white/10 rounded-xl p-3 sm:p-4 shadow-2xs'
+const metaLabel = 'text-slate-400 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1'
+
+const timeline = computed(() => {
+  if (!r.value) return []
+  const v = r.value
+  return [
+    { key: 'reserved',  at: v.created_at || v.reserved_date, dot: 'bg-slate-400',   label: t('reservation.detailPage.timelineReserved') },
+    { key: 'ready',     at: v.ready_at,                      dot: 'bg-blue-500',    label: t('reservation.detailPage.timelineReady') },
+    { key: 'fulfilled', at: v.fulfilled_at,                  dot: 'bg-emerald-500', label: t('reservation.detailPage.timelineFulfilled') },
+    { key: 'cancelled', at: v.cancelled_at,                  dot: 'bg-slate-500',   label: t('reservation.detailPage.timelineCancelled') },
+    { key: 'expired',   at: v.expired_at,                    dot: 'bg-rose-500',    label: t('reservation.detailPage.timelineExpired') },
+  ]
+    .filter((i) => i.at)
+    .sort((a, b) => new Date(a.at) - new Date(b.at))
+})
 
 function spineClass(status) {
   return {
     pending: 'bg-amber-400',
-    ready: 'bg-blue-500',
+    ready: 'bg-blue-500 dark:bg-sky-400',
     fulfilled: 'bg-emerald-500',
-    cancelled: 'bg-slate-300',
+    cancelled: 'bg-slate-300 dark:bg-slate-600',
     expired: 'bg-rose-400',
-  }[status] || 'bg-slate-300'
+  }[status] || 'bg-slate-300 dark:bg-slate-600'
 }
 
-async function handleFulfill() {
+async function run(action) {
   actionLoading.value = true
-  const result = await store.fulfillReservation(route.params.id)
-  actionSuccess.value = result.success
-  actionMessage.value = result.message
+  const result = await action(route.params.id)
   actionLoading.value = false
+  result.success ? toast.success(result.message) : toast.error(result.message)
+  if (result.success) store.fetchReservation(route.params.id, true) // silent: refresh timeline without a "Loading…" flash
 }
 
-async function handleCancel() {
+const handleFulfill = () => run(store.fulfillReservation)
+
+function handleCancel() {
   if (!confirm(t('reservation.confirmCancel'))) return
-  actionLoading.value = true
-  const result = await store.cancelReservation(route.params.id)
-  actionSuccess.value = result.success
-  actionMessage.value = result.message
-  actionLoading.value = false
+  run(store.cancelReservation)
 }
 
 function formatDate(d) {
@@ -152,9 +170,10 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
-function coverUrl(path) {
-  const baseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '')
-  return `${baseUrl}/storage/${path}`
+function formatDateTime(d) {
+  return new Date(d).toLocaleString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+  })
 }
 
 onMounted(() => store.fetchReservation(route.params.id))

@@ -1,68 +1,68 @@
 <template>
-  <div class="space-y-6 pb-12">
+  <div class="space-y-4 sm:space-y-6 pb-12">
     <!-- Main Wrapper Card -->
-    <div class="bg-white rounded-2xl border border-slate-300 shadow-md p-6 md:p-8 space-y-6">
-      
+    <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-300 dark:border-white/10 shadow-md p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+
       <!-- Header Banner -->
-      <div class="flex items-center justify-between pb-6 border-b border-slate-200">
-        <div class="flex items-center gap-5">
-          <div class="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center flex-shrink-0 shadow-2xs">
-            <ClockIcon class="w-7 h-7 text-purple-700" />
+      <div class="flex items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-200 dark:border-white/10">
+        <div class="flex items-center gap-3 sm:gap-5 min-w-0">
+          <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-500/20 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <ClockIcon class="w-6 h-6 sm:w-7 sm:h-7 text-purple-700 dark:text-purple-300" />
           </div>
-          <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('circulation.borrowHistory.title') }}</h1>
-            <p class="text-xs font-bold text-slate-500 mt-1">{{ store.pagination.total }} {{ $t('circulation.borrowHistory.recordsTotal') }}</p>
+          <div class="min-w-0">
+            <h1 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ $t('circulation.borrowHistory.title') }}</h1>
+            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-1">{{ store.pagination.total }} {{ $t('circulation.borrowHistory.recordsTotal') }}</p>
           </div>
         </div>
-        <span class="text-[10px] font-extrabold uppercase tracking-widest text-purple-600 bg-purple-50 border border-purple-100 px-3 py-1.5 rounded-xl hidden sm:inline-block">
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-500/20 px-3 py-1.5 rounded-xl hidden sm:inline-block">
           {{ $t('circulation.borrowHistory.title') }}
         </span>
       </div>
 
       <!-- Filter Bar -->
-      <div class="bg-slate-50/70 rounded-xl border border-slate-200 p-4">
+      <div class="bg-slate-50/70 dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-white/10 p-3 sm:p-4">
         <div class="flex flex-wrap gap-3 items-center">
-          <div class="relative flex-1 min-w-[240px]">
-            <MagnifyingGlassIcon class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div class="relative w-full sm:flex-1 sm:min-w-[240px]">
+            <MagnifyingGlassIcon class="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               v-model="store.filters.search"
               @input="debouncedFetch"
               type="text"
               :placeholder="$t('circulation.borrowHistory.searchPlaceholder')"
-              class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 transition-shadow shadow-2xs"
+              class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/15 rounded-xl pl-9 pr-3 py-2.5 sm:py-2 text-xs text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-purple-600 transition-shadow shadow-2xs"
             />
           </div>
 
           <select
             v-model="store.filters.status"
             @change="store.fetchList(1)"
-            class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
+            class="w-full sm:w-auto bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/15 rounded-xl px-3 py-2.5 sm:py-2 text-xs text-slate-700 dark:text-slate-300 font-bold focus:outline-none focus:border-purple-600 shadow-2xs cursor-pointer dark:[color-scheme:dark]"
           >
-            <option value="">{{ $t('circulation.allStatus') }}</option>
-            <option value="borrowed">{{ $t('circulation.statusBorrowed') }}</option>
-            <option value="returned">{{ $t('circulation.statusReturned') }}</option>
+            <option value="" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.allStatus') }}</option>
+            <option value="borrowed" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.statusBorrowed') }}</option>
+            <option value="returned" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.statusReturned') }}</option>
           </select>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 w-full sm:w-auto">
             <input
               v-model="store.filters.from"
               @change="store.fetchList(1)"
               type="date"
-              class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
+              class="flex-1 min-w-0 sm:flex-none bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/15 rounded-xl px-3 py-2.5 sm:py-2 text-xs text-slate-700 dark:text-slate-300 font-medium focus:outline-none focus:border-purple-600 shadow-2xs dark:[color-scheme:dark]"
             />
-            <span class="text-slate-400 text-xs font-bold">{{ $t('circulation.borrowHistory.to') }}</span>
+            <span class="text-slate-400 dark:text-slate-500 text-xs font-bold">{{ $t('circulation.borrowHistory.to') }}</span>
             <input
               v-model="store.filters.to"
               @change="store.fetchList(1)"
               type="date"
-              class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 shadow-2xs"
+              class="flex-1 min-w-0 sm:flex-none bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/15 rounded-xl px-3 py-2.5 sm:py-2 text-xs text-slate-700 dark:text-slate-300 font-medium focus:outline-none focus:border-purple-600 shadow-2xs dark:[color-scheme:dark]"
             />
           </div>
 
           <button
             v-if="hasActiveFilters"
             @click="clearFilters"
-            class="text-xs font-bold text-slate-500 hover:text-rose-600 px-3 py-2 transition-colors ml-auto"
+            class="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 px-3 py-2 transition-colors sm:ml-auto cursor-pointer"
           >
             {{ $t('circulation.borrowHistory.clearFilters') }}
           </button>
@@ -70,11 +70,12 @@
       </div>
 
       <!-- Loading / Table Container -->
-      <div v-if="store.loading" class="bg-white rounded-2xl border border-slate-200 p-14 text-center text-slate-400 text-sm font-semibold shadow-2xs">
+      <div v-if="store.loading" class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 p-10 sm:p-14 text-center text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider shadow-2xs">
+        <div class="w-7 h-7 border-3 border-purple-600 dark:border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
         {{ $t('circulation.borrowHistory.loadingRecords') }}
       </div>
 
-      <div v-else class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+      <div v-else class="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 shadow-2xs">
         <BorrowTable
           :items="store.borrows"
           role="admin"
@@ -84,12 +85,14 @@
       </div>
 
       <!-- Pagination -->
-      <div class="flex justify-center gap-2 pt-2" v-if="store.pagination.last_page > 1">
+      <div class="flex flex-wrap justify-center gap-2 pt-2" v-if="store.pagination.last_page > 1">
         <button
           v-for="p in store.pagination.last_page" :key="p"
           @click="store.fetchList(p)"
-          class="w-8 h-8 rounded-xl text-xs font-bold transition-colors shadow-2xs"
-          :class="p === store.pagination.current_page ? 'bg-purple-600 text-white' : 'bg-white border border-slate-300 text-slate-700 hover:bg-purple-50'"
+          class="w-9 h-9 sm:w-8 sm:h-8 rounded-xl text-xs font-bold transition-colors shadow-2xs cursor-pointer"
+          :class="p === store.pagination.current_page
+            ? 'bg-purple-600 dark:bg-purple-500 text-white'
+            : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-950/30'"
         >
           {{ p }}
         </button>

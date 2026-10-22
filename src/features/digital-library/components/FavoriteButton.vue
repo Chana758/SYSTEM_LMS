@@ -2,8 +2,10 @@
   <button
     @click="handleToggle"
     :disabled="loading"
-    class="flex items-center gap-2 border rounded-lg px-4 py-2.5 text-sm font-medium transition-colors"
-    :class="isFav ? 'border-red-200 text-red-600 bg-red-50 hover:bg-red-100' : 'border-gray-200 text-gray-600 hover:bg-gray-50'"
+    class="flex items-center gap-2 border rounded-lg px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer"
+    :class="isFav
+      ? 'border-red-200 text-red-600 bg-red-50 hover:bg-red-100 dark:border-rose-400/30 dark:text-rose-300 dark:bg-rose-500/15 dark:hover:bg-rose-500/25'
+      : 'border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-white/15 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-white/10'"
   >
     <HeartIcon v-if="!isFav" class="w-4 h-4" />
     <HeartIconSolid v-else class="w-4 h-4" />

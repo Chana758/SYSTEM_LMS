@@ -1,2 +1,4 @@
-/* src/assets/css/tailwind.css */
 @import 'tailwindcss';
+
+/* Make every dark: class follow the .dark class on <html> */
+@custom-variant dark (&:where(.dark, .dark *));

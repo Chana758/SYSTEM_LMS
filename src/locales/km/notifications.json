@@ -2,7 +2,9 @@
   "pageTitle": "ការជូនដំណឹង",
   "pageSubtitle": "តាមដានព័ត៌មានថ្មីៗ ការជូនដំណឹង និងសារពីប្រព័ន្ធ។",
   "markAllRead": "សម្គាល់ថាបានអានទាំងអស់ ({count})",
+  "markRead": "សម្គាល់ថាបានអាន",
   "sendNotification": "ផ្ញើការជូនដំណឹង",
+  "settings": "ការកំណត់",
   "total": "សរុប",
   "allAlerts": "ការជូនដំណឹងទាំងអស់",
   "unread": "មិនទាន់អាន",
@@ -12,12 +14,37 @@
   "loadingNotifications": "កំពុងផ្ទុកការជូនដំណឹង...",
   "updating": "កំពុងធ្វើបច្ចុប្បន្នភាព...",
   "noNotificationsFound": "រកមិនឃើញការជូនដំណឹង",
+  "noNotifications": "គ្មានការជូនដំណឹង",
   "allCaughtUp": "អ្នកបានឃើញអស់ហើយ — ការជូនដំណឹងថ្មីនឹងបង្ហាញនៅទីនេះ។",
   "confirmDelete": "លុបការជូនដំណឹងនេះ?",
+  "deleteNotification": "លុបការជូនដំណឹង",
+  "viewAllNotifications": "មើលការជូនដំណឹងទាំងអស់",
+  "new": "ថ្មី",
+  "viewDetails": "មើលលម្អិត",
+
+  "typeOverdue": "ហួសកំណត់",
+  "typeReservation": "ការកក់",
+  "typeFine": "ការពិន័យ",
+  "typeSystem": "ប្រព័ន្ធ",
+  "typeAnnouncement": "សេចក្តីជូនដំណឹង",
+
+  "timeJustNow": "ទើបតែឥឡូវនេះ",
+  "timeMinAgo": "{n} នាទីមុន",
+  "timeHourAgo": "{n} ម៉ោងមុន",
+  "timeDayAgo": "{n} ថ្ងៃមុន",
+
+ "filter": {
+  "all": "ទាំងអស់",
+  "read": "អានរួច",
+  "status": "ស្ថានភាព",
+  "reset": "កំណត់ឡើងវិញ",
+  "searchPlaceholder": "ស្វែងរកការជូនដំណឹង…"
+},
+
   "composeModal": {
     "broadcaster": "អ្នកផ្សាយសារ",
     "title": "ផ្ញើការជូនដំណឹង",
-    "subtitle": "សរសេរការជូនដំណឹងសម្រាប់សមាជិកម្នាក់ ឬសមាជិកភាពទាំងអស់។",
+    "subtitle": "សរសេរការជូនដំណឹងសម្រាប់សមាជិកម្នាក់ ឬសមាជិកទាំងអស់។",
     "recipient": "អ្នកទទួល",
     "allMembers": "សមាជិកទាំងអស់",
     "specificMember": "សមាជិកជាក់លាក់",
@@ -35,6 +62,15 @@
     "sending": "កំពុងផ្ញើ...",
     "send": "ផ្ញើ"
   },
+
+  "detail": {
+    "backToNotifications": "ការជូនដំណឹង",
+    "viewRelatedItem": "មើលធាតុពាក់ព័ន្ធ",
+    "deleteNotification": "លុបការជូនដំណឹង",
+    "loading": "កំពុងផ្ទុកព័ត៌មានលម្អិតការជូនដំណឹង...",
+    "notFound": "រកមិនឃើញការជូនដំណឹងទេ។",
+    "confirmDelete": "លុបការជូនដំណឹងនេះ?"
+  },
   "detailPage": {
     "backToNotifications": "ការជូនដំណឹង",
     "viewRelatedItem": "មើលធាតុពាក់ព័ន្ធ",
@@ -42,11 +78,13 @@
     "loading": "កំពុងផ្ទុកព័ត៌មានលម្អិតការជូនដំណឹង...",
     "confirmDelete": "លុបការជូនដំណឹងនេះ?"
   },
+
   "settingsPage": {
     "title": "ការកំណត់ការជូនដំណឹង",
     "subtitle": "គ្រប់គ្រងពេលវេលា និងរបៀបទទួលការជូនដំណឹង",
     "browserPushAlerts": "ការជូនដំណឹងតាមកម្មវិធីរុករក",
     "browserPushDesc": "បង្ហាញ popup ប្រព័ន្ធនៅពេលមានការជូនដំណឹងថ្មី ខណៈ tab នេះកំពុងបើក។",
+    "pushBlocked": "ការជូនដំណឹងត្រូវបានរារាំង។ សូមអនុញ្ញាតក្នុងការកំណត់គេហទំព័រនៃកម្មវិធីរុករករបស់អ្នក។",
     "muteByType": "បិទសំឡេងតាមប្រភេទ",
     "typeOverdueReminders": "ការរំលឹកហួសកំណត់",
     "typeReservationUpdates": "ការធ្វើបច្ចុប្បន្នភាពការកក់",
@@ -54,21 +92,5 @@
     "typeAnnouncements": "សេចក្តីជូនដំណឹង",
     "typeSystemMessages": "សារពីប្រព័ន្ធ",
     "savedNote": "ការកំណត់ទាំងនេះត្រូវបានរក្សាទុកតែលើឧបករណ៍នេះប៉ុណ្ណោះ។"
-  },
-  "typeOverdue": "ហួសកំណត់",
-  "typeReservation": "ការកក់",
-  "typeFine": "ការពិន័យ",
-  "typeSystem": "ប្រព័ន្ធ",
-  "typeAnnouncement": "សេចក្តីជូនដំណឹង",
-  "new": "ថ្មី",
-  "viewAllNotifications": "មើលការជូនដំណឹងទាំងអស់",
-  "timeJustNow": "ទើបតែឥឡូវនេះ",
-  "timeMinAgo": "{n} នាទីមុន",
-  "timeHourAgo": "{n} ម៉ោងមុន",
-  "timeDayAgo": "{n} ថ្ងៃមុន",
-  "noNotifications": "គ្មានការជូនដំណឹង",
-  "filter": {
-  "all": "ទាំងអស់",
-  "read": "អានរួច"
-}
+  }
 }

@@ -49,5 +49,14 @@
     "of": "នៃ",
     "next": "បន្ទាប់",
     "previous": "មុន"
+  },
+  "header": {
+    "toggleTheme": "ប្តូរពន្លឺ/ងងឹត",
+    "fullscreen": "ពេញអេក្រង់",
+    "roles": {
+      "admin": "អ្នកគ្រប់គ្រង",
+      "librarian": "បណ្ណារក្ស",
+      "member": "សមាជិក"
+    }
   }
 }

@@ -5,9 +5,9 @@
         <LockClosedIcon class="w-7 h-7 text-red-500" />
       </div>
 
-      <h1 class="text-2xl font-bold text-gray-800 mb-2">Access Denied</h1>
+      <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ $t('auth.accessDenied') }}</h1>
       <p class="text-gray-500 text-sm mb-6">
-        You do not have permission to access this page. Please contact your administrator if you believe this is an error.
+        {{ $t('auth.accessDeniedMessage') }}
       </p>
 
       <button
@@ -23,14 +23,18 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { LockClosedIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/features/auth/store/authStore'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const isStaff = computed(() => ['admin', 'librarian'].includes(authStore.role))
-const homeLabel = computed(() => (isStaff.value ? 'Return to Dashboard' : 'Return to My Borrows'))
+const homeLabel = computed(() =>
+  isStaff.value ? t('auth.returnToDashboard') : t('auth.returnToMyBorrows')
+)
 
 function goHome() {
   if (isStaff.value) {

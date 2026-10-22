@@ -2,7 +2,7 @@ import apiClient from './axios'
 import router from '@/router'
 
 export function setupInterceptors() {
-  // Request interceptor — attach the Bearer token and locale to every request
+  // Request: attach the Bearer token and locale to every request
   apiClient.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('access_token')
@@ -10,14 +10,10 @@ export function setupInterceptors() {
         config.headers.Authorization = `Bearer ${token}`
       }
 
-      // Attach the locale header.
-      // The Laravel SetLocale middleware reads this header to call
-      // App::setLocale(), ensuring validation messages, __()/trans()
-      // translations, emails, notifications, and other localized
-      // content are returned in the correct language.
+      // Laravel's SetLocale middleware reads this header to localize responses
       config.headers['X-Locale'] = localStorage.getItem('locale') || 'km'
-      
-      // Let the browser set the correct multipart boundary for file uploads.
+
+      // Let the browser set the multipart boundary for file uploads
       if (config.data instanceof FormData) {
         delete config.headers['Content-Type']
       }
@@ -26,7 +22,7 @@ export function setupInterceptors() {
     (error) => Promise.reject(error)
   )
 
-  // Response interceptor — handle global errors
+  // Response: on 401, clear the session and redirect to login
   apiClient.interceptors.response.use(
     (response) => response,
     (error) => {

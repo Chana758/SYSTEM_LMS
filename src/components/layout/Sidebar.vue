@@ -1,112 +1,107 @@
 <template>
   <aside
-    class="h-screen flex flex-col bg-gray-50 transition-all duration-300 border-r border-gray-200"
+    class="relative h-full flex flex-col overflow-hidden bg-gradient-to-b border-r transition-all duration-300
+           from-green-900 via-green-900 to-green-950 border-green-950
+           dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 dark:border-white/5"
     :class="isCollapsed ? 'w-20' : 'w-64'"
-    style="box-shadow: 4px 0 16px rgba(0,0,0,0.02);"
+    style="box-shadow: 6px 0 24px rgba(0,0,0,0.12);"
   >
-    <!-- Brand / Logo Section (Green + Gold Classic Library Theme) -->
-    <div class="relative flex flex-col items-center justify-center pt-6 pb-5 px-3 text-center transition-all overflow-hidden flex-shrink-0 bg-green-800 border-b-2 border-amber-400/70">
+    <!-- Close button: only shown inside the phone drawer -->
+    <button
+      v-if="closable"
+      type="button"
+      @click="$emit('close')"
+      class="absolute top-3 right-3 z-20 w-9 h-9 flex items-center justify-center rounded-xl bg-white/10 hover:bg-rose-500/80 text-white border border-white/15 transition cursor-pointer"
+      aria-label="Close menu"
+    >
+      <XMarkIcon class="w-5 h-5" />
+    </button>
 
-      <!-- Logo Image with gold ring accent -->
-      <div class="relative flex-shrink-0 mb-3 group">
-        <div class="absolute -inset-2 rounded-full bg-amber-300 opacity-20 blur-md group-hover:opacity-40 transition duration-500"></div>
+    <!-- Soft decorative glows (emerald in light mode, indigo in dark mode) -->
+    <div class="pointer-events-none absolute -top-24 -left-20 h-60 w-60 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-24 -right-20 h-60 w-60 rounded-full bg-emerald-400/10 dark:bg-indigo-400/10 blur-3xl"></div>
+
+    <!-- Brand -->
+    <div
+      class="relative flex-shrink-0 flex flex-col items-center text-center transition-all"
+      :class="isCollapsed ? 'px-2 pt-5 pb-4' : 'px-4 pt-6 pb-5'"
+    >
+      <div class="relative group mb-3">
+        <!-- Glow behind the logo (stronger in dark mode) -->
+        <div class="absolute -inset-2 rounded-full bg-amber-300 opacity-25 dark:opacity-40 blur-lg group-hover:opacity-45 dark:group-hover:opacity-60 transition duration-500"></div>
         <div
-          class="relative w-[76px] h-[76px] flex items-center justify-center rounded-full bg-white p-1 shadow-lg ring-2 ring-amber-400/70 transition-transform duration-300 group-hover:scale-105"
+          class="relative flex items-center justify-center rounded-full bg-white dark:bg-slate-900 p-1 shadow-xl dark:shadow-amber-400/30 ring-2 ring-amber-400/80 dark:ring-amber-300 transition-all duration-300 group-hover:scale-105"
+          :class="isCollapsed ? 'h-12 w-12' : 'h-[76px] w-[76px]'"
         >
-          <!-- CHANGED: dynamic logo, falls back to bundled asset -->
           <img
             :src="brandingStore.logoUrl || defaultLogo"
             :alt="brandingStore.siteName"
-            class="w-full h-full object-contain rounded-full"
+            class="h-full w-full rounded-full object-contain"
           />
         </div>
       </div>
 
-      <div v-if="!isCollapsed" class="flex flex-col items-center leading-tight relative">
-        <span class="text-[17px] font-black text-white tracking-wider">
-          <!-- CHANGED: dynamic site name -->
-          {{ brandingStore.siteName }} <span class="text-amber-300">{{ brandingStore.siteNameAccent }}</span>
+      <div v-if="!isCollapsed" class="flex flex-col items-center leading-tight">
+        <span class="text-[17px] font-black tracking-wider text-white">
+          {{ brandingStore.siteName }}
+          <span class="text-amber-300">{{ brandingStore.siteNameAccent }}</span>
         </span>
-        <!-- Gold divider line -->
-        <div class="w-8 h-[2px] bg-amber-400/70 rounded-full my-1.5"></div>
-        <span class="flex items-center gap-1.5 text-[9px] font-bold text-amber-100 uppercase tracking-widest bg-white/10 border border-amber-400/30 px-2.5 py-0.5 rounded-full shadow-sm backdrop-blur-sm">
-          <span class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
-          <!-- CHANGED: dynamic tagline -->
+        <div class="my-2 h-[2px] w-10 rounded-full bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+        <span class="flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-white/10 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-amber-100 backdrop-blur-sm dark:border-amber-400/40 dark:bg-slate-900/60">
+          <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-300"></span>
           {{ brandingStore.siteTagline }}
         </span>
       </div>
     </div>
 
-    <div v-if="canSee('dashboard')" class="px-3 mt-3 mb-2.5 flex-shrink-0">
-      <router-link
-        to="/dashboard"
-        class="relative flex items-center gap-3 px-3.5 py-2.5 bg-green-800 rounded-xl hover:bg-green-700 transition-all shadow-sm group overflow-hidden border border-amber-400/40"
-      >
-        <span class="absolute left-0 top-0 bottom-0 w-1 bg-amber-400"></span>
-        <ChartPieIcon class="w-[18px] h-[18px] text-amber-300 flex-shrink-0 group-hover:scale-110 transition-transform ml-1" />
-        <span v-if="!isCollapsed" class="text-white text-[15px] font-medium tracking-wide">
-          {{ $t('sidebar.dashboard') }}
-        </span>
-      </router-link>
-    </div>
+    <!-- Gold divider -->
+    <div class="h-px flex-shrink-0 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent"></div>
 
-    <!-- Navigation Area (Scrollable) -->
-    <nav class="flex-1 overflow-y-auto px-3 flex flex-col gap-1.5 pb-3 custom-scrollbar">
-      <template v-if="visibleCoreMenus.length">
-        <p v-if="!isCollapsed" class="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-bold px-1.5 pt-1.5 pb-1">
-          <span class="w-1 h-1 rounded-full bg-amber-400"></span>
-          {{ $t('sidebar.sections.management') }}
-        </p>
-        <SidebarLink
-          v-for="item in visibleCoreMenus"
-          :key="item.name + item.path"
-          :item="item"
-          :isCollapsed="isCollapsed"
-          :isActive="item.path === activePath"
-        />
-        <hr class="border-gray-200 my-2" />
-      </template>
+    <!-- Navigation -->
+    <nav class="sidebar-scroll relative flex-1 space-y-6 overflow-y-auto px-3 py-5">
+      <div v-for="section in visibleSections" :key="section.key">
+        <!-- Section heading -->
+        <div v-if="section.label && !isCollapsed" class="mb-2 flex items-center gap-2 px-2">
+          <span class="h-1 w-1 rounded-full bg-amber-400"></span>
+          <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-amber-300/80">
+            {{ section.label }}
+          </p>
+          <span class="h-px flex-1 bg-gradient-to-r from-amber-400/30 to-transparent"></span>
+        </div>
+        <div
+          v-else-if="section.label"
+          class="mx-3 mb-3 h-px bg-gradient-to-r from-transparent via-amber-400/40 to-transparent"
+        ></div>
 
-      <template v-if="visibleSmartMenus.length">
-        <p v-if="!isCollapsed" class="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-bold px-1.5 pb-1">
-          <span class="w-1 h-1 rounded-full bg-amber-400"></span>
-          {{ $t('sidebar.sections.smartTools') }}
-        </p>
-        <SidebarLink
-          v-for="item in visibleSmartMenus"
-          :key="item.name"
-          :item="item"
-          :isCollapsed="isCollapsed"
-          :isActive="item.path === activePath"
-        />
-        <hr class="border-gray-200 my-2" />
-      </template>
-
-      <template v-if="visibleSystemMenus.length">
-        <p v-if="!isCollapsed" class="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-bold px-1.5 pb-1">
-          <span class="w-1 h-1 rounded-full bg-amber-400"></span>
-          {{ $t('sidebar.sections.system') }}
-        </p>
-        <SidebarLink
-          v-for="item in visibleSystemMenus"
-          :key="item.name"
-          :item="item"
-          :isCollapsed="isCollapsed"
-          :isActive="item.path === activePath"
-        />
-        <hr class="border-gray-200 my-2" />
-      </template>
+        <div class="space-y-1">
+          <SidebarLink
+            v-for="item in section.items"
+            :key="item.path"
+            :item="item"
+            :isCollapsed="isCollapsed"
+            :isActive="item.path === activePath"
+          />
+        </div>
+      </div>
     </nav>
 
-    <!-- Logout Button -->
-    <div class="p-3 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+    <!-- Logout (keeps clear of the iPhone home indicator) -->
+    <div
+      class="relative flex-shrink-0 border-t border-white/10 bg-black/10 dark:bg-black/20 p-3"
+      style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom));"
+    >
       <button
         @click="handleLogout"
-        class="relative flex items-center gap-3 py-3 px-3.5 border border-gray-200 bg-white rounded-xl text-red-500 hover:bg-red-50 transition-all w-full overflow-hidden group shadow-sm"
+        :title="isCollapsed ? $t('sidebar.logout') : undefined"
+        class="group flex w-full items-center gap-3 rounded-xl py-1.5 transition-colors hover:bg-rose-500/15 cursor-pointer"
+        :class="isCollapsed ? 'justify-center px-0' : 'pl-1.5 pr-3'"
       >
-        <span class="absolute left-0 top-0 bottom-0 w-1.5 bg-red-400 rounded-r-md"></span>
-        <ArrowRightOnRectangleIcon class="w-[20px] h-[20px] flex-shrink-0 ml-0.5 group-hover:-translate-x-0.5 transition-transform" />
-        <span v-if="!isCollapsed" class="text-[15px] font-medium">{{ $t('sidebar.logout') }}</span>
+        <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-rose-500/15 text-rose-300 transition-all group-hover:bg-rose-500 group-hover:text-white">
+          <ArrowRightOnRectangleIcon class="h-[19px] w-[19px] transition-transform group-hover:-translate-x-0.5" />
+        </span>
+        <span v-if="!isCollapsed" class="text-[14.5px] font-medium leading-[1.7] text-rose-200 group-hover:text-white">
+          {{ $t('sidebar.logout') }}
+        </span>
       </button>
     </div>
   </aside>
@@ -122,88 +117,110 @@ import {
   CpuChipIcon, SparklesIcon, QrCodeIcon, BellIcon, CalendarDaysIcon,
   DocumentTextIcon, ArchiveBoxArrowDownIcon, UserGroupIcon,
   ArrowRightOnRectangleIcon, ExclamationTriangleIcon, ClockIcon, UserCircleIcon,
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import SidebarLink from './SidebarLink.vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
-import { useBrandingStore } from '@/stores/brandingStore' // NEW
-import defaultLogo from '@/assets/images/logoh6.jpg' // NEW — fallback
+import { useBrandingStore } from '@/stores/brandingStore'
+import defaultLogo from '@/assets/images/logoh6.jpg' // fallback when no custom logo is set
 
-defineProps({ isCollapsed: Boolean })
+defineProps({
+  isCollapsed: Boolean,
+  closable: { type: Boolean, default: false }, // true only inside the phone drawer
+})
+defineEmits(['close'])
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
-const brandingStore = useBrandingStore() // NEW
+const brandingStore = useBrandingStore()
 const { t } = useI18n()
 
+// Dashboard link (admin and librarian only)
+const dashboardMenus = computed(() => [
+  { name: t('sidebar.dashboard'), path: '/dashboard', icon: ChartPieIcon, color: 'amber', permission: ['admin', 'librarian'] },
+])
+
+// Main management menu; `permission` lists the roles that can see each item
 const coreMenus = computed(() => [
-  { name: t('sidebar.menu.books'),          path: '/books',           icon: BookOpenIcon,            permission: ['admin', 'librarian', 'member'] },
-  { name: t('sidebar.menu.myProfile'),      path: '/my-profile',      icon: UserCircleIcon,          permission: ['member'] },
-  { name: t('sidebar.menu.members'),        path: '/members',         icon: UsersIcon,               permission: ['admin'] },
-  { name: t('sidebar.menu.librarians'),     path: '/staff',           icon: UserGroupIcon,           permission: ['admin'] },
+  { name: t('sidebar.menu.books'),          path: '/books',           icon: BookOpenIcon,            color: 'blue',    permission: ['admin', 'librarian', 'member'] },
+  { name: t('sidebar.menu.myProfile'),      path: '/my-profile',      icon: UserCircleIcon,          color: 'violet',  permission: ['member'] },
+  { name: t('sidebar.menu.members'),        path: '/members',         icon: UsersIcon,               color: 'violet',  permission: ['admin'] },
+  { name: t('sidebar.menu.librarians'),     path: '/staff',           icon: UserGroupIcon,           color: 'pink',    permission: ['admin'] },
 
-  { name: t('sidebar.menu.borrow'),         path: '/borrow',          icon: ArrowsRightLeftIcon,     permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.myBorrows'),      path: '/my-borrows',      icon: ClockIcon,               permission: ['member'] },
+  { name: t('sidebar.menu.borrow'),         path: '/borrow',          icon: ArrowsRightLeftIcon,     color: 'emerald', permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.myBorrows'),      path: '/my-borrows',      icon: ClockIcon,               color: 'emerald', permission: ['member'] },
 
-  { name: t('sidebar.menu.return'),         path: '/return',          icon: ArrowUturnLeftIcon,      permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.overdue'),        path: '/overdue',         icon: ExclamationTriangleIcon, permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.borrowHistory'),  path: '/borrow-history',  icon: ClockIcon,               permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.return'),         path: '/return',          icon: ArrowUturnLeftIcon,      color: 'cyan',    permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.overdue'),        path: '/overdue',         icon: ExclamationTriangleIcon, color: 'red',     permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.borrowHistory'),  path: '/borrow-history',  icon: ClockIcon,               color: 'indigo',  permission: ['admin', 'librarian'] },
 
-  { name: t('sidebar.menu.reservations'),   path: '/reservations',    icon: CalendarDaysIcon,        permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.myReservations'), path: '/my-reservations', icon: CalendarDaysIcon,        permission: ['member'] },
+  { name: t('sidebar.menu.reservations'),   path: '/reservations',    icon: CalendarDaysIcon,        color: 'pink',    permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.myReservations'), path: '/my-reservations', icon: CalendarDaysIcon,        color: 'pink',    permission: ['member'] },
 
-  { name: t('sidebar.menu.fines'),          path: '/fines',           icon: BanknotesIcon,           permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.myFines'),        path: '/my-fines',        icon: BanknotesIcon,           permission: ['member'] },
+  { name: t('sidebar.menu.fines'),          path: '/fines',           icon: BanknotesIcon,           color: 'orange',  permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.myFines'),        path: '/my-fines',        icon: BanknotesIcon,           color: 'orange',  permission: ['member'] },
 ])
 
+// Digital library and AI tools menu
 const smartMenus = computed(() => [
-  { name: t('sidebar.menu.digitalLibrary'),  path: '/digital-library',   icon: DocumentTextIcon, permission: ['admin', 'librarian', 'member'] },
-  { name: t('sidebar.menu.aiChatbot'),       path: '/chatbot',           icon: CpuChipIcon,      permission: ['admin', 'librarian', 'member'] },
-  { name: t('sidebar.menu.recommendations'), path: '/ai-recommendation', icon: SparklesIcon,     permission: ['admin', 'librarian', 'member'] },
-  { name: t('sidebar.menu.scanner'),         path: '/scanner',           icon: QrCodeIcon,       permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.digitalLibrary'),  path: '/digital-library',   icon: DocumentTextIcon, color: 'teal',    permission: ['admin', 'librarian', 'member'] },
+  { name: t('sidebar.menu.aiChatbot'),       path: '/chatbot',           icon: CpuChipIcon,      color: 'cyan',    permission: ['admin', 'librarian', 'member'] },
+  { name: t('sidebar.menu.recommendations'), path: '/ai-recommendation', icon: SparklesIcon,     color: 'amber',   permission: ['admin', 'librarian', 'member'] },
+  { name: t('sidebar.menu.scanner'),         path: '/scanner',           icon: QrCodeIcon,       color: 'indigo',  permission: ['admin', 'librarian'] },
 ])
 
+// Reports, notifications, backup and settings menu
 const systemMenus = computed(() => [
-  { name: t('sidebar.menu.reports'),         path: '/reports',                 icon: ChartBarIcon,            permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.notifications'),   path: '/notifications',           icon: BellIcon,                permission: ['admin', 'librarian', 'member'] },
-  { name: t('sidebar.menu.cardApprovals'),   path: '/settings/card-approvals', icon: QrCodeIcon,              permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.backupRestore'),   path: '/settings/backup',         icon: ArchiveBoxArrowDownIcon, permission: ['admin'] },
-  { name: t('sidebar.menu.settings'),        path: '/settings',                icon: Cog6ToothIcon,           permission: ['admin', 'librarian', 'member'] },
+  { name: t('sidebar.menu.reports'),         path: '/reports',                 icon: ChartBarIcon,            color: 'blue',    permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.notifications'),   path: '/notifications',           icon: BellIcon,                color: 'amber',   permission: ['admin', 'librarian', 'member'] },
+  { name: t('sidebar.menu.cardApprovals'),   path: '/settings/card-approvals', icon: QrCodeIcon,              color: 'violet',  permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.backupRestore'),   path: '/settings/backup',         icon: ArchiveBoxArrowDownIcon, color: 'teal',    permission: ['admin'] },
+  { name: t('sidebar.menu.settings'),        path: '/settings',                icon: Cog6ToothIcon,           color: 'indigo',  permission: ['admin', 'librarian', 'member'] },
 ])
 
-function canSee(key) {
-  if (key === 'dashboard') {
-    return ['admin', 'librarian'].includes(authStore.role)
-  }
-  return true
-}
+// Keep only the menu items the current user's role is allowed to see
+const byRole = (items) => items.filter((item) => item.permission.includes(authStore.role))
 
-const visibleCoreMenus = computed(() =>
-  coreMenus.value.filter((item) => item.permission.includes(authStore.role))
-)
-const visibleSmartMenus = computed(() =>
-  smartMenus.value.filter((item) => item.permission.includes(authStore.role))
-)
-const visibleSystemMenus = computed(() =>
-  systemMenus.value.filter((item) => item.permission.includes(authStore.role))
+// Sidebar sections (empty ones are hidden)
+const visibleSections = computed(() =>
+  [
+    { key: 'main',   label: '',                                items: byRole(dashboardMenus.value) },
+    { key: 'core',   label: t('sidebar.sections.management'),  items: byRole(coreMenus.value) },
+    { key: 'smart',  label: t('sidebar.sections.smartTools'),  items: byRole(smartMenus.value) },
+    { key: 'system', label: t('sidebar.sections.system'),      items: byRole(systemMenus.value) },
+  ].filter((section) => section.items.length)
 )
 
-const allMenuPaths = computed(() => [
-  ...visibleCoreMenus.value,
-  ...visibleSmartMenus.value,
-  ...visibleSystemMenus.value,
-].map((item) => item.path))
-
+// The menu path that matches the current route; the longest match wins,
+// so /settings/backup highlights "Backup" and not "Settings"
 const activePath = computed(() => {
-  const matches = allMenuPaths.value.filter(
-    (p) => route.path === p || route.path.startsWith(p + '/')
-  )
+  const paths = visibleSections.value.flatMap((s) => s.items.map((i) => i.path))
+  const matches = paths.filter((p) => route.path === p || route.path.startsWith(p + '/'))
   if (!matches.length) return null
   return matches.reduce((a, b) => (b.length > a.length ? b : a))
 })
 
+// Log out, then go to the login page
 async function handleLogout() {
   await authStore.logout()
   router.push({ name: 'login' })
 }
 </script>
+
+<style scoped>
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 191, 36, 0.5);
+}
+</style>
