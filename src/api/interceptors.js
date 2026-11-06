@@ -22,15 +22,26 @@ export function setupInterceptors() {
     (error) => Promise.reject(error)
   )
 
-  // Response: on 401, clear the session and redirect to login
+  // Response: handle 401 (expired session) and 403 DEMO_RESTRICTED (blocked write)
   apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response?.status === 401) {
+      const status = error.response?.status
+
+      if (status === 401) {
         localStorage.removeItem('access_token')
         localStorage.removeItem('user')
         router.push({ name: 'login' })
       }
+
+      // Demo mode: the backend blocked a write. Notify the UI via an event.
+      if (status === 403 && error.response.data?.code === 'DEMO_RESTRICTED') {
+        error.isDemoRestricted = true
+        window.dispatchEvent(
+          new CustomEvent('demo-restricted', { detail: error.response.data.message })
+        )
+      }
+
       return Promise.reject(error)
     }
   )

@@ -16,6 +16,7 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     isAuthenticated: (state) => !!state.token,
     role: (state) => state.user?.role?.name || null,
+    isDemo: (state) => state.user?.is_demo === true,
   },
 
   actions: {
@@ -103,8 +104,10 @@ export const useAuthStore = defineStore('auth', {
     async fetchMe() {
       try {
         const { data } = await authService.me()
-        this.user = data
-        localStorage.setItem('user', JSON.stringify(data))
+        // Backend may return { user: {...} } or the user object directly
+        const user = data.user ?? data
+        this.user = user
+        localStorage.setItem('user', JSON.stringify(user))
       } catch (error) {
         this._clearSession()
       }
@@ -223,6 +226,12 @@ export const useAuthStore = defineStore('auth', {
     },
 
     _handleError(error) {
+      // Demo restriction is already shown as a toast by the interceptor
+      if (error.isDemoRestricted) {
+        this.errors = {}
+        return
+      }
+
       if (error.response?.status === 422) {
         const backendErrors = error.response.data.errors || {}
         this.errors = Object.fromEntries(

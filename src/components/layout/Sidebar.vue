@@ -122,6 +122,7 @@ import {
 import SidebarLink from './SidebarLink.vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { useBrandingStore } from '@/stores/brandingStore'
+import { isDemoHiddenPath } from '@/middleware/demo'
 import defaultLogo from '@/assets/images/logoh6.jpg' // fallback when no custom logo is set
 
 defineProps({
@@ -179,8 +180,12 @@ const systemMenus = computed(() => [
   { name: t('sidebar.menu.settings'),        path: '/settings',                icon: Cog6ToothIcon,           color: 'indigo',  permission: ['admin', 'librarian', 'member'] },
 ])
 
-// Keep only the menu items the current user's role is allowed to see
-const byRole = (items) => items.filter((item) => item.permission.includes(authStore.role))
+// Keep only the menu items the current user's role is allowed to see.
+// Demo accounts also lose the pages listed in DEMO_HIDDEN_PATHS.
+const byRole = (items) =>
+  items
+    .filter((item) => item.permission.includes(authStore.role))
+    .filter((item) => !(authStore.isDemo && isDemoHiddenPath(item.path)))
 
 // Sidebar sections (empty ones are hidden)
 const visibleSections = computed(() =>

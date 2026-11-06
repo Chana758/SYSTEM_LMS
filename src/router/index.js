@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { authGuard } from '@/middleware/auth'
 import { guestGuard } from '@/middleware/guest'
 import { roleGuard } from '@/middleware/role'
+import { demoGuard } from '@/middleware/demo'
 import { useAuthStore } from '@/features/auth/store/authStore'
 
 import authRoutes from './auth.routes'
@@ -19,6 +20,7 @@ import scannerRoutes from './scanner.routes'
 import reportRoutes from './report.routes'
 import chatbotRoutes from './chatbot.routes'
 import aiRecommendationRoutes from './ai-recommendation.routes'
+
 const routes = [
   {
     path: '/',
@@ -57,7 +59,7 @@ const routes = [
   ...scannerRoutes,
   ...reportRoutes,
   ...chatbotRoutes,
-  ...aiRecommendationRoutes
+  ...aiRecommendationRoutes,
 ]
 
 const router = createRouter({
@@ -67,9 +69,8 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if (to.meta.middleware === 'auth') {
-    const authResult = authGuard(to)
-    if (authResult) return authResult
-    return roleGuard(to)
+    // Order matters: login check -> role check -> demo restriction
+    return authGuard(to) || roleGuard(to) || demoGuard(to)
   }
 
   if (to.meta.middleware === 'guest') {

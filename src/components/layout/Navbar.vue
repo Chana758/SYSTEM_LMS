@@ -41,7 +41,10 @@
       </div>
     </router-link>
 
-    <div class="flex-1 min-w-0"></div>
+    <!-- Demo badge (only visible for demo accounts) -->
+    <div class="flex-1 min-w-0 flex items-center">
+      <DemoBadge />
+    </div>
 
     <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
 
@@ -152,6 +155,7 @@ import { useAuthStore } from '@/features/auth/store/authStore'
 import { useLanguageStore } from '@/stores/languageStore'
 import { applyTheme } from '@/utils/applyTheme'
 import NotificationBell from '@/features/notifications/components/NotificationBell.vue'
+import DemoBadge from '@/components/common/DemoBadge.vue'
 
 defineEmits(['toggle-sidebar'])
 
@@ -176,7 +180,7 @@ function toggleLocale() {
   languageStore.setLocale(nextLanguage.value.code)
 }
 
-//  Theme
+// Theme
 const isDark = ref(false)
 let themeObserver = null
 
@@ -200,7 +204,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => themeObserver?.disconnect())
 
-// User info 
+// User info
 const displayName = computed(() => authStore.user?.name || '...')
 
 // Translated role label, falling back to the raw role if no translation exists

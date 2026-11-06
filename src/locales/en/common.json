@@ -58,5 +58,10 @@
       "librarian": "Librarian",
       "member": "Member"
     }
+  },
+  "demo": {
+    "badge": "Demo Mode",
+    "tooltip": "You are using a read-only demo account. Data is sample data and resets periodically.",
+    "restricted": "This action is disabled in demo mode."
   }
 }
