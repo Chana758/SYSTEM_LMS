@@ -116,7 +116,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import apiClient from '@/api/axios'
 import { useReservationStore } from '../store/reservationStore'
-import { canBorrowDirectly, queueCountOf } from '../utils/reservationRules'
+import { canBorrowDirectly, queueCountOf } from '@/utils/reservationRules'
 
 const emit = defineEmits(['created', 'cancel'])
 
