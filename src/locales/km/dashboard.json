@@ -2,8 +2,8 @@
   "title": "ផ្ទាំងគ្រប់គ្រង",
   "subtitle": "សូមស្វាគមន៍! នេះជាអ្វីដែលកំពុងកើតឡើងនៅបណ្ណាល័យរបស់អ្នកថ្ងៃនេះ។",
   "systemOnline": "ប្រព័ន្ធកំពុងដំណើរការ",
-  "totalBooks": "សៀវភៅសរុប",
-  "availableBooks": "សៀវភៅមានទំនេរ",
+  "totalBooks": "ចំណងជើងសៀវភៅ",
+  "availableBooks": "ច្បាប់ទំនេរ",
   "activeMembers": "សមាជិកសកម្ម",
   "borrowedToday": "ខ្ចីថ្ងៃនេះ",
   "circulationOverview": "ទិដ្ឋភាពទូទៅចរាចរណ៍",
@@ -18,7 +18,7 @@
   "noLowStock": "🎉 អស្ចារ្យ! មិនមានសៀវភៅណានៅសល់តិចទេ។",
   "leftSuffix": "នៅសល់",
   "smartTools": "ឧបករណ៍ឆ្លាតវៃ",
-  "smartToolsSubtitle": "ចូលប្រើប្រាស់រហ័សទៅម៉ូឌុលដែលដំណើរការដោយ AI និងការភ្ជាប់ dhardware។",
+  "smartToolsSubtitle": "ចូលប្រើប្រាស់រហ័សទៅម៉ូឌុលដែលដំណើរការដោយ AI និងការភ្ជាប់ hardware។",
   "aiChatbot": "ជជែក AI",
   "aiChatbotDesc": "សួរ assistant ដើម្បីស្វែងរកសៀវភៅ ពិនិត្យកាលបរិច្ឆេទត្រូវប្រគល់ ឬសុំជំនួយ។",
   "aiRecommendations": "ការណែនាំ AI",
@@ -37,7 +37,11 @@
     "addMember": "បន្ថែមសមាជិក",
     "addMemberDesc": "ចុះឈ្មោះអ្នកប្រើប្រាស់ថ្មី",
     "scanBarcode": "ស្កេនបាកូដ",
-    "scanBarcodeDesc": "ស្វែងរក និងត្រួតពិនិត្យរហ័ស"
+    "scanBarcodeDesc": "ស្វែងរក និងត្រួតពិនិត្យរហ័ស",
+    "badgeAction": "សកម្មភាព",
+    "badgeReserve": "កក់",
+    "badgeMember": "សមាជិក",
+    "badgeScan": "ស្កេន"
   },
   "recentActivity": {
     "title": "សកម្មភាពថ្មីៗ",
@@ -46,12 +50,28 @@
     "justNow": "ទើបតែឥឡូវនេះ",
     "minAgo": "{n} នាទីមុន",
     "hourAgo": "{n} ម៉ោងមុន",
-    "dayAgo": "{n} ថ្ងៃមុន"
+    "dayAgo": "{n} ថ្ងៃមុន",
+    "someone": "សមាជិកម្នាក់",
+    "someBook": "សៀវភៅមួយ",
+    "events": {
+      "borrow": "{name} បានខ្ចី “{book}”",
+      "return": "{name} បានសង “{book}”",
+      "reservation": "{name} បានកក់ “{book}”",
+      "fine": "ពិន័យ {amount} ត្រូវបានចេញឲ្យ {name}",
+      "member": "{name} បានចូលជាសមាជិកបណ្ណាល័យ"
+    }
   },
   "revenueTrend": {
     "title": "និន្នាការចំណូល",
     "subtitle": "ការទូទាត់ពិន័យប្រមូលបានក្នុងប៉ុន្មានខែចុងក្រោយ។",
     "analytics": "វិភាគទិន្នន័យ",
     "noData": "មិនទាន់មានទិន្នន័យចំណូលទេ។"
-  }
+  },
+  "badgeTotal": "សរុប",
+  "badgeStock": "ស្តុក",
+  "badgeUsers": "អ្នកប្រើ",
+  "badgeToday": "ថ្ងៃនេះ",
+  "retry": "ព្យាយាមម្តងទៀត",
+  "smartTool": "ឧបករណ៍ឆ្លាតវៃ",
+  "loadError": "មិនអាចផ្ទុកស្ថិតិផ្ទាំងគ្រប់គ្រងបានទេ។"
 }

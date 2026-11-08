@@ -2,8 +2,8 @@
   "title": "Dashboard Overview",
   "subtitle": "Welcome back! Here is what's happening in your library today.",
   "systemOnline": "System Online",
-  "totalBooks": "Total Books",
-  "availableBooks": "Available Books",
+  "totalBooks": "Book Titles",
+  "availableBooks": "Available Copies",
   "activeMembers": "Active Members",
   "borrowedToday": "Borrowed Today",
   "circulationOverview": "Circulation Overview",
@@ -37,7 +37,11 @@
     "addMember": "Add Member",
     "addMemberDesc": "Register new user",
     "scanBarcode": "Scan Barcode",
-    "scanBarcodeDesc": "Quick lookup & audit"
+    "scanBarcodeDesc": "Quick lookup & audit",
+    "badgeAction": "Action",
+    "badgeReserve": "Reserve",
+    "badgeMember": "Member",
+    "badgeScan": "Scan"
   },
   "recentActivity": {
     "title": "Recent Activity",
@@ -46,12 +50,28 @@
     "justNow": "Just now",
     "minAgo": "{n}m ago",
     "hourAgo": "{n}h ago",
-    "dayAgo": "{n}d ago"
+    "dayAgo": "{n}d ago",
+    "someone": "A member",
+    "someBook": "a book",
+    "events": {
+      "borrow": "{name} borrowed “{book}”",
+      "return": "{name} returned “{book}”",
+      "reservation": "{name} reserved “{book}”",
+      "fine": "Fine of {amount} issued to {name}",
+      "member": "{name} joined the library"
+    }
   },
   "revenueTrend": {
     "title": "Revenue Trend",
     "subtitle": "Fine payments collected over the last few months.",
     "analytics": "Analytics",
     "noData": "No revenue data yet."
-  }
+  },
+  "badgeTotal": "Total",
+  "badgeStock": "Stock",
+  "badgeUsers": "Users",
+  "badgeToday": "Today",
+  "retry": "Retry",
+  "smartTool": "Smart Tool",
+  "loadError": "Failed to load dashboard stats."
 }

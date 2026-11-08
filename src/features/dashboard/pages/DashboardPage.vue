@@ -26,7 +26,7 @@
         v-if="store.error"
         class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-400/30 dark:bg-rose-500/10 dark:text-rose-300 px-4 py-3 text-xs font-bold"
       >
-        <span class="min-w-0">{{ store.error }}</span>
+        <span class="min-w-0">{{ t(store.error) }}</span>
         <button
           type="button"
           class="px-4 py-2 sm:px-3 sm:py-1 rounded-lg bg-white border border-rose-300 text-rose-700 hover:bg-rose-100 dark:bg-rose-500/10 dark:border-rose-400/30 dark:text-rose-200 dark:hover:bg-rose-500/20 transition cursor-pointer"
@@ -110,7 +110,7 @@
                   </div>
                   <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide leading-snug">{{ t('dashboard.overdueBooks') }}</span>
                 </div>
-                <span class="flex-shrink-0 font-black text-rose-600 dark:text-rose-300 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 dark:bg-rose-400/10 border border-rose-200 dark:border-rose-400/25">{{ stats.overdue_count ?? 0 }}</span>
+                <span class="flex-shrink-0 font-black font-mono text-base px-3 py-0.5 rounded-lg border" :class="countClass(stats.overdue_count)">{{ stats.overdue_count ?? 0 }}</span>
               </div>
 
               <!-- Unpaid Fines -->
@@ -121,7 +121,7 @@
                   </div>
                   <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide leading-snug">{{ t('dashboard.unpaidFines') }}</span>
                 </div>
-                <span class="flex-shrink-0 font-black text-rose-600 dark:text-rose-300 font-mono text-base px-3 py-0.5 rounded-lg bg-rose-50/60 dark:bg-rose-400/10 border border-rose-200 dark:border-rose-400/25">${{ unpaidFines }}</span>
+                <span class="flex-shrink-0 font-black font-mono text-base px-3 py-0.5 rounded-lg border" :class="countClass(unpaidFines)">${{ unpaidFines }}</span>
               </div>
             </div>
           </div>
@@ -255,6 +255,13 @@ const unpaidFines = computed(() =>
 const lowStockBooks = computed(() =>
   Array.isArray(stats.value.low_stock_books) ? stats.value.low_stock_books : []
 )
+
+// Red only when there is something to act on; neutral when the value is 0.
+const ALERT_CLASS = 'text-rose-600 dark:text-rose-300 bg-rose-50/60 dark:bg-rose-400/10 border-rose-200 dark:border-rose-400/25'
+const NEUTRAL_CLASS = 'text-slate-900 dark:text-white bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10'
+function countClass(value) {
+  return Number(value) > 0 ? ALERT_CLASS : NEUTRAL_CLASS
+}
 
 // The 4 top stat cards. Full class names are written out so Tailwind can generate them.
 // Badge labels go through t() with an English fallback.

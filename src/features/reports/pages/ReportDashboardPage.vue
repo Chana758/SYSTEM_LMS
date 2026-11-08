@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <ReportFilter :show-search="false" @apply="onFilterApply" />
+    <ReportFilter :show-search="false" :range="dashboard?.range" @apply="onFilterApply" />
 
     <ReportsNav />
 
@@ -184,7 +184,7 @@ const sp = computed(() => dashboard.value?.sparks ?? {})
 /*  Charts                                                             */
 /* ------------------------------------------------------------------ */
 const trendRows = computed(() => dashboard.value?.trend ?? [])
-const lineLabels = computed(() => trendRows.value.map((r) => r.date))
+const lineLabels = computed(() => trendRows.value.map((r) => analyticsService.formatAxisLabel(r.date)))
 const lineSeries = computed(() => [
   { name: t('reports.dashboardPage.borrows'), values: trendRows.value.map((r) => r.borrows), color: '#3b82f6' },
   { name: t('reports.dashboardPage.returns'), values: trendRows.value.map((r) => r.returns), color: '#10b981' },
@@ -233,7 +233,7 @@ const topMemberItems = computed(() =>
 /*  Lists                                                              */
 /* ------------------------------------------------------------------ */
 // Intl does not know "kh" — it must be "km" for Khmer.
-const intlLocale = computed(() => (locale.value === 'kh' ? 'km' : locale.value))
+const intlLocale = computed(() => (['km', 'kh'].includes(locale.value) ? 'km-KH' : 'en-US'))
 
 const timeAgo = (iso) => {
   try {

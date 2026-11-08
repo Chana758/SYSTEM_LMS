@@ -47,7 +47,8 @@ export const useDashboardStore = defineStore('dashboard', {
           low_stock_books: Array.isArray(s.low_stock_books) ? s.low_stock_books : [],
         }
       } catch (e) {
-        this.error = 'Failed to load dashboard stats.'
+        // Store an i18n key, not text, so the page can show it in the current language.
+        this.error = 'dashboard.loadError'
       } finally {
         this.statsLoading = false
       }

@@ -33,7 +33,7 @@
           <component :is="typeStyle(item.type).icon" class="w-4 h-4" :class="typeStyle(item.type).color" />
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs font-bold text-slate-800 dark:text-slate-100 leading-snug break-words">{{ item.description }}</p>
+          <p class="text-xs font-bold text-slate-800 dark:text-slate-100 leading-snug break-words">{{ describe(item) }}</p>
           <p class="flex items-center gap-1 text-[11px] font-semibold text-slate-400 dark:text-slate-500 mt-0.5">
             <ClockIcon class="w-3 h-3" />
             {{ formatTime(item.created_at) }}
@@ -46,6 +46,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { formatUsd } from '@/utils/currencyHelper'
 import {
   ArrowsRightLeftIcon,
   ArrowUturnLeftIcon,
@@ -98,6 +99,19 @@ const STYLE_MAP = {
 
 function typeStyle(type) {
   return STYLE_MAP[type] || STYLE_MAP.borrow
+}
+
+// Build the sentence from structured fields so it follows the selected language.
+// Falls back to the API's English `description` for older API responses or unknown types.
+function describe(item) {
+  const key = `dashboard.recentActivity.events.${item.type}`
+  const hasStructured = 'actor' in item || 'book' in item || 'amount' in item
+  if (!hasStructured || !STYLE_MAP[item.type]) return item.description || '—'
+  return t(key, {
+    name: item.actor || t('dashboard.recentActivity.someone'),
+    book: item.book || t('dashboard.recentActivity.someBook'),
+    amount: formatUsd(item.amount),
+  })
 }
 
 function formatTime(d) {

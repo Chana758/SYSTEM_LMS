@@ -27,7 +27,8 @@
 
     <div class="bg-white dark:bg-slate-800/50 rounded-2xl border-2 border-slate-300 dark:border-white/15 p-6 md:p-8 shadow-lg dark:shadow-none border-dashed space-y-6">
 
-      <ReportFilter :status-options="roleOptions" :status-label="t('reports.columns.role')" @apply="onApply" />
+      <ReportFilter
+        :range="range" :status-options="roleOptions" :status-label="t('reports.columns.role')" @apply="onApply" />
 
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4" v-if="summary">
         <ReportSummaryCard :label="t('reports.userPage.totalUsers')"  :value="summary.total_users" bg="bg-slate-700"   :badge="t('reports.badge.total')"    :icon="UserGroupIcon" />
@@ -104,6 +105,7 @@ const summary = ref(null)
 const trend = ref([])
 const topBorrowers = ref([])
 const loading = ref(false)
+const range = ref(null)
 const pagination = reactive({ current_page: 1, last_page: 1 })
 const filters = reactive({ date_from: '', date_to: '', status: '', search: '', all_time: false })
 
@@ -118,6 +120,7 @@ const load = async (page = 1) => {
     rows.value = data.data.data
     summary.value = data.summary
     trend.value = data.trend ?? []
+    range.value = data.range ?? null
     topBorrowers.value = data.top_borrowers ?? []
     pagination.current_page = data.data.current_page
     pagination.last_page = data.data.last_page

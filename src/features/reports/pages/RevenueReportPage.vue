@@ -39,7 +39,8 @@
 
     <div v-else class="bg-white dark:bg-slate-800/50 rounded-2xl border-2 border-slate-300 dark:border-white/15 p-6 md:p-8 shadow-lg dark:shadow-none border-dashed space-y-6">
 
-      <ReportFilter @apply="onApply" :show-search="false" />
+      <ReportFilter
+        :range="range" @apply="onApply" :show-search="false" />
 
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4" v-if="summary">
         <ReportSummaryCard :label="t('reports.revenuePage.totalRevenue')" :value="summary.total"      format="currency" bg="bg-emerald-600" :badge="t('reports.badge.total')"    :icon="BanknotesIcon" />
@@ -95,6 +96,7 @@ const rows = ref([])
 const summary = ref(null)
 const trend = ref([])
 const loading = ref(false)
+const range = ref(null)
 const pagination = reactive({ current_page: 1, last_page: 1 })
 const filters = reactive({ date_from: '', date_to: '', all_time: false })
 
@@ -108,6 +110,7 @@ const load = async (page = 1) => {
     rows.value = data.data.data
     summary.value = data.summary
     trend.value = data.trend ?? []
+    range.value = data.range ?? null
     pagination.current_page = data.data.current_page
     pagination.last_page = data.data.last_page
   } finally {

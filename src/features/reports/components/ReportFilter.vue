@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   CalendarDaysIcon,
@@ -109,6 +109,9 @@ const props = defineProps({
   defaultPreset: { type: String, default: 'all' },
   // e.g. { status: 'overdue' } coming from a clicked KPI card
   initial:       { type: Object, default: () => ({}) },
+  // { from: 'YYYY-MM-DD', to: 'YYYY-MM-DD' } — the period the API actually used.
+  // For "All time" the date boxes show it, instead of staying empty (Safari then shows today's date).
+  range:         { type: Object, default: null },
 })
 
 // 'reset' fires BEFORE the new 'apply', so pages can clear their own extra filters.
@@ -154,8 +157,8 @@ const setPreset = (key, autoApply = true) => {
   else if (key === 'month') local.date_from = fmt(new Date(now.getFullYear(), now.getMonth(), 1))
   else if (key === 'year')  local.date_from = fmt(new Date(now.getFullYear(), 0, 1))
   else { // all
-    local.date_from = ''
-    local.date_to = ''
+    local.date_from = props.range?.from ?? ''
+    local.date_to = props.range?.to ?? ''
     local.all_time = true
   }
   if (autoApply) apply()
@@ -174,6 +177,17 @@ const reset = () => {
   emit('reset')
   setPreset(props.defaultPreset)
 }
+
+// When "All time" is active, show the real first / last date the API resolved.
+watch(
+  () => props.range,
+  (r) => {
+    if (local.all_time && r?.from && r?.to) {
+      local.date_from = r.from
+      local.date_to = r.to
+    }
+  },
+)
 
 // Load the first page as soon as the parent is listening.
 onMounted(() => {

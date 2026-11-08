@@ -28,6 +28,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import echarts from '@/plugins/echarts'
 
 const props = defineProps({
@@ -36,7 +37,24 @@ const props = defineProps({
 })
 
 const chartRef = ref(null)
-const hasData = computed(() => Array.isArray(props.data) && props.data.length > 0)
+// Show the empty state when there are no months OR every month is $0 —
+// an all-zero chart is just an empty grid and looks broken.
+const hasData = computed(
+  () => Array.isArray(props.data) && props.data.some((d) => Number(d.total) > 0),
+)
+
+// Month name in the selected language ("Nov" / "វិច្ឆិកា"), from the API's "YYYY-MM".
+const { locale } = useI18n()
+function monthLabel(d) {
+  if (!d.ym) return d.month
+  const [y, m] = String(d.ym).split('-').map(Number)
+  const lang = locale.value === 'km' ? 'km-KH' : 'en-US'
+  try {
+    return new Intl.DateTimeFormat(lang, { month: 'short' }).format(new Date(y, m - 1, 1))
+  } catch {
+    return d.month
+  }
+}
 
 // Follow the app's dark mode (the `dark` class on <html>) so the chart re-colours live.
 const isDark = ref(document.documentElement.classList.contains('dark'))
@@ -106,7 +124,7 @@ function renderChart() {
       grid: { left: narrow ? 40 : 48, right: narrow ? 10 : 20, top: 20, bottom: 28 },
       xAxis: {
         type: 'category',
-        data: props.data.map((d) => d.month),
+        data: props.data.map(monthLabel),
         axisLine: { lineStyle: { color: c.axisLine } },
         axisTick: { show: false },
         axisLabel: { color: c.label, fontSize: 11, fontWeight: 600 },
@@ -178,6 +196,7 @@ watch(
 )
 
 watch(isDark, () => renderChart())
+watch(locale, () => renderChart())
 
 onBeforeUnmount(() => {
   themeObserver?.disconnect()

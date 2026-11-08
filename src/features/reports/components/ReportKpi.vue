@@ -22,6 +22,9 @@ const props = defineProps({
   to: { type: [String, Object], default: null },
 })
 
-// Nothing to draw when every point is 0 (it would render as a flat grey bar).
-const hasSpark = computed(() => props.spark?.length > 1 && props.spark.some((v) => Number(v) > 0))
+// Only draw a trend line when at least 2 days have activity.
+// A single busy day between zeros renders as a lone triangle that tells you nothing.
+const hasSpark = computed(
+  () => Array.isArray(props.spark) && props.spark.filter((v) => Number(v) > 0).length >= 2,
+)
 </script>
