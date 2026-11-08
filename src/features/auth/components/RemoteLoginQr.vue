@@ -54,6 +54,7 @@ import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import apiClient from '@/api/axios'
 import { ENDPOINTS } from '@/api/endpoints'
 import { createEcho } from '@/echo'
+import QRCode from 'qrcode'
 
 const props = defineProps({
   authError: { type: String, default: '' },
@@ -74,9 +75,10 @@ const pinDigits = computed(() => pin.value.split(''))
 let echo = null
 let expiryTimer = null
 
+// Drawn in the browser with the `qrcode` package (already a dependency).
+// Previously the session URL was sent to api.qrserver.com, a third-party service.
 function buildQrImageUrl(mobileUrl) {
-  const encoded = encodeURIComponent(mobileUrl)
-  return `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encoded}`
+  return QRCode.toDataURL(mobileUrl, { width: 260, margin: 1 })
 }
 
 // Create a login session, show its QR + PIN, and wait for the phone to scan
@@ -93,7 +95,7 @@ async function startSession() {
     pin.value = data.pin
 
     const mobileUrl = `${window.location.origin}/remote-login/${data.session_id}`
-    qrImageUrl.value = buildQrImageUrl(mobileUrl)
+    qrImageUrl.value = await buildQrImageUrl(mobileUrl)
 
     listenForScan(data.session_id)
 

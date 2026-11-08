@@ -1,34 +1,38 @@
+import i18n from '@/plugins/i18n'
+
 // Each validator returns an error message, or '' when the value is valid.
+// Messages follow the selected language (auth.validation.* in locales/en|km/auth.json).
+const t = (key) => i18n.global.t(`auth.validation.${key}`)
 
 export function validateEmail(email) {
-  if (!email) return 'សូមបញ្ចូលអ៊ីមែល'
+  if (!email) return t('emailRequired')
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!pattern.test(email)) return 'អ៊ីមែលមិនត្រឹមត្រូវ'
+  if (!pattern.test(email)) return t('emailInvalid')
   return ''
 }
 
 export function validatePassword(password) {
-  if (!password) return 'សូមបញ្ចូលពាក្យសម្ងាត់'
-  if (password.length < 8) return 'ពាក្យសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៨ តួ'
+  if (!password) return t('passwordRequired')
+  if (password.length < 8) return t('passwordMin')
   return ''
 }
 
 export function validatePasswordConfirmation(password, confirmation) {
-  if (!confirmation) return 'សូមបញ្ជាក់ពាក្យសម្ងាត់'
-  if (password !== confirmation) return 'ការបញ្ជាក់ពាក្យសម្ងាត់មិនត្រូវគ្នា'
+  if (!confirmation) return t('confirmRequired')
+  if (password !== confirmation) return t('confirmMismatch')
   return ''
 }
 
 export function validateName(name) {
-  if (!name) return 'សូមបញ្ចូលឈ្មោះ'
-  if (name.length > 100) return 'ឈ្មោះវែងពេក'
+  if (!name) return t('nameRequired')
+  if (name.length > 100) return t('nameTooLong')
   return ''
 }
 
 export function validateLoginForm(form) {
   return {
     email: validateEmail(form.email),
-    password: form.password ? '' : 'សូមបញ្ចូលពាក្យសម្ងាត់',
+    password: form.password ? '' : t('passwordRequired'),
   }
 }
 
