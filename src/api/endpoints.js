@@ -159,6 +159,20 @@ export const ENDPOINTS = {
     SUMMARY: '/scan/summary',
   },
 
+  // Phone-as-scanner: the laptop creates a session, the phone sends barcodes to it.
+  REMOTE_SCAN: {
+    CREATE_SESSION: '/remote-scan/session',
+    STATUS: (sessionId) => `/remote-scan/${sessionId}/status`,
+    SUBMIT: (sessionId) => `/remote-scan/${sessionId}/submit`,
+  },
+
+  // Not enabled on the backend yet (routes are off). Kept so the pages don't crash.
+  REMOTE_LOGIN: {
+    CREATE_SESSION: '/remote-login/session',
+    STATUS: (sessionId) => `/remote-login/${sessionId}/status`,
+    SUBMIT: (sessionId) => `/remote-login/${sessionId}/submit`,
+  },
+
   DASHBOARD: {
     STATS: '/dashboard',
     RECENT_ACTIVITIES: '/dashboard/recent-activities',

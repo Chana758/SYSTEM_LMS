@@ -15,11 +15,10 @@
   "resultsAppear": "Results appear instantly as staff scan books",
   "scanFailed": "Failed to process scan. Check your connection and try again.",
   "confirmClear": "Are you sure you want to clear this audit session?",
-
   "foundBorrowed": "Found · Currently borrowed",
-  "copiesAvailable":"{available}/{total} copies available",
-  "otherCopiesAvailable":"This copy is checked out, but {n} other copy(ies) are available. Borrow one directly.",
- " borrowAvailableCopy": "Borrow an available copy",
+  "copiesAvailable": "{available}/{total} copies available",
+  "otherCopiesAvailable": "This copy is checked out, but {n} other copy(ies) are available. Borrow one directly.",
+  " borrowAvailableCopy": "Borrow an available copy",
   "barcodeInput": {
     "title": "Scan or Type Barcode",
     "subtitle": "USB/Bluetooth scanners type directly into the field below",
@@ -158,10 +157,18 @@
     "sentCount": "Sent {count} scans",
     "tooFast": "Too fast, please wait a moment",
     "networkError": "Network error",
-    "sendFailed": "Failed to send"
+    "sendFailed": "Failed to send",
+    "phoneTitle": "Phone scanner",
+    "phoneSubtitle": "Scans go straight to the library computer",
+    "connected": "Connected to the computer",
+    "pointCamera": "Point the camera at a book or member barcode",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "httpsHint": "Phones only open the camera on HTTPS. On the computer, run \"npm run dev:phone\" and open the https:// address, then scan this QR again.",
+    "phoneHttpsHint": "This page is not on HTTPS, so the phone blocks the camera. On the computer, run \"npm run dev:phone\" and scan the new QR code."
   },
   "errors": {
-  "not_borrowed": "This copy has no active borrowing record.",
-  "copy_unavailable": "This copy is damaged or unavailable for borrowing."
+    "not_borrowed": "This copy has no active borrowing record.",
+    "copy_unavailable": "This copy is damaged or unavailable for borrowing."
   }
 }

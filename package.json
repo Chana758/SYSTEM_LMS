@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:phone": "DEV_HTTPS=1 vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-vue": "^6.0.6",
     "eslint": "^10.12.0",
     "eslint-plugin-vue": "^10.11.1",

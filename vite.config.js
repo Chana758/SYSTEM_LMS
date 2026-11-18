@@ -3,15 +3,36 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { fileURLToPath, URL } from 'node:url'
+import os from 'node:os'
 
-export default defineConfig(({ mode }) => {
+// First LAN IPv4 of this computer (e.g. 192.168.1.20), so a phone on the same Wi-Fi can open the app.
+function lanIp() {
+  for (const list of Object.values(os.networkInterfaces())) {
+    for (const a of list ?? []) {
+      if (a.family === 'IPv4' && !a.internal) return a.address
+    }
+  }
+  return ''
+}
+
+export default defineConfig(async ({ mode, command }) => {
   // BACKEND_URL (shell or .env) picks the backend the dev server proxies to.
   // Default = real backend on 8000; use http://localhost:8001 for the demo backend.
   const env = loadEnv(mode, process.cwd(), '')
   const backend = process.env.BACKEND_URL || env.BACKEND_URL || 'http://localhost:8000'
 
+  // `npm run dev:phone` = HTTPS dev server. Phones only allow the camera on HTTPS pages,
+  // so the Remote scan page needs it. Needs: npm i -D @vitejs/plugin-basic-ssl
+  const devHttps = command === 'serve' && (process.env.DEV_HTTPS || env.DEV_HTTPS) === '1'
+  const sslPlugins = devHttps ? [(await import('@vitejs/plugin-basic-ssl')).default()] : []
+
   return {
+    define: {
+      // Used by the Remote scan QR when the laptop opened the app on "localhost".
+      __DEV_LAN_IP__: JSON.stringify(command === 'serve' ? lanIp() : ''),
+    },
     plugins: [
+      ...sslPlugins,
       vue(),
       tailwindcss(),
       VitePWA({

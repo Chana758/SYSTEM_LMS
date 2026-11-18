@@ -12,6 +12,15 @@
         {{ t('scanner.remoteScan.instructions') }}
       </p>
 
+      <p class="text-[11px] font-mono text-slate-400 dark:text-slate-500 mt-1 break-all">{{ PUBLIC_URL }}</p>
+
+      <p
+        v-if="phoneNeedsHttps"
+        class="text-[11px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-400/25 rounded-lg px-3 py-2 mt-3 text-left"
+      >
+        {{ t('scanner.remoteScan.httpsHint') }}
+      </p>
+
       <div class="flex items-center justify-center gap-1.5 mt-2 text-[11px] font-bold uppercase tracking-wider" :class="expired ? 'text-rose-500 dark:text-rose-300' : 'text-emerald-600 dark:text-emerald-300'">
         <span class="w-1.5 h-1.5 rounded-full" :class="expired ? 'bg-rose-500 dark:bg-rose-400' : 'bg-emerald-500 dark:bg-emerald-400 animate-pulse'"></span>
         {{ expired ? t('scanner.remoteScan.sessionExpired') : t('scanner.remoteScan.readyWaiting') }}
@@ -67,8 +76,20 @@ let echo = null
 let channelName = null
 let expiryTimer = null
 
-// Phones can't open "localhost", so allow a public URL to be configured.
-const PUBLIC_URL = (import.meta.env.VITE_PUBLIC_URL || window.location.origin).replace(/\/$/, '')
+/* global __DEV_LAN_IP__ */
+// The phone opens this link, and a phone can't reach "localhost".
+// Order: VITE_PUBLIC_URL (.env) → this laptop's Wi-Fi IP (dev server) → the current address.
+const isLocalhost = ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)
+const devLanIp = typeof __DEV_LAN_IP__ !== 'undefined' ? __DEV_LAN_IP__ : ''
+const PUBLIC_URL = (
+  import.meta.env.VITE_PUBLIC_URL ||
+  (isLocalhost && devLanIp
+    ? `${window.location.protocol}//${devLanIp}${window.location.port ? `:${window.location.port}` : ''}`
+    : window.location.origin)
+).replace(/\/$/, '')
+
+// Phones only allow the camera on HTTPS pages.
+const phoneNeedsHttps = !PUBLIC_URL.startsWith('https://')
 
 async function buildQrImageUrl(mobileUrl) {
   return QRCode.toDataURL(mobileUrl, { width: 260, margin: 1, errorCorrectionLevel: 'M' })

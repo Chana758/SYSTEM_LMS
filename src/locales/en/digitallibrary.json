@@ -28,7 +28,12 @@
     "noDescription": "No description available for this e-book.",
     "continueReading": "Continue Reading",
     "readOnline": "Read Online",
-    "loading": "Loading e-book details..."
+    "loading": "Loading e-book details...",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "deleteTitle": "Delete e-book",
+    "confirmDelete": "Are you sure you want to delete this e-book?"
   },
   "reader": {
     "backToDetails": "Back to details",
