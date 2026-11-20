@@ -14,9 +14,13 @@
             <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-1">{{ store.pagination.total }} {{ $t('circulation.borrowHistory.recordsTotal') }}</p>
           </div>
         </div>
-        <span class="text-[10px] font-extrabold uppercase tracking-widest text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-500/20 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-          {{ $t('circulation.borrowHistory.title') }}
-        </span>
+        <router-link
+          to="/scanner"
+          class="inline-flex items-center gap-2 flex-shrink-0 bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-extrabold transition-colors shadow-sm"
+        >
+          <QrCodeIcon class="w-4 h-4" />
+          <span>{{ $t('circulation.newLoanScan') }}</span>
+        </router-link>
       </div>
 
       <!-- Filter Bar -->
@@ -115,13 +119,15 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
-import { MagnifyingGlassIcon, ClockIcon } from '@heroicons/vue/24/outline'
+import { MagnifyingGlassIcon, ClockIcon, QrCodeIcon } from '@heroicons/vue/24/outline'
 import { useCirculationStore } from '../store/circulationStore'
 import BorrowTable from '../components/BorrowTable.vue'
 import ReturnForm from '../components/ReturnForm.vue'
 
 const store = useCirculationStore()
+const route = useRoute()
 const returningBorrow = ref(null)
 const returnError = ref('')
 
@@ -158,7 +164,8 @@ async function handleReturnSubmit(payload) {
 }
 
 onMounted(() => {
-  store.filters.status = ''
+  // /overdue and /return redirect here with ?status=overdue / ?status=borrowed
+  store.filters.status = ['borrowed', 'overdue', 'returned'].includes(route.query.status) ? route.query.status : ''
   store.filters.search = ''
   store.filters.from = ''
   store.filters.to = ''

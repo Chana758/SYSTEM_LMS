@@ -1,15 +1,8 @@
 export default [
-  {
-    path: '/borrow',
-    component: () => import('@/layouts/AdminLayout.vue'),
-    meta: { middleware: 'auth', roles: ['admin', 'librarian'] },
-    children: [
-      { path: '', name: 'borrow-page', component: () => import('@/features/circulation/pages/BorrowPage.vue') },
-    ],
-  },
-  // Return and Overdue now live on the Borrow page (list + filter).
-  { path: '/return', redirect: '/borrow' },
-  { path: '/overdue', redirect: { path: '/borrow', query: { status: 'overdue' } } },
+  // One Loans page (/borrow-history). New loans and returns are done in the Scanner.
+  { path: '/borrow', redirect: (to) => ({ path: '/borrow-history', query: to.query }) },
+  { path: '/return', redirect: { path: '/borrow-history', query: { status: 'borrowed' } } },
+  { path: '/overdue', redirect: { path: '/borrow-history', query: { status: 'overdue' } } },
   {
     path: '/borrow-history',
     component: () => import('@/layouts/AdminLayout.vue'),

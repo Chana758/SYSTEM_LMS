@@ -149,10 +149,9 @@ const coreMenus = computed(() => [
   { name: t('sidebar.menu.members'),        path: '/members',         icon: UsersIcon,               color: 'violet',  permission: ['admin'] },
   { name: t('sidebar.menu.librarians'),     path: '/staff',           icon: UserGroupIcon,           color: 'pink',    permission: ['admin'] },
 
-  { name: t('sidebar.menu.borrow'),         path: '/borrow',          icon: ArrowsRightLeftIcon,     color: 'emerald', permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.myBorrows'),      path: '/my-borrows',      icon: ClockIcon,               color: 'emerald', permission: ['member'] },
 
-  { name: t('sidebar.menu.borrowHistory'),  path: '/borrow-history',  icon: ClockIcon,               color: 'indigo',  permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.borrowHistory'),  path: '/borrow-history',  icon: ArrowsRightLeftIcon,     color: 'emerald',  permission: ['admin', 'librarian'] },
 
   { name: t('sidebar.menu.reservations'),   path: '/reservations',    icon: CalendarDaysIcon,        color: 'pink',    permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.myReservations'), path: '/my-reservations', icon: CalendarDaysIcon,        color: 'pink',    permission: ['member'] },

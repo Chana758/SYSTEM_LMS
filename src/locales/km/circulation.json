@@ -42,7 +42,7 @@
     "confirmCheckout": "បញ្ជាក់ការខ្ចី"
   },
   "borrowHistory": {
-    "title": "ប្រវត្តិការខ្ចី",
+    "title": "ការខ្ចី",
     "recordsTotal": "កំណត់ត្រាសរុប",
     "searchPlaceholder": "ស្វែងរកសមាជិក ឬចំណងជើងសៀវភៅ...",
     "from": "ពី",

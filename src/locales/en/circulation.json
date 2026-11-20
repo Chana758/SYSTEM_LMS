@@ -42,7 +42,7 @@
     "confirmCheckout": "Confirm Checkout"
   },
   "borrowHistory": {
-    "title": "Borrow History",
+    "title": "Loans",
     "recordsTotal": "record(s) total",
     "searchPlaceholder": "Search member or book title...",
     "from": "From",
