@@ -51,22 +51,6 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Log in with the raw token from a scanned QR card
-    async loginWithQr(qrToken) {
-      this.loading = true
-      this.errors = {}
-      try {
-        const { data } = await authService.loginWithQr(qrToken)
-        this._setSession(data.user, data.access_token)
-        return true
-      } catch (error) {
-        this._handleError(error)
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
     // 2. QR login card
 
     // Read-only status of the current user's QR card (never returns the token)

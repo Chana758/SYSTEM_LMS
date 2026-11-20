@@ -9,9 +9,6 @@ export const authService = {
   login(payload) {
     return apiClient.post(ENDPOINTS.AUTH.LOGIN, payload)
   },
-  loginWithQr(qrToken) {
-    return apiClient.post(ENDPOINTS.AUTH.LOGIN_QR, { qr_token: qrToken })
-  },
   logout() {
     return apiClient.post(ENDPOINTS.AUTH.LOGOUT)
   },

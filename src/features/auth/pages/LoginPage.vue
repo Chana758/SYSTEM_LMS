@@ -68,44 +68,14 @@
           <p class="text-[12px] font-semibold text-slate-500">{{ $t('auth.loginSubtitle') }}</p>
         </div>
 
-        <!-- Tab Toggle: Password / Scan QR -->
-        <div class="flex gap-1 bg-slate-100/80 rounded-full p-1.5 border border-slate-200 shadow-inner">
-          <button
-            type="button"
-            @click="switchMode('password')"
-            class="flex-1 text-xs md:text-[11px] font-bold py-3 md:py-2.5 rounded-full transition-all duration-300 cursor-pointer"
-            :class="mode === 'password' ? 'bg-[#17664b] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
-          >
-            {{ $t('auth.tabPassword') }}
-          </button>
-          <button
-            type="button"
-            @click="switchMode('qr')"
-            class="flex-1 text-xs md:text-[11px] font-bold py-3 md:py-2.5 rounded-full transition-all duration-300 cursor-pointer"
-            :class="mode === 'qr' ? 'bg-[#17664b] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
-          >
-            {{ $t('auth.tabQrScan') }}
-          </button>
-        </div>
+        <LoginForm
+          :loading="authStore.loading"
+          :errors="authStore.errors"
+          @submit="handleLogin"
+        />
 
-        <!-- Dynamic Form Container -->
-        <div class="transition-all duration-300 md:min-h-[180px]">
-          <LoginForm
-            v-if="mode === 'password'"
-            :loading="authStore.loading"
-            :errors="authStore.errors"
-            @submit="handleLogin"
-          />
-          <QrLoginForm
-            v-else
-            :loading="authStore.loading"
-            :errors="authStore.errors"
-            @submit="handleQrLogin"
-          />
-        </div>
-
-        <!-- Forgot Password Link (password mode only) -->
-        <div v-if="mode === 'password'" class="text-right -mt-2 md:-mt-3">
+        <!-- Forgot Password Link -->
+        <div class="text-right -mt-2 md:-mt-3">
           <router-link
             :to="{ name: 'forgot-password' }"
             class="inline-block py-1 text-[12px] font-bold text-[#17664b] hover:underline"
@@ -131,10 +101,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import LoginForm from '../components/LoginForm.vue'
-import QrLoginForm from '../components/QrLoginForm.vue'
 import { useAuthStore } from '../store/authStore'
 import { useBrandingStore } from '@/stores/brandingStore'
 import defaultLogo from '@/assets/images/logoh6.jpg'
@@ -142,14 +110,6 @@ import defaultLogo from '@/assets/images/logoh6.jpg'
 const router = useRouter()
 const authStore = useAuthStore()
 const brandingStore = useBrandingStore()
-const mode = ref('password')
-
-function switchMode(newMode) {
-  if (mode.value === newMode) return
-  mode.value = newMode
-  authStore.clearErrors()
-}
-
 function redirectAfterLogin() {
   const isStaff = ['admin', 'librarian'].includes(authStore.role)
   router.push({ name: isStaff ? 'dashboard' : 'book-list' })
@@ -157,11 +117,6 @@ function redirectAfterLogin() {
 
 async function handleLogin(formData) {
   const success = await authStore.login(formData)
-  if (success) redirectAfterLogin()
-}
-
-async function handleQrLogin(qrToken) {
-  const success = await authStore.loginWithQr(qrToken)
   if (success) redirectAfterLogin()
 }
 </script>
