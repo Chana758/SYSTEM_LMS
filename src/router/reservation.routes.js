@@ -13,7 +13,7 @@ export default [
   // Member — own reservations only
   {
     path: '/my-reservations',
-    component: () => import('@/layouts/MemberLayout.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth', roles: ['member'] },
     children: [
       { path: '', name: 'my-reservations', component: () => import('@/features/reservation/pages/MyReservationsPage.vue') },

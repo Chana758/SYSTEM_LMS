@@ -10,7 +10,8 @@
   "sections": {
     "management": "Management",
     "smartTools": "Smart Tools",
-    "system": "System"
+    "system": "System",
+    "mine": "My Library"
   },
   "menu": {
     "books": "Books",

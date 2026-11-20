@@ -1,4 +1,3 @@
-
 {
   "pageTitle": "គ្រប់គ្រងសៀវភៅ",
   "pageSubtitle": "គ្រប់គ្រងស្តុកបណ្ណាល័យ តាមដានការខ្ចី និងរៀបចំប្រភេទសៀវភៅ។",
@@ -113,23 +112,37 @@
     "loadingDetail": "កំពុងផ្ទុកព័ត៌មានលម្អិតសៀវភៅ..."
   },
   "common": {
-  "cancel": "បោះបង់",
-  "edit": "កែសម្រួល",
-  "delete": "លុប",
-  "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
-  "saving": "កំពុងរក្សាទុក..."
-},
-"confirmDeleteBook": "លុបសៀវភៅ \"{title}\"?",
-"table": {
-  "title": "ចំណងជើង", "author": "អ្នកនិពន្ធ", "isbn": "ISBN", "category": "ប្រភេទ",
-  "copies": "ច្បាប់", "status": "ស្ថានភាព", "actions": "សកម្មភាព"
-},
-"copy": {
-  "manage": "គ្រប់គ្រង", "manageTitle": "គ្រប់គ្រងច្បាប់សៀវភៅ", "status": "ស្ថានភាព",
-  "shelfLocation": "ទីតាំងធ្នើ", "reason": "មូលហេតុ (ស្រេចចិត្ត)",
-  "reasonPlaceholder": "ឧ. ខូចដោយទឹក, អ្នកអានធ្វើបាត់",
-  "withdraw": "ដកច្បាប់ចេញ", "confirmWithdraw": "ដកច្បាប់ \"{barcode}\" ចេញពីបណ្ណាល័យ?",
-  "borrowedLocked": "ច្បាប់នេះកំពុងត្រូវបានខ្ចី។ អាចប្តូរស្ថានភាពបានតែក្រោយសងវិញ។",
-  "status_available": "មានទំនេរ", "status_damaged": "ខូចខាត", "status_lost": "បាត់បង់", "status_archived": "ទុកស្តុក"
-}
+    "cancel": "បោះបង់",
+    "edit": "កែសម្រួល",
+    "delete": "លុប",
+    "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
+    "saving": "កំពុងរក្សាទុក..."
+  },
+  "confirmDeleteBook": "លុបសៀវភៅ \"{title}\"?",
+  "table": {
+    "title": "ចំណងជើង",
+    "author": "អ្នកនិពន្ធ",
+    "isbn": "ISBN",
+    "category": "ប្រភេទ",
+    "copies": "ច្បាប់",
+    "status": "ស្ថានភាព",
+    "actions": "សកម្មភាព"
+  },
+  "copy": {
+    "manage": "គ្រប់គ្រង",
+    "manageTitle": "គ្រប់គ្រងច្បាប់សៀវភៅ",
+    "status": "ស្ថានភាព",
+    "shelfLocation": "ទីតាំងធ្នើ",
+    "reason": "មូលហេតុ (ស្រេចចិត្ត)",
+    "reasonPlaceholder": "ឧ. ខូចដោយទឹក, អ្នកអានធ្វើបាត់",
+    "withdraw": "ដកច្បាប់ចេញ",
+    "confirmWithdraw": "ដកច្បាប់ \"{barcode}\" ចេញពីបណ្ណាល័យ?",
+    "borrowedLocked": "ច្បាប់នេះកំពុងត្រូវបានខ្ចី។ អាចប្តូរស្ថានភាពបានតែក្រោយសងវិញ។",
+    "status_available": "មានទំនេរ",
+    "status_damaged": "ខូចខាត",
+    "status_lost": "បាត់បង់",
+    "status_archived": "ទុកស្តុក"
+  },
+  "browseTitle": "រកមើលសៀវភៅ",
+  "browseSubtitle": "ស្វែងរកសៀវភៅ មើលថានៅលើធ្នើឬអត់ ហើយកក់ទុក។"
 }

@@ -112,23 +112,37 @@
     "loadingDetail": "Loading book details..."
   },
   "common": {
-  "cancel": "Cancel",
-  "edit": "Edit",
-  "delete": "Delete",
-  "saveChanges": "Save Changes",
-  "saving": "Saving..."
-},
-"confirmDeleteBook": "Delete book \"{title}\"?",
-"table": {
-  "title": "Title", "author": "Author", "isbn": "ISBN", "category": "Category",
-  "copies": "Copies", "status": "Status", "actions": "Actions"
-},
-"copy": {
-  "manage": "Manage", "manageTitle": "Manage Copy", "status": "Status",
-  "shelfLocation": "Shelf Location", "reason": "Reason (optional)",
-  "reasonPlaceholder": "e.g. water damage, lost by reader",
-  "withdraw": "Withdraw copy", "confirmWithdraw": "Withdraw copy \"{barcode}\" from the library?",
-  "borrowedLocked": "This copy is currently borrowed. Status can change only after it is returned.",
-  "status_available": "Available", "status_damaged": "Damaged", "status_lost": "Lost", "status_archived": "Archived"
-}
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "saveChanges": "Save Changes",
+    "saving": "Saving..."
+  },
+  "confirmDeleteBook": "Delete book \"{title}\"?",
+  "table": {
+    "title": "Title",
+    "author": "Author",
+    "isbn": "ISBN",
+    "category": "Category",
+    "copies": "Copies",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "copy": {
+    "manage": "Manage",
+    "manageTitle": "Manage Copy",
+    "status": "Status",
+    "shelfLocation": "Shelf Location",
+    "reason": "Reason (optional)",
+    "reasonPlaceholder": "e.g. water damage, lost by reader",
+    "withdraw": "Withdraw copy",
+    "confirmWithdraw": "Withdraw copy \"{barcode}\" from the library?",
+    "borrowedLocked": "This copy is currently borrowed. Status can change only after it is returned.",
+    "status_available": "Available",
+    "status_damaged": "Damaged",
+    "status_lost": "Lost",
+    "status_archived": "Archived"
+  },
+  "browseTitle": "Browse Books",
+  "browseSubtitle": "Find a book, see if it is on the shelf, and reserve it."
 }

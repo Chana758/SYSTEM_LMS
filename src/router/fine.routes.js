@@ -15,7 +15,7 @@ export default [
     // ★ new — Member self-service page
     path: '/my-fines',
     component: () => import('@/layouts/AdminLayout.vue'),
-    meta: { middleware: 'auth' },
+    meta: { middleware: 'auth', roles: ['member'] },
     children: [
       { path: '', name: 'my-fines-page', component: () => import('@/features/fines/pages/MyFinesPage.vue') },
     ],

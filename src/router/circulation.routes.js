@@ -13,7 +13,7 @@ export default [
   },
   {
     path: '/my-borrows',
-    component: () => import('@/layouts/MemberLayout.vue'),
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { middleware: 'auth', roles: ['member'] },
     children: [
       { path: '', name: 'my-borrows-page', component: () => import('@/features/circulation/pages/MyBorrowsPage.vue') },

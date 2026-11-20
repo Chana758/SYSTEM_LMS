@@ -76,11 +76,12 @@ const authStore = useAuthStore()
 
 const isActive = (path) => route.path === path
 
-const personalItems = [
-  { to: '/settings/profile', icon: UserCircleIcon, labelKey: 'settings.nav.profile' },
+// Members edit their profile in "My profile" (/my-profile)
+const personalItems = computed(() => [
+  ...(authStore.role === 'member' ? [] : [{ to: '/settings/profile', icon: UserCircleIcon, labelKey: 'settings.nav.profile' }]),
   { to: '/settings/security', icon: ShieldCheckIcon, labelKey: 'settings.nav.security' },
   { to: '/settings/preferences', icon: AdjustmentsHorizontalIcon, labelKey: 'settings.nav.preferences' },
-]
+])
 
 const systemItems = computed(() => {
   const items = [{ to: '/settings/system', icon: Cog6ToothIcon, labelKey: 'settings.nav.systemSettings' }]
@@ -94,7 +95,7 @@ const systemItems = computed(() => {
 })
 
 const sections = computed(() => [
-  { titleKey: 'settings.nav.personal', items: personalItems, visible: true },
+  { titleKey: 'settings.nav.personal', items: personalItems.value, visible: true },
   { titleKey: 'settings.nav.system', items: systemItems.value, visible: ['admin', 'librarian'].includes(authStore.role) },
 ])
 

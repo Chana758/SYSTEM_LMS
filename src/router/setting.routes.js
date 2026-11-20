@@ -1,14 +1,16 @@
-
+import { useAuthStore } from '@/features/auth/store/authStore'
 export default [
   {
     path: '/settings',
     component: () => import('@/layouts/AdminLayout.vue'),
-    redirect: '/settings/profile',
+    // members keep their profile in /my-profile
+    redirect: () => (useAuthStore().role === 'member' ? '/settings/security' : '/settings/profile'),
     children: [
       { 
         path: 'profile',        
         name: 'settings.profile',    
         component: () => import('@/features/settings/pages/ProfilePage.vue'), 
+        beforeEnter: () => (useAuthStore().role === 'member' ? '/my-profile' : true),
         meta: { middleware: 'auth' } 
       },
       { path: 'account', redirect: '/settings/profile' },

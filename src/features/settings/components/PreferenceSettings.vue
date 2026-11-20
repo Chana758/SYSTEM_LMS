@@ -12,33 +12,11 @@
     <LanguageSettings />
     <hr class="border-gray-100 dark:border-slate-700" />
 
-    <ToggleSwitch
-      :label="t('settings.preferences.darkMode')"
-      :hint="t('settings.preferences.darkModeHint')"
-      :model-value="themeStore.isDark"
-      @update:model-value="onDarkToggle"
-    />
-    <hr class="border-gray-100 dark:border-slate-700" />
-
     <div>
       <p class="text-sm font-semibold text-gray-800 dark:text-slate-100 mb-3">{{ t('settings.preferences.notificationChannels') }}</p>
       <div class="space-y-3">
         <ToggleSwitch
           v-for="item in channelToggles"
-          :key="item.key"
-          :label="t(item.labelKey)"
-          :model-value="form[item.key]"
-          @update:model-value="setToggle(item.key, $event)"
-        />
-      </div>
-    </div>
-    <hr class="border-gray-100 dark:border-slate-700" />
-
-    <div>
-      <p class="text-sm font-semibold text-gray-800 dark:text-slate-100 mb-3">{{ t('settings.preferences.alertTypes') }}</p>
-      <div class="space-y-3">
-        <ToggleSwitch
-          v-for="item in alertToggles"
           :key="item.key"
           :label="t(item.labelKey)"
           :model-value="form[item.key]"
@@ -92,21 +70,10 @@ const loaded = ref(false)
 const channelToggles = [
   { key: 'email_notifications', labelKey: 'settings.preferences.emailNotifications' },
   { key: 'sms_notifications', labelKey: 'settings.preferences.smsNotifications' },
-  { key: 'push_notifications', labelKey: 'settings.preferences.pushNotifications' },
-]
-
-const alertToggles = [
-  { key: 'overdue_alerts', labelKey: 'settings.preferences.overdueReminders' },
-  { key: 'reservation_alerts', labelKey: 'settings.preferences.reservationReadyAlerts' },
-  { key: 'promotional_alerts', labelKey: 'settings.preferences.promotionsAnnouncements' },
 ]
 
 function onThemeChange(value) {
   themeStore.setTheme(value)
-}
-
-function onDarkToggle(isDark) {
-  themeStore.setTheme(isDark ? 'dark' : 'light')
 }
 
 function setToggle(key, value) {

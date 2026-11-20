@@ -4,8 +4,8 @@
     <div class="bg-white dark:bg-slate-800/50 rounded-3xl border border-slate-300 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-sm space-y-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 class="font-serif text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ t('catalog.pageTitle') }}</h1>
-          <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">{{ t('catalog.pageSubtitle') }}</p>
+          <h1 class="font-serif text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ canManage ? t('catalog.pageTitle') : t('catalog.browseTitle') }}</h1>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">{{ canManage ? t('catalog.pageSubtitle') : t('catalog.browseSubtitle') }}</p>
         </div>
         <div v-if="canManage" class="flex flex-wrap items-center gap-3">
           <router-link
@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-2 sm:pt-4">
+      <div v-if="canManage" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-2 sm:pt-4">
         <div
           v-for="s in stats"
           :key="s.key"

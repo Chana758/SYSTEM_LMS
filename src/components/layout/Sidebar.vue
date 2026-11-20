@@ -125,7 +125,7 @@ import { useBrandingStore } from '@/stores/brandingStore'
 import { isDemoHiddenPath } from '@/middleware/demo'
 import defaultLogo from '@/assets/images/logoh6.jpg' // fallback when no custom logo is set
 
-defineProps({
+const props = defineProps({
   isCollapsed: Boolean,
   closable: { type: Boolean, default: false }, // true only inside the phone drawer
 })
@@ -171,7 +171,7 @@ const smartMenus = computed(() => [
 // Reports, notifications, backup and settings menu
 const systemMenus = computed(() => [
   { name: t('sidebar.menu.reports'),         path: '/reports',                 icon: ChartBarIcon,            color: 'blue',    permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.notifications'),   path: '/notifications',           icon: BellIcon,                color: 'amber',   permission: ['admin', 'librarian', 'member'] },
+  { name: t('sidebar.menu.notifications'),   path: '/notifications',           icon: BellIcon,                color: 'amber',   permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.cardApprovals'),   path: '/settings/card-approvals', icon: QrCodeIcon,              color: 'violet',  permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.settings'),        path: '/settings',                icon: Cog6ToothIcon,           color: 'indigo',  permission: ['admin', 'librarian', 'member'] },
 ])
@@ -182,12 +182,17 @@ const byRole = (items) =>
   items
     .filter((item) => item.permission.includes(authStore.role))
     .filter((item) => !(authStore.isDemo && isDemoHiddenPath(item.path)))
+    // In the phone drawer, members already have these on the bottom nav
+    .filter((item) => !(props.closable && authStore.role === 'member' && MEMBER_TAB_PATHS.includes(item.path)))
+
+// Same paths as MobileBottomNav.vue
+const MEMBER_TAB_PATHS = ['/books', '/my-borrows', '/my-reservations', '/my-profile']
 
 // Sidebar sections (empty ones are hidden)
 const visibleSections = computed(() =>
   [
     { key: 'main',   label: '',                                items: byRole(dashboardMenus.value) },
-    { key: 'core',   label: t('sidebar.sections.management'),  items: byRole(coreMenus.value) },
+    { key: 'core',   label: authStore.role === 'member' ? t('sidebar.sections.mine') : t('sidebar.sections.management'),  items: byRole(coreMenus.value) },
     { key: 'smart',  label: t('sidebar.sections.smartTools'),  items: byRole(smartMenus.value) },
     { key: 'system', label: t('sidebar.sections.system'),      items: byRole(systemMenus.value) },
   ].filter((section) => section.items.length)
