@@ -32,17 +32,8 @@
         {{ t('fines.markAsPaid') }}
       </button>
 
-      <!-- Edit + Waive share the width and may wrap onto two lines (no more "…" cut-off);
-           View is icon-only so the two text buttons get the room. -->
-      <div class="grid grid-cols-[1fr_1fr_auto] gap-2">
-        <button
-          type="button"
-          @click="$emit('edit', fine)"
-          class="inline-flex min-h-10 min-w-0 items-center justify-center gap-1 rounded-xl border border-sky-200 bg-sky-50 px-2 py-1.5 text-sky-600 dark:border-sky-400/25 dark:bg-sky-500/10 dark:text-sky-300 text-[11px] font-bold transition-colors cursor-pointer"
-        >
-          <PencilSquareIcon class="w-4 h-4 flex-shrink-0" />
-          <span class="text-center leading-tight break-words">{{ t('fines.editFine') }}</span>
-        </button>
+      <!-- Waive takes the width; View is icon-only. -->
+      <div class="grid grid-cols-[1fr_auto] gap-2">
         <button
           type="button"
           @click="$emit('waive', fine)"
@@ -78,13 +69,13 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BanknotesIcon, EyeIcon, PencilSquareIcon, HandRaisedIcon } from '@heroicons/vue/24/outline'
+import { BanknotesIcon, EyeIcon, HandRaisedIcon } from '@heroicons/vue/24/outline'
 import FineStatusBadge from './FineStatusBadge.vue'
 
 const { t } = useI18n()
 
 const props = defineProps({ fine: { type: Object, required: true } })
-defineEmits(['pay', 'waive', 'view', 'edit'])
+defineEmits(['pay', 'waive', 'view'])
 
 const isUnpaid = computed(() => props.fine.status === 'unpaid')
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')

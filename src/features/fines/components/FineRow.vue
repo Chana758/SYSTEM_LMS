@@ -39,16 +39,6 @@
 
           <button
             type="button"
-            @click="$emit('edit', fine)"
-            :title="t('fines.editFine')"
-            :aria-label="t('fines.editFine')"
-            class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-200 bg-sky-50 text-sky-600 hover:bg-sky-100 dark:border-sky-400/25 dark:bg-sky-500/10 dark:text-sky-300 dark:hover:bg-sky-500/20 transition-colors cursor-pointer"
-          >
-            <PencilSquareIcon class="w-4 h-4" />
-          </button>
-
-          <button
-            type="button"
             @click="$emit('waive', fine)"
             :title="t('fines.waiveFine')"
             :aria-label="t('fines.waiveFine')"
@@ -75,13 +65,13 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BanknotesIcon, EyeIcon, PencilSquareIcon, HandRaisedIcon } from '@heroicons/vue/24/outline'
+import { BanknotesIcon, EyeIcon, HandRaisedIcon } from '@heroicons/vue/24/outline'
 import FineStatusBadge from './FineStatusBadge.vue'
 
 const { t } = useI18n()
 
 const props = defineProps({ fine: { type: Object, required: true } })
-defineEmits(['pay', 'waive', 'view', 'edit'])
+defineEmits(['pay', 'waive', 'view'])
 
 const isUnpaid = computed(() => props.fine.status === 'unpaid')
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')

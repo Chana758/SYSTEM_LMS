@@ -12,9 +12,7 @@
         </div>
       </div>
       <div class="grid grid-cols-2 sm:flex sm:items-center gap-2.5">
-        <!-- Points directly at the full-featured Fine Report inside the
-             Admin Reports module. /fines/report still exists and redirects
-             here too, for anyone with it bookmarked. -->
+        <!-- Opens the Fine Report in the Reports module. -->
         <router-link
           to="/reports/fine"
           class="border-2 border-slate-300 dark:border-white/15 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/10 px-3 sm:px-4 py-2.5 rounded-xl text-xs font-extrabold transition-colors shadow-2xs inline-flex items-center justify-center gap-1.5"
@@ -36,7 +34,7 @@
     <!-- Filters & Main Table Container Unified -->
     <div class="bg-white dark:bg-slate-900 rounded-2xl border-2 border-slate-300 dark:border-white/10 p-4 sm:p-6 shadow-md dark:shadow-black/30 space-y-4 sm:space-y-6 transition-colors">
       <FineFilter v-model="store.filters" @change="store.fetchFines(1)" />
-      <FineTable :fines="store.fines" :loading="store.loading" @pay="openPay" @waive="openWaive" @view="goDetail" @edit="goEdit" />
+      <FineTable :fines="store.fines" :loading="store.loading" @pay="openPay" @waive="openWaive" @view="goDetail" />
     </div>
 
     <!-- Pagination -->
@@ -139,7 +137,6 @@ function openWaive(fine) {
   waiveNotes.value = ''
 }
 function goDetail(fine) { router.push({ name: 'fine-detail', params: { id: fine.id } }) }
-function goEdit(fine) { router.push({ name: 'fine-edit', params: { id: fine.id } }) }
 
 async function confirmPay(method) {
   const result = await paymentStore.payFine(payTarget.value.id, method)

@@ -65,7 +65,7 @@
 import { computed, ref, watch, onMounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import {
-  UserCircleIcon, IdentificationIcon, ShieldCheckIcon,
+  UserCircleIcon, ShieldCheckIcon,
   AdjustmentsHorizontalIcon, Cog6ToothIcon, ArchiveBoxArrowDownIcon,
   RectangleStackIcon, ChevronRightIcon,
 } from '@heroicons/vue/24/outline'
@@ -78,7 +78,6 @@ const isActive = (path) => route.path === path
 
 const personalItems = [
   { to: '/settings/profile', icon: UserCircleIcon, labelKey: 'settings.nav.profile' },
-  { to: '/settings/account', icon: IdentificationIcon, labelKey: 'settings.nav.account' },
   { to: '/settings/security', icon: ShieldCheckIcon, labelKey: 'settings.nav.security' },
   { to: '/settings/preferences', icon: AdjustmentsHorizontalIcon, labelKey: 'settings.nav.preferences' },
 ]
@@ -88,7 +87,7 @@ const systemItems = computed(() => {
   if (authStore.role === 'admin') {
     items.push(
       { to: '/settings/membership-types', icon: RectangleStackIcon, labelKey: 'settings.nav.membershipTypes' },
-      { to: '/settings/backup', icon: ArchiveBoxArrowDownIcon, labelKey: 'settings.nav.backupRestore' },
+      { to: '/settings/backup', icon: ArchiveBoxArrowDownIcon, labelKey: 'settings.nav.backup' },
     )
   }
   return items

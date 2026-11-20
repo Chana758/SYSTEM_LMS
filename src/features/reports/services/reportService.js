@@ -3,11 +3,9 @@
 import api from '@/api/axios'
 
 export const reportService = {
-  dashboard: (params) => api.get('/admin/reports/dashboard', { params }),
   borrow:    (params) => api.get('/admin/reports/borrow', { params }),
   fine:      (params) => api.get('/admin/reports/fine', { params }),
   user:      (params) => api.get('/admin/reports/user', { params }),
-  revenue:   (params) => api.get('/admin/reports/revenue', { params }),
   stock:     (params) => api.get('/admin/reports/stock', { params }),
 
   history: (params)     => api.get('/admin/reports', { params }),

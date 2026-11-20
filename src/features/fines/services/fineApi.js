@@ -9,7 +9,6 @@ export const fineApi = {
   show: (id) => apiClient.get(ENDPOINTS.FINES.SHOW(id)),
   // NEW — PUT to the same /fines/{id} URL used by show(), matching the
   // new PUT route added in routes/api.php (§6 FINES).
-  update: (id, payload) => apiClient.put(ENDPOINTS.FINES.SHOW(id), payload),
   pay: (id, paymentMethod) => apiClient.post(ENDPOINTS.FINES.PAY(id), { payment_method: paymentMethod }),
   waive: (id, notes) => apiClient.post(ENDPOINTS.FINES.WAIVE(id), { notes }),
 }

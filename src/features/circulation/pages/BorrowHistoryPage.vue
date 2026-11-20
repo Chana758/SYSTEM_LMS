@@ -40,6 +40,7 @@
           >
             <option value="" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.allStatus') }}</option>
             <option value="borrowed" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.statusBorrowed') }}</option>
+            <option value="overdue" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.overdue') }}</option>
             <option value="returned" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.statusReturned') }}</option>
           </select>
 

@@ -17,7 +17,7 @@
     "system": "System",
     "systemSettings": "System Settings",
     "membershipTypes": "Membership Types",
-    "backupRestore": "Backup & Restore"
+    "backup": "Backup"
   },
   "profile": {
     "title": "Profile Picture",
@@ -141,12 +141,6 @@
     "createSubtitle": "Generate a full database backup file for download.",
     "creating": "Creating...",
     "createDownload": "Create & Download Backup",
-    "restoreTitle": "Restore Backup",
-    "restoreSubtitle": "Upload a previously downloaded backup file to restore the system.",
-    "overwriteWarning": "This will overwrite current data.",
-    "chooseFile": "Choose Backup File",
-    "restoring": "Restoring...",
-    "confirmRestore": "Confirm Restore",
     "historyTitle": "Backup History",
     "colFileName": "File Name",
     "colPerformedBy": "Performed By",
@@ -154,16 +148,7 @@
     "colStatus": "Status",
     "colDate": "Date",
     "noHistory": "No backup history yet.",
-    "createError": "Failed to create backup.",
-    "restoreError": "Failed to restore backup.",
-    "restoreSuccessMsg": "Database restored successfully.",
-    "confirmModal": {
-      "title": "Confirm Database Restore",
-      "warning": "This will permanently overwrite all current data with the contents of {filename}. This action cannot be undone.",
-      "typeToConfirm": "Type RESTORE to confirm:",
-      "cancel": "Cancel",
-      "yesOverwrite": "Yes, Overwrite Data"
-    }
+    "createError": "Failed to create backup."
   },
   "membershipTypes": {
     "title": "Membership Types",

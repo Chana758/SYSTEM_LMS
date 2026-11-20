@@ -69,7 +69,6 @@ export const ENDPOINTS = {
 
   BORROWS: {
     LIST: '/borrows',
-    OVERDUE: '/borrows/overdue',
     CREATE: '/borrows',
     SHOW: (id) => `/borrows/${id}`,
     RETURN: (id) => `/borrows/${id}/return`,
@@ -138,15 +137,12 @@ export const ENDPOINTS = {
   BACKUP: {
     HISTORY: '/settings/backup/history',
     CREATE: '/settings/backup/create',
-    RESTORE: '/settings/backup/restore',
   },
 
   REPORTS: {
-    DASHBOARD: '/admin/reports/dashboard',
     BORROW: '/admin/reports/borrow',
     FINE: '/admin/reports/fine',
     USER: '/admin/reports/user',
-    REVENUE: '/admin/reports/revenue',
     STOCK: '/admin/reports/stock',
     EXPORT: '/admin/reports/export',
     LIST: '/admin/reports',
@@ -164,13 +160,6 @@ export const ENDPOINTS = {
     CREATE_SESSION: '/remote-scan/session',
     STATUS: (sessionId) => `/remote-scan/${sessionId}/status`,
     SUBMIT: (sessionId) => `/remote-scan/${sessionId}/submit`,
-  },
-
-  // Not enabled on the backend yet (routes are off). Kept so the pages don't crash.
-  REMOTE_LOGIN: {
-    CREATE_SESSION: '/remote-login/session',
-    STATUS: (sessionId) => `/remote-login/${sessionId}/status`,
-    SUBMIT: (sessionId) => `/remote-login/${sessionId}/submit`,
   },
 
   DASHBOARD: {

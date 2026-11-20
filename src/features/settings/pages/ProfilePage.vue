@@ -3,6 +3,9 @@
     <SettingsCard>
       <ProfileSettings class="w-full" />
     </SettingsCard>
+    <SettingsCard>
+      <AccountSettings class="w-full" />
+    </SettingsCard>
   </SettingsLayout>
 </template>
 
@@ -10,4 +13,5 @@
 import SettingsLayout from '@/features/settings/components/Settingslayout.vue'
 import SettingsCard from '@/features/settings/components/SettingsCard.vue'
 import ProfileSettings from '@/features/settings/components/ProfileSettings.vue'
+import AccountSettings from '@/features/settings/components/AccountSettings.vue'
 </script>

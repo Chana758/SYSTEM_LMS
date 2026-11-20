@@ -6,9 +6,6 @@ export const circulationService = {
   getBorrows(params) {
     return apiClient.get(ENDPOINTS.BORROWS.LIST, { params })
   },
-  getOverdue(params) {
-    return apiClient.get(ENDPOINTS.BORROWS.OVERDUE, { params })
-  },
   createBorrow(payload) {
     return apiClient.post(ENDPOINTS.BORROWS.CREATE, payload)
   },

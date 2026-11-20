@@ -24,14 +24,12 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
-  ChartBarIcon, ArrowsRightLeftIcon, BanknotesIcon,
-  CurrencyDollarIcon, ArchiveBoxIcon, UsersIcon,
+  ArrowsRightLeftIcon, BanknotesIcon,
+  ArchiveBoxIcon, UsersIcon,
 } from '@heroicons/vue/24/outline'
-import { useAuthStore } from '@/features/auth/store/authStore'
 
 const { t } = useI18n()
 const route = useRoute()
-const authStore = useAuthStore()
 const isActive = (path) => route.path === path
 
 const darkActiveIcon = 'dark:bg-white/25 dark:border-white/30 dark:text-white'
@@ -79,13 +77,9 @@ const theme = (item) => palette[item.color] ?? palette.emerald
 
 const items = computed(() => {
   const base = [
-    { to: '/reports', labelKey: 'reports.navOverview', icon: ChartBarIcon, color: 'emerald' },
     { to: '/reports/borrow', labelKey: 'reports.navBorrow', icon: ArrowsRightLeftIcon, color: 'blue' },
     { to: '/reports/fine', labelKey: 'reports.navFine', icon: BanknotesIcon, color: 'orange' },
   ]
-  if (authStore.role === 'admin') {
-    base.push({ to: '/reports/revenue', labelKey: 'reports.navRevenue', icon: CurrencyDollarIcon, color: 'amber' })
-  }
   base.push(
     { to: '/reports/stock', labelKey: 'reports.navStock', icon: ArchiveBoxIcon, color: 'teal' },
     { to: '/reports/user', labelKey: 'reports.navUser', icon: UsersIcon, color: 'purple' },

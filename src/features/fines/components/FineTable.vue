@@ -18,7 +18,6 @@
         @pay="$emit('pay', $event)"
         @waive="$emit('waive', $event)"
         @view="$emit('view', $event)"
-        @edit="$emit('edit', $event)"
       />
     </div>
 
@@ -59,7 +58,6 @@
             @pay="$emit('pay', $event)"
             @waive="$emit('waive', $event)"
             @view="$emit('view', $event)"
-            @edit="$emit('edit', $event)"
           />
         </tbody>
       </table>
@@ -75,5 +73,5 @@ import FineCard from './FineCard.vue'
 
 const { t } = useI18n()
 defineProps({ fines: { type: Array, required: true }, loading: { type: Boolean, default: false } })
-defineEmits(['pay', 'waive', 'view', 'edit'])
+defineEmits(['pay', 'waive', 'view'])
 </script>

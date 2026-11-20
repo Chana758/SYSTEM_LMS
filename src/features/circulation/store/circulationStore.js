@@ -9,10 +9,8 @@ export const useCirculationStore = defineStore('circulation', {
   state: () => ({
     borrows: [],
     myBorrows: [],
-    overdueBorrows: [],
     pagination: emptyPage(),
     myPagination: emptyPage(),
-    overduePagination: emptyPage(), // separate, so Overdue never clobbers the Borrow list
     filters: { status: '', search: '', from: '', to: '' },
     loading: false,
     error: '',   // load errors (shown on the page)
@@ -56,23 +54,6 @@ export const useCirculationStore = defineStore('circulation', {
         this.myPagination = emptyPage()
         this.error = errMsg(e, 'Failed to load your borrows.')
         console.error('fetchMyBorrows failed:', e.response?.data || e)
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async fetchOverdue(page = 1) {
-      this.loading = true
-      this.error = ''
-      try {
-        const { data } = await circulationService.getOverdue({ page })
-        this.overdueBorrows = data.data
-        this.overduePagination = toPage(data)
-      } catch (e) {
-        this.overdueBorrows = []
-        this.overduePagination = emptyPage()
-        this.error = errMsg(e, 'Failed to load overdue books.')
-        console.error('fetchOverdue failed:', e.response?.data || e)
       } finally {
         this.loading = false
       }

@@ -51,6 +51,7 @@
               >
                 <option value="" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.allStatus') }}</option>
                 <option value="borrowed" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.statusBorrowed') }}</option>
+                <option value="overdue" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.overdue') }}</option>
                 <option value="returned" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">{{ $t('circulation.statusReturned') }}</option>
               </select>
             </div>
@@ -139,6 +140,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
 import { ArrowsRightLeftIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { useCirculationStore } from '../store/circulationStore'
@@ -146,7 +148,9 @@ import BorrowForm from '../components/BorrowForm.vue'
 import ReturnForm from '../components/ReturnForm.vue'
 
 const store = useCirculationStore()
-store.filters.status = 'borrowed'
+const route = useRoute()
+// /overdue redirects here with ?status=overdue
+store.filters.status = ['borrowed', 'overdue', 'returned'].includes(route.query.status) ? route.query.status : 'borrowed'
 
 const returningBorrow = ref(null)
 const returnError = ref('')

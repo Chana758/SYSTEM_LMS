@@ -14,7 +14,7 @@
 
       <div class="flex items-center gap-3 flex-wrap">
         <RouterLink
-          to="/reports"
+          to="/dashboard"
           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700/60 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-200 text-xs font-black tracking-wider uppercase transition-all shadow-2xs"
         >
           <ArrowLeftIcon class="w-4 h-4" />
@@ -24,6 +24,8 @@
         <ExportReportButton type="user" :filters="filters" />
       </div>
     </div>
+
+    <ReportsNav />
 
     <div class="bg-white dark:bg-slate-800/50 rounded-2xl border-2 border-slate-300 dark:border-white/15 p-6 md:p-8 shadow-lg dark:shadow-none border-dashed space-y-6">
 
@@ -74,6 +76,7 @@ import {
 import { reportService } from '../services/reportService'
 import { analyticsService } from '../services/analyticsService'
 import ReportFilter from '../components/ReportFilter.vue'
+import ReportsNav from '../components/ReportsNav.vue'
 import ReportSummaryCard from '../components/ReportSummaryCard.vue'
 import ReportTable from '../components/ReportTable.vue'
 import ReportChart from '../components/ReportChart.vue'

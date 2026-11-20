@@ -11,12 +11,7 @@ export default [
         component: () => import('@/features/settings/pages/ProfilePage.vue'), 
         meta: { middleware: 'auth' } 
       },
-      { 
-        path: 'account',        
-        name: 'settings.account',    
-        component: () => import('@/features/settings/pages/AccountPage.vue'), 
-        meta: { middleware: 'auth' } 
-      },
+      { path: 'account', redirect: '/settings/profile' },
       { 
         path: 'security',       
         name: 'settings.security',   

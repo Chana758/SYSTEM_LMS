@@ -113,10 +113,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
   BookOpenIcon, ChartPieIcon, UsersIcon, ArrowsRightLeftIcon,
-  ArrowUturnLeftIcon, BanknotesIcon, ChartBarIcon, Cog6ToothIcon,
+  BanknotesIcon, ChartBarIcon, Cog6ToothIcon,
   CpuChipIcon, SparklesIcon, QrCodeIcon, BellIcon, CalendarDaysIcon,
-  DocumentTextIcon, ArchiveBoxArrowDownIcon, UserGroupIcon,
-  ArrowRightOnRectangleIcon, ExclamationTriangleIcon, ClockIcon, UserCircleIcon,
+  DocumentTextIcon, UserGroupIcon,
+  ArrowRightOnRectangleIcon, ClockIcon, UserCircleIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import SidebarLink from './SidebarLink.vue'
@@ -152,8 +152,6 @@ const coreMenus = computed(() => [
   { name: t('sidebar.menu.borrow'),         path: '/borrow',          icon: ArrowsRightLeftIcon,     color: 'emerald', permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.myBorrows'),      path: '/my-borrows',      icon: ClockIcon,               color: 'emerald', permission: ['member'] },
 
-  { name: t('sidebar.menu.return'),         path: '/return',          icon: ArrowUturnLeftIcon,      color: 'cyan',    permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.overdue'),        path: '/overdue',         icon: ExclamationTriangleIcon, color: 'red',     permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.borrowHistory'),  path: '/borrow-history',  icon: ClockIcon,               color: 'indigo',  permission: ['admin', 'librarian'] },
 
   { name: t('sidebar.menu.reservations'),   path: '/reservations',    icon: CalendarDaysIcon,        color: 'pink',    permission: ['admin', 'librarian'] },
@@ -176,7 +174,6 @@ const systemMenus = computed(() => [
   { name: t('sidebar.menu.reports'),         path: '/reports',                 icon: ChartBarIcon,            color: 'blue',    permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.notifications'),   path: '/notifications',           icon: BellIcon,                color: 'amber',   permission: ['admin', 'librarian', 'member'] },
   { name: t('sidebar.menu.cardApprovals'),   path: '/settings/card-approvals', icon: QrCodeIcon,              color: 'violet',  permission: ['admin', 'librarian'] },
-  { name: t('sidebar.menu.backupRestore'),   path: '/settings/backup',         icon: ArchiveBoxArrowDownIcon, color: 'teal',    permission: ['admin'] },
   { name: t('sidebar.menu.settings'),        path: '/settings',                icon: Cog6ToothIcon,           color: 'indigo',  permission: ['admin', 'librarian', 'member'] },
 ])
 

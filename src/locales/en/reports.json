@@ -110,7 +110,7 @@
   "borrowPage": {
     "title": "Borrow Report",
     "subtitle": "Circulation activity for the selected period",
-    "backToReports": "Back to Reports",
+    "backToReports": "Back to Dashboard",
     "total": "Total",
     "returned": "Returned",
     "active": "Active",
@@ -121,7 +121,7 @@
   "finePage": {
     "title": "Fine Report",
     "subtitle": "Fines issued and collected for the selected period",
-    "backToReports": "Back to Reports",
+    "backToReports": "Back to Dashboard",
     "totalFines": "Total Fines",
     "totalAmount": "Total Amount",
     "collected": "Collected",
@@ -135,7 +135,7 @@
   "revenuePage": {
     "title": "Revenue Report",
     "subtitle": "Financial insights and collection history",
-    "backToReports": "Back to Reports",
+    "backToReports": "Back to Dashboard",
     "totalRevenue": "Total Revenue",
     "thisMonth": "This Month",
     "fines": "Fines",
@@ -147,7 +147,7 @@
   "stockPage": {
     "title": "Stock Report",
     "subtitle": "Inventory levels and availability",
-    "backToReports": "Back to Reports",
+    "backToReports": "Back to Dashboard",
     "totalBooks": "Total Books",
     "available": "Available",
     "borrowed": "Borrowed",
@@ -163,7 +163,7 @@
   "userPage": {
     "title": "User Report",
     "subtitle": "Member activity and registrations for the selected period",
-    "backToReports": "Back to Reports",
+    "backToReports": "Back to Dashboard",
     "totalUsers": "Total Users",
     "newPeriod": "New (period)",
     "members": "Members",
