@@ -6,9 +6,6 @@ export const circulationService = {
   getBorrows(params) {
     return apiClient.get(ENDPOINTS.BORROWS.LIST, { params })
   },
-  createBorrow(payload) {
-    return apiClient.post(ENDPOINTS.BORROWS.CREATE, payload)
-  },
   returnBook(borrowId, payload) {
     return apiClient.post(ENDPOINTS.BORROWS.RETURN(borrowId), payload)
   },

@@ -1,6 +1,6 @@
 {
-  "bookCheckout": "Book Checkout",
-  "checkoutSubtitle": "Create a new checkout and manage currently borrowed books.",
+  "bookCheckout": "Active Loans",
+  "checkoutSubtitle": "Track, return and renew borrowed books, and see what is overdue. New loans are made in the Scanner.",
   "createNewCheckout": "Create New Checkout",
   "currentlyBorrowed": "Currently Borrowed",
   "searchMemberBook": "Search member or book title...",
@@ -96,5 +96,6 @@
     "delete": "Delete",
     "saveChanges": "Save Changes",
     "saving": "Saving..."
-  }
+  },
+  "newLoanScan": "New loan (Scan)"
 }

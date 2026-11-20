@@ -59,22 +59,6 @@ export const useCirculationStore = defineStore('circulation', {
       }
     },
 
-    async borrow(payload) {
-      this.loading = true
-      this.errors = {}
-      try {
-        const { data } = await circulationService.createBorrow(payload)
-        return { success: true, message: data.message }
-      } catch (e) {
-        if (e.response?.status === 422) {
-          this.errors = e.response.data.errors || { general: e.response.data.message }
-        }
-        return { success: false, message: errMsg(e, 'Borrow failed.') }
-      } finally {
-        this.loading = false
-      }
-    },
-
     async renew(borrowId, forMember = false) {
       try {
         const { data } = await circulationService.renewBorrow(borrowId)

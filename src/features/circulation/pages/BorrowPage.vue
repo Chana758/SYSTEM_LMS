@@ -14,17 +14,14 @@
             <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-1">{{ $t('circulation.checkoutSubtitle') }}</p>
           </div>
         </div>
-        <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-500/20 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-          {{ $t('sidebar.menu.borrow') }}
-        </span>
+        <router-link
+          to="/scanner"
+          class="inline-flex items-center gap-2 flex-shrink-0 bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-extrabold transition-colors shadow-sm"
+        >
+          <QrCodeIcon class="w-4 h-4" />
+          <span>{{ $t('circulation.newLoanScan') }}</span>
+        </router-link>
       </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        <!-- Create New Checkout Form -->
-        <div class="bg-slate-50/50 dark:bg-slate-900/40 rounded-2xl border border-slate-200 dark:border-white/10 p-4 sm:p-6 space-y-5 sm:space-y-6">
-          <h2 class="text-lg font-black text-slate-900 dark:text-white tracking-tight pb-4 border-b border-slate-200 dark:border-white/10">{{ $t('circulation.createNewCheckout') }}</h2>
-          <BorrowForm :loading="store.loading" :errors="store.errors" @submit="handleBorrow" />
-        </div>
 
         <!-- Currently Borrowed Section -->
         <div class="bg-slate-50/50 dark:bg-slate-900/40 rounded-2xl border border-slate-200 dark:border-white/10 p-4 sm:p-6 space-y-5 sm:space-y-6">
@@ -57,9 +54,9 @@
             </div>
           </div>
 
-          <!-- Borrowed Items List (inner scroll only on desktop; on phones the page itself scrolls) -->
-          <div class="space-y-3 lg:max-h-[32rem] lg:overflow-y-auto lg:pr-1">
-            <div v-if="store.borrows.length === 0" class="text-center py-12">
+          <!-- Borrowed items (new loans are made in the Scanner) -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div v-if="store.borrows.length === 0" class="text-center py-12 lg:col-span-2">
               <div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 flex items-center justify-center mx-auto mb-3 shadow-2xs">
                 <ArrowsRightLeftIcon class="w-6 h-6 text-slate-400 dark:text-slate-500" />
               </div>
@@ -122,7 +119,6 @@
             </button>
           </div>
         </div>
-      </div>
 
     </div>
 
@@ -142,9 +138,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
-import { ArrowsRightLeftIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+import { ArrowsRightLeftIcon, MagnifyingGlassIcon, QrCodeIcon } from '@heroicons/vue/24/outline'
 import { useCirculationStore } from '../store/circulationStore'
-import BorrowForm from '../components/BorrowForm.vue'
 import ReturnForm from '../components/ReturnForm.vue'
 
 const store = useCirculationStore()
@@ -156,12 +151,6 @@ const returningBorrow = ref(null)
 const returnError = ref('')
 
 const debouncedFetch = debounce(() => store.fetchList(), 400)
-
-async function handleBorrow(payload) {
-  const result = await store.borrow(payload)
-  alert(result.message)
-  if (result.success) store.fetchList()
-}
 
 async function handleRenew(b) {
   const result = await store.renew(b.id, false)
