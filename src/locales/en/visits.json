@@ -28,7 +28,11 @@
     "guestSubmit": "Come in",
     "guestLeavingTitle": "Choose your name",
     "noGuests": "No guests inside",
-    "since": "In since {time}"
+    "since": "In since {time}",
+    "reminderTitle": "Don’t forget",
+    "late": "Late",
+    "dueOn": "Due {date}",
+    "finesDue": "Unpaid fines {amount}"
   },
   "purpose": {
     "read": "Reading",
@@ -60,7 +64,10 @@
     "checkedOut": "Checked out",
     "checkedIn": "Checked in",
     "memberSearch": "Name or member no.…",
-    "mode": { "member": "Member (forgot card)", "guest": "Guest" }
+    "mode": {
+      "member": "Member (forgot card)",
+      "guest": "Guest"
+    }
   },
   "type": {
     "student": "Student",
@@ -102,7 +109,13 @@
     "none": "No kiosks yet",
     "onceOnly": "Write this down now. It is shown only once.",
     "saved": "I have saved it",
-    "secret": { "login": "Login", "password": "Password", "device_id": "Device ID", "door_key": "Door key", "poll_url": "Poll URL" },
+    "secret": {
+      "login": "Login",
+      "password": "Password",
+      "device_id": "Device ID",
+      "door_key": "Door key",
+      "poll_url": "Poll URL"
+    },
     "online": "Kiosk online",
     "offline": "Kiosk offline",
     "doorOnline": "Door online",
@@ -116,7 +129,11 @@
     "name": "Name",
     "location": "Location",
     "modeLabel": "Mode",
-    "mode": { "both": "In and out", "entrance": "Entrance only", "exit": "Exit only" },
+    "mode": {
+      "both": "In and out",
+      "entrance": "Entrance only",
+      "exit": "Exit only"
+    },
     "pulse": "Unlock time (ms)",
     "doorEnabled": "Door controller connected (ESP32 + relay)",
     "doorHint": "The exit must always have a release button on the inside, for fire safety.",
@@ -134,7 +151,12 @@
     "close": "Closes",
     "capacity": "Seats",
     "rescan": "Ignore a repeat scan within (seconds)",
-    "kioskDays": "Kiosk stays signed in (days)"
+    "kioskDays": "Kiosk stays signed in (days)",
+    "voiceTitle": "Kiosk voice",
+    "voiceEnabled": "Speak on scan (welcome / goodbye)",
+    "voiceName": "Say the name (needs a Khmer voice on the tablet)",
+    "voiceVolume": "Volume {v}%",
+    "voiceHint": "Put recorded Khmer clips in public/sounds/kiosk/ to sound the same on every device"
   },
   "logs": {
     "title": "Login history",

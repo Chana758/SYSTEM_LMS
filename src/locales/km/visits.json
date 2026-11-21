@@ -28,7 +28,11 @@
     "guestSubmit": "ចូល",
     "guestLeavingTitle": "ជ្រើសឈ្មោះរបស់អ្នក",
     "noGuests": "គ្មានភ្ញៀវនៅខាងក្នុងទេ",
-    "since": "ចូលម៉ោង {time}"
+    "since": "ចូលម៉ោង {time}",
+    "reminderTitle": "កុំភ្លេច",
+    "late": "ហួសកំណត់",
+    "dueOn": "សង {date}",
+    "finesDue": "ពិន័យមិនទាន់បង់ {amount}"
   },
   "purpose": {
     "read": "អានសៀវភៅ",
@@ -60,7 +64,10 @@
     "checkedOut": "បាន Check-out",
     "checkedIn": "បាន Check-in",
     "memberSearch": "ឈ្មោះ ឬលេខសមាជិក…",
-    "mode": { "member": "សមាជិក (ភ្លេចកាត)", "guest": "ភ្ញៀវ" }
+    "mode": {
+      "member": "សមាជិក (ភ្លេចកាត)",
+      "guest": "ភ្ញៀវ"
+    }
   },
   "type": {
     "student": "សិស្ស",
@@ -102,7 +109,13 @@
     "none": "មិនទាន់មាន Kiosk ទេ",
     "onceOnly": "កត់ទុកឥឡូវ។ ព័ត៌មាននេះបង្ហាញតែម្តងគត់។",
     "saved": "ខ្ញុំបានកត់ទុករួចហើយ",
-    "secret": { "login": "Login", "password": "ពាក្យសម្ងាត់", "device_id": "លេខឧបករណ៍", "door_key": "Door key", "poll_url": "Poll URL" },
+    "secret": {
+      "login": "Login",
+      "password": "ពាក្យសម្ងាត់",
+      "device_id": "លេខឧបករណ៍",
+      "door_key": "Door key",
+      "poll_url": "Poll URL"
+    },
     "online": "Kiosk កំពុងដំណើរការ",
     "offline": "Kiosk មិនភ្ជាប់",
     "doorOnline": "ទ្វារភ្ជាប់",
@@ -116,7 +129,11 @@
     "name": "ឈ្មោះ",
     "location": "ទីតាំង",
     "modeLabel": "របៀប",
-    "mode": { "both": "ចូល និងចេញ", "entrance": "ចូលតែប៉ុណ្ណោះ", "exit": "ចេញតែប៉ុណ្ណោះ" },
+    "mode": {
+      "both": "ចូល និងចេញ",
+      "entrance": "ចូលតែប៉ុណ្ណោះ",
+      "exit": "ចេញតែប៉ុណ្ណោះ"
+    },
     "pulse": "បើកសោរយៈពេល (ms)",
     "doorEnabled": "ភ្ជាប់ Controller ទ្វារ (ESP32 + Relay)",
     "doorHint": "ផ្លូវចេញត្រូវតែមានប៊ូតុងបើកពីខាងក្នុងជានិច្ច ដើម្បីសុវត្ថិភាពពេលមានអគ្គិភ័យ។",
@@ -134,7 +151,12 @@
     "close": "ម៉ោងបិទ",
     "capacity": "ចំនួនកន្លែងអង្គុយ",
     "rescan": "មិនរាប់ការស្កេនម្តងទៀត ក្នុង (វិនាទី)",
-    "kioskDays": "Kiosk នៅ Login (ថ្ងៃ)"
+    "kioskDays": "Kiosk នៅ Login (ថ្ងៃ)",
+    "voiceTitle": "សម្លេង Kiosk",
+    "voiceEnabled": "និយាយពេលស្កេន (សូមស្វាគមន៍ / លាហើយ)",
+    "voiceName": "អានឈ្មោះ (ត្រូវការសំឡេងខ្មែរលើ Tablet)",
+    "voiceVolume": "កម្រិតសំឡេង {v}%",
+    "voiceHint": "ដាក់សម្លេងថតជាខ្មែរ នៅ public/sounds/kiosk/ ដើម្បីឲ្យដូចគ្នាលើគ្រប់ឧបករណ៍"
   },
   "logs": {
     "title": "ប្រវត្តិ Login",

@@ -78,6 +78,15 @@
           <p v-if="result.person?.class_name" class="text-xl mt-2 opacity-80">{{ result.person.class_name }}</p>
           <p class="text-2xl sm:text-3xl font-bold mt-6 leading-snug">{{ result.message }}</p>
           <p v-if="result.notice?.message" class="mt-6 text-lg bg-black/20 rounded-2xl px-5 py-4">{{ result.notice.message }}</p>
+          <!-- Idea 3: reminder at the door -->
+          <div v-if="result.reminders" class="mt-6 text-left bg-black/25 rounded-2xl px-5 py-4 space-y-2">
+            <p class="text-lg font-black">⏰ {{ t('visits.kiosk.reminderTitle') }}</p>
+            <p v-for="(l, i) in result.reminders.loans" :key="i" class="text-lg flex justify-between gap-4">
+              <span class="truncate">{{ l.title }}</span>
+              <span class="whitespace-nowrap font-bold" :class="l.late ? 'text-amber-200' : ''">{{ l.late ? t('visits.kiosk.late') : t('visits.kiosk.dueOn', { date: dm(l.due_date) }) }}</span>
+            </p>
+            <p v-if="result.reminders.unpaid_fines_khr > 0" class="text-lg font-bold">{{ t('visits.kiosk.finesDue', { amount: formatMoney(result.reminders.unpaid_fines_khr) }) }}</p>
+          </div>
           <p v-if="result.door" class="mt-6 text-lg font-semibold opacity-90">🚪 {{ t('visits.kiosk.doorOpen') }}</p>
         </div>
       </div>
@@ -143,6 +152,8 @@ import CameraScanner from '@/features/scanner/components/CameraScanner.vue'
 import { soundService } from '@/features/scanner/services/soundService'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { visitService } from '../services/visitService'
+import { announce, configureVoice } from '../services/kioskVoice'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
@@ -163,6 +174,7 @@ const now = ref(new Date())
 const clock = computed(() => now.value.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }))
 const today = computed(() => now.value.toLocaleDateString(locale.value === 'km' ? 'km-KH' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))
 const hm = (iso) => (iso ? new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '')
+const dm = (iso) => (iso ? new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : '')
 
 const overlayClass = computed(() => ({
   in: 'bg-emerald-600',
@@ -185,7 +197,15 @@ const resultIcon = computed(() => ({
 }[result.value?.action] || InformationCircleIcon))
 
 let resultTimer = null
+const VOICE_KEY = { in: 'welcome', out: 'goodbye', already_in: 'already_in', not_in: 'not_in', guest: 'guest', guest_out: 'goodbye', denied: 'denied' }
+
 function show(data, ms = 4000) {
+  if (data.reminders) ms = Math.max(ms, 8000) // give time to read the reminder
+  announce(VOICE_KEY[data.action] || 'denied', {
+    name: data.person?.name || '',
+    lang: locale.value === 'en' ? 'en' : 'km',
+    reminder: !!data.reminders?.loans?.length,
+  })
   result.value = data
   clearTimeout(resultTimer)
   resultTimer = setTimeout(() => (result.value = null), ms)
@@ -270,6 +290,11 @@ async function refresh() {
     device.value = data.device
     settings.value = data.settings
     occupancy.value = data.occupancy
+    configureVoice({
+      enabled: data.settings.kiosk_voice_enabled !== false,
+      name: data.settings.kiosk_voice_name !== false,
+      volume: data.settings.kiosk_voice_volume ?? 80,
+    })
   } catch {
     /* keep the last values; the next scan shows the error */
   }
