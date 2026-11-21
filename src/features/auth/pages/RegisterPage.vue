@@ -114,6 +114,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import RegisterForm from '../components/RegisterForm.vue'
 import { useAuthStore } from '../store/authStore'
 import { useBrandingStore } from '@/stores/brandingStore'
@@ -123,13 +124,19 @@ const router = useRouter()
 const authStore = useAuthStore()
 const brandingStore = useBrandingStore()
 const registered = ref(false)
+const toast = useToast()
 
 async function handleRegister(formData) {
   const success = await authStore.register(formData)
   if (success) registered.value = true
 }
 
+// A1: pending accounts see why they can't borrow yet (shown after "Continue")
+
 function finishAndEnter() {
+  if (authStore.accountNotice) {
+    toast.info(authStore.accountNotice.message, { timeout: 8000 })
+  }
   router.push({ name: 'book-list' })
 }
 </script>

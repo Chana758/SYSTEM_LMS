@@ -84,8 +84,18 @@
           </router-link>
         </div>
 
-        <!-- Register Link -->
-        <div class="text-center pt-1 md:pt-2">
+        <!-- B2.2: imported students activate their own account -->
+        <div v-if="authConfig.activation_enabled" class="text-center -mt-1">
+          <router-link
+            :to="{ name: 'activate-account' }"
+            class="inline-block py-1 text-[12px] font-bold text-[#17664b] hover:underline"
+          >
+            {{ $t('auth.activateLink') }}
+          </router-link>
+        </div>
+
+        <!-- Register Link (hidden when online registration is turned off, B3.1) -->
+        <div v-if="authConfig.registration_enabled" class="text-center pt-1 md:pt-2">
           <p class="text-[12px] font-semibold text-slate-500">
             {{ $t('auth.noAccount') }}
             <router-link :to="{ name: 'register' }" class="text-[#17664b] font-bold hover:underline ml-1">
@@ -101,7 +111,10 @@
 </template>
 
 <script setup>
+import { onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+import { authService } from '../services/authService'
 import LoginForm from '../components/LoginForm.vue'
 import { useAuthStore } from '../store/authStore'
 import { useBrandingStore } from '@/stores/brandingStore'
@@ -110,9 +123,33 @@ import defaultLogo from '@/assets/images/logoh6.jpg'
 const router = useRouter()
 const authStore = useAuthStore()
 const brandingStore = useBrandingStore()
+const toast = useToast()
+
+// Defaults keep the links visible if /auth/config can't be reached
+const authConfig = reactive({ registration_enabled: true, activation_enabled: true })
+
+onMounted(async () => {
+  try {
+    const { data } = await authService.config()
+    Object.assign(authConfig, data)
+  } catch {
+    // keep defaults
+  }
+})
+
 function redirectAfterLogin() {
-  const isStaff = ['admin', 'librarian'].includes(authStore.role)
-  router.push({ name: isStaff ? 'dashboard' : 'book-list' })
+  // B2.6: a temporary password must be changed first
+  if (authStore.mustChangePassword) {
+    router.push({ name: 'force-change-password' })
+    return
+  }
+
+  // A1/A3: pending approval or expired membership (can still browse)
+  if (authStore.accountNotice) {
+    toast.warning(authStore.accountNotice.message, { timeout: 8000 })
+  }
+
+  router.push({ name: authStore.isStaff ? 'dashboard' : 'book-list' })
 }
 
 async function handleLogin(formData) {

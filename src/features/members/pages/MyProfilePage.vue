@@ -92,6 +92,9 @@
       <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-2xs">
         <AccountSettings />
       </div>
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-2xs">
+        <LogoutAllCard />
+      </div>
     </div>
   </div>
   <div v-else class="text-center py-20 text-slate-400 dark:text-slate-500">
@@ -108,6 +111,7 @@ import { useMemberStore } from '../store/memberStore'
 import MemberCard from '../components/MemberCard.vue'
 import ProfileSettings from '@/features/settings/components/ProfileSettings.vue'
 import AccountSettings from '@/features/settings/components/AccountSettings.vue'
+import LogoutAllCard from '@/features/settings/components/LogoutAllCard.vue'
 
 const { t } = useI18n()
 const store = useMemberStore()

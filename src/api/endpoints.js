@@ -15,6 +15,18 @@ export const ENDPOINTS = {
     QR_TOKEN_REVOKE: '/auth/qr-token/revoke',
     QR_TOKEN_GENERATE_FOR: (userId) => `/auth/users/${userId}/qr-token/generate`,
     PENDING_CARDS: '/auth/pending-cards',
+    CONFIG: '/auth/config',
+    ACTIVATE: '/auth/activate',
+    LOGOUT_ALL: '/auth/logout-all',
+    VERIFY_PASSWORD: '/auth/verify-password',
+    RESET_CREDENTIALS: (userId) => `/auth/users/${userId}/reset-credentials`,
+  },
+
+  MEMBER_ACCOUNTS: {
+    PENDING: '/member-accounts/pending',
+    IMPORT: '/member-accounts/import',
+    APPROVE: (id) => `/member-accounts/${id}/approve`,
+    REJECT: (id) => `/member-accounts/${id}/reject`,
   },
 
   MEMBERS: {

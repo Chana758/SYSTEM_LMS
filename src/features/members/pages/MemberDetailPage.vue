@@ -29,6 +29,9 @@
           />
         </div>
 
+        <!-- B2.5: temporary password / PIN reset -->
+        <ResetCredentialsCard :user-id="store.currentMember.user?.id" />
+
         <!-- Promote / demote (admin only — the card hides itself for other roles) -->
         <ChangeRoleCard
           :user-id="store.currentMember.user?.id"
@@ -74,6 +77,7 @@ import { useMemberStore } from '../store/memberStore'
 import MemberForm from '../components/MemberForm.vue'
 import MemberCard from '../components/MemberCard.vue'
 import QrLoginCardAdmin from '@/features/settings/components/QrLoginCardAdmin.vue'
+import ResetCredentialsCard from '../components/ResetCredentialsCard.vue'
 import ChangeRoleCard from '@/features/settings/components/ChangeRoleCard.vue'
 
 const { t } = useI18n()

@@ -15,6 +15,25 @@ export const authService = {
   me() {
     return apiClient.get(ENDPOINTS.AUTH.ME)
   },
+  logoutAll() {
+    return apiClient.post(ENDPOINTS.AUTH.LOGOUT_ALL)
+  },
+  // Public: registration/activation switches + staff idle-lock minutes (B3.1)
+  config() {
+    return apiClient.get(ENDPOINTS.AUTH.CONFIG)
+  },
+  // Public: imported student sets password + PIN with student ID + date of birth (B2.2)
+  activate(payload) {
+    return apiClient.post(ENDPOINTS.AUTH.ACTIVATE, payload)
+  },
+  // Staff idle lock (B2.7)
+  verifyPassword(password) {
+    return apiClient.post(ENDPOINTS.AUTH.VERIFY_PASSWORD, { password })
+  },
+  // Admin/librarian: temporary password + clear PIN (B2.5)
+  resetCredentials(userId) {
+    return apiClient.post(ENDPOINTS.AUTH.RESET_CREDENTIALS(userId))
+  },
 
   // 2. Forgot / reset password
   forgotPassword(email) {

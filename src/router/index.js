@@ -68,6 +68,17 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
+  // B2.6: nothing else opens until a temporary password is replaced
+  const auth = useAuthStore()
+  if (
+    auth.isAuthenticated &&
+    auth.mustChangePassword &&
+    to.meta.middleware === 'auth' &&
+    to.name !== 'force-change-password'
+  ) {
+    return { name: 'force-change-password' }
+  }
+
   if (to.meta.middleware === 'auth') {
     // Order matters: login check -> role check -> demo restriction
     return authGuard(to) || roleGuard(to) || demoGuard(to)

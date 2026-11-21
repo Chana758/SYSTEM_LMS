@@ -11,12 +11,17 @@ export const useAuthStore = defineStore('auth', {
     token: localStorage.getItem('access_token') || null,
     loading: false,
     errors: {},
+    // A1/A3: e.g. "waiting for approval" or "membership expired" (user can still browse)
+    accountNotice: JSON.parse(localStorage.getItem('account_notice')) || null,
   }),
 
   getters: {
     isAuthenticated: (state) => !!state.token,
     role: (state) => state.user?.role?.name || null,
     isDemo: (state) => state.user?.is_demo === true,
+    isStaff: (state) => ['admin', 'librarian'].includes(state.user?.role?.name),
+    // B2.6: a temporary password must be replaced before using the app
+    mustChangePassword: (state) => state.user?.must_change_password === true,
   },
 
   actions: {
@@ -26,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
       this.errors = {}
       try {
         const { data } = await authService.register(payload)
-        this._setSession(data.user, data.access_token)
+        this._setSession(data.user, data.access_token, data.account_notice)
         return true
       } catch (error) {
         this._handleError(error)
@@ -41,7 +46,7 @@ export const useAuthStore = defineStore('auth', {
       this.errors = {}
       try {
         const { data } = await authService.login(payload)
-        this._setSession(data.user, data.access_token)
+        this._setSession(data.user, data.access_token, data.account_notice)
         return true
       } catch (error) {
         this._handleError(error)
@@ -85,6 +90,20 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // B2.8: delete every token (e.g. phone lost), then go to login
+    async logoutAll() {
+      try {
+        await authService.logoutAll()
+        return true
+      } catch (error) {
+        this._handleError(error)
+        return false
+      } finally {
+        this._clearSession()
+        router.push({ name: 'login' })
+      }
+    },
+
     async fetchMe() {
       try {
         const { data } = await authService.me()
@@ -92,6 +111,7 @@ export const useAuthStore = defineStore('auth', {
         const user = data.user ?? data
         this.user = user
         localStorage.setItem('user', JSON.stringify(user))
+        this._setNotice(data.account_notice ?? null)
       } catch (error) {
         this._clearSession()
       }
@@ -163,6 +183,10 @@ export const useAuthStore = defineStore('auth', {
       this.errors = {}
       try {
         await securityService.changePassword(payload)
+        if (this.user?.must_change_password) {
+          this.user = { ...this.user, must_change_password: false }
+          localStorage.setItem('user', JSON.stringify(this.user))
+        }
         return true
       } catch (error) {
         this._handleError(error)
@@ -195,11 +219,18 @@ export const useAuthStore = defineStore('auth', {
       this.errors = {}
     },
 
-    _setSession(user, token) {
+    _setSession(user, token, notice = null) {
       this.user = user
       this.token = token
       localStorage.setItem('access_token', token)
       localStorage.setItem('user', JSON.stringify(user))
+      this._setNotice(notice)
+    },
+
+    _setNotice(notice) {
+      this.accountNotice = notice
+      if (notice) localStorage.setItem('account_notice', JSON.stringify(notice))
+      else localStorage.removeItem('account_notice')
     },
 
     _clearSession() {
@@ -207,6 +238,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       localStorage.removeItem('access_token')
       localStorage.removeItem('user')
+      this._setNotice(null)
     },
 
     _handleError(error) {
@@ -228,6 +260,7 @@ export const useAuthStore = defineStore('auth', {
       } else {
         this.errors = {
           general: error.response?.data?.message || 'An unexpected error occurred',
+          code: error.response?.data?.code || null,
         }
       }
     },

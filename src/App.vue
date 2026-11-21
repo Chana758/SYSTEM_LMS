@@ -1,6 +1,7 @@
 <template>
   <AppWrapper>
     <router-view />
+    <IdleLock />
   </AppWrapper>
 </template>
 
@@ -9,6 +10,7 @@ import { onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import AppWrapper from '@/components/layout/AppWrapper.vue'
+import IdleLock from '@/components/IdleLock.vue'
 
 const toast = useToast()
 const { t } = useI18n()

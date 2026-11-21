@@ -1,13 +1,13 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
     <AuthField
-      v-model="form.email"
-      :label="$t('auth.email')"
-      type="email"
-      placeholder="you@example.com"
-      autocomplete="email"
-      :icon="EnvelopeIcon"
-      :error="errors.email"
+      v-model="form.login"
+      :label="$t('auth.loginId')"
+      type="text"
+      :placeholder="$t('auth.loginIdPlaceholder')"
+      autocomplete="username"
+      :icon="UserIcon"
+      :error="errors.login || errors.email"
     />
 
     <AuthField
@@ -43,7 +43,7 @@
 
 <script setup>
 import { reactive } from 'vue'
-import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
+import { UserIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
 import AuthField from './AuthField.vue'
 
 defineProps({
@@ -52,7 +52,8 @@ defineProps({
 })
 const emit = defineEmits(['submit'])
 
-const form = reactive({ email: '', password: '' })
+// B2.4: one box for email, student ID or membership no.
+const form = reactive({ login: '', password: '' })
 
 const handleSubmit = () => emit('submit', { ...form })
 </script>

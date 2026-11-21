@@ -76,6 +76,28 @@
       </div>
     </div>
 
+    <!-- Block 1 (Sam): tabs for approvals (B2.3) and Excel import (B2.1) -->
+    <div class="flex gap-2 overflow-x-auto">
+      <button
+        v-for="tb in tabs"
+        :key="tb.key"
+        type="button"
+        @click="tab = tb.key"
+        class="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer border"
+        :class="tab === tb.key
+          ? 'bg-emerald-700 text-white border-emerald-700 dark:bg-emerald-600 dark:border-emerald-600'
+          : 'bg-white dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-700/50'"
+      >
+        {{ tb.label }}
+        <span v-if="tb.key === 'pending' && pendingCount" class="ml-1.5 inline-flex min-w-5 h-5 px-1.5 items-center justify-center rounded-full bg-amber-400 text-slate-900 text-[10px] font-black">{{ pendingCount }}</span>
+      </button>
+    </div>
+
+    <PendingApprovals v-if="tab === 'pending'" :membership-types="membershipTypes" @changed="onAccountsChanged" />
+    <ImportMembers v-if="tab === 'import'" :membership-types="membershipTypes" @imported="onAccountsChanged" />
+
+    <template v-if="tab === 'list'">
+
     <!-- ============ TOOLBAR: search on its own row, two filters side by side on phones ============ -->
     <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-300 dark:border-white/10 p-3 sm:p-4 shadow-sm">
       <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-3">
@@ -229,6 +251,8 @@
       </template>
     </div>
 
+    </template>
+
     <!-- ============ CREATE MODAL: bottom sheet on phones, centered dialog on sm+ ============ -->
     <div v-if="showCreateModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center z-50 sm:p-4">
       <div
@@ -269,10 +293,36 @@ import { useMemberStore } from '../store/memberStore'
 import { membershipTypeService } from '../services/membershipTypeService'
 import MemberForm from '../components/MemberForm.vue'
 import MembershipBadge from '../components/MembershipBadge.vue'
+import PendingApprovals from '../components/PendingApprovals.vue'
+import ImportMembers from '../components/ImportMembers.vue'
+import { memberAccountService } from '../services/memberAccountService'
 
 const { t } = useI18n()
 const store = useMemberStore()
 const showCreateModal = ref(false)
+
+// Block 1 tabs
+const tab = ref('list')
+const pendingCount = ref(0)
+const tabs = computed(() => [
+  { key: 'list', label: t('members.pageTitle') },
+  { key: 'pending', label: t('auth.pending.tab') },
+  { key: 'import', label: t('auth.import.tab') },
+])
+
+async function loadPendingCount() {
+  try {
+    const { data } = await memberAccountService.pending({ per_page: 1 })
+    pendingCount.value = data.total || 0
+  } catch {
+    pendingCount.value = 0
+  }
+}
+
+function onAccountsChanged() {
+  loadPendingCount()
+  store.fetchList()
+}
 
 // NOTE: these three counts only cover the CURRENT page of results.
 // For exact totals across all pages, have GET /members return a `stats` object
@@ -337,5 +387,6 @@ async function handleDelete(member) {
 onMounted(() => {
   store.fetchList()
   loadMembershipTypes()
+  loadPendingCount()
 })
 </script>

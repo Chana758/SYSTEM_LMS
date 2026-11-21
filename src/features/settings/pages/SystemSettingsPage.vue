@@ -1,6 +1,7 @@
 <template>
   <SettingsLayout>
     <SettingsCard><BrandingSettings class="w-full" /></SettingsCard>
+    <SettingsCard v-if="authStore.role === 'admin'"><AuthSettings class="w-full" /></SettingsCard>
   </SettingsLayout>
 </template>
 
@@ -8,4 +9,8 @@
 import SettingsLayout from '@/features/settings/components/Settingslayout.vue'
 import SettingsCard from '@/features/settings/components/SettingsCard.vue'
 import BrandingSettings from '@/features/settings/components/BrandingSettings.vue'
+import AuthSettings from '@/features/settings/components/AuthSettings.vue'
+import { useAuthStore } from '@/features/auth/store/authStore'
+
+const authStore = useAuthStore()
 </script>
