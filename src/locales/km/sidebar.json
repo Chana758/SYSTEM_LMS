@@ -36,6 +36,9 @@
     "cardApprovals": "កាត",
     "backupRestore": "បម្រុងទុក និងស្តារ",
     "settings": "ការកំណត់",
-    "payments": "ប្រវត្តិការបង់ប្រាក់"
+    "payments": "ប្រវត្តិការបង់ប្រាក់",
+    "myCard": "ប័ណ្ណរបស់ខ្ញុំ",
+    "visits": "អ្នកមកបណ្ណាល័យ",
+    "loginLogs": "ប្រវត្តិ Login"
   }
 }

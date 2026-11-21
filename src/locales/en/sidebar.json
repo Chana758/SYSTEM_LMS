@@ -36,6 +36,9 @@
     "cardApprovals": "Card Approvals",
     "backupRestore": "Backup&Restore",
     "settings": "Settings",
-    "payments": "Payment history"
+    "payments": "Payment history",
+    "myCard": "My card",
+    "visits": "Library visits",
+    "loginLogs": "Login history"
   }
 }

@@ -20,6 +20,7 @@ import scannerRoutes from './scanner.routes'
 import reportRoutes from './report.routes'
 import chatbotRoutes from './chatbot.routes'
 import aiRecommendationRoutes from './ai-recommendation.routes'
+import visitRoutes from './visits.routes'
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
 
       if (['admin', 'librarian'].includes(authStore.role)) {
         return { name: 'dashboard' }
+      }
+
+      // The door tablet only ever shows the kiosk screen
+      if (authStore.role === 'kiosk') {
+        return { name: 'kiosk' }
       }
 
       // Members have no access to /dashboard — send them to their own landing page.
@@ -60,6 +66,7 @@ const routes = [
   ...reportRoutes,
   ...chatbotRoutes,
   ...aiRecommendationRoutes,
+  ...visitRoutes,
 ]
 
 const router = createRouter({
@@ -77,6 +84,11 @@ router.beforeEach((to) => {
     to.name !== 'force-change-password'
   ) {
     return { name: 'force-change-password' }
+  }
+
+  // A kiosk account must not wander into other pages
+  if (auth.isAuthenticated && auth.role === 'kiosk' && to.meta.middleware === 'auth' && to.name !== 'kiosk') {
+    return { name: 'kiosk' }
   }
 
   if (to.meta.middleware === 'auth') {

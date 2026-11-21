@@ -34,6 +34,8 @@ import chatbot_en from '@/locales/en/chatbot.json'
 import chatbot_km from '@/locales/km/chatbot.json'
 import recommendation_en from '@/locales/en/recommendation.json'
 import recommendation_km from '@/locales/km/recommendation.json'
+import visits_en from '@/locales/en/visits.json'
+import visits_km from '@/locales/km/visits.json'
 
 const messages = {
   en: {
@@ -54,6 +56,7 @@ const messages = {
     sidebar: sidebar_en,
     chatbot: chatbot_en,
     recommendation: recommendation_en,
+    visits: visits_en,
   },
   km: {
     common: common_km,
@@ -73,6 +76,7 @@ const messages = {
     sidebar: sidebar_km,
     chatbot: chatbot_km,
     recommendation: recommendation_km,
+    visits: visits_km,
   },
 }
 

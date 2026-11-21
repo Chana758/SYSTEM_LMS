@@ -117,7 +117,7 @@ import {
   CpuChipIcon, SparklesIcon, QrCodeIcon, BellIcon, CalendarDaysIcon,
   DocumentTextIcon, UserGroupIcon,
   ArrowRightOnRectangleIcon, ClockIcon, UserCircleIcon,
-  XMarkIcon, ReceiptPercentIcon,
+  XMarkIcon, ReceiptPercentIcon, IdentificationIcon, ArrowLeftEndOnRectangleIcon, ShieldCheckIcon,
 } from '@heroicons/vue/24/outline'
 import SidebarLink from './SidebarLink.vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
@@ -159,6 +159,8 @@ const coreMenus = computed(() => [
   { name: t('sidebar.menu.fines'),          path: '/fines',           icon: BanknotesIcon,           color: 'orange',  permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.payments'),       path: '/fines/payments',  icon: ReceiptPercentIcon,           color: 'orange',  permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.myFines'),        path: '/my-fines',        icon: BanknotesIcon,           color: 'orange',  permission: ['member'] },
+  { name: t('sidebar.menu.myCard'),         path: '/my-card',         icon: IdentificationIcon,      color: 'emerald', permission: ['member'] },
+  { name: t('sidebar.menu.visits'),         path: '/visits',          icon: ArrowLeftEndOnRectangleIcon, color: 'teal', permission: ['admin', 'librarian'] },
 ])
 
 // Digital library and AI tools menu
@@ -174,6 +176,7 @@ const systemMenus = computed(() => [
   { name: t('sidebar.menu.reports'),         path: '/reports',                 icon: ChartBarIcon,            color: 'blue',    permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.notifications'),   path: '/notifications',           icon: BellIcon,                color: 'amber',   permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.cardApprovals'),   path: '/settings/card-approvals', icon: QrCodeIcon,              color: 'violet',  permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.loginLogs'),       path: '/login-logs',              icon: ShieldCheckIcon,         color: 'rose',    permission: ['admin'] },
   { name: t('sidebar.menu.settings'),        path: '/settings',                icon: Cog6ToothIcon,           color: 'indigo',  permission: ['admin', 'librarian', 'member'] },
 ])
 
