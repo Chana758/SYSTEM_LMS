@@ -7,6 +7,11 @@ export const scannerService = {
     return api.post('/scan', payload)
   },
 
+  // B4.3: member card (printed or phone QR) or typed member / student number
+  scanMember(code) {
+    return api.post('/scan/member', { code })
+  },
+
   // Get scan history with optional filters or pagination.
   getHistory(params = {}) {
     return api.get('/scan/history', { params })

@@ -229,6 +229,8 @@ const dropdownClass = 'absolute z-30 left-0 right-0 mt-1 rounded-xl border borde
 const props = defineProps({
   result: { type: Object, required: true },
   scanType: { type: String, required: true },
+  // B4.3: member already identified by card at the desk ({ id, name, membership_no })
+  presetMember: { type: Object, default: null },
 })
 
 const emit = defineEmits(['completed'])
@@ -392,6 +394,12 @@ const clearSelectedMember = () => {
 }
 
 const formatDate = (d) => new Date(d).toLocaleDateString()
+
+// Member scanned first: fill the member box so staff only confirm
+if (props.presetMember) {
+  selectedMember.value = { id: props.presetMember.id, membership_no: props.presetMember.membership_no, user: { name: props.presetMember.name } }
+  memberSearch.value = props.presetMember.name || props.presetMember.membership_no
+}
 
 const bookId = () => props.result.book_copy?.book_id || props.result.book_copy?.book?.id
 

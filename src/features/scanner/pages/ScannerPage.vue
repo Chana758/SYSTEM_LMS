@@ -53,6 +53,18 @@
       <!-- MAIN CONTENT GRID -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start pt-2">
         <div class="space-y-4">
+          <!-- Borrow: 1) member card, 2) books -->
+          <MemberPanel v-if="scanType === 'borrow'" :data="deskMember" :error="memberError" @lookup="lookupMember" @clear="nextMember" />
+
+          <!-- Return: quick mode returns each scanned book in good condition at once -->
+          <label v-if="scanType === 'return'" class="flex items-start gap-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 px-4 py-3 cursor-pointer">
+            <input v-model="quickReturn" type="checkbox" class="mt-1 w-4 h-4" />
+            <span>
+              <span class="block text-sm font-black text-slate-900 dark:text-white">{{ t('scanner.desk.quickReturn') }}</span>
+              <span class="block text-xs text-slate-500 dark:text-slate-400">{{ t('scanner.desk.quickReturnHint') }}</span>
+            </span>
+          </label>
+
           <!-- Input mode selector: manual / camera / remote phone -->
           <div class="flex w-full sm:inline-flex sm:w-auto gap-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl p-1 shadow-inner">
             <button
@@ -66,7 +78,7 @@
           </div>
 
           <BarcodeScanner v-if="mode === 'manual'" :is-loading="isScanning" :accent="activeType.accent" @scan="handleScan" />
-          <CameraScanner v-else-if="mode === 'camera'" @detected="handleScan" />
+          <CameraScanner v-else-if="mode === 'camera'" continuous :dedupe-ms="3000" @detected="handleScan" />
 
           <!-- v-show (not v-if) so switching tabs doesn't create a new QR session each time.
                It is only mounted the first time the remote tab is opened. -->
@@ -77,22 +89,50 @@
           </transition>
         </div>
 
-        <!-- Result Card Container -->
-        <div>
+        <!-- Right column -->
+        <div class="space-y-4">
+          <!-- Borrow basket once a member is at the desk -->
+          <BorrowBasket
+            v-if="scanType === 'borrow' && deskMember"
+            :items="basket"
+            :remaining="remaining"
+            :busy="borrowing"
+            :blocked="!!deskMember.loans?.refusal"
+            @remove="removeFromBasket"
+            @confirm="borrowAll"
+            @next="nextMember"
+          />
+
+          <!-- Quick return list -->
+          <div v-if="scanType === 'return' && quickReturn && returned.length" class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5">
+            <p class="text-sm font-black text-slate-900 dark:text-white mb-3">{{ t('scanner.desk.returnedList', { n: returned.filter((r) => r.ok).length }) }}</p>
+            <ul class="divide-y divide-slate-100 dark:divide-white/5">
+              <li v-for="r in returned" :key="r.key" class="py-2.5 flex items-center justify-between gap-3 text-sm">
+                <div class="min-w-0">
+                  <p class="font-semibold text-slate-900 dark:text-white truncate">{{ r.title }}</p>
+                  <p class="text-xs text-slate-400">{{ r.member }}</p>
+                </div>
+                <span v-if="r.ok" class="text-xs font-bold text-right" :class="r.fine ? 'text-amber-600' : 'text-emerald-600'">{{ r.fine ? t('scanner.desk.returnedLate') : '✓' }}</span>
+                <span v-else class="text-xs font-bold text-rose-600 text-right max-w-[50%]">{{ r.error }}</span>
+              </li>
+            </ul>
+          </div>
+
           <transition name="fade" mode="out-in">
             <ScanResultCard
               v-if="lastResult"
               :key="`scan-${scanCounter}`"
               :result="lastResult"
               :scan-type="resultScanType"
+              :preset-member="scanType === 'borrow' ? deskMember?.member : null"
               @completed="handleActionCompleted"
             />
-            <div v-else class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 p-8 sm:p-12 text-center shadow-inner">
+            <div v-else-if="!(scanType === 'borrow' && deskMember) && !(scanType === 'return' && quickReturn && returned.length)" class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 p-8 sm:p-12 text-center shadow-inner">
               <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 flex items-center justify-center mx-auto mb-4 shadow-2xs">
                 <QrCodeIcon class="w-8 h-8 text-slate-400 dark:text-slate-500" />
               </div>
-              <p class="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">{{ t('scanner.scanToSee') }}</p>
-              <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">{{ t('scanner.resultsAppear') }}</p>
+              <p class="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">{{ scanType === 'borrow' ? t('scanner.desk.scanMemberFirst') : t('scanner.scanToSee') }}</p>
+              <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">{{ scanType === 'borrow' ? t('scanner.desk.scanMemberFirstHint') : t('scanner.resultsAppear') }}</p>
             </div>
           </transition>
         </div>
@@ -115,9 +155,12 @@ import BarcodeScanner from '../components/BarcodeScanner.vue'
 import CameraScanner from '../components/CameraScanner.vue'
 import RemoteScanPanel from '../components/RemoteScanQr.vue'
 import ScanResultCard from '../components/ScanResultCard.vue'
+import MemberPanel from '../components/MemberPanel.vue'
+import BorrowBasket from '../components/BorrowBasket.vue'
 import { scannerService } from '../services'
+import { soundService } from '../services/soundService'
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 
 const scanTypes = [
   { value: 'borrow', labelKey: 'scanner.typeBorrow', icon: ArrowsRightLeftIcon, activeBg: 'bg-emerald-700 dark:bg-emerald-600', accent: 'green' },
@@ -125,7 +168,6 @@ const scanTypes = [
   { value: 'lookup', labelKey: 'scanner.typeLookup', icon: MagnifyingGlassIcon, activeBg: 'bg-purple-600 dark:bg-violet-600', accent: 'purple' },
 ]
 
-// New i18n keys needed: scanner.modeCamera, scanner.modeRemote
 const inputModes = [
   { value: 'manual', labelKey: 'scanner.modeManualShort' },
   { value: 'camera', labelKey: 'scanner.modeCamera' },
@@ -166,19 +208,169 @@ const setMode = (value) => {
 const isValidScanResult = (payload) =>
   !!payload && typeof payload === 'object' && ['success', 'not_found', 'error'].includes(payload.result)
 
+const errorText = (e, fallbackKey) => {
+  const data = e.response?.data
+  if (data?.code && te(`scanner.errors.${data.code}`)) return t(`scanner.errors.${data.code}`)
+  return data?.message || t(fallbackKey)
+}
+
+/* ------------------------------------------------------------------ */
+/*  B4.3: member at the desk                                           */
+/* ------------------------------------------------------------------ */
+const deskMember = ref(null)   // response of POST /scan/member
+const memberError = ref('')
+const basket = ref([])         // books scanned for this member
+const borrowing = ref(false)
+
+// A member card is a phone QR ("SNX1.…") or the 48-character printed token.
+// Book copies use short barcodes like BC-26-000123.
+const looksLikeCard = (code) => /^SNX1\./.test(code) || /^[A-Za-z0-9]{40,64}$/.test(code)
+
+const remaining = computed(() => {
+  const l = deskMember.value?.loans
+  if (!l) return 0
+  return Math.max(0, (l.max_books || 0) - (l.active_loans || 0))
+})
+
+async function lookupMember(code) {
+  memberError.value = ''
+  try {
+    const { data } = await scannerService.scanMember(code)
+    deskMember.value = data
+    basket.value = []
+    lastResult.value = null
+    data.loans?.refusal ? soundService.error() : soundService.success()
+    return true
+  } catch (e) {
+    memberError.value = errorText(e, 'scanner.scanFailed')
+    soundService.error()
+    return false
+  }
+}
+
+function nextMember() {
+  deskMember.value = null
+  basket.value = []
+  memberError.value = ''
+  lastResult.value = null
+}
+
+function removeFromBasket(copyId) {
+  basket.value = basket.value.filter((i) => i.copyId !== copyId)
+}
+
+/** A book scanned while a member is at the desk: free copies go to the basket. */
+function addToBasket(data) {
+  const copy = data.book_copy
+  const free = data.result === 'success' && copy && !data.active_borrow && copy.status === 'available'
+  if (!free) return false
+
+  if (basket.value.some((i) => i.copyId === copy.id)) {
+    scanError.value = t('scanner.desk.alreadyInBasket')
+    soundService.notFound()
+    return true
+  }
+  basket.value.push({
+    copyId: copy.id,
+    bookId: copy.book_id || copy.book?.id,
+    title: copy.book?.title || copy.barcode,
+    barcode: copy.barcode,
+    state: 'pending',
+    error: '',
+    due: '',
+  })
+  soundService.success()
+  return true
+}
+
+async function borrowAll() {
+  if (borrowing.value || !deskMember.value) return
+  borrowing.value = true
+  const memberId = deskMember.value.member.id
+  for (const item of basket.value.filter((i) => i.state === 'pending')) {
+    try {
+      const { data } = await scannerService.confirmBorrow({ member_id: memberId, book_id: item.bookId, book_copy_id: item.copyId })
+      item.state = 'ok'
+      item.due = new Date(data.data?.due_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+    } catch (e) {
+      item.state = 'error'
+      item.error = errorText(e, 'scanner.result.confirmBorrowFailed')
+    }
+  }
+  borrowing.value = false
+  basket.value.some((i) => i.state === 'error') ? soundService.error() : soundService.success()
+  // Refresh "2/3 books" and the current loans without clearing the basket
+  try {
+    const { data } = await scannerService.scanMember(deskMember.value.member.membership_no)
+    deskMember.value = data
+  } catch { /* keep the old numbers */ }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Quick return                                                       */
+/* ------------------------------------------------------------------ */
+const quickReturn = ref(false)
+const returned = ref([])
+
+async function quickReturnBook(data) {
+  const borrow = data.active_borrow
+  const entry = { key: `${Date.now()}-${data.book_copy?.id}`, title: data.book_copy?.book?.title || data.book_copy?.barcode, member: borrow?.member?.user?.name || '', ok: false, fine: false, error: '' }
+  try {
+    const { data: res } = await scannerService.confirmReturn(borrow.id, { condition: 'good' })
+    entry.ok = true
+    entry.fine = (res.data?.fines || []).some((f) => f.status === 'unpaid')
+    soundService.success()
+  } catch (e) {
+    entry.error = errorText(e, 'scanner.result.confirmReturnFailed')
+    soundService.error()
+  }
+  returned.value.unshift(entry)
+}
+
+// Borrow tab, no member yet, not a book: maybe a typed member / student number
+async function typedMemberNumber(type, payload, code) {
+  if (type !== 'borrow' || deskMember.value || payload?.result !== 'not_found') return false
+  if (await lookupMember(code)) {
+    lastResult.value = null
+    return true
+  }
+  memberError.value = ''
+  return false
+}
+
+/* ------------------------------------------------------------------ */
+/*  Every scan comes here (keyboard scanner, camera, phone)            */
+/* ------------------------------------------------------------------ */
 const handleScan = async (barcode) => {
+  const code = String(barcode || '').trim()
+  if (!code) return
   cancelClearTimer()
+  scanError.value = ''
+
+  // Borrow tab: a member card always (re)selects the member
+  if (scanType.value === 'borrow' && looksLikeCard(code)) return lookupMember(code)
+
   const seq = ++scanSeq
   const typeAtScan = scanType.value
-  scanError.value = ''
   isScanning.value = true
   try {
     const { data } = await scannerService.scan({
-      barcode,
+      barcode: code,
       scan_type: typeAtScan,
       device: navigator.userAgent,
     })
     if (seq !== scanSeq) return // stale response, discard
+
+    if (await typedMemberNumber(typeAtScan, data, code)) return
+    if (typeAtScan === 'borrow' && deskMember.value && addToBasket(data)) {
+      lastResult.value = null
+      return
+    }
+    if (typeAtScan === 'return' && quickReturn.value && data.result === 'success' && data.active_borrow) {
+      lastResult.value = null
+      return quickReturnBook(data)
+    }
+
     lastResult.value = data
     resultScanType.value = typeAtScan
     scanCounter.value += 1
@@ -186,6 +378,7 @@ const handleScan = async (barcode) => {
     if (seq !== scanSeq) return
     const payload = e.response?.data
     if (isValidScanResult(payload)) {
+      if (await typedMemberNumber(typeAtScan, payload, code)) return
       lastResult.value = payload
       resultScanType.value = typeAtScan
       scanCounter.value += 1
@@ -217,6 +410,10 @@ const handleActionCompleted = () => {
     if (scanCounter.value === counterAtCompletion) lastResult.value = null
     clearTimer = null
   }, 2500)
+  // A borrow made from the card changes the member's numbers
+  if (deskMember.value) {
+    scannerService.scanMember(deskMember.value.member.membership_no).then(({ data }) => (deskMember.value = data)).catch(() => {})
+  }
 }
 
 onBeforeUnmount(cancelClearTimer)

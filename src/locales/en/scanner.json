@@ -169,6 +169,40 @@
   },
   "errors": {
     "not_borrowed": "This copy has no active borrowing record.",
-    "copy_unavailable": "This copy is damaged or unavailable for borrowing."
+    "copy_unavailable": "This copy is damaged or unavailable for borrowing.",
+    "UNPAID_FINES": "Unpaid fines. Please pay before borrowing more.",
+    "MAX_BOOKS": "Borrowing limit reached",
+    "COPY_NOT_AVAILABLE": "This copy is not on the shelf",
+    "MEMBER_NOT_FOUND": "Member not found",
+    "NOT_A_MEMBER": "This card does not belong to a member",
+    "CARD_UNKNOWN": "Card not recognised",
+    "CARD_EXPIRED": "This card has expired",
+    "DIGITAL_CODE_EXPIRED": "Phone QR expired, please reopen it"
+  },
+  "desk": {
+    "step1": "1. Scan the member card",
+    "step1Hint": "Printed card or phone QR · or type a name / member no. / student ID",
+    "searchPlaceholder": "Name, member no. or student ID…",
+    "change": "Change",
+    "loans": "Borrowing",
+    "overdue": "Overdue",
+    "fines": "Fines",
+    "step2": "2. Scan books ({n} more allowed)",
+    "currentLoans": "Books on loan ({n})",
+    "basket": "Books to borrow ({n})",
+    "basketEmpty": "Scan book barcodes to add them here",
+    "dueOn": "Due {date}",
+    "borrowed": "Borrowed",
+    "remove": "Remove",
+    "overLimit": "Over the limit ({n} left). Extra books will be refused.",
+    "borrowAll": "Borrow all ({n})",
+    "nextMember": "Next member",
+    "alreadyInBasket": "This book is already in the list",
+    "scanMemberFirst": "Scan the member card first",
+    "scanMemberFirstHint": "Then scan the books one by one and press \"Borrow all\"",
+    "quickReturn": "Quick return",
+    "quickReturnHint": "Every scanned book is returned at once (good condition). Turn off for damaged or lost books.",
+    "returnedList": "Returned ({n})",
+    "returnedLate": "Late · fine added"
   }
 }
