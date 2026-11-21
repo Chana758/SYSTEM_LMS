@@ -118,7 +118,9 @@
     "retry": "Try again",
     "genericError": "Something went wrong. Please try again.",
     "testMode": "Test mode: this QR cannot be paid for real",
-    "simulate": "Test: mark as paid"
+    "simulate": "Test: mark as paid",
+    "payInKhr": "Pay in ៛ Riel",
+    "payInUsd": "Pay in $ Dollar"
   },
   "payments": {
     "title": "Payment history",
@@ -178,7 +180,8 @@
     "rangeMonth": "This month",
     "found": "{n} payments found",
     "countBadge": "{n} paid",
-    "desk": "Desk"
+    "desk": "Desk",
+    "chargedIn": "paid as {amount}"
   },
   "deposit": {
     "title": "Deposit",
@@ -206,5 +209,12 @@
       "paid": "Paid",
       "refunded": "Refunded"
     }
+  },
+  "currency": {
+    "title": "Currency",
+    "subtitle": "Fines and deposits are stored in Riel. This rate is used to show and charge them in dollars.",
+    "rate": "Exchange rate",
+    "default": "Currency shown first",
+    "example": "Example: {usd} = {khr}"
   }
 }

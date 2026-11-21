@@ -56,3 +56,22 @@ export function formatKhr(amount) {
   const n = Number(amount) || 0
   return `${n.toLocaleString('en-US')}៛`
 }
+// ── ៛ / $ switch ─────────────────────────────────────────────────────────
+// Amounts from the API are in Riel. formatMoney() shows them in the currency
+// picked in the top bar (reactive: re-renders when the switch changes).
+import { useCurrencyStore } from '@/stores/currencyStore'
+
+/** Format an amount in an exact currency: formatIn(1.22, 'USD') -> "$1.22" */
+export function formatIn(amount, currency) {
+  const n = Number(amount) || 0
+  return currency === 'USD'
+    ? `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    : formatKhr(Math.round(n))
+}
+
+/** Riel amount shown in the selected currency: 5000 -> "5,000៛" or "$1.22" */
+export function formatMoney(amountKhr) {
+  const store = useCurrencyStore()
+  const khr = Number(amountKhr) || 0
+  return store.isUsd ? formatIn(khr / store.rate, 'USD') : formatKhr(khr)
+}

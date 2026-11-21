@@ -7,7 +7,7 @@
     </div>
 
     <template v-if="d">
-      <p v-if="d.deposit_status !== 'none'" class="text-2xl font-black text-slate-900 dark:text-white">{{ formatKhr(d.deposit_amount) }}</p>
+      <p v-if="d.deposit_status !== 'none'" class="text-2xl font-black text-slate-900 dark:text-white">{{ formatMoney(d.deposit_amount) }}</p>
 
       <!-- none: ask for the deposit of this member's type -->
       <div v-if="d.deposit_status === 'none'" class="space-y-2">
@@ -25,16 +25,16 @@
       <div v-else-if="d.deposit_status === 'paid'" class="space-y-2">
         <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('fines.deposit.paidOn', { date: formatDate(d.deposit_paid_at) }) }}</p>
         <div v-if="d.refund_preview" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-900/60 p-3 space-y-1">
-          <p class="flex justify-between"><span>{{ t('fines.deposit.unpaidFines') }}</span><b>{{ formatKhr(d.refund_preview.unpaid_fines) }}</b></p>
-          <p class="flex justify-between"><span>{{ t('fines.deposit.deducted') }}</span><b>− {{ formatKhr(d.refund_preview.deducted) }}</b></p>
-          <p class="flex justify-between text-sm"><span class="font-bold">{{ t('fines.deposit.refundAmount') }}</span><b class="text-emerald-700 dark:text-emerald-300">{{ formatKhr(d.refund_preview.refund) }}</b></p>
+          <p class="flex justify-between"><span>{{ t('fines.deposit.unpaidFines') }}</span><b>{{ formatMoney(d.refund_preview.unpaid_fines) }}</b></p>
+          <p class="flex justify-between"><span>{{ t('fines.deposit.deducted') }}</span><b>− {{ formatMoney(d.refund_preview.deducted) }}</b></p>
+          <p class="flex justify-between text-sm"><span class="font-bold">{{ t('fines.deposit.refundAmount') }}</span><b class="text-emerald-700 dark:text-emerald-300">{{ formatMoney(d.refund_preview.refund) }}</b></p>
         </div>
         <button type="button" :disabled="busy" @click="confirmRefund" :class="btnLight">{{ t('fines.deposit.refund') }}</button>
       </div>
 
       <!-- refunded -->
       <div v-else class="space-y-2">
-        <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('fines.deposit.refundedInfo', { refund: formatKhr(d.deposit_refunded), deducted: formatKhr(d.deposit_deducted) }) }}</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('fines.deposit.refundedInfo', { refund: formatMoney(d.deposit_refunded), deducted: formatMoney(d.deposit_deducted) }) }}</p>
         <button type="button" :disabled="busy" @click="run('requireDeposit')" :class="btnLight">{{ t('fines.deposit.require') }}</button>
       </div>
     </template>
@@ -51,7 +51,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import PayKhqrModal from '@/features/fines/components/PayKhqrModal.vue'
 import { paymentService } from '@/features/fines/services/paymentService'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const props = defineProps({
   memberId: { type: [Number, String], required: true },
@@ -99,11 +99,11 @@ async function run(action) {
 }
 
 function confirmCash() {
-  if (window.confirm(t('fines.deposit.cashConfirm', { amount: formatKhr(d.value.deposit_amount) }))) run('depositCash')
+  if (window.confirm(t('fines.deposit.cashConfirm', { amount: formatMoney(d.value.deposit_amount) }))) run('depositCash')
 }
 
 function confirmRefund() {
-  if (window.confirm(t('fines.deposit.refundConfirm', { amount: formatKhr(d.value.refund_preview?.refund) }))) run('refundDeposit')
+  if (window.confirm(t('fines.deposit.refundConfirm', { amount: formatMoney(d.value.refund_preview?.refund) }))) run('refundDeposit')
 }
 
 onMounted(load)

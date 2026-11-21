@@ -45,7 +45,7 @@
 
         <!-- B6.2: this type needs a deposit before borrowing -->
         <div v-if="depositFor(form[m.id].membership_type)" class="lg:col-span-4 flex flex-wrap items-center gap-3 text-xs rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-400/20 px-3 py-2">
-          <span class="font-semibold text-amber-800 dark:text-amber-200">{{ t('fines.deposit.approveNotice', { amount: formatKhr(depositFor(form[m.id].membership_type)) }) }}</span>
+          <span class="font-semibold text-amber-800 dark:text-amber-200">{{ t('fines.deposit.approveNotice', { amount: formatMoney(depositFor(form[m.id].membership_type)) }) }}</span>
           <label class="inline-flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-200 cursor-pointer">
             <input v-model="form[m.id].deposit_paid_cash" type="checkbox" class="w-4 h-4 accent-emerald-600" />
             {{ t('fines.deposit.paidCashNow') }}
@@ -63,7 +63,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import { memberAccountService } from '../services/memberAccountService'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const props = defineProps({
   membershipTypes: { type: Array, default: () => [] },

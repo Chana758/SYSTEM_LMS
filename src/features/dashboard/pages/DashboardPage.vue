@@ -121,7 +121,7 @@
                   </div>
                   <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide leading-snug">{{ t('dashboard.unpaidFines') }}</span>
                 </div>
-                <span class="flex-shrink-0 font-black font-mono text-base px-3 py-0.5 rounded-lg border" :class="countClass(unpaidFines)">{{ formatKhr(unpaidFines) }}</span>
+                <span class="flex-shrink-0 font-black font-mono text-base px-3 py-0.5 rounded-lg border" :class="countClass(unpaidFines)">{{ formatMoney(unpaidFines) }}</span>
               </div>
             </div>
           </div>
@@ -220,7 +220,7 @@
 </template>
 
 <script setup>
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDashboardStore } from '../store/dashboardStore'

@@ -74,7 +74,7 @@
           </div>
           <div>
             <h2 class="text-lg font-black text-slate-900 dark:text-white tracking-tight">{{ t('fines.waiveFineTitle') }}</h2>
-            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">{{ t('fines.amount') }}: <span class="font-extrabold text-slate-900 dark:text-white">{{ formatKhr(waiveTarget.amount) }}</span></p>
+            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">{{ t('fines.amount') }}: <span class="font-extrabold text-slate-900 dark:text-white">{{ formatMoney(waiveTarget.amount) }}</span></p>
           </div>
 
           <div class="space-y-1.5">
@@ -122,7 +122,7 @@ import FineFilter from '../components/FineFilter.vue'
 import FineTable from '../components/FineTable.vue'
 import PayFineModal from '../components/PayFineModal.vue'
 import PayKhqrModal from '../components/PayKhqrModal.vue'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 const router = useRouter()

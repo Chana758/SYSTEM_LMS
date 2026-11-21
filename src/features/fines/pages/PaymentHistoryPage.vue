@@ -166,7 +166,7 @@
                 </td>
                 <td class="px-5 py-4 text-right whitespace-nowrap">
                   <span class="text-sm font-black" :class="p.status === 'refunded' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'">
-                    {{ p.status === 'refunded' ? '− ' : '' }}{{ formatKhr(p.amount) }}
+                    {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span>
                   </span>
                 </td>
                 <td class="px-5 py-4">
@@ -191,7 +191,7 @@
               <p class="text-[11px] text-slate-400">{{ formatDate(p.paid_at || p.created_at) }} · {{ formatClock(p.paid_at || p.created_at) }}</p>
             </div>
             <span class="text-base font-black flex-shrink-0" :class="p.status === 'refunded' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'">
-              {{ p.status === 'refunded' ? '− ' : '' }}{{ formatKhr(p.amount) }}
+              {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span>
             </span>
           </div>
           <div class="flex flex-wrap items-center gap-2 mt-3">
@@ -235,7 +235,7 @@ import {
   CheckBadgeIcon, MagnifyingGlassIcon, CalendarDaysIcon,
 } from '@heroicons/vue/24/outline'
 import { paymentService } from '../services/paymentService'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney, formatIn } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 
@@ -264,23 +264,23 @@ const periods = computed(() => [
 const cards = computed(() => [
   {
     key: 'total', icon: CheckBadgeIcon, badge: t('fines.payments.badgeReceived'),
-    value: formatKhr(summary.value.paid_total),
+    value: formatMoney(summary.value.paid_total),
     label: `${summary.value.paid_count ?? 0} ${t('fines.payments.paidCount')}`,
     cls: 'from-emerald-600 to-emerald-700 dark:from-emerald-600 dark:to-emerald-900 border-emerald-500 dark:border-emerald-300/20',
   },
   {
     key: 'khqr', icon: QrCodeIcon, badge: 'KHQR',
-    value: formatKhr(summary.value.khqr_total), label: t('fines.payments.viaKhqr'),
+    value: formatMoney(summary.value.khqr_total), label: t('fines.payments.viaKhqr'),
     cls: 'from-indigo-600 to-blue-700 dark:from-indigo-600 dark:to-blue-900 border-indigo-500 dark:border-indigo-300/20',
   },
   {
     key: 'cash', icon: BanknotesIcon, badge: t('fines.payments.cash'),
-    value: formatKhr(summary.value.cash_total), label: t('fines.payments.atDesk'),
+    value: formatMoney(summary.value.cash_total), label: t('fines.payments.atDesk'),
     cls: 'from-amber-500 to-orange-600 dark:from-amber-600 dark:to-orange-800 border-amber-400 dark:border-amber-300/20',
   },
   {
     key: 'refunded', icon: ArrowUturnLeftIcon, badge: t('fines.payments.badgeOut'),
-    value: formatKhr(summary.value.refunded_total), label: t('fines.payments.refundedTotal'),
+    value: formatMoney(summary.value.refunded_total), label: t('fines.payments.refundedTotal'),
     cls: 'from-rose-500 to-rose-700 dark:from-rose-600 dark:to-rose-900 border-rose-400 dark:border-rose-300/20',
   },
 ])

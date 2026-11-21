@@ -159,7 +159,7 @@ import {
 import { useFineStore } from '../store/fineStore'
 import FineStatusBadge from '../components/FineStatusBadge.vue'
 import PayKhqrModal from '../components/PayKhqrModal.vue'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 const store = useFineStore()
@@ -168,7 +168,7 @@ const activeTab = ref('all')
 const payingFine = ref(null)
 
 // FIN1: fines are stored and shown in Riel
-const money = (n) => formatKhr(n)
+const money = (n) => formatMoney(n)
 
 // Refresh the list once the bank confirms (the modal stays open to show the receipt)
 function onPaid() {

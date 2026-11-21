@@ -74,7 +74,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { BanknotesIcon } from '@heroicons/vue/24/outline'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 
@@ -93,7 +93,7 @@ const methods = [
 
 const method = ref('cash')
 
-const amount = computed(() => formatKhr(props.fine.amount))
+const amount = computed(() => formatMoney(props.fine.amount))
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')
 const bookTitle = computed(() => props.fine.borrow?.book_copy?.book?.title || '')
 

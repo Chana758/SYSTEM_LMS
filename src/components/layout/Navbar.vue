@@ -94,6 +94,19 @@
         </button>
       </div>
 
+      <!-- ៛ / $: every amount and new KHQR follows this -->
+      <div class="flex items-center bg-black/25 backdrop-blur-md rounded-xl p-1 border border-white/15 shadow-inner flex-shrink-0" :title="t('common.header.currency', 'Currency')">
+        <button
+          v-for="c in ['KHR', 'USD']"
+          :key="c"
+          type="button"
+          @click="currencyStore.set(c)"
+          class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-black transition-all duration-200 cursor-pointer"
+          :class="currencyStore.currency === c ? 'bg-amber-400 text-green-950 shadow-md scale-105' : 'text-white/70 hover:text-white hover:bg-white/10'"
+          :aria-pressed="currencyStore.currency === c"
+        >{{ c === 'KHR' ? '៛' : '$' }}</button>
+      </div>
+
       <button
         @click="toggleFullscreen"
         class="w-10 h-10 items-center justify-center rounded-xl text-white bg-white/10 hover:bg-amber-400/20 hover:text-amber-300 border border-white/10 transition hidden md:flex cursor-pointer"
@@ -153,6 +166,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { useLanguageStore } from '@/stores/languageStore'
+import { useCurrencyStore } from '@/stores/currencyStore'
 import { applyTheme } from '@/utils/applyTheme'
 import NotificationBell from '@/features/notifications/components/NotificationBell.vue'
 import DemoBadge from '@/components/common/DemoBadge.vue'
@@ -161,6 +175,8 @@ defineEmits(['toggle-sidebar'])
 
 const authStore = useAuthStore()
 const languageStore = useLanguageStore()
+const currencyStore = useCurrencyStore()
+if (!currencyStore.loaded) currencyStore.loadConfig()
 const { t, te } = useI18n()
 
 // Members have the bottom nav on phones/tablets, so the burger is replaced by the avatar

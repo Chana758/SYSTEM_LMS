@@ -67,7 +67,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { BanknotesIcon, EyeIcon, HandRaisedIcon } from '@heroicons/vue/24/outline'
 import FineStatusBadge from './FineStatusBadge.vue'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 
@@ -77,7 +77,7 @@ defineEmits(['pay', 'waive', 'view'])
 const isUnpaid = computed(() => props.fine.status === 'unpaid')
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')
 const bookTitle = computed(() => props.fine.borrow?.book_copy?.book?.title || '')
-const amount = computed(() => formatKhr(props.fine.amount))
+const amount = computed(() => formatMoney(props.fine.amount))
 
 // Translate the reason (overdue / damaged / lost / other) instead of showing the raw value.
 const REASON_KEYS = {

@@ -9,6 +9,19 @@
         </button>
       </div>
 
+      <!-- ៛ / $: which currency the QR charges (also changes how amounts are shown) -->
+      <div v-if="state !== 'paid'" class="flex p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10">
+        <button
+          v-for="c in ['KHR', 'USD']"
+          :key="c"
+          type="button"
+          :disabled="state === 'loading'"
+          @click="changeCurrency(c)"
+          class="flex-1 py-2 rounded-lg text-xs font-black transition cursor-pointer disabled:opacity-60"
+          :class="currency === c ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-sm' : 'text-slate-500 dark:text-slate-400'"
+        >{{ c === 'KHR' ? t('fines.khqr.payInKhr') : t('fines.khqr.payInUsd') }}</button>
+      </div>
+
       <!-- Loading -->
       <div v-if="state === 'loading'" class="py-16">
         <div class="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -26,7 +39,7 @@
         <CheckCircleIcon class="w-16 h-16 text-emerald-600 mx-auto" />
         <p class="text-lg font-black text-slate-900 dark:text-white">{{ t('fines.khqr.paid') }}</p>
         <div class="text-left text-xs bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 space-y-1.5">
-          <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.khqr.amount') }}</span><b>{{ formatKhr(payment.amount) }}</b></p>
+          <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.khqr.amount') }}</span><b>{{ formatIn(payment.amount, payment.currency) }}</b></p>
           <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.khqr.reference') }}</span><b class="font-mono">{{ payment.tran_id }}</b></p>
           <p v-if="payment.apv" class="flex justify-between"><span class="text-slate-500">APV</span><b class="font-mono">{{ payment.apv }}</b></p>
           <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.khqr.time') }}</span><b>{{ formatTime(payment.paid_at) }}</b></p>
@@ -43,7 +56,13 @@
 
       <!-- Waiting for scan -->
       <div v-else class="space-y-3">
-        <p class="text-2xl font-black text-slate-900 dark:text-white">{{ formatKhr(payment.amount) }}</p>
+        <div>
+          <p class="text-2xl font-black text-slate-900 dark:text-white">{{ formatIn(payment.amount, payment.currency) }}</p>
+          <p class="text-[11px] font-bold text-slate-400">
+            ≈ {{ payment.currency === 'USD' ? formatIn(payment.amount_khr, 'KHR') : formatIn(payment.amount_khr / rate, 'USD') }}
+            <span v-if="payment.currency === 'USD' && payment.exchange_rate"> · 1$ = {{ formatIn(payment.exchange_rate, 'KHR') }}</span>
+          </p>
+        </div>
         <div class="inline-block bg-white p-3 rounded-2xl border border-slate-200">
           <img v-if="qrImage" :src="qrImage" alt="KHQR" class="w-56 h-auto mx-auto" />
           <QrcodeVue v-else :value="payment.qr_string" :size="224" level="M" />
@@ -78,7 +97,8 @@ import QrcodeVue from 'qrcode.vue'
 import { XMarkIcon, CheckCircleIcon, ClockIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 import { paymentService } from '../services/paymentService'
 import { useAuthStore } from '@/features/auth/store/authStore'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatIn } from '@/utils/currencyHelper'
+import { useCurrencyStore } from '@/stores/currencyStore'
 
 // Pass either a fine, or the member id whose deposit is being paid
 const props = defineProps({
@@ -93,6 +113,18 @@ const POLL_MS = 4000
 const { t } = useI18n()
 const authStore = useAuthStore()
 const isStaff = computed(() => ['admin', 'librarian'].includes(authStore.role))
+
+// Starts with the top-bar choice; switching here regenerates the QR and updates the top bar too
+const currencyStore = useCurrencyStore()
+const currency = ref(currencyStore.currency)
+const rate = computed(() => payment.value?.exchange_rate || currencyStore.rate)
+
+function changeCurrency(c) {
+  if (c === currency.value) return
+  currency.value = c
+  currencyStore.set(c)
+  start()
+}
 
 const state = ref('loading') // loading | waiting | paid | ended | error
 const payment = ref(null)
@@ -140,8 +172,8 @@ async function start() {
   deeplink.value = null
   try {
     const { data } = props.fine
-      ? await paymentService.payFineByKhqr(props.fine.id)
-      : await paymentService.payDepositByKhqr(props.depositMemberId)
+      ? await paymentService.payFineByKhqr(props.fine.id, currency.value)
+      : await paymentService.payDepositByKhqr(props.depositMemberId, currency.value)
     apply(data)
     if (state.value === 'waiting') pollTimer = setInterval(poll, POLL_MS)
   } catch (e) {

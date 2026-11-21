@@ -39,12 +39,12 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ExclamationCircleIcon, CheckCircleIcon, HandRaisedIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 const props = defineProps({ summary: { type: Object, required: true } })
 
-const money = (n) => formatKhr(n)
+const money = (n) => formatMoney(n)
 
 // Full class names so Tailwind can generate them.
 const cards = computed(() => [

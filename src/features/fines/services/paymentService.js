@@ -3,12 +3,12 @@ import apiClient from '@/api/axios'
 // B5.1-B5.4 (Sam): KHQR payments
 export const paymentService = {
   // Start (or reuse) a KHQR for one unpaid fine. Amount is decided by the server.
-  payFineByKhqr(fineId) {
-    return apiClient.post(`/fines/${fineId}/khqr`)
+  payFineByKhqr(fineId, currency = 'KHR') {
+    return apiClient.post(`/fines/${fineId}/khqr`, { currency })
   },
   // B6.2: deposit of an external member (own, or staff at the desk)
-  payDepositByKhqr(memberId) {
-    return apiClient.post(`/members/${memberId}/deposit/khqr`)
+  payDepositByKhqr(memberId, currency = 'KHR') {
+    return apiClient.post(`/members/${memberId}/deposit/khqr`, { currency })
   },
   myDeposit() {
     return apiClient.get('/my-deposit')

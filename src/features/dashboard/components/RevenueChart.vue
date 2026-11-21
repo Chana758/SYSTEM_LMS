@@ -30,7 +30,7 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import echarts from '@/plugins/echarts'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const props = defineProps({
   data: { type: Array, default: () => [] },
@@ -145,7 +145,7 @@ function renderChart() {
         backgroundColor: c.tipBg,
         borderColor: c.tipBorder,
         textStyle: { color: c.tipText, fontSize: 12 },
-        valueFormatter: (v) => formatKhr(v),
+        valueFormatter: (v) => formatMoney(v),
       },
       series: [
         {

@@ -46,7 +46,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 import {
   ArrowsRightLeftIcon,
   ArrowUturnLeftIcon,
@@ -110,7 +110,7 @@ function describe(item) {
   return t(key, {
     name: item.actor || t('dashboard.recentActivity.someone'),
     book: item.book || t('dashboard.recentActivity.someBook'),
-    amount: formatKhr(item.amount),
+    amount: formatMoney(item.amount),
   })
 }
 

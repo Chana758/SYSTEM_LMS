@@ -57,7 +57,8 @@
       "admin": "Administrator",
       "librarian": "Librarian",
       "member": "Member"
-    }
+    },
+    "currency": "Currency"
   },
   "demo": {
     "badge": "Demo Mode",

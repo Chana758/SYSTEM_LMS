@@ -11,7 +11,7 @@
 
     <div class="rounded-2xl bg-slate-50 dark:bg-slate-900/60 p-4 flex items-center justify-between">
       <span class="text-sm text-slate-500 dark:text-slate-400">{{ t('fines.deposit.amount') }}</span>
-      <span class="text-xl font-black text-slate-900 dark:text-white">{{ formatKhr(deposit.deposit_amount) }}</span>
+      <span class="text-xl font-black text-slate-900 dark:text-white">{{ formatMoney(deposit.deposit_amount) }}</span>
     </div>
 
     <template v-if="deposit.deposit_status === 'unpaid'">
@@ -27,7 +27,7 @@
     </p>
 
     <p v-else-if="deposit.deposit_status === 'refunded'" class="text-xs text-slate-500 dark:text-slate-400">
-      {{ t('fines.deposit.refundedInfo', { refund: formatKhr(deposit.deposit_refunded), deducted: formatKhr(deposit.deposit_deducted) }) }}
+      {{ t('fines.deposit.refundedInfo', { refund: formatMoney(deposit.deposit_refunded), deducted: formatMoney(deposit.deposit_deducted) }) }}
     </p>
 
     <PayKhqrModal v-if="paying" :deposit-member-id="deposit.member_id" :title="t('fines.deposit.payTitle')" @close="paying = false" @paid="load" />
@@ -40,7 +40,7 @@ import { useI18n } from 'vue-i18n'
 import { QrCodeIcon } from '@heroicons/vue/24/outline'
 import PayKhqrModal from '@/features/fines/components/PayKhqrModal.vue'
 import { paymentService } from '@/features/fines/services/paymentService'
-import { formatKhr } from '@/utils/currencyHelper'
+import { formatMoney } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 const deposit = ref(null)
