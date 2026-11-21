@@ -8,14 +8,15 @@ export const useFinePaymentStore = defineStore('finePayment', {
   }),
 
   actions: {
-    async payFine(id, paymentMethod) {
+    async payFine(id, paymentMethod, cash = {}) {
       this.processing = true
       this.errors = {}
       try {
-        const { data } = await finePaymentService.pay(id, paymentMethod)
-        return { success: true, message: data.message, data: data.data }
+        const { data } = await finePaymentService.pay(id, paymentMethod, cash)
+        return { success: true, message: data.message, data: data.data, paymentId: data.payment_id }
       } catch (e) {
-        this.errors = { general: e.response?.data?.message || 'Failed to process payment' }
+        const res = e.response?.data
+        this.errors = { general: (res?.errors && Object.values(res.errors)[0]?.[0]) || res?.message || 'Failed to process payment' }
         return { success: false, message: this.errors.general }
       } finally {
         this.processing = false

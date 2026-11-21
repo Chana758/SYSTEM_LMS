@@ -20,8 +20,8 @@ export const paymentService = {
   requireDeposit(memberId) {
     return apiClient.post(`/members/${memberId}/deposit/require`)
   },
-  depositCash(memberId) {
-    return apiClient.post(`/members/${memberId}/deposit/cash`)
+  depositCash(memberId, cash = {}) {
+    return apiClient.post(`/members/${memberId}/deposit/cash`, cash)
   },
   refundDeposit(memberId) {
     return apiClient.post(`/members/${memberId}/deposit/refund`)
@@ -33,6 +33,19 @@ export const paymentService = {
   // Staff demo button, test mode only
   simulatePaid(paymentId) {
     return apiClient.post(`/payments/${paymentId}/simulate-paid`)
+  },
+  receipt(paymentId) {
+    return apiClient.get(`/payments/${paymentId}/receipt`)
+  },
+  // End-of-day cash close (staff)
+  cashClosing(params = {}) {
+    return apiClient.get('/cash-closing', { params })
+  },
+  saveCashClosing(payload) {
+    return apiClient.post('/cash-closing', payload)
+  },
+  cashClosings() {
+    return apiClient.get('/cash-closings')
   },
   // Staff: all payments (KHQR + cash)
   list(params = {}) {

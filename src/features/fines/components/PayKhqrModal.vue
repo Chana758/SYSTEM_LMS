@@ -44,7 +44,11 @@
           <p v-if="payment.apv" class="flex justify-between"><span class="text-slate-500">APV</span><b class="font-mono">{{ payment.apv }}</b></p>
           <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.khqr.time') }}</span><b>{{ formatTime(payment.paid_at) }}</b></p>
         </div>
-        <button type="button" @click="close" class="w-full h-11 rounded-xl bg-emerald-700 text-white text-sm font-bold cursor-pointer">{{ t('fines.khqr.done') }}</button>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" @click="showReceipt = true" class="h-11 rounded-xl border-2 border-slate-300 dark:border-white/15 text-sm font-bold text-slate-700 dark:text-slate-200 cursor-pointer">{{ t('fines.receipt.print') }}</button>
+          <button type="button" @click="close" class="h-11 rounded-xl bg-emerald-700 text-white text-sm font-bold cursor-pointer">{{ t('fines.khqr.done') }}</button>
+        </div>
+        <ReceiptModal v-if="showReceipt" :payment-id="payment.id" @close="showReceipt = false" />
       </div>
 
       <!-- Expired / failed -->
@@ -98,6 +102,7 @@ import { XMarkIcon, CheckCircleIcon, ClockIcon, ExclamationTriangleIcon } from '
 import { paymentService } from '../services/paymentService'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { formatIn } from '@/utils/currencyHelper'
+import ReceiptModal from './ReceiptModal.vue'
 import { useCurrencyStore } from '@/stores/currencyStore'
 
 // Pass either a fine, or the member id whose deposit is being paid
@@ -126,6 +131,7 @@ function changeCurrency(c) {
   start()
 }
 
+const showReceipt = ref(false)
 const state = ref('loading') // loading | waiting | paid | ended | error
 const payment = ref(null)
 const qrImage = ref(null)

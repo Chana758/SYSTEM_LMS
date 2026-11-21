@@ -14,6 +14,12 @@
           </div>
         </div>
 
+        <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+        <!-- End-of-day cash close -->
+        <button type="button" @click="showClosing = true"
+          class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-extrabold shadow-md cursor-pointer whitespace-nowrap">
+          <BanknotesIcon class="w-4 h-4" />{{ t('fines.closing.button') }}
+        </button>
         <!-- Quick period -->
         <div class="flex w-full md:w-auto p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10">
           <button
@@ -26,6 +32,7 @@
               ? 'bg-emerald-700 dark:bg-emerald-600 text-white shadow-md'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'"
           >{{ p.label }}</button>
+        </div>
         </div>
       </div>
 
@@ -132,6 +139,7 @@
                 <th class="px-5 py-3.5">{{ t('fines.payments.date') }}</th>
                 <th class="px-5 py-3.5 text-right">{{ t('fines.payments.amount') }}</th>
                 <th class="px-5 py-3.5">{{ t('fines.payments.statusLabel') }}</th>
+                <th class="px-5 py-3.5 text-right"></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 dark:divide-white/5 text-xs font-medium text-slate-700 dark:text-slate-300">
@@ -166,7 +174,7 @@
                 </td>
                 <td class="px-5 py-4 text-right whitespace-nowrap">
                   <span class="text-sm font-black" :class="p.status === 'refunded' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'">
-                    {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span>
+                    {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span><span v-if="p.method === 'cash' && Number(p.cash_received_usd) > 0" class="block text-[10px] font-bold text-slate-400">{{ t('fines.cash.gotUsd', { usd: formatIn(p.cash_received_usd, 'USD'), change: formatIn(p.change_khr, 'KHR') }) }}</span>
                   </span>
                 </td>
                 <td class="px-5 py-4">
@@ -174,6 +182,12 @@
                     <span class="w-1.5 h-1.5 rounded-full" :class="statusDot(p.status)"></span>
                     {{ t(`fines.payments.status.${p.status}`) }}
                   </span>
+                </td>
+                <td class="px-5 py-4 text-right">
+                  <button v-if="['paid', 'refunded'].includes(p.status)" type="button" @click="receiptId = p.id" :title="t('fines.receipt.title')"
+                    class="w-8 h-8 rounded-lg border border-slate-300 dark:border-white/15 inline-flex items-center justify-center text-slate-500 hover:text-emerald-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer">
+                    <PrinterIcon class="w-4 h-4" />
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -191,7 +205,7 @@
               <p class="text-[11px] text-slate-400">{{ formatDate(p.paid_at || p.created_at) }} · {{ formatClock(p.paid_at || p.created_at) }}</p>
             </div>
             <span class="text-base font-black flex-shrink-0" :class="p.status === 'refunded' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'">
-              {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span>
+              {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span><span v-if="p.method === 'cash' && Number(p.cash_received_usd) > 0" class="block text-[10px] font-bold text-slate-400">{{ t('fines.cash.gotUsd', { usd: formatIn(p.cash_received_usd, 'USD'), change: formatIn(p.change_khr, 'KHR') }) }}</span>
             </span>
           </div>
           <div class="flex flex-wrap items-center gap-2 mt-3">
@@ -205,7 +219,12 @@
               {{ t(`fines.payments.status.${p.status}`) }}
             </span>
           </div>
-          <p class="font-mono text-[10px] text-slate-400 mt-2">{{ p.tran_id }}<span v-if="p.apv"> · APV {{ p.apv }}</span></p>
+          <div class="flex items-center justify-between gap-2 mt-2">
+            <p class="font-mono text-[10px] text-slate-400">{{ p.tran_id }}<span v-if="p.apv"> · APV {{ p.apv }}</span></p>
+            <button v-if="['paid', 'refunded'].includes(p.status)" type="button" @click="receiptId = p.id" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 cursor-pointer">
+              <PrinterIcon class="w-3.5 h-3.5" />{{ t('fines.receipt.title') }}
+            </button>
+          </div>
         </div>
       </div>
     </template>
@@ -224,6 +243,9 @@
         >{{ n }}</button>
       </template>
     </div>
+
+    <ReceiptModal v-if="receiptId" :payment-id="receiptId" @close="receiptId = null" />
+    <CashClosingModal v-if="showClosing" @close="showClosing = false" />
   </div>
 </template>
 
@@ -232,8 +254,10 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   ReceiptPercentIcon, BanknotesIcon, QrCodeIcon, ArrowUturnLeftIcon,
-  CheckBadgeIcon, MagnifyingGlassIcon, CalendarDaysIcon,
+  CheckBadgeIcon, MagnifyingGlassIcon, CalendarDaysIcon, PrinterIcon,
 } from '@heroicons/vue/24/outline'
+import ReceiptModal from '../components/ReceiptModal.vue'
+import CashClosingModal from '../components/CashClosingModal.vue'
 import { paymentService } from '../services/paymentService'
 import { formatMoney, formatIn } from '@/utils/currencyHelper'
 
@@ -251,6 +275,8 @@ const page = ref(1)
 const lastPage = ref(1)
 const loading = ref(false)
 const showDates = ref(false)
+const receiptId = ref(null)
+const showClosing = ref(false)
 const period = ref('all')
 let timer = null
 

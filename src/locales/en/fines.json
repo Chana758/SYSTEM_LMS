@@ -216,5 +216,49 @@
     "rate": "Exchange rate",
     "default": "Currency shown first",
     "example": "Example: {usd} = {khr}"
+  },
+  "cash": {
+    "receivedKhr": "Received in ៛",
+    "receivedUsd": "Received in $",
+    "exact": "Exact",
+    "owed": "To pay",
+    "total": "Total received",
+    "short": "Short",
+    "change": "Change to give (៛)",
+    "receivedLabel": "Cash received",
+    "confirm": "Confirm cash received",
+    "gotUsd": "Got {usd} · change {change}"
+  },
+  "receipt": {
+    "title": "Receipt",
+    "print": "Print receipt",
+    "close": "Close",
+    "no": "Receipt no.",
+    "date": "Date",
+    "member": "Member",
+    "for": "For",
+    "method": "Method",
+    "staff": "Staff",
+    "thanks": "Thank you! Please keep this receipt."
+  },
+  "closing": {
+    "button": "Close cash",
+    "title": "End-of-day cash close",
+    "subtitle": "Count the drawer (៛ and $ separately) and compare with the system.",
+    "count": "{n} transactions",
+    "receivedKhr": "Received in ៛",
+    "change": "Change given",
+    "refunds": "Deposit refunds",
+    "expected": "Should be in drawer",
+    "counted": "Counted",
+    "countedKhr": "Counted ៛",
+    "countedUsd": "Counted $",
+    "diff": "Difference",
+    "notePlaceholder": "Why is it different?",
+    "save": "Save (cannot be edited)",
+    "onceHint": "Once per day. Any difference is sent to the admins.",
+    "done": "Cash already closed for this day",
+    "recent": "Recent",
+    "match": "Matches"
   }
 }

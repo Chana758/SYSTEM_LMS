@@ -63,6 +63,7 @@
     />
 
     <!-- B5.2: member scans the KHQR shown on the desk screen -->
+    <ReceiptModal v-if="receiptId" :payment-id="receiptId" @close="receiptId = null" />
     <PayKhqrModal v-if="khqrTarget" :fine="khqrTarget" @close="khqrTarget = null" @paid="refresh" />
 
     <!-- Waive Modal: bottom sheet on phones, centered dialog from sm up -->
@@ -122,6 +123,7 @@ import FineFilter from '../components/FineFilter.vue'
 import FineTable from '../components/FineTable.vue'
 import PayFineModal from '../components/PayFineModal.vue'
 import PayKhqrModal from '../components/PayKhqrModal.vue'
+import ReceiptModal from '../components/ReceiptModal.vue'
 import { formatMoney } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
@@ -131,6 +133,7 @@ const paymentStore = useFinePaymentStore()
 
 const payTarget = ref(null)
 const khqrTarget = ref(null)
+const receiptId = ref(null)
 const waiveTarget = ref(null)
 const waiveNotes = ref('')
 
@@ -153,10 +156,11 @@ function refresh() {
 }
 function goDetail(fine) { router.push({ name: 'fine-detail', params: { id: fine.id } }) }
 
-async function confirmPay(method) {
-  const result = await paymentStore.payFine(payTarget.value.id, method)
+async function confirmPay(method, cash = {}) {
+  const result = await paymentStore.payFine(payTarget.value.id, method, cash)
   if (result.success) {
     payTarget.value = null
+    receiptId.value = result.paymentId || null
     store.fetchFines(store.pagination.current_page)
     store.fetchSummary()
   }

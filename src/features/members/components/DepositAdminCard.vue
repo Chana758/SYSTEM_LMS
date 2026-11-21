@@ -17,8 +17,12 @@
 
       <!-- unpaid: cash at the desk, or show a KHQR for the member to scan -->
       <div v-else-if="d.deposit_status === 'unpaid'" class="grid grid-cols-2 gap-2">
-        <button type="button" :disabled="busy" @click="confirmCash" :class="btnLight">{{ t('fines.deposit.cash') }}</button>
+        <button type="button" :disabled="busy" @click="takingCash = !takingCash" :class="btnLight">{{ t('fines.deposit.cash') }}</button>
         <button type="button" :disabled="busy" @click="paying = true" :class="btnGreen">KHQR</button>
+        <div v-if="takingCash" class="col-span-2 space-y-2 pt-1">
+          <CashInput v-model="cash" :amount-khr="Number(d.deposit_amount) || 0" />
+          <button type="button" :disabled="busy || !cash.valid" @click="saveCash" :class="btnGreen">{{ t('fines.cash.confirm') }}</button>
+        </div>
       </div>
 
       <!-- paid: refund (unpaid fines are taken out first) -->
@@ -50,6 +54,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import PayKhqrModal from '@/features/fines/components/PayKhqrModal.vue'
+import CashInput from '@/features/fines/components/CashInput.vue'
 import { paymentService } from '@/features/fines/services/paymentService'
 import { formatMoney } from '@/utils/currencyHelper'
 
@@ -63,6 +68,8 @@ const d = ref(null)
 const busy = ref(false)
 const error = ref('')
 const paying = ref(false)
+const takingCash = ref(false)
+const cash = ref({ received_khr: 0, received_usd: 0, valid: true })
 
 const btnLight = 'w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 disabled:opacity-50 cursor-pointer'
 const btnGreen = 'w-full px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold disabled:opacity-50 cursor-pointer'
@@ -98,8 +105,20 @@ async function run(action) {
   }
 }
 
-function confirmCash() {
-  if (window.confirm(t('fines.deposit.cashConfirm', { amount: formatMoney(d.value.deposit_amount) }))) run('depositCash')
+async function saveCash() {
+  busy.value = true
+  error.value = ''
+  try {
+    const { data } = await paymentService.depositCash(props.memberId, { received_khr: cash.value.received_khr, received_usd: cash.value.received_usd })
+    toast.success(data.message)
+    takingCash.value = false
+    await load()
+  } catch (e) {
+    const res = e.response?.data
+    error.value = (res?.errors && Object.values(res.errors)[0]?.[0]) || res?.message || 'Error'
+  } finally {
+    busy.value = false
+  }
 }
 
 function confirmRefund() {

@@ -44,6 +44,9 @@
           </div>
         </div>
 
+        <!-- Cash: how much ៛ / $ was handed over, change in ៛ -->
+        <CashInput v-if="method === 'cash'" v-model="cash" :amount-khr="Number(fine.amount) || 0" />
+
         <!-- Server error (e.g. already paid) -->
         <p v-if="error" class="text-xs font-bold text-rose-500 dark:text-rose-400">{{ error }}</p>
 
@@ -58,8 +61,8 @@
           </button>
           <button
             type="button"
-            :disabled="processing"
-            @click="method === 'khqr' ? emit('khqr') : emit('confirm', method)"
+            :disabled="processing || (method === 'cash' && !cash.valid)"
+            @click="method === 'khqr' ? emit('khqr') : emit('confirm', method, cash)"
             class="flex-1 bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white py-3 sm:py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm"
           >
             {{ processing ? t('fines.processing') : t('fines.confirmPaymentBtn') }}
@@ -75,6 +78,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { BanknotesIcon } from '@heroicons/vue/24/outline'
 import { formatMoney } from '@/utils/currencyHelper'
+import CashInput from './CashInput.vue'
 
 const { t } = useI18n()
 
@@ -92,6 +96,7 @@ const methods = [
 ]
 
 const method = ref('cash')
+const cash = ref({ received_khr: 0, received_usd: 0, valid: true })
 
 const amount = computed(() => formatMoney(props.fine.amount))
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')
