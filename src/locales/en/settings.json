@@ -201,8 +201,10 @@
       "maxBooks": "Max books",
       "maxRenewals": "Max renewals",
       "renewDays": "Days per renewal",
-      "finePerDay": "Fine per day (៛)"
-    }
+      "finePerDay": "Fine per day (៛)",
+      "depositAmount": "Deposit (KHR, 0 = none)"
+    },
+    "colDeposit": "Deposit"
   },
   "cardApprovals": {
     "title": "Card Approvals Queue",

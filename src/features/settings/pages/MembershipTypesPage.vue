@@ -105,6 +105,7 @@
               <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colMaxBooks') }}</th>
               <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colRenewals') }}</th>
               <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colFine') }}</th>
+              <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colDeposit') }}</th>
               <th class="px-5 py-3.5">{{ t('settings.membershipTypes.colStatus') }}</th>
               <th class="px-5 py-3.5 text-right">{{ t('settings.membershipTypes.colActions') }}</th>
             </tr>
@@ -122,6 +123,7 @@
               <td class="px-5 py-4 text-center font-bold">{{ type.max_books ?? 3 }}</td>
               <td class="px-5 py-4 text-center font-bold">{{ type.max_renewals ?? 2 }} × {{ type.renew_days ?? 7 }}</td>
               <td class="px-5 py-4 text-center font-bold">{{ Number(type.fine_per_day ?? 500).toLocaleString() }}៛</td>
+              <td class="px-5 py-4 text-center font-bold">{{ Number(type.deposit_amount) ? Number(type.deposit_amount).toLocaleString() + '៛' : '—' }}</td>
               <td class="px-5 py-4">
                 <span
                   class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border"
@@ -259,7 +261,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const router = useRouter()
 
-const DEFAULT_RULES = { loan_days: 14, max_books: 3, max_renewals: 2, renew_days: 7, fine_per_day: 500 }
+const DEFAULT_RULES = { loan_days: 14, max_books: 3, max_renewals: 2, renew_days: 7, fine_per_day: 500, deposit_amount: 0 }
 
 // Loan-rule inputs rendered in the modal (limits mirror MembershipTypeRequest)
 const ruleFields = [
@@ -268,6 +270,8 @@ const ruleFields = [
   { key: 'max_renewals', label: 'maxRenewals', min: 0, max: 10 },
   { key: 'renew_days',   label: 'renewDays',   min: 1, max: 90 },
   { key: 'fine_per_day', label: 'finePerDay',  min: 0, max: 100000 },
+  // B6.2: deposit external members pay before borrowing (0 = none)
+  { key: 'deposit_amount', label: 'depositAmount', min: 0, max: 1000000 },
 ]
 
 const types = ref([])
@@ -370,6 +374,7 @@ function openEdit(type) {
     max_renewals: type.max_renewals ?? DEFAULT_RULES.max_renewals,
     renew_days: type.renew_days ?? DEFAULT_RULES.renew_days,
     fine_per_day: type.fine_per_day ?? DEFAULT_RULES.fine_per_day,
+    deposit_amount: type.deposit_amount ?? DEFAULT_RULES.deposit_amount,
   })
   formErrors.value = {}
   showModal.value = true

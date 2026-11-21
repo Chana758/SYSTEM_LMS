@@ -95,6 +95,10 @@
       <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-2xs">
         <LogoutAllCard />
       </div>
+      <!-- B6.2: deposit (shown only when this member has one) -->
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-2xs empty:hidden">
+        <DepositCard />
+      </div>
     </div>
   </div>
   <div v-else class="text-center py-20 text-slate-400 dark:text-slate-500">
@@ -112,6 +116,7 @@ import MemberCard from '../components/MemberCard.vue'
 import ProfileSettings from '@/features/settings/components/ProfileSettings.vue'
 import AccountSettings from '@/features/settings/components/AccountSettings.vue'
 import LogoutAllCard from '@/features/settings/components/LogoutAllCard.vue'
+import DepositCard from '../components/DepositCard.vue'
 
 const { t } = useI18n()
 const store = useMemberStore()

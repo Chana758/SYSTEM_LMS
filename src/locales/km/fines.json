@@ -106,7 +106,7 @@
     "scanHint": "បើក App ធនាគារណាមួយ (ABA, ACLEDA, Wing...) ហើយស្កេន QR នេះ",
     "expiresIn": "QR ផុតកំណត់ក្នុង {time}",
     "waiting": "កំពុងរង់ចាំការបង់...",
-    "openAba": "បើកក្នុង ABA Mobile",
+    "openAba": "បើកក្នុង App ធនាគារ",
     "paid": "បង់រួចរាល់!",
     "amount": "ចំនួន",
     "reference": "លេខយោង",
@@ -141,7 +141,44 @@
       "pending": "កំពុងរង់ចាំ",
       "expired": "ផុតកំណត់",
       "failed": "បរាជ័យ",
-      "cancelled": "បានបោះបង់"
+      "cancelled": "បានបោះបង់",
+      "refunded": "បានសងវិញ"
+    },
+    "allPurposes": "គ្រប់គោលបំណង",
+    "purposeLabel": "គោលបំណង",
+    "refundedTotal": "សងវិញ",
+    "purpose": {
+      "fine": "ពិន័យ",
+      "deposit": "ប្រាក់កក់",
+      "deposit_refund": "សងប្រាក់កក់",
+      "ebook_rental": "ជួល E-book"
+    }
+  },
+  "deposit": {
+    "title": "ប្រាក់កក់",
+    "subtitle": "សម្រាប់សមាជិកខាងក្រៅ ទទួលវិញពេលបញ្ឈប់សមាជិកភាព",
+    "amount": "ចំនួនប្រាក់កក់",
+    "mustPay": "សូមបង់ប្រាក់កក់ជាមុនសិន ទើបអាចខ្ចី ឬកក់សៀវភៅបាន។",
+    "payTitle": "បង់ប្រាក់កក់តាម KHQR",
+    "paidOn": "បានបង់ថ្ងៃ {date}",
+    "refundHint": "ទទួលវិញនៅតុបញ្ជរ (កាត់ពិន័យដែលមិនទាន់បង់ជាមុន)",
+    "refundedInfo": "បានសងវិញ {refund} (កាត់ពិន័យ {deducted})",
+    "noneHint": "សមាជិកនេះមិនទាន់មានប្រាក់កក់ទេ។",
+    "require": "ទាមទារប្រាក់កក់តាមប្រភេទសមាជិក",
+    "cash": "ទទួលសាច់ប្រាក់",
+    "cashConfirm": "បានទទួលសាច់ប្រាក់ {amount} មែនទេ?",
+    "unpaidFines": "ពិន័យមិនទាន់បង់",
+    "deducted": "កាត់ពីប្រាក់កក់",
+    "refundAmount": "សងវិញ",
+    "refund": "សងប្រាក់កក់វិញ",
+    "refundConfirm": "សងប្រាក់កក់ {amount} ជាសាច់ប្រាក់ ហើយបញ្ឈប់ប្រាក់កក់មែនទេ?",
+    "approveNotice": "ប្រភេទនេះត្រូវបង់ប្រាក់កក់ {amount} មុនពេលខ្ចី",
+    "paidCashNow": "បានបង់សាច់ប្រាក់ឥឡូវនេះ",
+    "status": {
+      "none": "គ្មាន",
+      "unpaid": "មិនទាន់បង់",
+      "paid": "បានបង់",
+      "refunded": "បានសងវិញ"
     }
   }
 }

@@ -6,6 +6,26 @@ export const paymentService = {
   payFineByKhqr(fineId) {
     return apiClient.post(`/fines/${fineId}/khqr`)
   },
+  // B6.2: deposit of an external member (own, or staff at the desk)
+  payDepositByKhqr(memberId) {
+    return apiClient.post(`/members/${memberId}/deposit/khqr`)
+  },
+  myDeposit() {
+    return apiClient.get('/my-deposit')
+  },
+  // Staff
+  deposit(memberId) {
+    return apiClient.get(`/members/${memberId}/deposit`)
+  },
+  requireDeposit(memberId) {
+    return apiClient.post(`/members/${memberId}/deposit/require`)
+  },
+  depositCash(memberId) {
+    return apiClient.post(`/members/${memberId}/deposit/cash`)
+  },
+  refundDeposit(memberId) {
+    return apiClient.post(`/members/${memberId}/deposit/refund`)
+  },
   // Polled every few seconds by the QR modal; the server asks the bank.
   status(paymentId) {
     return apiClient.get(`/payments/${paymentId}/status`)

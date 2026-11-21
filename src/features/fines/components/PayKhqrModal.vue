@@ -1,9 +1,9 @@
 <template>
-  <!-- B5.2 (Sam): pay a fine by scanning a KHQR with any Cambodian bank app -->
+  <!-- B5.2 / B6.2 (Sam): pay a fine or a deposit by scanning a KHQR with any Cambodian bank app -->
   <div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center sm:p-4" @click.self="close">
     <div class="w-full sm:max-w-sm bg-white dark:bg-slate-800 rounded-t-3xl sm:rounded-3xl shadow-2xl p-6 space-y-4 text-center">
       <div class="flex items-center justify-between">
-        <h2 class="text-base font-black text-slate-900 dark:text-white">{{ t('fines.khqr.title') }}</h2>
+        <h2 class="text-base font-black text-slate-900 dark:text-white">{{ title || t('fines.khqr.title') }}</h2>
         <button type="button" @click="close" class="w-9 h-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center cursor-pointer">
           <XMarkIcon class="w-5 h-5 text-slate-500" />
         </button>
@@ -80,8 +80,11 @@ import { paymentService } from '../services/paymentService'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { formatKhr } from '@/utils/currencyHelper'
 
+// Pass either a fine, or the member id whose deposit is being paid
 const props = defineProps({
-  fine: { type: Object, required: true },
+  fine: { type: Object, default: null },
+  depositMemberId: { type: [Number, String], default: null },
+  title: { type: String, default: '' },
 })
 const emit = defineEmits(['close', 'paid'])
 
@@ -136,7 +139,9 @@ async function start() {
   qrImage.value = null
   deeplink.value = null
   try {
-    const { data } = await paymentService.payFineByKhqr(props.fine.id)
+    const { data } = props.fine
+      ? await paymentService.payFineByKhqr(props.fine.id)
+      : await paymentService.payDepositByKhqr(props.depositMemberId)
     apply(data)
     if (state.value === 'waiting') pollTimer = setInterval(poll, POLL_MS)
   } catch (e) {

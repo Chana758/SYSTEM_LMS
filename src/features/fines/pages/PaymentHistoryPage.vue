@@ -7,19 +7,23 @@
         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ t('fines.payments.subtitle') }}</p>
       </div>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <div v-for="card in cards" :key="card.key" class="rounded-2xl border border-slate-200 dark:border-white/10 p-4">
           <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400">{{ card.label }}</p>
           <p class="text-lg sm:text-xl font-black text-slate-900 dark:text-white mt-1">{{ card.value }}</p>
         </div>
       </div>
 
-      <div class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+      <div class="grid grid-cols-2 lg:grid-cols-6 gap-2">
         <input v-model="filters.search" @input="debouncedLoad" :placeholder="t('fines.payments.search')" :class="inputCls" class="col-span-2 lg:col-span-1" />
         <select v-model="filters.method" @change="load(1)" :class="inputCls">
           <option value="">{{ t('fines.payments.allMethods') }}</option>
           <option value="khqr">KHQR</option>
           <option value="cash">{{ t('fines.payments.cash') }}</option>
+        </select>
+        <select v-model="filters.purpose" @change="load(1)" :class="inputCls">
+          <option value="">{{ t('fines.payments.allPurposes') }}</option>
+          <option v-for="pp in purposes" :key="pp" :value="pp">{{ t(`fines.payments.purpose.${pp}`) }}</option>
         </select>
         <select v-model="filters.status" @change="load(1)" :class="inputCls">
           <option value="">{{ t('fines.payments.allStatus') }}</option>
@@ -36,6 +40,7 @@
           <tr>
             <th class="px-4 py-3">{{ t('fines.payments.date') }}</th>
             <th class="px-4 py-3">{{ t('fines.payments.member') }}</th>
+            <th class="px-4 py-3">{{ t('fines.payments.purposeLabel') }}</th>
             <th class="px-4 py-3">{{ t('fines.payments.reference') }}</th>
             <th class="px-4 py-3">{{ t('fines.payments.method') }}</th>
             <th class="px-4 py-3 text-right">{{ t('fines.payments.amount') }}</th>
@@ -43,14 +48,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading"><td colspan="6" class="px-4 py-10 text-center text-slate-400">…</td></tr>
-          <tr v-else-if="!rows.length"><td colspan="6" class="px-4 py-10 text-center text-slate-400">{{ t('fines.payments.empty') }}</td></tr>
+          <tr v-if="loading"><td colspan="7" class="px-4 py-10 text-center text-slate-400">…</td></tr>
+          <tr v-else-if="!rows.length"><td colspan="7" class="px-4 py-10 text-center text-slate-400">{{ t('fines.payments.empty') }}</td></tr>
           <tr v-for="p in rows" :key="p.id" class="border-t border-slate-100 dark:border-white/5">
             <td class="px-4 py-3 whitespace-nowrap text-slate-600 dark:text-slate-300">{{ formatTime(p.paid_at || p.created_at) }}</td>
             <td class="px-4 py-3 font-bold text-slate-900 dark:text-white">{{ p.user?.name || '—' }}</td>
+            <td class="px-4 py-3 text-xs font-bold text-slate-600 dark:text-slate-300">{{ t(`fines.payments.purpose.${p.purpose}`, p.purpose) }}</td>
             <td class="px-4 py-3 font-mono text-xs text-slate-500">{{ p.tran_id }}<span v-if="p.apv"> · {{ p.apv }}</span></td>
             <td class="px-4 py-3">{{ p.method === 'khqr' ? 'KHQR' : t('fines.payments.cash') }}<span v-if="p.provider === 'fake'" class="ml-1 text-[10px] text-amber-600">TEST</span></td>
-            <td class="px-4 py-3 text-right font-black text-slate-900 dark:text-white">{{ formatKhr(p.amount) }}</td>
+            <td class="px-4 py-3 text-right font-black" :class="p.status === 'refunded' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'">{{ p.status === 'refunded' ? '− ' : '' }}{{ formatKhr(p.amount) }}</td>
             <td class="px-4 py-3">
               <span class="px-2.5 py-1 rounded-full text-[11px] font-bold" :class="badge(p.status)">{{ t(`fines.payments.status.${p.status}`) }}</span>
             </td>
@@ -73,10 +79,11 @@ import { paymentService } from '../services/paymentService'
 import { formatKhr } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
-const statuses = ['paid', 'pending', 'expired', 'failed', 'cancelled']
+const statuses = ['paid', 'pending', 'refunded', 'expired', 'failed', 'cancelled']
+const purposes = ['fine', 'deposit', 'deposit_refund']
 const inputCls = 'h-10 rounded-xl border border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-3 text-base sm:text-sm outline-none focus:border-emerald-600'
 
-const filters = reactive({ search: '', method: '', status: '', from: '', to: '' })
+const filters = reactive({ search: '', method: '', purpose: '', status: '', from: '', to: '' })
 const rows = ref([])
 const summary = ref({})
 const page = ref(1)
@@ -89,6 +96,7 @@ const cards = computed(() => [
   { key: 'count', label: t('fines.payments.paidCount'), value: summary.value.paid_count ?? 0 },
   { key: 'khqr', label: 'KHQR', value: formatKhr(summary.value.khqr_total) },
   { key: 'cash', label: t('fines.payments.cash'), value: formatKhr(summary.value.cash_total) },
+  { key: 'refunded', label: t('fines.payments.refundedTotal'), value: formatKhr(summary.value.refunded_total) },
 ])
 
 function badge(status) {

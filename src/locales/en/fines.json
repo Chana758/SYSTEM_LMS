@@ -106,7 +106,7 @@
     "scanHint": "Open any bank app (ABA, ACLEDA, Wing...) and scan this QR",
     "expiresIn": "QR expires in {time}",
     "waiting": "Waiting for payment...",
-    "openAba": "Open in ABA Mobile",
+    "openAba": "Open in bank app",
     "paid": "Payment complete!",
     "amount": "Amount",
     "reference": "Reference",
@@ -141,7 +141,44 @@
       "pending": "Pending",
       "expired": "Expired",
       "failed": "Failed",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    },
+    "allPurposes": "All purposes",
+    "purposeLabel": "Purpose",
+    "refundedTotal": "Refunded",
+    "purpose": {
+      "fine": "Fine",
+      "deposit": "Deposit",
+      "deposit_refund": "Deposit refund",
+      "ebook_rental": "E-book rental"
+    }
+  },
+  "deposit": {
+    "title": "Deposit",
+    "subtitle": "For external members, returned when membership ends",
+    "amount": "Deposit amount",
+    "mustPay": "Please pay the deposit before borrowing or reserving books.",
+    "payTitle": "Pay deposit by KHQR",
+    "paidOn": "Paid on {date}",
+    "refundHint": "Returned at the front desk (unpaid fines are taken out first)",
+    "refundedInfo": "Refunded {refund} (fines deducted {deducted})",
+    "noneHint": "This member has no deposit.",
+    "require": "Ask for this member type's deposit",
+    "cash": "Cash received",
+    "cashConfirm": "Received {amount} in cash?",
+    "unpaidFines": "Unpaid fines",
+    "deducted": "Taken from deposit",
+    "refundAmount": "Refund",
+    "refund": "Refund deposit",
+    "refundConfirm": "Refund {amount} in cash and close the deposit?",
+    "approveNotice": "This type must pay a {amount} deposit before borrowing",
+    "paidCashNow": "Paid in cash now",
+    "status": {
+      "none": "None",
+      "unpaid": "Unpaid",
+      "paid": "Paid",
+      "refunded": "Refunded"
     }
   }
 }

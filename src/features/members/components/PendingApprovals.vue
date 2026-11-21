@@ -43,6 +43,15 @@
           </button>
         </div>
 
+        <!-- B6.2: this type needs a deposit before borrowing -->
+        <div v-if="depositFor(form[m.id].membership_type)" class="lg:col-span-4 flex flex-wrap items-center gap-3 text-xs rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-400/20 px-3 py-2">
+          <span class="font-semibold text-amber-800 dark:text-amber-200">{{ t('fines.deposit.approveNotice', { amount: formatKhr(depositFor(form[m.id].membership_type)) }) }}</span>
+          <label class="inline-flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-200 cursor-pointer">
+            <input v-model="form[m.id].deposit_paid_cash" type="checkbox" class="w-4 h-4 accent-emerald-600" />
+            {{ t('fines.deposit.paidCashNow') }}
+          </label>
+        </div>
+
         <p v-if="rowErrors[m.id]" class="lg:col-span-4 text-xs font-semibold text-red-600">{{ rowErrors[m.id] }}</p>
       </div>
     </div>
@@ -54,6 +63,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import { memberAccountService } from '../services/memberAccountService'
+import { formatKhr } from '@/utils/currencyHelper'
 
 const props = defineProps({
   membershipTypes: { type: Array, default: () => [] },
@@ -71,6 +81,11 @@ const busyId = ref(null)
 
 const inputCls =
   'w-full h-10 rounded-xl border border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-3 text-base sm:text-sm outline-none focus:border-emerald-600'
+
+// Deposit (Riel) of a membership type, 0 when none
+function depositFor(code) {
+  return Number(props.membershipTypes.find((mt) => mt.code === code)?.deposit_amount || 0)
+}
 
 function formatDate(value) {
   return value ? new Date(value).toLocaleDateString('en-GB') : '—'
@@ -91,6 +106,7 @@ async function load() {
       form[m.id] = {
         membership_type: m.membership_type || props.membershipTypes[0]?.code || 'student',
         student_id: m.student_id || '',
+        deposit_paid_cash: false,
       }
     })
   } finally {
@@ -102,7 +118,7 @@ async function approve(m) {
   busyId.value = m.id
   rowErrors[m.id] = ''
   try {
-    const payload = { membership_type: form[m.id].membership_type }
+    const payload = { membership_type: form[m.id].membership_type, deposit_paid_cash: form[m.id].deposit_paid_cash }
     if (form[m.id].student_id.trim()) payload.student_id = form[m.id].student_id.trim()
     const { data } = await memberAccountService.approve(m.id, payload)
     toast.success(data.message)

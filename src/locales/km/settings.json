@@ -201,8 +201,10 @@
       "maxBooks": "សៀវភៅអតិបរមា",
       "maxRenewals": "ចំនួនបន្តអតិបរមា",
       "renewDays": "ថ្ងៃក្នុងមួយការបន្ត",
-      "finePerDay": "ពិន័យក្នុងមួយថ្ងៃ (៛)"
-    }
+      "finePerDay": "ពិន័យក្នុងមួយថ្ងៃ (៛)",
+      "depositAmount": "ប្រាក់កក់ (៛, 0 = គ្មាន)"
+    },
+    "colDeposit": "ប្រាក់កក់"
   },
   "cardApprovals": {
     "title": "ជួរអនុម័តកាត",
