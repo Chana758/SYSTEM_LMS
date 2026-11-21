@@ -58,7 +58,10 @@
       "librarian": "Librarian",
       "member": "Member"
     },
-    "currency": "Currency"
+    "currency": "Currency",
+    "currencyHint": "Show money in ៛ or $ ({rate})",
+    "showingUsd": "Showing $ ({rate}) · amounts are still kept in ៛",
+    "showingKhr": "Showing ៛ Riel"
   },
   "demo": {
     "badge": "Demo Mode",

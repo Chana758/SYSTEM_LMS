@@ -64,7 +64,7 @@
 
     <!-- B5.2: member scans the KHQR shown on the desk screen -->
     <ReceiptModal v-if="receiptId" :payment-id="receiptId" @close="receiptId = null" />
-    <PayKhqrModal v-if="khqrTarget" :fine="khqrTarget" @close="khqrTarget = null" @paid="refresh" />
+    <PayKhqrModal v-if="khqrTarget" :fine="khqrTarget" :currency="khqrCurrency" @close="khqrTarget = null" @paid="refresh" />
 
     <!-- Waive Modal: bottom sheet on phones, centered dialog from sm up -->
     <Teleport to="body">
@@ -134,6 +134,7 @@ const paymentStore = useFinePaymentStore()
 const payTarget = ref(null)
 const khqrTarget = ref(null)
 const receiptId = ref(null)
+const khqrCurrency = ref('KHR')
 const waiveTarget = ref(null)
 const waiveNotes = ref('')
 
@@ -146,7 +147,8 @@ function openWaive(fine) {
   waiveTarget.value = fine
   waiveNotes.value = ''
 }
-function openKhqr() {
+function openKhqr(currency = 'KHR') {
+  khqrCurrency.value = currency
   khqrTarget.value = payTarget.value
   payTarget.value = null
 }

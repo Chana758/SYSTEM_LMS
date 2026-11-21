@@ -110,6 +110,8 @@ const props = defineProps({
   fine: { type: Object, default: null },
   depositMemberId: { type: [Number, String], default: null },
   title: { type: String, default: '' },
+  // Start with this currency (staff picked it in the pay dialog); default: the top-bar choice
+  currency: { type: String, default: '' },
 })
 const emit = defineEmits(['close', 'paid'])
 
@@ -121,7 +123,7 @@ const isStaff = computed(() => ['admin', 'librarian'].includes(authStore.role))
 
 // Starts with the top-bar choice; switching here regenerates the QR and updates the top bar too
 const currencyStore = useCurrencyStore()
-const currency = ref(currencyStore.currency)
+const currency = ref(props.currency || currencyStore.currency)
 const rate = computed(() => payment.value?.exchange_rate || currencyStore.rate)
 
 function changeCurrency(c) {

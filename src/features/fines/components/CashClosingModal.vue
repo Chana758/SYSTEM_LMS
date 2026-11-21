@@ -23,6 +23,8 @@
           <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.closing.receivedKhr') }}</span><b>{{ formatIn(info.received_khr, 'KHR') }}</b></p>
           <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.closing.change') }}</span><b>− {{ formatIn(info.change_khr, 'KHR') }}</b></p>
           <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.closing.refunds') }}</span><b>− {{ formatIn(info.refunded_khr, 'KHR') }}</b></p>
+          <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.closing.receivedUsd') }}</span><b>{{ formatIn(info.received_usd, 'USD') }}</b></p>
+          <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.closing.changeUsd') }}</span><b>− {{ formatIn(info.change_usd || 0, 'USD') }}</b></p>
           <p class="flex justify-between text-sm pt-1.5 border-t border-slate-200 dark:border-white/10"><span class="font-bold">{{ t('fines.closing.expected') }} ៛</span><b class="text-slate-900 dark:text-white">{{ formatIn(info.expected_khr, 'KHR') }}</b></p>
           <p class="flex justify-between text-sm"><span class="font-bold">{{ t('fines.closing.expected') }} $</span><b class="text-slate-900 dark:text-white">{{ formatIn(info.expected_usd, 'USD') }}</b></p>
         </div>

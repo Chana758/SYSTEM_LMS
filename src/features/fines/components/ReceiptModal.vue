@@ -59,7 +59,8 @@ const lines = computed(() => {
   if (x.method === 'cash' && x.status === 'paid') {
     const got = [x.cash_received_khr ? formatIn(x.cash_received_khr, 'KHR') : '', x.cash_received_usd ? formatIn(x.cash_received_usd, 'USD') : ''].filter(Boolean).join(' + ')
     out.push([t('fines.cash.receivedLabel'), got || '—'])
-    out.push([t('fines.cash.change'), formatIn(x.change_khr, 'KHR')])
+    const chg = [x.change_usd ? formatIn(x.change_usd, 'USD') : '', x.change_khr || !x.change_usd ? formatIn(x.change_khr, 'KHR') : ''].filter(Boolean).join(' + ')
+    out.push([t('fines.cash.changeGive'), chg])
   }
   if (x.apv) out.push(['APV / Hash', x.apv])
   if (x.staff) out.push([t('fines.receipt.staff'), x.staff])

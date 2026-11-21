@@ -13,6 +13,7 @@ export const fineApi = {
     payment_method: paymentMethod,
     received_khr: cash.received_khr || 0,
     received_usd: cash.received_usd || 0,
+    change_in: cash.change_in || 'KHR',
   }),
   waive: (id, notes) => apiClient.post(ENDPOINTS.FINES.WAIVE(id), { notes }),
 }

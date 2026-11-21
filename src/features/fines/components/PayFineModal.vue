@@ -44,6 +44,20 @@
           </div>
         </div>
 
+        <!-- KHQR: which currency the QR will charge -->
+        <div v-if="method === 'khqr'" class="space-y-1.5">
+          <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ t('fines.khqr.chargeIn') }}</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button v-for="c in ['KHR', 'USD']" :key="c" type="button" @click="khqrCurrency = c"
+              class="rounded-xl border-2 px-3 py-3 sm:py-2.5 text-xs font-extrabold transition-colors cursor-pointer"
+              :class="khqrCurrency === c
+                ? 'border-emerald-600 bg-emerald-50 text-emerald-700 dark:border-emerald-400 dark:bg-emerald-500/15 dark:text-emerald-300'
+                : 'border-slate-300 bg-white text-slate-600 dark:border-white/10 dark:bg-slate-800 dark:text-slate-300'">
+              {{ c === 'KHR' ? t('fines.khqr.payInKhr') : t('fines.khqr.payInUsd') }}
+            </button>
+          </div>
+        </div>
+
         <!-- Cash: how much ៛ / $ was handed over, change in ៛ -->
         <CashInput v-if="method === 'cash'" v-model="cash" :amount-khr="Number(fine.amount) || 0" />
 
@@ -62,7 +76,7 @@
           <button
             type="button"
             :disabled="processing || (method === 'cash' && !cash.valid)"
-            @click="method === 'khqr' ? emit('khqr') : emit('confirm', method, cash)"
+            @click="method === 'khqr' ? emit('khqr', khqrCurrency) : emit('confirm', method, cash)"
             class="flex-1 bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white py-3 sm:py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm"
           >
             {{ processing ? t('fines.processing') : t('fines.confirmPaymentBtn') }}
@@ -79,6 +93,7 @@ import { useI18n } from 'vue-i18n'
 import { BanknotesIcon } from '@heroicons/vue/24/outline'
 import { formatMoney } from '@/utils/currencyHelper'
 import CashInput from './CashInput.vue'
+import { useCurrencyStore } from '@/stores/currencyStore'
 
 const { t } = useI18n()
 
@@ -96,7 +111,8 @@ const methods = [
 ]
 
 const method = ref('cash')
-const cash = ref({ received_khr: 0, received_usd: 0, valid: true })
+const cash = ref({ received_khr: 0, received_usd: 0, change_in: 'KHR', valid: true })
+const khqrCurrency = ref(useCurrencyStore().currency)
 
 const amount = computed(() => formatMoney(props.fine.amount))
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')

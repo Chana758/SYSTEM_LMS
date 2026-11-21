@@ -58,7 +58,10 @@
       "librarian": "បណ្ណារក្ស",
       "member": "សមាជិក"
     },
-    "currency": "រូបិយប័ណ្ណ"
+    "currency": "រូបិយប័ណ្ណ",
+    "currencyHint": "បង្ហាញលុយជា ៛ ឬ $ ({rate})",
+    "showingUsd": "បង្ហាញជា $ ({rate}) · លុយពិតរក្សាទុកជា ៛ ដដែល",
+    "showingKhr": "បង្ហាញជា ៛ រៀល"
   },
   "demo": {
     "badge": "របៀបសាកល្បង",

@@ -30,9 +30,20 @@
       <p class="flex justify-between"><span class="text-slate-500">{{ t('fines.cash.total') }}</span>
         <b class="text-slate-900 dark:text-white">{{ formatIn(totalKhr, 'KHR') }}<span v-if="usd > 0" class="font-semibold text-slate-400"> (1$ = {{ formatIn(rate, 'KHR') }})</span></b></p>
       <p v-if="short > 0" class="flex justify-between text-rose-600 dark:text-rose-400 font-black"><span>{{ t('fines.cash.short') }}</span><span>{{ formatIn(short, 'KHR') }}</span></p>
-      <p v-else class="flex justify-between text-sm font-black text-emerald-700 dark:text-emerald-300 pt-1 border-t border-slate-200 dark:border-white/10">
-        <span>{{ t('fines.cash.change') }}</span><span>{{ formatIn(change, 'KHR') }}</span>
-      </p>
+      <template v-else>
+        <!-- Give change in Riel, or in dollars + the rest in Riel -->
+        <div v-if="changeTotal >= rate" class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200 dark:border-white/10">
+          <span class="text-slate-500">{{ t('fines.cash.changeIn') }}</span>
+          <div class="flex p-0.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10">
+            <button v-for="m in ['KHR', 'USD']" :key="m" type="button" @click="changeIn = m"
+              class="px-2.5 py-1 rounded-md text-[11px] font-black cursor-pointer"
+              :class="changeIn === m ? 'bg-emerald-600 text-white' : 'text-slate-500'">{{ m === 'KHR' ? '៛' : '$ + ៛' }}</button>
+          </div>
+        </div>
+        <p class="flex justify-between text-sm font-black text-emerald-700 dark:text-emerald-300 pt-1 border-t border-slate-200 dark:border-white/10">
+          <span>{{ t('fines.cash.changeGive') }}</span><span>{{ changeLabel }}</span>
+        </p>
+      </template>
     </div>
   </div>
 </template>
@@ -63,17 +74,34 @@ const usdNeeded = computed(() => Math.ceil((props.amountKhr / rate.value) * 100)
 const usdNotes = computed(() => [1, 5, 10].filter((n) => n >= usdNeeded.value).slice(0, 2))
 const totalKhr = computed(() => (Number(khr.value) || 0) + (Number(usd.value) || 0) * rate.value)
 const short = computed(() => Math.max(0, Math.ceil(props.amountKhr - totalKhr.value)))
-// Same rule as the server: change in Riel, rounded down to 100៛
-const change = computed(() => (short.value > 0 ? 0 : Math.floor((totalKhr.value - props.amountKhr) / 100) * 100))
+// Same rule as the server (PaymentService::splitChange)
+const changeIn = ref('KHR')
+const changeTotal = computed(() => (short.value > 0 ? 0 : totalKhr.value - props.amountKhr))
+const changeSplit = computed(() => {
+  const c = Math.max(0, changeTotal.value)
+  if (changeIn.value === 'USD') {
+    const usd = Math.floor((c + 0.5) / rate.value)
+    return { usd, khr: Math.max(0, Math.floor((c - usd * rate.value) / 100) * 100) }
+  }
+  return { usd: 0, khr: Math.floor(c / 100) * 100 }
+})
+const changeLabel = computed(() => {
+  const { usd, khr } = changeSplit.value
+  const parts = []
+  if (usd > 0) parts.push(formatIn(usd, 'USD'))
+  if (khr > 0 || !usd) parts.push(formatIn(khr, 'KHR'))
+  return parts.join(' + ')
+})
 
 function exactKhr() { khr.value = props.amountKhr; usd.value = 0 }
 function exactUsd() { khr.value = 0; usd.value = usdNeeded.value }
 function setUsd(n) { khr.value = 0; usd.value = n }
 
-watch([khr, usd], () => {
+watch([khr, usd, changeIn], () => {
   emit('update:modelValue', {
     received_khr: Number(khr.value) || 0,
     received_usd: Number(usd.value) || 0,
+    change_in: changeIn.value,
     valid: short.value === 0 && totalKhr.value > 0,
   })
 }, { immediate: true })

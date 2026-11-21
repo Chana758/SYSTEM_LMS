@@ -94,17 +94,33 @@
         </button>
       </div>
 
-      <!-- ៛ / $: every amount and new KHQR follows this -->
-      <div class="flex items-center bg-black/25 backdrop-blur-md rounded-xl p-1 border border-white/15 shadow-inner flex-shrink-0" :title="t('common.header.currency', 'Currency')">
+      <!-- ៛ / $ (phones): one button that shows the currency you will switch TO -->
+      <button
+        type="button"
+        @click="switchCurrency(currencyStore.isUsd ? 'KHR' : 'USD')"
+        class="sm:hidden h-9 px-3 flex items-center gap-1 rounded-full border text-[11px] font-black active:scale-95 flex-shrink-0 cursor-pointer transition
+               text-slate-700 bg-slate-100 border-slate-200 hover:bg-slate-200
+               dark:text-white dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/15"
+        :aria-label="t('common.header.currency')"
+      >
+        <span class="text-base leading-none text-green-800 dark:text-amber-300">{{ currencyStore.isUsd ? '៛' : '$' }}</span>
+        <span class="tracking-wider">{{ currencyStore.isUsd ? 'KHR' : 'USD' }}</span>
+      </button>
+
+      <!-- ៛ / $ (tablet/desktop): both options. Every amount and new KHQR follows this. -->
+      <div class="hidden sm:flex items-center bg-black/25 backdrop-blur-md rounded-xl p-1 border border-white/15 shadow-inner flex-shrink-0" :title="t('common.header.currencyHint', { rate: rateLabel })">
         <button
-          v-for="c in ['KHR', 'USD']"
-          :key="c"
+          v-for="c in currencyOptions"
+          :key="c.code"
           type="button"
-          @click="currencyStore.set(c)"
-          class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-black transition-all duration-200 cursor-pointer"
-          :class="currencyStore.currency === c ? 'bg-amber-400 text-green-950 shadow-md scale-105' : 'text-white/70 hover:text-white hover:bg-white/10'"
-          :aria-pressed="currencyStore.currency === c"
-        >{{ c === 'KHR' ? '៛' : '$' }}</button>
+          @click="switchCurrency(c.code)"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer"
+          :class="currencyStore.currency === c.code ? 'bg-amber-400 text-green-950 shadow-md scale-105' : 'text-white/70 hover:text-white hover:bg-white/10'"
+          :aria-pressed="currencyStore.currency === c.code"
+        >
+          <span class="text-base leading-none font-black">{{ c.symbol }}</span>
+          <span class="tracking-wider uppercase">{{ c.code }}</span>
+        </button>
       </div>
 
       <button
@@ -158,6 +174,7 @@
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'vue-toastification'
 import {
   Bars3Icon,
   SunIcon,
@@ -177,6 +194,22 @@ const authStore = useAuthStore()
 const languageStore = useLanguageStore()
 const currencyStore = useCurrencyStore()
 if (!currencyStore.loaded) currencyStore.loadConfig()
+const toast = useToast()
+
+const currencyOptions = [
+  { code: 'KHR', symbol: '៛' },
+  { code: 'USD', symbol: '$' },
+]
+const rateLabel = computed(() => `1$ = ${Number(currencyStore.rate).toLocaleString('en-US')}៛`)
+
+// Only the display changes; amounts are stored in Riel (see currencyStore)
+function switchCurrency(code) {
+  if (code === currencyStore.currency) return
+  currencyStore.set(code)
+  toast.info(code === 'USD'
+    ? t('common.header.showingUsd', { rate: rateLabel.value })
+    : t('common.header.showingKhr'), { timeout: 3000 })
+}
 const { t, te } = useI18n()
 
 // Members have the bottom nav on phones/tablets, so the burger is replaced by the avatar

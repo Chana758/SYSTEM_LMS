@@ -174,7 +174,7 @@
                 </td>
                 <td class="px-5 py-4 text-right whitespace-nowrap">
                   <span class="text-sm font-black" :class="p.status === 'refunded' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'">
-                    {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span><span v-if="p.method === 'cash' && Number(p.cash_received_usd) > 0" class="block text-[10px] font-bold text-slate-400">{{ t('fines.cash.gotUsd', { usd: formatIn(p.cash_received_usd, 'USD'), change: formatIn(p.change_khr, 'KHR') }) }}</span>
+                    {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span><span v-if="p.method === 'cash' && Number(p.cash_received_usd) > 0" class="block text-[10px] font-bold text-slate-400">{{ t('fines.cash.gotUsd', { usd: formatIn(p.cash_received_usd, 'USD'), change: (Number(p.change_usd) ? formatIn(p.change_usd, 'USD') + ' + ' : '') + formatIn(p.change_khr, 'KHR') }) }}</span>
                   </span>
                 </td>
                 <td class="px-5 py-4">
@@ -205,7 +205,7 @@
               <p class="text-[11px] text-slate-400">{{ formatDate(p.paid_at || p.created_at) }} · {{ formatClock(p.paid_at || p.created_at) }}</p>
             </div>
             <span class="text-base font-black flex-shrink-0" :class="p.status === 'refunded' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'">
-              {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span><span v-if="p.method === 'cash' && Number(p.cash_received_usd) > 0" class="block text-[10px] font-bold text-slate-400">{{ t('fines.cash.gotUsd', { usd: formatIn(p.cash_received_usd, 'USD'), change: formatIn(p.change_khr, 'KHR') }) }}</span>
+              {{ p.status === 'refunded' ? '− ' : '' }}{{ formatMoney(p.amount_khr ?? p.amount) }}<span v-if="p.currency === 'USD'" class="block text-[10px] font-bold text-slate-400">{{ t('fines.payments.chargedIn', { amount: formatIn(p.amount, 'USD') }) }}</span><span v-if="p.method === 'cash' && Number(p.cash_received_usd) > 0" class="block text-[10px] font-bold text-slate-400">{{ t('fines.cash.gotUsd', { usd: formatIn(p.cash_received_usd, 'USD'), change: (Number(p.change_usd) ? formatIn(p.change_usd, 'USD') + ' + ' : '') + formatIn(p.change_khr, 'KHR') }) }}</span>
             </span>
           </div>
           <div class="flex flex-wrap items-center gap-2 mt-3">

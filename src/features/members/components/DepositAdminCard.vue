@@ -109,7 +109,7 @@ async function saveCash() {
   busy.value = true
   error.value = ''
   try {
-    const { data } = await paymentService.depositCash(props.memberId, { received_khr: cash.value.received_khr, received_usd: cash.value.received_usd })
+    const { data } = await paymentService.depositCash(props.memberId, { received_khr: cash.value.received_khr, received_usd: cash.value.received_usd, change_in: cash.value.change_in })
     toast.success(data.message)
     takingCash.value = false
     await load()

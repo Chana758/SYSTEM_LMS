@@ -120,7 +120,8 @@
     "testMode": "Test mode: this QR cannot be paid for real",
     "simulate": "Test: mark as paid",
     "payInKhr": "Pay in ៛ Riel",
-    "payInUsd": "Pay in $ Dollar"
+    "payInUsd": "Pay in $ Dollar",
+    "chargeIn": "QR charges in"
   },
   "payments": {
     "title": "Payment history",
@@ -227,7 +228,9 @@
     "change": "Change to give (៛)",
     "receivedLabel": "Cash received",
     "confirm": "Confirm cash received",
-    "gotUsd": "Got {usd} · change {change}"
+    "gotUsd": "Got {usd} · change {change}",
+    "changeIn": "Change in",
+    "changeGive": "Give back"
   },
   "receipt": {
     "title": "Receipt",
@@ -259,6 +262,8 @@
     "onceHint": "Once per day. Any difference is sent to the admins.",
     "done": "Cash already closed for this day",
     "recent": "Recent",
-    "match": "Matches"
+    "match": "Matches",
+    "receivedUsd": "Received in $",
+    "changeUsd": "Change given in $"
   }
 }
