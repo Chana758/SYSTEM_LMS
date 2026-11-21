@@ -137,7 +137,7 @@
         <div v-if="daysLate > 0" class="flex items-start gap-2 text-sm rounded-xl px-3.5 py-3 bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-400/25 text-rose-700 dark:text-rose-300">
           <ExclamationTriangleIcon class="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-500 dark:text-rose-300" />
           <span>
-            {{ t('scanner.result.overdueWarning', { days: daysLate, fine: estimatedOverdueFineKhr.toLocaleString(), usd: khrToUsd(estimatedOverdueFineKhr) }) }}
+            {{ t('scanner.result.overdueWarning', { days: daysLate, fine: estimatedOverdueFineKhr.toLocaleString() }) }}
           </span>
         </div>
 
@@ -164,7 +164,6 @@
             :class="inputBase"
             class="px-3.5 focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 dark:focus:border-blue-400"
           />
-          <p class="text-xs text-gray-400 dark:text-slate-400 mt-1">≈ ${{ khrToUsd(damageFeeKhr) }}</p>
         </div>
 
         <div v-if="returnCondition === 'lost'">
@@ -176,7 +175,6 @@
             :class="inputBase"
             class="px-3.5 focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 dark:focus:border-blue-400"
           />
-          <p class="text-xs text-gray-400 dark:text-slate-400 mt-1">≈ ${{ khrToUsd(lostFeeKhr) }}</p>
         </div>
 
         <div v-if="returnCondition !== 'good'">
@@ -227,8 +225,6 @@ const labelClass = 'block text-sm font-medium text-gray-700 dark:text-slate-300 
 const inputBase = 'w-full rounded-xl py-2.5 text-sm outline-none transition border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 disabled:opacity-60 disabled:cursor-not-allowed'
 const dropdownClass = 'absolute z-30 left-0 right-0 mt-1 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-800 shadow-xl dark:shadow-black/50 divide-y divide-gray-100 dark:divide-white/10 max-h-48 overflow-y-auto select-none'
 
-const KHR_TO_USD_RATE = 4100
-const khrToUsd = (khr) => ((khr || 0) / KHR_TO_USD_RATE).toFixed(2)
 
 const props = defineProps({
   result: { type: Object, required: true },

@@ -35,6 +35,7 @@
     "notifications": "Notifications",
     "cardApprovals": "Card Approvals",
     "backupRestore": "Backup&Restore",
-    "settings": "Settings"
+    "settings": "Settings",
+    "payments": "Payment history"
   }
 }

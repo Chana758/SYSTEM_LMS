@@ -157,6 +157,7 @@ const coreMenus = computed(() => [
   { name: t('sidebar.menu.myReservations'), path: '/my-reservations', icon: CalendarDaysIcon,        color: 'pink',    permission: ['member'] },
 
   { name: t('sidebar.menu.fines'),          path: '/fines',           icon: BanknotesIcon,           color: 'orange',  permission: ['admin', 'librarian'] },
+  { name: t('sidebar.menu.payments'),       path: '/fines/payments',  icon: BanknotesIcon,           color: 'orange',  permission: ['admin', 'librarian'] },
   { name: t('sidebar.menu.myFines'),        path: '/my-fines',        icon: BanknotesIcon,           color: 'orange',  permission: ['member'] },
 ])
 

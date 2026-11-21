@@ -109,7 +109,7 @@ function firstError(e) {
 function handleSubmit() {
   Object.keys(clientErrors).forEach((k) => delete clientErrors[k])
 
-  const validation = validateFineForm(form, { unit: isEdit.value ? 'usd' : 'khr' })
+  const validation = validateFineForm(form)
   if (Object.keys(validation).length) {
     Object.assign(clientErrors, validation)
     return

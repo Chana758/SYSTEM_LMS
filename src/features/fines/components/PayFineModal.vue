@@ -22,7 +22,7 @@
         <!-- Big amount -->
         <div class="rounded-xl border-2 border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800 p-4 text-center">
           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{{ t('fines.amountDue') }}</p>
-          <p class="mt-1 text-4xl font-black leading-none text-slate-900 dark:text-white">${{ amount }}</p>
+          <p class="mt-1 text-4xl font-black leading-none text-slate-900 dark:text-white">{{ amount }}</p>
         </div>
 
         <!-- Payment method: tap to choose (Cash is preselected) -->
@@ -59,7 +59,7 @@
           <button
             type="button"
             :disabled="processing"
-            @click="emit('confirm', method)"
+            @click="method === 'khqr' ? emit('khqr') : emit('confirm', method)"
             class="flex-1 bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white py-3 sm:py-2.5 rounded-xl text-xs font-extrabold disabled:opacity-50 transition-colors shadow-sm"
           >
             {{ processing ? t('fines.processing') : t('fines.confirmPaymentBtn') }}
@@ -74,6 +74,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { BanknotesIcon } from '@heroicons/vue/24/outline'
+import { formatKhr } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 
@@ -82,18 +83,17 @@ const props = defineProps({
   processing: { type: Boolean, default: false },
   error: { type: String, default: '' },
 })
-const emit = defineEmits(['confirm', 'cancel'])
+const emit = defineEmits(['confirm', 'cancel', 'khqr'])
 
+// FIN2: in Cambodia the desk takes cash, or the member scans a KHQR
 const methods = [
   { value: 'cash', key: 'fines.methodCash' },
-  { value: 'card', key: 'fines.methodCard' },
-  { value: 'bank_transfer', key: 'fines.methodBankTransfer' },
-  { value: 'other', key: 'fines.methodOther' },
+  { value: 'khqr', key: 'fines.methodKhqr' },
 ]
 
 const method = ref('cash')
 
-const amount = computed(() => Number(props.fine.amount || 0).toFixed(2))
+const amount = computed(() => formatKhr(props.fine.amount))
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')
 const bookTitle = computed(() => props.fine.borrow?.book_copy?.book?.title || '')
 

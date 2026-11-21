@@ -15,7 +15,7 @@
       class="px-4 py-3 font-bold"
       :class="isUnpaid ? 'text-red-600 dark:text-rose-400' : 'text-gray-800 dark:text-slate-100'"
     >
-      ${{ amount }}
+      {{ amount }}
     </td>
 
     <td class="px-4 py-3 capitalize text-gray-500 dark:text-slate-400">{{ reasonLabel }}</td>
@@ -67,6 +67,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { BanknotesIcon, EyeIcon, HandRaisedIcon } from '@heroicons/vue/24/outline'
 import FineStatusBadge from './FineStatusBadge.vue'
+import { formatKhr } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 
@@ -76,7 +77,7 @@ defineEmits(['pay', 'waive', 'view'])
 const isUnpaid = computed(() => props.fine.status === 'unpaid')
 const memberName = computed(() => props.fine.borrow?.member?.user?.name || '')
 const bookTitle = computed(() => props.fine.borrow?.book_copy?.book?.title || '')
-const amount = computed(() => Number(props.fine.amount || 0).toFixed(2))
+const amount = computed(() => formatKhr(props.fine.amount))
 
 // Translate the reason (overdue / damaged / lost / other) instead of showing the raw value.
 const REASON_KEYS = {

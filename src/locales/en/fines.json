@@ -98,5 +98,50 @@
     "loading": "Loading your fines...",
     "noRecords": "No Fine Records",
     "noRecordsHint": "You don't have any library fine history right now."
+  },
+  "methodKhqr": "KHQR (scan with a bank app)",
+  "khqr": {
+    "title": "Pay by KHQR",
+    "payButton": "Pay by KHQR",
+    "scanHint": "Open any bank app (ABA, ACLEDA, Wing...) and scan this QR",
+    "expiresIn": "QR expires in {time}",
+    "waiting": "Waiting for payment...",
+    "openAba": "Open in ABA Mobile",
+    "paid": "Payment complete!",
+    "amount": "Amount",
+    "reference": "Reference",
+    "time": "Time",
+    "done": "Done",
+    "expired": "This QR has expired.",
+    "failed": "The payment did not go through.",
+    "newQr": "Make a new QR",
+    "retry": "Try again",
+    "genericError": "Something went wrong. Please try again.",
+    "testMode": "Test mode: this QR cannot be paid for real",
+    "simulate": "Test: mark as paid"
+  },
+  "payments": {
+    "title": "Payment history",
+    "subtitle": "Every KHQR and cash payment, to check the money received",
+    "search": "Search name or reference",
+    "allMethods": "All methods",
+    "allStatus": "All statuses",
+    "cash": "Cash",
+    "date": "Date",
+    "member": "Member",
+    "reference": "Reference",
+    "method": "Method",
+    "amount": "Amount",
+    "statusLabel": "Status",
+    "empty": "No payments yet",
+    "paidTotal": "Total received",
+    "paidCount": "Payments",
+    "status": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "expired": "Expired",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    }
   }
 }

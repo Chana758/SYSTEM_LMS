@@ -61,7 +61,7 @@
     "reserveForMember": "Reserve for Member",
     "addingToQueue": "Adding…",
     "addToQueue": "Add to Reservation Queue",
-    "overdueWarning": "This book is {days} day(s) overdue. Estimated overdue fine: {fine}៛ (≈ ${usd})",
+    "overdueWarning": "This book is {days} day(s) overdue. Estimated overdue fine: {fine}៛",
     "bookCondition": "Book Condition",
     "conditionGood": "Good",
     "conditionDamaged": "Damaged",

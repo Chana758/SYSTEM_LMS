@@ -58,8 +58,12 @@
       :processing="paymentStore.processing"
       :error="paymentStore.errors.general || ''"
       @confirm="confirmPay"
+      @khqr="openKhqr"
       @cancel="payTarget = null"
     />
+
+    <!-- B5.2: member scans the KHQR shown on the desk screen -->
+    <PayKhqrModal v-if="khqrTarget" :fine="khqrTarget" @close="khqrTarget = null" @paid="refresh" />
 
     <!-- Waive Modal: bottom sheet on phones, centered dialog from sm up -->
     <Teleport to="body">
@@ -70,7 +74,7 @@
           </div>
           <div>
             <h2 class="text-lg font-black text-slate-900 dark:text-white tracking-tight">{{ t('fines.waiveFineTitle') }}</h2>
-            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">{{ t('fines.amount') }}: <span class="font-extrabold text-slate-900 dark:text-white">${{ Number(waiveTarget.amount).toFixed(2) }}</span></p>
+            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">{{ t('fines.amount') }}: <span class="font-extrabold text-slate-900 dark:text-white">{{ formatKhr(waiveTarget.amount) }}</span></p>
           </div>
 
           <div class="space-y-1.5">
@@ -117,6 +121,8 @@ import FineSummaryCard from '../components/FineSummaryCard.vue'
 import FineFilter from '../components/FineFilter.vue'
 import FineTable from '../components/FineTable.vue'
 import PayFineModal from '../components/PayFineModal.vue'
+import PayKhqrModal from '../components/PayKhqrModal.vue'
+import { formatKhr } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -124,6 +130,7 @@ const store = useFineStore()
 const paymentStore = useFinePaymentStore()
 
 const payTarget = ref(null)
+const khqrTarget = ref(null)
 const waiveTarget = ref(null)
 const waiveNotes = ref('')
 
@@ -135,6 +142,14 @@ function openWaive(fine) {
   paymentStore.errors = {}
   waiveTarget.value = fine
   waiveNotes.value = ''
+}
+function openKhqr() {
+  khqrTarget.value = payTarget.value
+  payTarget.value = null
+}
+function refresh() {
+  store.fetchFines(store.pagination.current_page)
+  store.fetchSummary()
 }
 function goDetail(fine) { router.push({ name: 'fine-detail', params: { id: fine.id } }) }
 

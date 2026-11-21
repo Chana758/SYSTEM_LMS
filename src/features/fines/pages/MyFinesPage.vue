@@ -129,10 +129,23 @@
                 {{ money(fine.amount) }}
               </span>
             </div>
+
+            <!-- B5.2 (Sam): pay this fine by KHQR with any bank app -->
+            <button
+              v-if="fine.status === 'unpaid'"
+              type="button"
+              @click="payingFine = fine"
+              class="w-full h-11 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white text-sm font-black inline-flex items-center justify-center gap-2 shadow-md transition cursor-pointer"
+            >
+              <QrCodeIcon class="w-5 h-5" />
+              {{ t('fines.khqr.payButton') }}
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <PayKhqrModal v-if="payingFine" :fine="payingFine" @close="payingFine = null" @paid="onPaid" />
   </div>
 </template>
 
@@ -141,17 +154,26 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   BookOpenIcon, WalletIcon, SparklesIcon,
-  ExclamationCircleIcon, CheckCircleIcon, HandRaisedIcon,
+  ExclamationCircleIcon, CheckCircleIcon, HandRaisedIcon, QrCodeIcon,
 } from '@heroicons/vue/24/outline'
 import { useFineStore } from '../store/fineStore'
 import FineStatusBadge from '../components/FineStatusBadge.vue'
+import PayKhqrModal from '../components/PayKhqrModal.vue'
+import { formatKhr } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 const store = useFineStore()
 
 const activeTab = ref('all')
+const payingFine = ref(null)
 
-const money = (n) => `$${Number(n || 0).toFixed(2)}`
+// FIN1: fines are stored and shown in Riel
+const money = (n) => formatKhr(n)
+
+// Refresh the list once the bank confirms (the modal stays open to show the receipt)
+function onPaid() {
+  store.fetchMyFines()
+}
 function formatDate(d) {
   return d ? new Date(d).toLocaleDateString('en-GB') : '—'
 }

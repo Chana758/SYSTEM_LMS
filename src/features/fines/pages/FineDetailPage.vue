@@ -35,7 +35,7 @@
 
       <div class="flex justify-between items-center gap-4 py-2.5 border-b border-slate-100 dark:border-white/10">
         <span class="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 flex-shrink-0">{{ t('fines.detailPage.amount') }}</span>
-        <span class="text-sm font-black text-slate-900 dark:text-white">${{ Number(store.currentFine.amount).toFixed(2) }}</span>
+        <span class="text-sm font-black text-slate-900 dark:text-white">{{ formatKhr(store.currentFine.amount) }}</span>
       </div>
 
       <div class="flex justify-between items-center gap-4 py-2.5 border-b border-slate-100 dark:border-white/10">
@@ -70,6 +70,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useFineStore } from '../store/fineStore'
 import FineStatusBadge from '../components/FineStatusBadge.vue'
+import { formatKhr } from '@/utils/currencyHelper'
 
 const { t } = useI18n()
 const route = useRoute()

@@ -121,7 +121,7 @@
                   </div>
                   <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide leading-snug">{{ t('dashboard.unpaidFines') }}</span>
                 </div>
-                <span class="flex-shrink-0 font-black font-mono text-base px-3 py-0.5 rounded-lg border" :class="countClass(unpaidFines)">${{ unpaidFines }}</span>
+                <span class="flex-shrink-0 font-black font-mono text-base px-3 py-0.5 rounded-lg border" :class="countClass(unpaidFines)">{{ formatKhr(unpaidFines) }}</span>
               </div>
             </div>
           </div>
@@ -220,6 +220,7 @@
 </template>
 
 <script setup>
+import { formatKhr } from '@/utils/currencyHelper'
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDashboardStore } from '../store/dashboardStore'
@@ -248,9 +249,8 @@ const store = useDashboardStore()
 // which would otherwise crash the whole page during render.
 const stats = computed(() => store.stats ?? {})
 
-const unpaidFines = computed(() =>
-  (Number(stats.value.unpaid_fines_total) || 0).toFixed(2)
-)
+// Riel (FIN1)
+const unpaidFines = computed(() => Number(stats.value.unpaid_fines_total) || 0)
 
 const lowStockBooks = computed(() =>
   Array.isArray(stats.value.low_stock_books) ? stats.value.low_stock_books : []

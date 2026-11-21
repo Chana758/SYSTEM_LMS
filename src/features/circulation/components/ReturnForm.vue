@@ -38,7 +38,6 @@
                amount before submitting (this is exactly the kind of
                "wait, that's way too high" signal that was missing when
                the $5000/$15000 fines got created in the first place). -->
-          <p class="text-[11px] font-semibold text-slate-400 dark:text-slate-500 mt-1">≈ {{ formatUsd(khrToUsd(form.damage_fee)) }}</p>
         </div>
 
         <!-- Lost Fee -->
@@ -50,7 +49,6 @@
             class="w-full border border-slate-300 dark:border-white/15 rounded-xl px-3.5 py-2.5 text-xs bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 font-mono outline-none focus:border-emerald-600 transition"
             placeholder="15000"
           />
-          <p class="text-[11px] font-semibold text-slate-400 dark:text-slate-500 mt-1">≈ {{ formatUsd(khrToUsd(form.lost_fee)) }}</p>
         </div>
 
         <!-- Notes (Optional) -->
@@ -98,10 +96,6 @@
 
 <script setup>
 import { reactive, computed } from 'vue'
-// NOTE: khrToUsd/formatUsd are used ONLY for the on-screen "≈ $x.xx"
-// preview text below the Riel inputs — they are display-only helpers now.
-// They are NOT applied to the payload anymore (see handleSubmit below).
-import { khrToUsd, formatUsd } from '@/utils/currencyHelper'
 
 const props = defineProps({
   borrow: { type: Object, required: true },

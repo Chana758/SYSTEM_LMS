@@ -61,7 +61,7 @@
     "reserveForMember": "កក់សម្រាប់សមាជិក",
     "addingToQueue": "កំពុងបន្ថែម…",
     "addToQueue": "បន្ថែមទៅជួរឈរកក់",
-    "overdueWarning": "សៀវភៅនេះហួសកំណត់ {days} ថ្ងៃហើយ។ ការពិន័យប៉ាន់ស្មាន: {fine}៛ (≈ ${usd})",
+    "overdueWarning": "សៀវភៅនេះហួសកំណត់ {days} ថ្ងៃហើយ។ ការពិន័យប៉ាន់ស្មាន: {fine}៛",
     "bookCondition": "ស្ថានភាពសៀវភៅ",
     "conditionGood": "ល្អ",
     "conditionDamaged": "ខូចខាត",
