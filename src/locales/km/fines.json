@@ -152,7 +152,33 @@
       "deposit": "ប្រាក់កក់",
       "deposit_refund": "សងប្រាក់កក់",
       "ebook_rental": "ជួល E-book"
-    }
+    },
+    "loading": "កំពុងផ្ទុក...",
+    "emptyHint": "ពេលសមាជិកបង់ពិន័យ ឬប្រាក់កក់តាម KHQR ឬសាច់ប្រាក់នៅតុបញ្ជរ វានឹងបង្ហាញនៅទីនេះ។",
+    "emptyFiltered": "គ្មានការបង់ដែលត្រូវនឹង Filter នេះទេ។",
+    "clearFilters": "សម្អាត Filter",
+    "dateRange": "ចន្លោះថ្ងៃ",
+    "from": "ពីថ្ងៃ",
+    "to": "ដល់ថ្ងៃ",
+    "viaKhqr": "បង់តាម KHQR",
+    "atDesk": "បង់នៅតុបញ្ជរ",
+    "badgeReceived": "ចូល",
+    "badgeOut": "ចេញ",
+    "period": {
+      "today": "ថ្ងៃនេះ",
+      "week": "7 ថ្ងៃ",
+      "month": "ខែនេះ",
+      "all": "ទាំងអស់"
+    },
+    "goFines": "ពិន័យ",
+    "exportCsv": "ទាញយក CSV",
+    "rangeAll": "ទាំងអស់",
+    "rangeToday": "ថ្ងៃនេះ",
+    "range7d": "7 ថ្ងៃ",
+    "rangeMonth": "ខែនេះ",
+    "found": "រកឃើញ {n} ការបង់",
+    "countBadge": "{n} ដង",
+    "desk": "តុបញ្ជរ"
   },
   "deposit": {
     "title": "ប្រាក់កក់",

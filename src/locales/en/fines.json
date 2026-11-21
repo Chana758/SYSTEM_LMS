@@ -152,7 +152,33 @@
       "deposit": "Deposit",
       "deposit_refund": "Deposit refund",
       "ebook_rental": "E-book rental"
-    }
+    },
+    "loading": "Loading...",
+    "emptyHint": "When members pay a fine or deposit by KHQR, or in cash at the desk, it shows up here.",
+    "emptyFiltered": "No payments match these filters.",
+    "clearFilters": "Clear filters",
+    "dateRange": "Date range",
+    "from": "From",
+    "to": "To",
+    "viaKhqr": "Paid by KHQR",
+    "atDesk": "Paid at the desk",
+    "badgeReceived": "In",
+    "badgeOut": "Out",
+    "period": {
+      "today": "Today",
+      "week": "7 days",
+      "month": "This month",
+      "all": "All"
+    },
+    "goFines": "Fines",
+    "exportCsv": "Export CSV",
+    "rangeAll": "All",
+    "rangeToday": "Today",
+    "range7d": "7 days",
+    "rangeMonth": "This month",
+    "found": "{n} payments found",
+    "countBadge": "{n} paid",
+    "desk": "Desk"
   },
   "deposit": {
     "title": "Deposit",
