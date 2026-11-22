@@ -1,105 +1,103 @@
 /**
  * printMembershipCard.js
  * ─────────────────────────────────────────────────────────────────
- * Shared print logic for QR membership cards — used by any page/component
- * that issues a card and needs a "Print ID Card" action (PendingCardsPage.vue,
- * and future call sites like QrLoginCardAdmin.vue).
+ * Opens a print window with the library ID card at real size (CR80,
+ * 85.6 × 54 mm): front and back side by side on A4 with cut marks
+ * and a fold line, so a school can print, cut, fold and laminate.
  *
- * Colors here are kept in sync with the `themes` object in
- * MembershipCardDesign.vue — if that component's palette changes,
- * update THEME_COLORS below to match, so the printed card still looks
- * the same as the on-screen preview.
+ * The card itself comes from membershipCardMarkup.js, the same markup
+ * as the on-screen preview (MembershipCardDesign.vue).
  * ─────────────────────────────────────────────────────────────────
  */
+import { useBrandingStore } from '@/stores/brandingStore'
+import defaultLogo from '@/assets/images/logoh6.jpg'
+import { CARD_CSS, cardBackHtml, cardFrontHtml, esc } from './membershipCardMarkup'
 
-const THEME_COLORS = {
-  member:    { grad: '#047857, #065f46', accent: '#047857', box: '#ecfdf5' },
-  librarian: { grad: '#1d4ed8, #3730a3', accent: '#1d4ed8', box: '#eff6ff' },
-  admin:     { grad: '#d97706, #c2410c', accent: '#d97706', box: '#fffbeb' },
+const absolute = (url) => (url ? new URL(url, window.location.origin).href : '')
+
+function currentBrand() {
+  let store = null
+  try {
+    store = useBrandingStore()
+  } catch {
+    store = null
+  }
+  return {
+    logoUrl: absolute(store?.logoUrl || defaultLogo),
+    siteName: store?.siteName || 'SMART',
+    siteNameAccent: store?.siteNameAccent || 'NEXUS',
+  }
 }
 
 /**
- * @param {Object} card
- * @param {string} card.qrDataUrl
- * @param {string} card.name
- * @param {string} [card.avatarUrl]
- * @param {string} card.role - 'member' | 'librarian' | 'admin'
- * @param {string} card.idLabel
- * @param {string} card.idValue
- * @param {string} [card.subLabel]
- * @param {string} [card.expiresAt]
+ * @param {Object} card  see cardFrontHtml() in membershipCardMarkup.js
  */
 export function printMembershipCard(card) {
   if (!card?.qrDataUrl) return
 
-  const colors = THEME_COLORS[card.role] || THEME_COLORS.member
-  const initials = (card.name || '').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
+  const brand = currentBrand()
+  const data = { ...card, avatarUrl: card.avatarUrl ? absolute(card.avatarUrl) : null, idValue: String(card.idValue ?? '—') }
 
-  const avatarBlock = card.avatarUrl
-    ? `<img src="${card.avatarUrl}" style="width:80px;height:80px;border-radius:16px;object-fit:cover;border:4px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,0.15);" />`
-    : `<div style="width:80px;height:80px;border-radius:16px;border:4px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,0.15);background:linear-gradient(135deg, ${colors.grad});display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;font-weight:900;">${initials}</div>`
+  const win = window.open('', '_blank', 'width=900,height=700')
+  if (!win) return
 
-  const formatDate = (d) => {
-    if (!d) return '—'
-    return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-  }
-
-  const win = window.open('', '_blank', 'width=500,height=750')
-  win.document.write(`
-    <html>
-      <head>
-        <title>Library Card</title>
-        <style>
-          * { box-sizing: border-box; }
-          body { display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; background:#f1f5f9; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; }
-          @media print { body { background: #fff; } }
-        </style>
-      </head>
-      <body onload="window.print(); window.close();">
-        <div style="width:360px;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.15);border:1px solid #e5e7eb;background:#fff;">
-          <div style="background:linear-gradient(135deg, ${colors.grad});padding:16px 20px 40px;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
-                <span style="color:#fff;font-size:16px;">📖</span>
-              </div>
-              <span style="color:#fff;font-size:14px;font-weight:700;">Library LMS</span>
-              <span style="margin-left:auto;color:#fff;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:999px;">${card.role}</span>
-            </div>
-          </div>
-
-          <div style="padding:0 20px;margin-top:-32px;">
-            <div style="display:flex;align-items:flex-end;gap:16px;">
-              ${avatarBlock}
-              <div style="flex:1;padding-bottom:4px;">
-                <p style="margin:0;font-size:16px;font-weight:900;color:#111827;">${card.name}</p>
-                <p style="margin:2px 0 0;font-size:12px;font-weight:600;color:${colors.accent};">${card.subLabel || ''}</p>
-              </div>
-            </div>
-          </div>
-
-          <div style="padding:20px;padding-top:16px;">
-            <div style="background:${colors.box};border-radius:12px;padding:14px;margin-bottom:16px;">
-              <p style="margin:0;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:${colors.accent};">${card.idLabel}</p>
-              <p style="margin:2px 0 0;font-size:18px;font-weight:900;font-family:monospace;color:#1f2937;">${card.idValue}</p>
-            </div>
-
-            <div style="display:flex;align-items:center;gap:16px;">
-              <img src="${card.qrDataUrl}" style="width:96px;height:96px;border:2px solid ${colors.box};border-radius:12px;padding:4px;background:#fff;" />
-              <div style="flex:1;font-size:12px;color:#6b7280;line-height:1.5;">
-                <p style="margin:0;">Scan at the library kiosk to log in instantly.</p>
-                <p style="margin:4px 0 0;font-weight:700;color:${colors.accent};">Valid until ${formatDate(card.expiresAt)}</p>
-              </div>
-            </div>
-          </div>
-
-          <div style="border-top:1px dashed #e5e7eb;">
-            <p style="text-align:center;font-size:10px;font-weight:800;color:${colors.accent};padding:8px 0;text-transform:uppercase;letter-spacing:.15em;margin:0;">
-              Official Library Card
-            </p>
-          </div>
-        </div>
-      </body>
-    </html>
-  `)
+  win.document.write(`<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="utf-8" />
+  <title>Library card · ${esc(data.idValue)}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    @page { size: A4 portrait; margin: 12mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f1f5f9; font-family: 'Kantumruy Pro', system-ui, sans-serif; color: #334155; }
+    .sheet { padding: 12mm; }
+    .hint { font-size: 12px; margin: 0 0 8mm; line-height: 1.6; }
+    .pair { position: relative; display: inline-flex; gap: 0; padding: 6mm; }
+    .slot { position: relative; }
+    .fold { position: absolute; top: 2mm; bottom: 2mm; left: calc(6mm + 85.6mm); border-left: .3mm dashed #94a3b8; }
+    .fold span { position: absolute; top: -4.5mm; left: -6mm; font-size: 8px; color: #64748b; white-space: nowrap; }
+    .mark { position: absolute; width: 4mm; height: 4mm; border-color: #64748b; border-style: solid; border-width: 0; }
+    .tl { top: 1.5mm; left: 1.5mm; border-top-width: .25mm; border-left-width: .25mm; }
+    .tr { top: 1.5mm; right: 1.5mm; border-top-width: .25mm; border-right-width: .25mm; }
+    .bl { bottom: 1.5mm; left: 1.5mm; border-bottom-width: .25mm; border-left-width: .25mm; }
+    .br { bottom: 1.5mm; right: 1.5mm; border-bottom-width: .25mm; border-right-width: .25mm; }
+    .snx-card { border-radius: 0 !important; }
+    .slot:first-child .snx-card { border-radius: 3.2mm 0 0 3.2mm !important; }
+    .slot:last-child .snx-card { border-radius: 0 3.2mm 3.2mm 0 !important; }
+    @media screen { .pair { background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.12); border-radius: 4px; } }
+    @media print { body { background: #fff; } .sheet { padding: 0; } .hint { display: none; } }
+    ${CARD_CSS}
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <p class="hint">
+      បោះពុម្ពទំហំ <b>100% (Actual size)</b> កុំជ្រើស "Fit to page"។ កាត់តាមសញ្ញាជ្រុង បត់ពាក់កណ្ដាលតាមបន្ទាត់ចុច រួចស្រោបប្លាស្ទិក (Laminate)។<br/>
+      Print at 100% (actual size). Cut on the corner marks, fold on the dashed line, then laminate.
+    </p>
+    <div class="pair">
+      <span class="mark tl"></span><span class="mark tr"></span><span class="mark bl"></span><span class="mark br"></span>
+      <div class="fold"><span>បត់ · fold</span></div>
+      <div class="slot">${cardFrontHtml(data, brand)}</div>
+      <div class="slot">${cardBackHtml(data, brand)}</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var imgs = Array.prototype.slice.call(document.images).map(function (img) {
+        return img.complete ? Promise.resolve() : new Promise(function (ok) { img.onload = img.onerror = ok; });
+      });
+      var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      var timeout = new Promise(function (ok) { setTimeout(ok, 4000); });
+      Promise.race([Promise.all(imgs.concat([fonts])), timeout]).then(function () {
+        setTimeout(function () { window.focus(); window.print(); }, 150);
+      });
+    })();
+  <\/script>
+</body>
+</html>`)
   win.document.close()
 }

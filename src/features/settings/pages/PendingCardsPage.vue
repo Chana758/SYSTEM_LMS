@@ -195,6 +195,9 @@
             :role="issuedCard.role"
             :id-label="issuedCard.idLabel"
             :id-value="issuedCard.idValue || '—'"
+            :name-en="issuedCard.nameEn"
+            :class-name="issuedCard.className"
+            :member-type="issuedCard.memberType"
             :sub-label="issuedCard.subLabel"
             :expires-at="issuedCard.expiresAt"
           />
@@ -275,6 +278,9 @@ async function handleIssue(user) {
     issuedCard.value = {
       qrDataUrl,
       name: user.name,
+      nameEn: user.member?.name_en || '',
+      className: user.member?.class_name || '',
+      memberType: isLibrarian ? '' : (user.member?.membership_type || ''),
       avatarUrl: buildAvatarUrl(user),
       role: user.role?.name || 'member',
       idLabel: isLibrarian ? 'Employee ID' : 'Membership No.',
