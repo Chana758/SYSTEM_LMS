@@ -88,6 +88,13 @@
         <input :id="id('dob')" v-model="form.date_of_birth" type="date" :class="[inputCls, errs.date_of_birth ? errBorder : '']" />
         <p v-if="errs.date_of_birth" class="text-rose-500 text-xs font-semibold mt-1">{{ errs.date_of_birth }}</p>
       </div>
+      <label class="sm:col-span-3 flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+        <input v-model="form.has_school_card" type="checkbox" :disabled="!form.student_id" class="mt-0.5 w-4 h-4 accent-emerald-700" />
+        <span>
+          <span class="font-semibold">{{ t('members.form.hasSchoolCard') }}</span>
+          <span class="block text-xs text-slate-500 dark:text-slate-400">{{ t('members.form.hasSchoolCardHint') }}</span>
+        </span>
+      </label>
     </div>
 
     <!-- Phone & Identity Card -->
@@ -221,6 +228,7 @@ const form = reactive({
   student_id: '',
   class_name: '',
   date_of_birth: '',
+  has_school_card: false,
   membership_type: 'student',
   max_borrow_limit: 3,
   address: '',
@@ -272,6 +280,7 @@ watch(
         student_id: data.student_id || '',
         class_name: data.class_name || '',
         date_of_birth: (data.date_of_birth || '').slice(0, 10),
+        has_school_card: !!data.has_school_card,
         membership_type: data.membership_type || 'student',
         max_borrow_limit: data.max_borrow_limit || 3,
         address: data.address || '',

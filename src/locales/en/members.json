@@ -54,7 +54,9 @@
     "gender": "Gender",
     "studentId": "Student ID",
     "className": "Class",
-    "dateOfBirth": "Date of birth"
+    "dateOfBirth": "Date of birth",
+    "hasSchoolCard": "Holds the university student card",
+    "hasSchoolCardHint": "Its QR (student ID) works at the kiosk and desk, so no library card is needed. Needs a student ID."
   },
   "detail": {
     "backToMembers": "Back to Members",
@@ -108,5 +110,14 @@
   "gender": {
     "male": "Male",
     "female": "Female"
+  },
+  "origin": {
+    "all": "All sources",
+    "import": "Import",
+    "register": "Signed up",
+    "staff": "Staff created",
+    "schoolCard": "University card ✓",
+    "notActivated": "Not activated",
+    "pending": "Pending approval"
   }
 }

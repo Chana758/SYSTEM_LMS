@@ -234,7 +234,12 @@
     "searchPlaceholder": "Search name, student ID or member no…",
     "pageOf": "Page {page}/{last} · {total} total",
     "prev": "Prev",
-    "next": "Next"
+    "next": "Next",
+    "filter": {
+      "need": "Needs a card",
+      "school": "University card",
+      "all": "All"
+    }
   },
   "qrCard": {
     "title": "QR Login Card",

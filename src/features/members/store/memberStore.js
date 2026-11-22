@@ -20,6 +20,7 @@ export const useMemberStore = defineStore('member', () => {
     search: '',
     status: '',
     membership_type: '',
+    source: '',
   })
 
   // ---- Actions ----
@@ -36,6 +37,7 @@ export const useMemberStore = defineStore('member', () => {
         search: filters.search || undefined,
         status: filters.status || undefined,
         membership_type: filters.membership_type || undefined,
+        source: filters.source || undefined,
       })
       members.value = data.data
       pagination.current_page = data.current_page

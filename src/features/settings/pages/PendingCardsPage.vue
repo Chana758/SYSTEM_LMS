@@ -45,6 +45,13 @@
               {{ total }}
             </span>
           </div>
+          <div class="flex gap-1 bg-gray-100 dark:bg-slate-900/60 rounded-lg p-0.5 text-[11px] font-bold">
+            <button v-for="f in filters" :key="f" type="button" @click="setFilter(f)"
+              class="px-2.5 py-1 rounded-md cursor-pointer"
+              :class="filter === f ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-xs' : 'text-gray-500 dark:text-slate-400'">
+              {{ t('settings.cardApprovals.filter.' + f) }}
+            </button>
+          </div>
           <input
             v-model.trim="search"
             type="search"
@@ -272,6 +279,13 @@ function buildAvatarUrl(user) {
 }
 
 const search = ref('')
+// need = still needs a library card (default); school = holds the university card; all
+const filters = ['need', 'school', 'all']
+const filter = ref('need')
+function setFilter(f) {
+  filter.value = f
+  loadPending(1)
+}
 const page = ref(1)
 const lastPage = ref(1)
 const total = ref(0)
@@ -285,7 +299,7 @@ async function loadPending(toPage = page.value) {
   if (typeof toPage !== 'number') toPage = 1 // called from the refresh button with a click event
   loading.value = true
   try {
-    const { data } = await authService.getPendingCards({ page: toPage, search: search.value || undefined })
+    const { data } = await authService.getPendingCards({ page: toPage, search: search.value || undefined, filter: filter.value })
     users.value = data.data
     page.value = data.current_page || 1
     lastPage.value = data.last_page || 1

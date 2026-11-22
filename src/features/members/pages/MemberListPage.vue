@@ -133,6 +133,17 @@
             {{ mt.label }}
           </option>
         </select>
+        <!-- Where the member came from: university Excel, signed up themselves, or staff -->
+        <select
+          v-model="store.filters.source"
+          @change="store.fetchList(1)"
+          class="min-w-0 border border-slate-300 dark:border-white/15 rounded-xl px-3 sm:px-4 py-3 sm:py-2.5 text-sm sm:text-xs font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 focus:outline-emerald-600 shadow-2xs cursor-pointer"
+        >
+          <option value="">{{ t('members.origin.all') }}</option>
+          <option value="import">{{ t('members.origin.import') }}</option>
+          <option value="register">{{ t('members.origin.register') }}</option>
+          <option value="staff">{{ t('members.origin.staff') }}</option>
+        </select>
       </div>
     </div>
 
@@ -177,6 +188,7 @@
                 <td class="px-5 py-4">
                   <p class="font-bold text-slate-900 dark:text-white">{{ m.user?.name }}</p>
                   <p v-if="m.name_en || m.class_name" class="text-xs text-slate-500 dark:text-slate-400">{{ [m.name_en, m.class_name].filter(Boolean).join(' · ') }}</p>
+                  <MemberOriginChips :member="m" class="mt-1" />
                 </td>
                 <td class="px-5 py-4 text-slate-500 dark:text-slate-400">{{ m.user?.email }}</td>
                 <td class="px-5 py-4">
@@ -211,6 +223,7 @@
               <p class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ m.user?.name }}</p>
               <p v-if="m.name_en" class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ m.name_en }}</p>
               <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ m.user?.email }}</p>
+              <MemberOriginChips :member="m" class="mt-1" />
             </div>
             <MembershipBadge :status="m.status" hide-type class="flex-shrink-0" />
           </div>
@@ -299,6 +312,7 @@ import MemberForm from '../components/MemberForm.vue'
 import MembershipBadge from '../components/MembershipBadge.vue'
 import PendingApprovals from '../components/PendingApprovals.vue'
 import ImportMembers from '../components/ImportMembers.vue'
+import MemberOriginChips from '../components/MemberOriginChips.vue'
 import { memberAccountService } from '../services/memberAccountService'
 
 const { t } = useI18n()

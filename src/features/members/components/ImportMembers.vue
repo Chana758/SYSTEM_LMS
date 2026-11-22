@@ -97,9 +97,10 @@ function onFile(event) {
 
 function downloadTemplate() {
   const rows = [
-    ['student_id', 'name', 'name_en', 'gender', 'class_name', 'date_of_birth', 'membership_type', 'phone', 'email'],
-    ['2024001', 'សុខ ដារា', 'Sok Dara', 'ប្រុស', '12A', '15/03/2008', 'student', '012345678', ''],
-    ['T-0001', 'ចាន់ សុភា', 'Chan Sophea', 'ស្រី', '', '02/11/1990', 'teacher', '', 'sophea@example.com'],
+    ['student_id', 'name', 'name_en', 'gender', 'class_name', 'date_of_birth', 'membership_type', 'phone', 'email', 'school_card'],
+    ['2024001', 'សុខ ដារា', 'Sok Dara', 'ប្រុស', 'CS Y2', '15/03/2005', 'student', '012345678', '', 'yes'],
+    ['2025117', 'កែវ ពិសី', 'Keo Pisey', 'ស្រី', 'ENG Y1', '04/09/2007', 'student', '', '', 'no'],
+    ['T-0001', 'ចាន់ សុភា', 'Chan Sophea', 'ស្រី', '', '02/11/1990', 'teacher', '', 'sophea@example.com', ''],
   ]
   const sheet = XLSX.utils.aoa_to_sheet(rows)
   const book = XLSX.utils.book_new()

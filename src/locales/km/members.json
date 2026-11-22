@@ -54,7 +54,9 @@
     "gender": "ភេទ",
     "studentId": "លេខសិស្ស",
     "className": "ថ្នាក់",
-    "dateOfBirth": "ថ្ងៃកំណើត"
+    "dateOfBirth": "ថ្ងៃកំណើត",
+    "hasSchoolCard": "មានកាតនិស្សិតរបស់សាកលវិទ្យាល័យ",
+    "hasSchoolCardHint": "QR លើកាតនោះ (អត្តលេខ) ស្កេនចូល/ចេញ និងខ្ចីបាន ដូច្នេះមិនចាំបាច់ចេញកាតបណ្ណាល័យ។ ត្រូវមានអត្តលេខជាមុន។"
   },
   "detail": {
     "backToMembers": "ត្រឡប់ទៅសមាជិក",
@@ -108,5 +110,14 @@
   "gender": {
     "male": "ប្រុស",
     "female": "ស្រី"
+  },
+  "origin": {
+    "all": "ប្រភពទាំងអស់",
+    "import": "Import",
+    "register": "ចុះឈ្មោះខ្លួនឯង",
+    "staff": "បុគ្គលិកបង្កើត",
+    "schoolCard": "កាតសាលា ✓",
+    "notActivated": "មិនទាន់ Activate",
+    "pending": "រង់ចាំអនុម័ត"
   }
 }
