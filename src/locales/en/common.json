@@ -36,7 +36,8 @@
     "loadingData": "Loading data...",
     "confirmDelete": "Are you sure you want to delete this?",
     "unexpectedError": "An unexpected error occurred",
-    "tryAgain": "Please try again"
+    "tryAgain": "Please try again",
+    "serverOffline": "Cannot reach the server. Check the connection and try again shortly."
   },
   "table": {
     "actions": "Actions",

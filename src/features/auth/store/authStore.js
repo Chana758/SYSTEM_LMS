@@ -4,6 +4,7 @@ import { profileService } from '@/features/settings/services/profileService'
 import { securityService } from '@/features/settings/services/securityService'
 import { accountService } from '@/features/settings/services/accountService'
 import router from '@/router'
+import i18n from '@/plugins/i18n'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -257,9 +258,15 @@ export const useAuthStore = defineStore('auth', {
         if (!Object.keys(this.errors).length && error.response.data.message) {
           this.errors = { general: error.response.data.message }
         }
+      } else if (!error.response) {
+        // Laravel not running, or no network between the browser and the server
+        this.errors = { general: i18n.global.t('common.messages.serverOffline'), code: 'OFFLINE' }
+      } else if (error.response.status >= 500 && !error.response.data?.code) {
+        // Never show raw server errors (SQL, stack traces) on the login screen
+        this.errors = { general: i18n.global.t('common.messages.unexpectedError'), code: 'SERVER_ERROR' }
       } else {
         this.errors = {
-          general: error.response?.data?.message || 'An unexpected error occurred',
+          general: error.response?.data?.message || i18n.global.t('common.messages.unexpectedError'),
           code: error.response?.data?.code || null,
         }
       }
