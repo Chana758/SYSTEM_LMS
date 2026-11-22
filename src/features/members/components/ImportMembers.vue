@@ -21,11 +21,17 @@
       </button>
       <button type="button" :disabled="!canImport || busy" @click="run"
         class="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold disabled:opacity-40 cursor-pointer">
-        {{ t('auth.import.run') }}
+        {{ busy ? t('auth.import.working') : t('auth.import.run') }}
       </button>
     </div>
 
-    <div v-if="result" class="space-y-3">
+    <p v-if="busy" class="text-xs font-semibold text-amber-700 dark:text-amber-300">{{ t('auth.import.wait') }}</p>
+
+    <div v-if="done" class="rounded-xl border border-emerald-300 dark:border-emerald-400/30 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-800 dark:text-emerald-200">
+      ✓ {{ done }}
+    </div>
+
+    <div v-if="result && !done" class="space-y-3">
       <div class="flex flex-wrap gap-2 text-xs font-bold">
         <span class="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">{{ t('auth.import.total') }}: {{ result.total }}</span>
         <span class="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300">{{ t('auth.import.valid') }}: {{ result.valid }}</span>
@@ -79,6 +85,7 @@ const file = ref(null)
 const result = ref(null)
 const checked = ref(false)
 const busy = ref(false)
+const done = ref('') // success message, stays on screen after a real import
 
 const canImport = computed(() => checked.value && result.value && !result.value.invalid.length && result.value.valid > 0)
 
@@ -102,6 +109,7 @@ function downloadTemplate() {
 
 async function send(dryRun) {
   busy.value = true
+  done.value = ''
   try {
     const { data } = await memberAccountService.import(file.value, dryRun)
     result.value = data
@@ -132,6 +140,7 @@ async function run() {
   const data = await send(false)
   if (data?.imported) {
     toast.success(data.message)
+    done.value = data.message
     checked.value = false
     file.value = null
     if (fileInput.value) fileInput.value.value = ''
