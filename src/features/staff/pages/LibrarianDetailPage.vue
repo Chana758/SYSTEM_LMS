@@ -20,6 +20,7 @@
           :user-name="store.currentLibrarian.user?.name"
           :id-value="store.currentLibrarian.employee_id"
           :sub-label="store.currentLibrarian.department"
+          :avatar-url="avatarFor(store.currentLibrarian.user)"
           :has-card="!!store.currentLibrarian.user?.has_qr_card"
           role="librarian"
         />
@@ -77,4 +78,10 @@ async function handleUpdate(formData) {
 }
 
 onMounted(() => store.fetchOne(route.params.id))
+
+// The staff member's photo on their card (same storage URL as the member pages)
+function avatarFor(user) {
+  if (!user?.avatar) return null
+  return `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}/storage/${user.avatar}`
+}
 </script>

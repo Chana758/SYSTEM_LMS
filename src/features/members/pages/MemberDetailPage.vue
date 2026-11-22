@@ -24,6 +24,10 @@
             :user-name="store.currentMember.user?.name"
             :id-value="store.currentMember.membership_no"
             :sub-label="subLabel"
+            :name-en="store.currentMember.name_en || ''"
+            :class-name="store.currentMember.class_name || ''"
+            :member-type="store.currentMember.membership_type || ''"
+            :avatar-url="avatarFor(store.currentMember.user)"
             :has-card="!!store.currentMember.user?.has_qr_card"
             role="member"
           />
@@ -88,6 +92,12 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const store = useMemberStore()
+
+// Same storage URL as MemberCard.vue, so the card shows the member's photo
+function avatarFor(user) {
+  if (!user?.avatar) return null
+  return `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}/storage/${user.avatar}`
+}
 
 const subLabel = computed(() =>
   store.currentMember?.membership_type

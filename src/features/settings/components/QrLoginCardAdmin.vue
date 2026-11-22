@@ -24,6 +24,9 @@
         v-if="qrDataUrl"
         :qr-data-url="qrDataUrl"
         :name="userName"
+        :name-en="nameEn"
+        :class-name="className"
+        :member-type="memberType"
         :avatar-url="avatarUrl"
         :role="role"
         :id-label="idLabel"
@@ -81,6 +84,9 @@ const props = defineProps({
   idValue: { type: String, default: '—' },
   role: { type: String, default: 'member' }, // 'member' | 'librarian'
   avatarUrl: { type: String, default: null },
+  nameEn: { type: String, default: '' },
+  className: { type: String, default: '' },
+  memberType: { type: String, default: '' },
   subLabel: { type: String, default: '' },
   hasCard: { type: Boolean, default: false },
 })
@@ -116,6 +122,9 @@ function handlePrintCard() {
   printMembershipCard({
     qrDataUrl: qrDataUrl.value,
     name: props.userName,
+    nameEn: props.nameEn,
+    className: props.className,
+    memberType: props.memberType,
     avatarUrl: props.avatarUrl,
     role: props.role,
     idLabel: idLabel.value,
