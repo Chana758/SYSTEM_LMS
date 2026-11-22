@@ -56,7 +56,7 @@ function initialsOf(name) {
 }
 
 function typeLabel(card) {
-  if (card.role === 'librarian') return card.subLabel || 'បុគ្គលិកបណ្ណាល័យ · Library staff'
+  if (card.role === 'librarian') return 'បុគ្គលិក · Staff'
   const code = (card.memberType || '').toLowerCase()
   return TYPE_LABELS[code] || (code ? code.charAt(0).toUpperCase() + code.slice(1) : '—')
 }
@@ -81,7 +81,8 @@ export const CARD_CSS = `
 .snx-info{flex:1;min-width:0;display:flex;flex-direction:column}
 .snx-name{font-size:3.7mm;font-weight:800;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .snx-name-en{font-size:2.3mm;font-weight:600;letter-spacing:.25mm;text-transform:uppercase;color:#475569;margin-top:.3mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.snx-fields{display:grid;grid-template-columns:1fr 1fr;gap:1.3mm 2mm;margin-top:2.2mm}
+.snx-fields{display:grid;grid-template-columns:1fr 1.25fr;gap:1.1mm 2mm;margin-top:1.8mm}
+.snx-field.wide{grid-column:span 2}
 .snx-field i{display:block;font-style:normal;font-size:1.7mm;font-weight:600;color:#64748b;line-height:1.2;white-space:nowrap}
 .snx-field b{display:block;font-size:2.35mm;font-weight:700;color:#0f172a;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .snx-field b.mono{font-family:ui-monospace,'SF Mono',Menlo,monospace;letter-spacing:.1mm}
@@ -164,10 +165,10 @@ export function cardFrontHtml(card, brand = {}) {
       <p class="snx-name">${esc(card.name || '—')}</p>
       ${card.nameEn ? `<p class="snx-name-en">${esc(card.nameEn)}</p>` : ''}
       <div class="snx-fields">
-        <div class="snx-field"><i>${isStaff ? 'អត្តលេខ · ID' : 'លេខសមាជិក · No.'}</i><b class="mono">${esc(card.idValue || '—')}</b></div>
+        <div class="snx-field wide"><i>${isStaff ? 'អត្តលេខ · ID' : 'លេខសមាជិក · No.'}</i><b class="mono">${esc(card.idValue || '—')}</b></div>
         <div class="snx-field"><i>${third.km} · ${third.en}</i><b>${esc(third.value)}</b></div>
-        <div class="snx-field"><i>ប្រភេទ · Type</i><b>${esc(typeLabel(card))}</b></div>
         <div class="snx-field"><i>ផុតកំណត់ · Valid until</i><b>${esc(formatDate(card.expiresAt))}</b></div>
+        <div class="snx-field wide"><i>ប្រភេទ · Type</i><b>${esc(typeLabel(card))}</b></div>
       </div>
     </div>
     <div class="snx-qr">
