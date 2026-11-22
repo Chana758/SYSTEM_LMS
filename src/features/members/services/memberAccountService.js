@@ -17,6 +17,11 @@ export const memberAccountService = {
     const form = new FormData()
     form.append('file', file)
     form.append('dry_run', dryRun ? '1' : '0')
-    return apiClient.post(ENDPOINTS.MEMBER_ACCOUNTS.IMPORT, form)
+    // The client default is JSON, which would turn the file into "{}".
+    // A file of a few hundred rows can also take longer than the 10 s default.
+    return apiClient.post(ENDPOINTS.MEMBER_ACCOUNTS.IMPORT, form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 300000,
+    })
   },
 }

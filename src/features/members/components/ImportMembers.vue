@@ -111,7 +111,11 @@ async function send(dryRun) {
     if (error.response?.data?.invalid) {
       result.value = error.response.data
     } else {
-      toast.error(error.response?.data?.message || 'Error')
+      const status = error.response?.status
+      const reason = error.response?.data?.message
+        || (error.code === 'ECONNABORTED' ? 'Timeout' : error.message)
+        || 'Error'
+      toast.error(status ? `${reason} (HTTP ${status})` : reason)
     }
     return null
   } finally {
