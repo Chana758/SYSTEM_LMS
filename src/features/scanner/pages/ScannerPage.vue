@@ -65,7 +65,7 @@
             </span>
           </label>
 
-          <!-- Input mode selector: manual / camera / remote phone -->
+          <!-- Input mode selector: USB scanner / camera -->
           <div class="flex w-full sm:inline-flex sm:w-auto gap-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl p-1 shadow-inner">
             <button
               v-for="m in inputModes" :key="m.value"
@@ -80,9 +80,6 @@
           <BarcodeScanner v-if="mode === 'manual'" :is-loading="isScanning" :accent="activeType.accent" @scan="handleScan" />
           <CameraScanner v-else-if="mode === 'camera'" continuous :dedupe-ms="3000" @detected="handleScan" />
 
-          <!-- v-show (not v-if) so switching tabs doesn't create a new QR session each time.
-               It is only mounted the first time the remote tab is opened. -->
-          <RemoteScanPanel v-if="remoteOpened" v-show="mode === 'remote'" @scan="handleScan" />
 
           <transition name="fade">
             <p v-if="scanError" class="text-xs font-bold text-rose-600 dark:text-rose-300 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-400/25 rounded-xl px-4 py-3 shadow-2xs">{{ scanError }}</p>
@@ -153,7 +150,6 @@ import {
 } from '@heroicons/vue/24/outline'
 import BarcodeScanner from '../components/BarcodeScanner.vue'
 import CameraScanner from '../components/CameraScanner.vue'
-import RemoteScanPanel from '../components/RemoteScanQr.vue'
 import ScanResultCard from '../components/ScanResultCard.vue'
 import MemberPanel from '../components/MemberPanel.vue'
 import BorrowBasket from '../components/BorrowBasket.vue'
@@ -171,14 +167,13 @@ const scanTypes = [
 const inputModes = [
   { value: 'manual', labelKey: 'scanner.modeManualShort' },
   { value: 'camera', labelKey: 'scanner.modeCamera' },
-  { value: 'remote', labelKey: 'scanner.modeRemote' },
 ]
 
 const scanType = ref('borrow')
 const activeType = computed(() => scanTypes.find((s) => s.value === scanType.value))
 
-const mode = ref('manual')
-const remoteOpened = ref(false)
+// Each computer remembers its input: the desk PC keeps "scanner", a tablet keeps "camera".
+const mode = ref((() => { try { return localStorage.getItem('scanner_mode') === 'camera' ? 'camera' : 'manual' } catch { return 'manual' } })())
 const isScanning = ref(false)
 const scanError = ref('')
 const lastResult = ref(null)
@@ -202,7 +197,7 @@ const cancelClearTimer = () => {
 
 const setMode = (value) => {
   mode.value = value
-  if (value === 'remote') remoteOpened.value = true
+  try { localStorage.setItem('scanner_mode', value) } catch {}
 }
 
 const isValidScanResult = (payload) =>

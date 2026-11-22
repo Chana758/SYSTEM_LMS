@@ -49,6 +49,14 @@
         </button>
       </div>
 
+      <div v-if="cameras.length > 1" class="mt-4 flex items-center justify-center gap-2">
+        <label class="text-xs font-semibold text-gray-500 dark:text-slate-400">{{ t('scanner.camera.choose') }}</label>
+        <select v-model="cameraId" @change="switchCamera"
+          class="text-sm rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-800 px-3 py-1.5 max-w-xs">
+          <option v-for="c in cameras" :key="c.id" :value="c.id">{{ c.label }}</option>
+        </select>
+      </div>
+
       <div class="flex justify-center mt-4">
         <button
           v-if="!isScanning"
@@ -99,6 +107,27 @@ const error = ref('')
 const torchSupported = ref(false)
 const torchOn = ref(false)
 
+const cameras = ref([])
+const CAMERA_KEY = 'scanner_camera'
+const cameraId = ref((() => { try { return localStorage.getItem(CAMERA_KEY) || '' } catch { return '' } })())
+
+const loadCameras = async () => {
+  try { cameras.value = await barcodeService.listCameras() } catch { cameras.value = [] }
+  if (cameraId.value && !cameras.value.some((c) => c.id === cameraId.value)) cameraId.value = ''
+  if (!cameraId.value) {
+    const live = stream?.getVideoTracks?.()[0]?.getSettings?.().deviceId
+    if (live) cameraId.value = live
+  }
+}
+
+const switchCamera = async () => {
+  try { localStorage.setItem(CAMERA_KEY, cameraId.value) } catch {}
+  if (isScanning.value) {
+    stop()
+    await start()
+  }
+}
+
 let stream = null
 let reader = null
 let decodingControls = null
@@ -128,8 +157,9 @@ const start = async () => {
   lastCode = ''
   lastAt = 0
   try {
-    stream = await barcodeService.startCamera(videoRef.value)
+    stream = await barcodeService.startCamera(videoRef.value, cameraId.value || null)
     isScanning.value = true
+    await loadCameras()
     torchSupported.value = barcodeService.hasTorch(stream)
     torchOn.value = false
     reader = barcodeService.createReader()
@@ -172,6 +202,7 @@ const stop = () => {
 }
 
 onMounted(() => {
+  if (supported) loadCameras()
   if (props.autoStart && supported) start()
 })
 onBeforeUnmount(stop)

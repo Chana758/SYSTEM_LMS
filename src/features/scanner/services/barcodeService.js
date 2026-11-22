@@ -16,7 +16,7 @@ export const barcodeService = {
   },
 
   // Start the camera and display its video.
-  async startCamera(videoElement) {
+  async startCamera(videoElement, deviceId = null) {
     if (typeof window !== 'undefined' && !window.isSecureContext) {
       const err = new Error(
         'Camera access requires HTTPS (or localhost). This page is not running in a secure context.'
@@ -31,14 +31,30 @@ export const barcodeService = {
       throw err
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' } },
-    })
+    let stream
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: 'environment' } },
+      })
+    } catch (e) {
+      // The remembered camera was unplugged: fall back to the default one.
+      if (!deviceId || !['OverconstrainedError', 'NotFoundError', 'NotReadableError'].includes(e?.name)) throw e
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } })
+    }
 
     videoElement.srcObject = stream
     await videoElement.play()
 
     return stream
+  },
+
+  // Cameras on this computer (labels are only filled after permission is granted).
+  async listCameras() {
+    if (!navigator.mediaDevices?.enumerateDevices) return []
+    const devices = await navigator.mediaDevices.enumerateDevices()
+    return devices
+      .filter((d) => d.kind === 'videoinput')
+      .map((d, i) => ({ id: d.deviceId, label: d.label || `Camera ${i + 1}` }))
   },
 
   // Stop all camera tracks.

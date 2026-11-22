@@ -73,8 +73,6 @@
       <div v-else-if="mode === 'camera'" class="max-w-md mx-auto">
         <CameraScanner continuous :dedupe-ms="3000" @detected="handleScan" />
       </div>
-      <!-- Mounted on first open, then kept alive with v-show so the QR session isn't recreated -->
-      <RemoteScanPanel v-if="remoteOpened" v-show="mode === 'remote'" @scan="handleScan" />
 
       <transition name="fade">
         <p v-if="notice.text" :class="noticeClass" class="text-xs font-bold rounded-xl px-4 py-3 border">{{ notice.text }}</p>
@@ -153,7 +151,6 @@ import {
 } from '@heroicons/vue/24/outline'
 import BarcodeScanner from '../components/BarcodeScanner.vue'
 import CameraScanner from '../components/CameraScanner.vue'
-import RemoteScanPanel from '../components/RemoteScanQr.vue'
 import { scannerService } from '../services'
 import { soundService } from '../services/soundService'
 
@@ -174,17 +171,16 @@ const loadSavedSession = () => {
 const sessionItems = ref(loadSavedSession())
 const isScanning = ref(false)
 
-// ---- input mode (manual / camera / remote phone) ----
+// ---- input mode (USB scanner / camera) ----
 const inputModes = [
   { value: 'manual', labelKey: 'scanner.modeManualShort' },
   { value: 'camera', labelKey: 'scanner.modeCamera' },
-  { value: 'remote', labelKey: 'scanner.modeRemote' },
 ]
-const mode = ref('manual')
-const remoteOpened = ref(false)
+// Each computer remembers its input: the desk PC keeps "scanner", a tablet keeps "camera".
+const mode = ref((() => { try { return localStorage.getItem('scanner_mode') === 'camera' ? 'camera' : 'manual' } catch { return 'manual' } })())
 const setMode = (value) => {
   mode.value = value
-  if (value === 'remote') remoteOpened.value = true
+  try { localStorage.setItem('scanner_mode', value) } catch {}
 }
 
 // ---- notice banner (duplicates / network errors) ----

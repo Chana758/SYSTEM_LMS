@@ -9,7 +9,7 @@
   "modeManual": "Manual / USB Scanner",
   "modeCamera": "Camera",
   "modeRemote": "Phone",
-  "modeManualShort": "Manual",
+  "modeManualShort": "Scanner / type",
   "modeUsbScan": "USB Scan",
   "scanToSee": "Scan a barcode to see the result here",
   "resultsAppear": "Results appear instantly as staff scan books",
@@ -34,7 +34,8 @@
     "stopCamera": "Stop Camera",
     "scanning": "Scanning",
     "torchOn": "Torch On",
-    "torch": "Torch"
+    "torch": "Torch",
+    "choose": "Camera"
   },
   "cameraErrors": {
     "permissionDenied": "Camera permission was denied. Allow camera access for this site in your browser settings and try again.",
