@@ -11,7 +11,11 @@
 
     <div class="rounded-2xl bg-slate-50 dark:bg-slate-900/60 p-4 flex items-center justify-between">
       <span class="text-sm text-slate-500 dark:text-slate-400">{{ t('fines.deposit.amount') }}</span>
-      <span class="text-xl font-black text-slate-900 dark:text-white">{{ formatMoney(deposit.deposit_amount) }}</span>
+      <span class="text-right">
+        <span class="block text-xl font-black text-slate-900 dark:text-white">{{ formatMoney(deposit.deposit_amount) }}</span>
+        <!-- The deposit rule is set in dollars ($20), so show that too -->
+        <span v-if="!currencyStore.isUsd" class="block text-xs font-semibold text-slate-500 dark:text-slate-400">≈ {{ formatIn(deposit.deposit_amount / currencyStore.rate, 'USD') }}</span>
+      </span>
     </div>
 
     <template v-if="deposit.deposit_status === 'unpaid'">
@@ -40,9 +44,11 @@ import { useI18n } from 'vue-i18n'
 import { QrCodeIcon } from '@heroicons/vue/24/outline'
 import PayKhqrModal from '@/features/fines/components/PayKhqrModal.vue'
 import { paymentService } from '@/features/fines/services/paymentService'
-import { formatMoney } from '@/utils/currencyHelper'
+import { formatMoney, formatIn } from '@/utils/currencyHelper'
+import { useCurrencyStore } from '@/stores/currencyStore'
 
 const { t } = useI18n()
+const currencyStore = useCurrencyStore()
 const deposit = ref(null)
 const paying = ref(false)
 

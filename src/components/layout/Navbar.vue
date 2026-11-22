@@ -96,6 +96,7 @@
 
       <!-- ៛ / $ (phones): one button that shows the currency you will switch TO -->
       <button
+        v-if="!isMember"
         type="button"
         @click="switchCurrency(currencyStore.isUsd ? 'KHR' : 'USD')"
         class="sm:hidden h-9 px-3 flex items-center gap-1 rounded-full border text-[11px] font-black active:scale-95 flex-shrink-0 cursor-pointer transition
@@ -108,7 +109,7 @@
       </button>
 
       <!-- ៛ / $ (tablet/desktop): both options. Every amount and new KHQR follows this. -->
-      <div class="hidden sm:flex items-center bg-black/25 backdrop-blur-md rounded-xl p-1 border border-white/15 shadow-inner flex-shrink-0" :title="t('common.header.currencyHint', { rate: rateLabel })">
+      <div v-if="!isMember" class="hidden sm:flex items-center bg-black/25 backdrop-blur-md rounded-xl p-1 border border-white/15 shadow-inner flex-shrink-0" :title="t('common.header.currencyHint', { rate: rateLabel })">
         <button
           v-for="c in currencyOptions"
           :key="c.code"
@@ -172,7 +173,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import {
@@ -214,6 +215,8 @@ const { t, te } = useI18n()
 
 // Members have the bottom nav on phones/tablets, so the burger is replaced by the avatar
 const isMember = computed(() => authStore.role === 'member')
+// Members: Riel only (switch hidden above). Staff keep their own ៛/$ choice.
+watch(isMember, (member) => currencyStore.setRielOnly(member), { immediate: true })
 
 const languageOptions = [
   { code: 'en', label: 'English', shortLabel: 'EN', flag: '🇬🇧' },

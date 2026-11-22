@@ -9,6 +9,9 @@ const read = () => (localStorage.getItem(KEY) === 'USD' ? 'USD' : localStorage.g
 export const useCurrencyStore = defineStore('currency', {
   state: () => ({
     currency: read() || 'KHR',
+    // Members always see Riel: fines and KHQR are charged in Riel, so a $ view
+    // (fixed-rate conversion) would show a number they never actually pay.
+    rielOnly: false,
     rate: Number(localStorage.getItem('exchange_rate')) || 4100, // Riel per 1 USD
     loaded: false,
   }),
@@ -19,8 +22,13 @@ export const useCurrencyStore = defineStore('currency', {
 
   actions: {
     set(currency) {
+      if (this.rielOnly) return
       this.currency = currency === 'USD' ? 'USD' : 'KHR'
       localStorage.setItem(KEY, this.currency)
+    },
+    setRielOnly(on) {
+      this.rielOnly = !!on
+      this.currency = on ? 'KHR' : (read() || 'KHR')
     },
     toggle() {
       this.set(this.isUsd ? 'KHR' : 'USD')
@@ -31,7 +39,7 @@ export const useCurrencyStore = defineStore('currency', {
         const { data } = await apiClient.get('/payment-config')
         this.rate = Number(data.exchange_rate) || this.rate
         localStorage.setItem('exchange_rate', String(this.rate))
-        if (!read() && data.default_currency) this.currency = data.default_currency
+        if (!read() && !this.rielOnly && data.default_currency) this.currency = data.default_currency
       } catch {
         // keep the last known rate
       } finally {
