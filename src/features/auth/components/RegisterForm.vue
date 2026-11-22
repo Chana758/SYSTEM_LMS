@@ -29,6 +29,31 @@
       :error="errors.phone"
     />
 
+    <!-- Who is signing up: staff still check, but "outside" asks for the deposit at once -->
+    <div>
+      <p class="text-[11px] font-bold text-slate-600 mb-1.5">{{ $t('auth.origin.label') }}</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button v-for="o in ['school', 'external']" :key="o" type="button" @click="form.origin = o"
+          class="h-11 rounded-xl border text-xs font-bold cursor-pointer transition"
+          :class="form.origin === o ? 'bg-emerald-700 border-emerald-700 text-white' : 'border-slate-300 text-slate-600 hover:border-emerald-600'">
+          {{ $t('auth.origin.' + o) }}
+        </button>
+      </div>
+      <p v-if="form.origin === 'external'" class="mt-1.5 text-[11px] text-amber-700 font-semibold">{{ $t('auth.origin.externalHint') }}</p>
+    </div>
+
+    <!-- Optional ID photo: lets staff approve in seconds -->
+    <label class="block">
+      <span class="text-[11px] font-bold text-slate-600">{{ $t('auth.idDocument.label') }}</span>
+      <span class="mt-1.5 flex items-center gap-3 rounded-xl border border-dashed border-slate-300 px-3 py-2.5 cursor-pointer hover:border-emerald-600">
+        <IdentificationIcon class="w-6 h-6 text-slate-400 shrink-0" />
+        <span class="text-xs text-slate-500 truncate flex-1">{{ idName || $t('auth.idDocument.choose') }}</span>
+        <input type="file" accept="image/*" class="hidden" @change="pickId" />
+      </span>
+      <span class="block mt-1 text-[10px] text-slate-400">{{ $t('auth.idDocument.hint') }}</span>
+      <span v-if="errors.id_document" class="block mt-1 text-[11px] font-semibold text-red-600">{{ errors.id_document }}</span>
+    </label>
+
     <!-- password + confirm side by side on wide screens -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
       <AuthField
@@ -73,8 +98,8 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import { UserIcon, EnvelopeIcon, PhoneIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
+import { reactive, ref } from 'vue'
+import { UserIcon, EnvelopeIcon, PhoneIcon, LockClosedIcon, IdentificationIcon } from '@heroicons/vue/24/outline'
 import AuthField from './AuthField.vue'
 
 defineProps({
@@ -89,7 +114,25 @@ const form = reactive({
   phone: '',
   password: '',
   password_confirmation: '',
+  // Coming from the kiosk QR "?origin=external" pre-selects outside
+  origin: new URLSearchParams(window.location.search).get('origin') === 'external' ? 'external' : 'school',
 })
 
-const handleSubmit = () => emit('submit', { ...form })
+const idFile = ref(null)
+const idName = ref('')
+
+function pickId(e) {
+  const f = e.target.files?.[0] || null
+  idFile.value = f
+  idName.value = f ? f.name : ''
+}
+
+// FormData only when there is a photo; otherwise plain JSON as before
+const handleSubmit = () => {
+  if (!idFile.value) return emit('submit', { ...form })
+  const fd = new FormData()
+  Object.entries(form).forEach(([k, v]) => fd.append(k, v ?? ''))
+  fd.append('id_document', idFile.value)
+  emit('submit', fd)
+}
 </script>

@@ -119,5 +119,17 @@
     "schoolCard": "University card ✓",
     "notActivated": "Not activated",
     "pending": "Pending approval"
+  },
+  "pin": {
+    "title": "Self-checkout PIN",
+    "subtitle": "4 digits you type at the self-checkout kiosk. Keep it secret.",
+    "set": "Set",
+    "notSet": "Not set",
+    "newPin": "New PIN (4 digits)",
+    "confirm": "Repeat PIN",
+    "password": "Current password",
+    "save": "Save PIN",
+    "change": "Change PIN",
+    "mismatch": "The two PINs are different"
   }
 }

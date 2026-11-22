@@ -202,9 +202,12 @@
       "maxRenewals": "Max renewals",
       "renewDays": "Days per renewal",
       "finePerDay": "Fine per day (៛)",
-      "depositAmount": "Deposit (KHR, 0 = none)"
+      "depositAmount": "Deposit (KHR, 0 = none)",
+      "selfCheckout": "Allow self-checkout at the kiosk",
+      "selfCheckoutHint": "Members scan their card, enter a PIN and scan books without going to the desk. Suggested: on for students/teachers, off for external members."
     },
-    "colDeposit": "Deposit"
+    "colDeposit": "Deposit",
+    "colSelf": "Self-checkout"
   },
   "cardApprovals": {
     "title": "Card Approvals Queue",

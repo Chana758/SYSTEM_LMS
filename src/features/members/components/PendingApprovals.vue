@@ -18,6 +18,14 @@
           <p class="font-bold text-slate-900 dark:text-white truncate">{{ m.user?.name }}</p>
           <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ m.user?.email }} · {{ m.user?.phone || '—' }}</p>
           <p class="text-[11px] text-slate-400 mt-0.5">{{ t('auth.pending.registered') }}: {{ formatDate(m.created_at) }}</p>
+          <!-- #7: what is already done, so staff can approve the ready ones first -->
+          <div class="flex flex-wrap gap-1.5 mt-1.5">
+            <span v-if="m.membership_type === 'external'" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-purple-100 text-purple-700 dark:bg-purple-500/15 dark:text-purple-300">{{ t('auth.pending.saysExternal') }}</span>
+            <span v-if="m.deposit_status === 'paid'" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">✓ {{ t('auth.pending.depositPaid') }}</span>
+            <button v-if="m.has_id_document" type="button" @click="viewId(m)"
+              class="px-2 py-0.5 rounded-full text-[10px] font-black bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300 cursor-pointer hover:underline">🪪 {{ t('auth.pending.viewId') }}</button>
+            <span v-else class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300">{{ t('auth.pending.noId') }}</span>
+          </div>
         </div>
 
         <label class="block">
@@ -45,14 +53,27 @@
 
         <!-- B6.2: this type needs a deposit before borrowing -->
         <div v-if="depositFor(form[m.id].membership_type)" class="lg:col-span-4 flex flex-wrap items-center gap-3 text-xs rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-400/20 px-3 py-2">
-          <span class="font-semibold text-amber-800 dark:text-amber-200">{{ t('fines.deposit.approveNotice', { amount: formatMoney(depositFor(form[m.id].membership_type)) }) }}</span>
-          <label class="inline-flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-200 cursor-pointer">
+          <span v-if="m.deposit_status === 'paid'" class="font-semibold text-emerald-700 dark:text-emerald-300">✓ {{ t('auth.pending.depositPaidKhqr', { amount: formatMoney(m.deposit_amount) }) }}</span>
+          <span v-else class="font-semibold text-amber-800 dark:text-amber-200">{{ t('fines.deposit.approveNotice', { amount: formatMoney(depositFor(form[m.id].membership_type)) }) }}</span>
+          <label v-if="m.deposit_status !== 'paid'" class="inline-flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-200 cursor-pointer">
             <input v-model="form[m.id].deposit_paid_cash" type="checkbox" class="w-4 h-4 accent-emerald-600" />
             {{ t('fines.deposit.paidCashNow') }}
           </label>
         </div>
 
         <p v-if="rowErrors[m.id]" class="lg:col-span-4 text-xs font-semibold text-red-600">{{ rowErrors[m.id] }}</p>
+      </div>
+    </div>
+
+    <!-- ID photo (private: fetched with the staff token, never a public link) -->
+    <div v-if="idView.url" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" @click="closeId">
+      <div class="max-w-3xl w-full" @click.stop>
+        <div class="flex items-center justify-between text-white mb-2">
+          <p class="font-bold">{{ idView.name }}</p>
+          <button type="button" class="px-3 py-1 rounded-lg bg-white/15 cursor-pointer" @click="closeId">{{ t('auth.pending.close') }}</button>
+        </div>
+        <img :src="idView.url" alt="" class="w-full max-h-[80vh] object-contain rounded-xl bg-white" />
+        <p class="text-xs text-white/70 mt-2">{{ t('auth.pending.idDeleted') }}</p>
       </div>
     </div>
   </div>
@@ -63,6 +84,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import { memberAccountService } from '../services/memberAccountService'
+import apiClient from '@/api/axios'
 import { formatMoney } from '@/utils/currencyHelper'
 
 const props = defineProps({
@@ -129,6 +151,24 @@ async function approve(m) {
   } finally {
     busyId.value = null
   }
+}
+
+const idView = reactive({ url: '', name: '' })
+
+async function viewId(m) {
+  try {
+    const { data } = await apiClient.get(`/member-accounts/${m.id}/id-document`, { responseType: 'blob' })
+    closeId()
+    idView.url = URL.createObjectURL(data)
+    idView.name = m.user?.name || ''
+  } catch {
+    toast.error(t('auth.pending.idMissing'))
+  }
+}
+
+function closeId() {
+  if (idView.url) URL.revokeObjectURL(idView.url)
+  idView.url = ''
 }
 
 async function reject(m) {

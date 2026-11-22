@@ -13,8 +13,11 @@
       </div>
     </header>
 
+    <!-- Self-checkout kiosk (mode "checkout"), or opened from a two-way kiosk -->
+    <SelfCheckout v-if="device?.mode === 'checkout' || selfOpen" :closable="device?.mode !== 'checkout'" @close="selfOpen = false" />
+
     <!-- Main -->
-    <main class="flex-1 grid lg:grid-cols-2 gap-6 px-6 sm:px-10 pb-6">
+    <main v-else class="flex-1 grid lg:grid-cols-2 gap-6 px-6 sm:px-10 pb-6">
       <section class="flex flex-col items-center justify-center text-center gap-6">
         <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-[2.5rem] bg-white/10 border border-white/15 flex items-center justify-center">
           <QrCodeIcon class="w-24 h-24 text-emerald-300" />
@@ -33,10 +36,23 @@
             class="px-6 py-4 rounded-2xl bg-white/10 border border-white/20 font-bold text-lg cursor-pointer active:scale-95 transition">
             {{ t('visits.kiosk.guestLeaving') }}
           </button>
+          <button v-if="device?.mode === 'both'" type="button" @click="openSelf"
+            class="px-6 py-4 rounded-2xl bg-amber-400 text-amber-950 font-black text-lg cursor-pointer active:scale-95 transition">
+            📚 {{ t('visits.self.open') }}
+          </button>
           <button type="button" @click="cameraOn = !cameraOn"
             class="px-6 py-4 rounded-2xl bg-white/10 border border-white/20 font-bold text-lg cursor-pointer active:scale-95 transition">
             {{ cameraOn ? t('visits.kiosk.cameraOff') : t('visits.kiosk.cameraOn') }}
           </button>
+        </div>
+
+        <!-- #8: people from outside can sign up on their phone while standing here -->
+        <div v-if="device && device.mode !== 'exit'" class="flex items-center gap-4 rounded-3xl bg-white/10 border border-white/15 p-4 text-left max-w-md">
+          <div class="bg-white p-2 rounded-xl shrink-0"><QrcodeVue :value="registerUrl" :size="96" level="M" /></div>
+          <div>
+            <p class="text-lg font-black">{{ t('visits.kiosk.joinTitle') }}</p>
+            <p class="text-sm text-emerald-100/80 mt-1">{{ t('visits.kiosk.joinHint') }}</p>
+          </div>
         </div>
       </section>
 
@@ -76,6 +92,10 @@
           <component :is="resultIcon" class="w-28 h-28 mx-auto mb-6" />
           <p v-if="result.person?.name" class="text-4xl sm:text-5xl font-black">{{ result.person.name }}</p>
           <p v-if="result.person?.name_en || result.person?.class_name" class="text-xl mt-2 opacity-80">{{ [result.person.name_en, result.person.class_name].filter(Boolean).join(' · ') }}</p>
+          <div v-if="result.person?.is_external || result.person?.via === 'school_card'" class="mt-3 flex justify-center gap-2">
+            <span v-if="result.person.is_external" class="px-4 py-1.5 rounded-full bg-purple-600 text-white text-lg font-black ring-2 ring-white/60">{{ t('visits.kiosk.external') }}</span>
+            <span v-if="result.person.via === 'school_card'" class="px-4 py-1.5 rounded-full bg-white/20 text-lg font-bold">{{ t('visits.method.school_card') }}</span>
+          </div>
           <p class="text-2xl sm:text-3xl font-bold mt-6 leading-snug">{{ result.message }}</p>
           <p v-if="result.notice?.message" class="mt-6 text-lg bg-black/20 rounded-2xl px-5 py-4">{{ result.notice.message }}</p>
           <!-- Idea 3: reminder at the door -->
@@ -86,6 +106,17 @@
               <span class="whitespace-nowrap font-bold" :class="l.late ? 'text-amber-200' : ''">{{ l.late ? t('visits.kiosk.late') : t('visits.kiosk.dueOn', { date: dm(l.due_date) }) }}</span>
             </p>
             <p v-if="result.reminders.unpaid_fines_khr > 0" class="text-lg font-bold">{{ t('visits.kiosk.finesDue', { amount: formatMoney(result.reminders.unpaid_fines_khr) }) }}</p>
+          </div>
+          <!-- #3: leaving with books borrowed today: staff can match what they carry -->
+          <div v-if="result.borrowed_today?.length" class="mt-6 text-left bg-white text-slate-900 rounded-2xl px-5 py-4">
+            <p class="text-lg font-black mb-2">📚 {{ t('visits.kiosk.borrowedToday', { n: result.borrowed_today.length }) }}</p>
+            <ul class="space-y-2">
+              <li v-for="(b, i) in result.borrowed_today" :key="i" class="flex items-center gap-3">
+                <img v-if="b.cover_image" :src="coverUrl(b.cover_image)" alt="" class="w-9 h-12 rounded object-cover" />
+                <span class="flex-1 min-w-0 font-bold truncate">{{ b.title }}</span>
+                <span class="text-sm text-slate-500 whitespace-nowrap">{{ t('visits.kiosk.dueOn', { date: dm(b.due_date) }) }}</span>
+              </li>
+            </ul>
           </div>
           <p v-if="result.door" class="mt-6 text-lg font-semibold opacity-90">🚪 {{ t('visits.kiosk.doorOpen') }}</p>
         </div>
@@ -149,6 +180,9 @@ import {
   QrCodeIcon, CheckCircleIcon, ArrowRightOnRectangleIcon, InformationCircleIcon, XCircleIcon,
 } from '@heroicons/vue/24/outline'
 import CameraScanner from '@/features/scanner/components/CameraScanner.vue'
+import QrcodeVue from 'qrcode.vue'
+import SelfCheckout from '../components/SelfCheckout.vue'
+import { coverUrl } from '@/utils/coverUrl'
 import { soundService } from '@/features/scanner/services/soundService'
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { visitService } from '../services/visitService'
@@ -166,6 +200,8 @@ const busy = ref(false)
 const cameraOn = ref(false)
 const guestOpen = ref(false)
 const guestListOpen = ref(false)
+const selfOpen = ref(false)
+const registerUrl = `${window.location.origin}/register`
 const guests = ref([])
 const guest = ref({ name: '', phone: '', purpose: 'read' })
 const purposes = ['read', 'research', 'meeting', 'other']
@@ -201,6 +237,7 @@ const VOICE_KEY = { in: 'welcome', out: 'goodbye', already_in: 'already_in', not
 
 function show(data, ms = 4000) {
   if (data.reminders) ms = Math.max(ms, 8000) // give time to read the reminder
+  if (data.borrowed_today?.length) ms = Math.max(ms, 10000)
   announce(VOICE_KEY[data.action] || 'denied', {
     name: data.person?.name || '',
     lang: locale.value === 'en' ? 'en' : 'km',
@@ -232,7 +269,8 @@ async function submit(code) {
 let buffer = ''
 let lastKey = 0
 function onKey(e) {
-  if (guestOpen.value || guestListOpen.value) return
+  // The self-checkout screen reads the scanner itself
+  if (guestOpen.value || guestListOpen.value || selfOpen.value || device.value?.mode === 'checkout') return
   const t0 = Date.now()
   if (t0 - lastKey > 80) buffer = ''
   lastKey = t0
@@ -298,6 +336,12 @@ async function refresh() {
   } catch {
     /* keep the last values; the next scan shows the error */
   }
+}
+
+function openSelf() {
+  result.value = null
+  cameraOn.value = false
+  selfOpen.value = true
 }
 
 function confirmLogout() {

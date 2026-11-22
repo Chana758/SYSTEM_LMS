@@ -18,6 +18,8 @@ export const CARD_W_PX = (CARD_W_MM / 25.4) * 96 // ≈ 323.5 px at 96 dpi
 const THEMES = {
   member:    { dark: '#0f3d24', mid: '#166534', light: '#ecfdf3', accent: '#d4a017', chipKm: 'សមាជិក',   chipEn: 'MEMBER' },
   librarian: { dark: '#172554', mid: '#1d4ed8', light: '#eff6ff', accent: '#d4a017', chipKm: 'បុគ្គលិក', chipEn: 'STAFF' },
+  // Members from outside the institution: purple, so the desk sees it at a glance.
+  external:  { dark: '#3b0764', mid: '#7e22ce', light: '#faf5ff', accent: '#d4a017', chipKm: 'សមាជិកខាងក្រៅ', chipEn: 'EXTERNAL' },
   admin:     { dark: '#7c2d12', mid: '#c2410c', light: '#fff7ed', accent: '#facc15', chipKm: 'អ្នកគ្រប់គ្រង', chipEn: 'ADMIN' },
 }
 
@@ -27,9 +29,15 @@ const TYPE_LABELS = {
   staff:   'បុគ្គលិក · Staff',
   public:  'សាធារណៈ · Public',
   guest:   'ភ្ញៀវ · Guest',
+  external: 'ខាងក្រៅ · External',
 }
 
-export function themeFor(role) {
+export function isExternal(card) {
+  return (card?.role || 'member') === 'member' && String(card?.memberType || '').toLowerCase() === 'external'
+}
+
+export function themeFor(role, memberType = null) {
+  if ((role || 'member') === 'member' && String(memberType || '').toLowerCase() === 'external') return THEMES.external
   return THEMES[role] || THEMES.member
 }
 
@@ -134,7 +142,7 @@ const guilloche = (color) => `
  * @param {Object} brand            { logoUrl, siteName, siteNameAccent }
  */
 export function cardFrontHtml(card, brand = {}) {
-  const th = themeFor(card.role)
+  const th = themeFor(card.role, card.memberType)
   const isStaff = card.role === 'librarian'
   const site = `${esc(brand.siteName || 'SMART')} ${esc(brand.siteNameAccent || 'NEXUS')}`.trim()
 
@@ -153,7 +161,7 @@ export function cardFrontHtml(card, brand = {}) {
     ${brand.logoUrl ? `<img class="snx-logo" src="${esc(brand.logoUrl)}" alt="" />` : ''}
     <div class="snx-brand">
       <b>${site}</b>
-      <span>${isStaff ? 'ប័ណ្ណបុគ្គលិកបណ្ណាល័យ · LIBRARY STAFF CARD' : 'ប័ណ្ណសមាជិកបណ្ណាល័យ · LIBRARY CARD'}</span>
+      <span>${isStaff ? 'ប័ណ្ណបុគ្គលិកបណ្ណាល័យ · LIBRARY STAFF CARD' : isExternal(card) ? 'ប័ណ្ណសមាជិកខាងក្រៅ · EXTERNAL MEMBER' : 'ប័ណ្ណសមាជិកបណ្ណាល័យ · LIBRARY CARD'}</span>
     </div>
     <span class="snx-chip" style="background:${th.accent}">${th.chipEn}</span>
   </div>
@@ -185,7 +193,7 @@ export function cardFrontHtml(card, brand = {}) {
 }
 
 export function cardBackHtml(card, brand = {}) {
-  const th = themeFor(card.role)
+  const th = themeFor(card.role, card.memberType)
   const site = `${esc(brand.siteName || 'SMART')} ${esc(brand.siteNameAccent || 'NEXUS')}`.trim()
 
   return `

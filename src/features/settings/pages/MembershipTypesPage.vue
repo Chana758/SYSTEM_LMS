@@ -106,6 +106,7 @@
               <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colRenewals') }}</th>
               <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colFine') }}</th>
               <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colDeposit') }}</th>
+              <th class="px-5 py-3.5 text-center">{{ t('settings.membershipTypes.colSelf') }}</th>
               <th class="px-5 py-3.5">{{ t('settings.membershipTypes.colStatus') }}</th>
               <th class="px-5 py-3.5 text-right">{{ t('settings.membershipTypes.colActions') }}</th>
             </tr>
@@ -124,6 +125,7 @@
               <td class="px-5 py-4 text-center font-bold">{{ type.max_renewals ?? 2 }} × {{ type.renew_days ?? 7 }}</td>
               <td class="px-5 py-4 text-center font-bold">{{ Number(type.fine_per_day ?? 500).toLocaleString() }}៛</td>
               <td class="px-5 py-4 text-center font-bold">{{ Number(type.deposit_amount) ? Number(type.deposit_amount).toLocaleString() + '៛' : '—' }}</td>
+              <td class="px-5 py-4 text-center font-bold" :class="type.self_checkout ? 'text-emerald-600' : 'text-slate-400'">{{ type.self_checkout ? '✓' : '—' }}</td>
               <td class="px-5 py-4">
                 <span
                   class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border"
@@ -213,6 +215,16 @@
             </div>
           </div>
 
+          <!-- B4.16: may members of this type borrow alone at the self-checkout kiosk? -->
+          <div class="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3">
+            <input v-model="form.self_checkout" type="checkbox" id="self_checkout"
+              class="mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer" />
+            <label for="self_checkout" class="cursor-pointer">
+              <span class="font-semibold text-slate-700 dark:text-slate-300">{{ t('settings.membershipTypes.modal.selfCheckout') }}</span>
+              <span class="block text-slate-500 dark:text-slate-400 mt-0.5">{{ t('settings.membershipTypes.modal.selfCheckoutHint') }}</span>
+            </label>
+          </div>
+
           <div v-if="editing" class="flex items-center gap-2.5 pt-1 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3">
             <input
               v-model="form.is_active"
@@ -261,7 +273,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const router = useRouter()
 
-const DEFAULT_RULES = { loan_days: 14, max_books: 3, max_renewals: 2, renew_days: 7, fine_per_day: 500, deposit_amount: 0 }
+const DEFAULT_RULES = { loan_days: 14, max_books: 3, max_renewals: 2, renew_days: 7, fine_per_day: 500, deposit_amount: 0, self_checkout: false }
 
 // Loan-rule inputs rendered in the modal (limits mirror MembershipTypeRequest)
 const ruleFields = [
@@ -375,6 +387,7 @@ function openEdit(type) {
     renew_days: type.renew_days ?? DEFAULT_RULES.renew_days,
     fine_per_day: type.fine_per_day ?? DEFAULT_RULES.fine_per_day,
     deposit_amount: type.deposit_amount ?? DEFAULT_RULES.deposit_amount,
+    self_checkout: !!type.self_checkout,
   })
   formErrors.value = {}
   showModal.value = true

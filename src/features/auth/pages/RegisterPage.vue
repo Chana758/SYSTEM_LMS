@@ -98,6 +98,11 @@
             <h1 class="text-2xl font-black text-slate-900 mb-2">{{ $t('auth.registrationReceived') }}</h1>
             <p class="text-[12px] text-slate-500 leading-relaxed mb-6" v-html="$t('auth.registrationMessage')"></p>
 
+            <!-- #6/#7: from outside: pay the deposit by KHQR now, so staff can approve at once -->
+            <div class="text-left mb-6 rounded-2xl border border-slate-200 p-4 empty:hidden">
+              <DepositCard />
+            </div>
+
             <button @click="finishAndEnter"
               class="w-full h-12 bg-[#17664b] hover:bg-emerald-800 text-white rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md active:scale-[0.99] cursor-pointer">
               {{ $t('auth.continueToApp') }}
@@ -116,6 +121,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import RegisterForm from '../components/RegisterForm.vue'
+import DepositCard from '@/features/members/components/DepositCard.vue'
 import { useAuthStore } from '../store/authStore'
 import { useBrandingStore } from '@/stores/brandingStore'
 import defaultLogo from '@/assets/images/logoh6.jpg'

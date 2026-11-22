@@ -18,6 +18,16 @@ export const visitService = {
   kioskGuestOut(visitId) {
     return apiClient.post(`/kiosk/guests/${visitId}/out`)
   },
+  // Self-checkout (B4.16/17)
+  selfStart(code, pin) {
+    return apiClient.post('/kiosk/self/start', { code, pin })
+  },
+  selfBorrow(token, barcode) {
+    return apiClient.post('/kiosk/self/borrow', { token, barcode })
+  },
+  selfFinish(token) {
+    return apiClient.post('/kiosk/self/finish', { token })
+  },
 
   // Member
   myCardCode() {

@@ -93,6 +93,9 @@
         <AccountSettings />
       </div>
       <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-2xs">
+        <SelfCheckoutPin />
+      </div>
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-2xs">
         <LogoutAllCard />
       </div>
       <!-- B6.2: deposit (shown only when this member has one) -->
@@ -117,6 +120,7 @@ import ProfileSettings from '@/features/settings/components/ProfileSettings.vue'
 import AccountSettings from '@/features/settings/components/AccountSettings.vue'
 import LogoutAllCard from '@/features/settings/components/LogoutAllCard.vue'
 import DepositCard from '../components/DepositCard.vue'
+import SelfCheckoutPin from '../components/SelfCheckoutPin.vue'
 
 const { t } = useI18n()
 const store = useMemberStore()

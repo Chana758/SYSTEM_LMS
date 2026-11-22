@@ -4,7 +4,9 @@ import { ENDPOINTS } from '@/api/endpoints'
 export const authService = {
   // 1. Authentication
   register(payload) {
-    return apiClient.post(ENDPOINTS.AUTH.REGISTER, payload)
+    // With an ID photo the payload is FormData: send it as multipart, with more time to upload
+    const isForm = typeof FormData !== 'undefined' && payload instanceof FormData
+    return apiClient.post(ENDPOINTS.AUTH.REGISTER, payload, isForm ? { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 60000 } : undefined)
   },
   login(payload) {
     return apiClient.post(ENDPOINTS.AUTH.LOGIN, payload)

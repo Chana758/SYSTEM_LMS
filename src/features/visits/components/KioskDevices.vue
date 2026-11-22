@@ -55,7 +55,7 @@
         </label>
         <label class="text-xs font-semibold text-gray-500">{{ t('visits.devices.modeLabel') }}
           <select v-model="form.mode" class="mt-1 block w-full h-10 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 text-gray-900 dark:text-white px-3 text-sm outline-none focus:border-green-600">
-            <option v-for="m in ['both', 'entrance', 'exit']" :key="m" :value="m">{{ t('visits.devices.mode.' + m) }}</option>
+            <option v-for="m in ['both', 'entrance', 'exit', 'checkout']" :key="m" :value="m">{{ t('visits.devices.mode.' + m) }}</option>
           </select>
         </label>
         <label class="text-xs font-semibold text-gray-500">{{ t('visits.devices.pulse') }}

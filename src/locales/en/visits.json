@@ -32,7 +32,11 @@
     "reminderTitle": "Don’t forget",
     "late": "Late",
     "dueOn": "Due {date}",
-    "finesDue": "Unpaid fines {amount}"
+    "finesDue": "Unpaid fines {amount}",
+    "external": "External member",
+    "joinTitle": "Want to borrow books?",
+    "joinHint": "Scan this QR with your phone to sign up (visitors from outside can pay the deposit by KHQR)",
+    "borrowedToday": "Borrowed today ({n})"
   },
   "purpose": {
     "read": "Reading",
@@ -133,7 +137,8 @@
     "mode": {
       "both": "In and out",
       "entrance": "Entrance only",
-      "exit": "Exit only"
+      "exit": "Exit only",
+      "checkout": "Self-checkout"
     },
     "pulse": "Unlock time (ms)",
     "doorEnabled": "Door controller connected (ESP32 + relay)",
@@ -195,5 +200,28 @@
   "mine": {
     "title": "Recent sign-ins",
     "subtitle": "If you see a sign-in that was not you, change your password and log out everywhere"
+  },
+  "self": {
+    "open": "Borrow books",
+    "title": "Self-checkout",
+    "scanCard": "Scan your library card or school card to start",
+    "help1": "Scan your card",
+    "help2": "Enter your 4-digit PIN",
+    "help3": "Scan the barcode on each book",
+    "help4": "Press \"Done\" for your receipt",
+    "enterPin": "Enter your 4-digit PIN",
+    "canBorrow": "Can borrow",
+    "scanBook": "Scan the barcode on the book",
+    "limitReached": "You have reached your limit",
+    "loanDays": "Loan period {days} days",
+    "typeBarcode": "or type the barcode…",
+    "borrowedNow": "Borrowed ({n})",
+    "noneYet": "No books yet",
+    "finish": "Done",
+    "autoEnd": "Ends by itself in {s} s if nothing happens",
+    "receiptHint": "Due dates are also in the app. Scan your card at the exit.",
+    "next": "Next person",
+    "doneCount": "{n} book(s) borrowed. Thank you!",
+    "doneNone": "No books borrowed."
   }
 }
