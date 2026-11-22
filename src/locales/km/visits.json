@@ -143,7 +143,10 @@
     "doorKeyConfirm": "Controller ទ្វារចាស់នឹងលែងដំណើរការ រហូតដល់ដាក់ Key ថ្មី។ បន្តទេ?",
     "testSent": "បានផ្ញើបញ្ជាបើកទ្វារ (រង់ចាំ 10 វិនាទី)",
     "testNotSent": "ទ្វារមិនទាន់បើក ឬគ្មាន Door key",
-    "deleteConfirm": "លុប Kiosk \"{name}\"? ប្រវត្តិចូល/ចេញនៅដដែល។"
+    "deleteConfirm": "លុប Kiosk \"{name}\"? ប្រវត្តិចូល/ចេញនៅដដែល។",
+    "copy": "Copy",
+    "copied": "បានចម្លង",
+    "passwordReset": "បានបង្កើតពាក្យសម្ងាត់ថ្មីសម្រាប់ {name}"
   },
   "settings": {
     "title": "ម៉ោងបណ្ណាល័យ និងការចូល/ចេញ",

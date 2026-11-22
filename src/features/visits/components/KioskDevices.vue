@@ -12,8 +12,13 @@
     <!-- One-time secret -->
     <div v-if="secret" class="mb-4 rounded-2xl border border-amber-300 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700 p-4 text-sm text-amber-900 dark:text-amber-100 space-y-1">
       <p class="font-bold">{{ t('visits.devices.onceOnly') }}</p>
-      <p v-for="(v, k) in secret" :key="k" class="break-all"><span class="font-semibold">{{ t('visits.devices.secret.' + k) }}:</span> <code class="tabular-nums">{{ v }}</code></p>
-      <button type="button" @click="secret = null" class="mt-2 text-xs underline cursor-pointer">{{ t('visits.devices.saved') }}</button>
+      <p v-if="secretFor" class="font-bold text-base">🖥 {{ secretFor }}</p>
+      <p v-for="(v, k) in secret" :key="k" class="break-all flex items-center gap-2 flex-wrap">
+        <span class="font-semibold">{{ t('visits.devices.secret.' + k) }}:</span>
+        <code class="tabular-nums">{{ v }}</code>
+        <button type="button" @click="copy(v)" class="px-2 py-0.5 rounded-md border border-amber-300 dark:border-amber-700 text-[11px] font-semibold cursor-pointer">{{ t('visits.devices.copy') }}</button>
+      </p>
+      <button type="button" @click="secret = null; secretFor = ''" class="mt-2 text-xs underline cursor-pointer">{{ t('visits.devices.saved') }}</button>
     </div>
 
     <p v-if="!devices.length" class="text-sm text-gray-400 py-4">{{ t('visits.devices.none') }}</p>
@@ -80,6 +85,7 @@ const toast = useToast()
 const devices = ref([])
 const form = ref(null)
 const secret = ref(null)
+const secretFor = ref('') // which kiosk the one-time secret belongs to
 
 const blank = () => ({ id: null, name: '', location: '', mode: 'both', door_enabled: false, door_pulse_ms: 3000 })
 
@@ -98,6 +104,7 @@ async function save() {
     } else {
       const { data } = await visitService.createDevice(payload)
       secret.value = { login: data.login, password: data.password }
+      secretFor.value = payload.name || ''
     }
     form.value = null
     await load()
@@ -109,14 +116,31 @@ async function save() {
 
 async function resetPassword(d) {
   if (!window.confirm(t('visits.devices.resetConfirm'))) return
-  const { data } = await visitService.resetDevicePassword(d.id)
-  secret.value = { login: data.login, password: data.password }
+  secret.value = null
+  try {
+    const { data } = await visitService.resetDevicePassword(d.id)
+    secret.value = { login: data.login, password: data.password }
+    secretFor.value = d.name
+    toast.success(t('visits.devices.passwordReset', { name: d.name }))
+  } catch (e) {
+    toast.error(e.response?.data?.message || t('visits.error'))
+  }
+}
+
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(String(text))
+    toast.success(t('visits.devices.copied'))
+  } catch {
+    toast.error(t('visits.error'))
+  }
 }
 
 async function doorKey(d) {
   if (d.has_door_key && !window.confirm(t('visits.devices.doorKeyConfirm'))) return
   const { data } = await visitService.doorKey(d.id)
   secret.value = { device_id: data.device_id, door_key: data.door_key, poll_url: data.poll_url }
+  secretFor.value = d.name
   await load()
 }
 

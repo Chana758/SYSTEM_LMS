@@ -143,7 +143,10 @@
     "doorKeyConfirm": "The current door controller stops working until it gets the new key. Continue?",
     "testSent": "Open command sent (waits 10 seconds)",
     "testNotSent": "Door is off or has no key",
-    "deleteConfirm": "Delete kiosk \"{name}\"? Its visit history is kept."
+    "deleteConfirm": "Delete kiosk \"{name}\"? Its visit history is kept.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "passwordReset": "New password for {name}"
   },
   "settings": {
     "title": "Library hours and entry",
