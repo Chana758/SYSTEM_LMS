@@ -8,9 +8,8 @@
     <span v-if="member.has_school_card" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
       {{ t('members.origin.schoolCard') }}
     </span>
-    <span v-if="member.user?.status === 'inactive'" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
-      {{ t('members.origin.notActivated') }}
-    </span>
+    <!-- Not activated yet: one click activates it and shows a one-time password -->
+    <QuickActivate v-if="member.user?.status === 'inactive'" :member="member" />
     <span v-else-if="member.user?.status === 'pending'" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-orange-50 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300">
       {{ t('members.origin.pending') }}
     </span>
@@ -20,6 +19,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import QuickActivate from './QuickActivate.vue'
 
 const props = defineProps({ member: { type: Object, required: true } })
 const { t } = useI18n()

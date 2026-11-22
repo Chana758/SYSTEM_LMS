@@ -131,5 +131,22 @@
     "save": "Save PIN",
     "change": "Change PIN",
     "mismatch": "The two PINs are different"
+  },
+  "activate": {
+    "button": "Activate ▸",
+    "tip": "Click to activate and create a temporary password",
+    "confirm": "Activate {name}? A temporary password will be created.",
+    "done": "{name} activated",
+    "onceOnly": "This password is shown only once. Give it to the student or print it now.",
+    "login": "Login (student ID)",
+    "password": "Temporary password",
+    "copy": "Copy",
+    "copied": "Copied",
+    "step1": "Log in with the student ID and the password above",
+    "step2": "You will be asked to choose a new password",
+    "step3": "Set a 4-digit PIN in \"Profile\" to borrow at the self-checkout kiosk",
+    "print": "Print",
+    "close": "Done",
+    "slipTitle": "Smart Nexus · Login"
   }
 }
