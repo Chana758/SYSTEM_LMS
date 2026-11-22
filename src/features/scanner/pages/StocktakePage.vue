@@ -70,7 +70,9 @@
 
       <BarcodeScanner v-if="mode === 'manual'" :is-loading="isScanning" accent="purple" @scan="handleScan" />
       <!-- Continuous: stocktake scans many books in a row -->
-      <CameraScanner v-else-if="mode === 'camera'" continuous @detected="handleScan" />
+      <div v-else-if="mode === 'camera'" class="max-w-md mx-auto">
+        <CameraScanner continuous :dedupe-ms="3000" @detected="handleScan" />
+      </div>
       <!-- Mounted on first open, then kept alive with v-show so the QR session isn't recreated -->
       <RemoteScanPanel v-if="remoteOpened" v-show="mode === 'remote'" @scan="handleScan" />
 
@@ -271,6 +273,8 @@ const statusLabelMap = computed(() => ({
 }))
 const statusLabel = (status) => statusLabelMap.value[status] || status
 
+const pendingBarcodes = new Set()
+
 const addItem = (item) => {
   sessionItems.value.unshift({ ...item, scannedAt: new Date().toLocaleTimeString() })
 }
@@ -279,8 +283,8 @@ const handleScan = async (rawBarcode) => {
   const barcode = String(rawBarcode ?? '').trim()
   if (!barcode) return
 
-  // A book is counted once per stocktake session.
-  if (sessionItems.value.some((i) => i.barcode === barcode)) {
+  // A book is counted once per stocktake session (also while its first scan is still loading).
+  if (pendingBarcodes.has(barcode) || sessionItems.value.some((i) => i.barcode === barcode)) {
     soundService.notFound()
     soundService.vibrate([30, 40, 30])
     showNotice(t('scanner.stocktakePage.duplicate', { barcode }))
@@ -288,6 +292,7 @@ const handleScan = async (rawBarcode) => {
   }
 
   isScanning.value = true
+  pendingBarcodes.add(barcode)
   try {
     const { data } = await scannerService.scan({
       barcode,
@@ -314,6 +319,7 @@ const handleScan = async (rawBarcode) => {
       showNotice(payload?.message || t('scanner.stocktakePage.networkError'), 'error')
     }
   } finally {
+    pendingBarcodes.delete(barcode)
     isScanning.value = false
   }
 }
