@@ -47,6 +47,15 @@
         </div>
       </div>
 
+      <div class="sm:col-span-2 pt-4 border-t border-gray-100 dark:border-white/10">
+        <h3 class="text-sm font-bold text-gray-800 dark:text-white mb-3">{{ t('visits.settings.schoolCardTitle') }}</h3>
+        <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-slate-300 cursor-pointer">
+          <input v-model="form.school_card_enabled" type="checkbox" class="w-4 h-4 accent-green-700" />
+          {{ t('visits.settings.schoolCard') }}
+        </label>
+        <p class="text-xs text-gray-400 dark:text-slate-500 mt-2">{{ t('visits.settings.schoolCardHint') }}</p>
+      </div>
+
       <div class="sm:col-span-2">
         <button type="submit" :disabled="busy" class="w-full sm:w-auto px-5 py-2.5 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold rounded-xl disabled:opacity-50 cursor-pointer">{{ t('auth.settings.save') }}</button>
       </div>

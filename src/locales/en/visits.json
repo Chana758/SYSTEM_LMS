@@ -82,7 +82,8 @@
     "digital_card": "Phone card",
     "guest": "Guest",
     "manual": "Manual",
-    "auto": "auto-closed"
+    "auto": "auto-closed",
+    "school_card": "School card"
   },
   "col": {
     "person": "Visitor",
@@ -157,7 +158,10 @@
     "voiceName": "Say the name (needs a Khmer voice on the tablet)",
     "voiceVolume": "Volume {v}%",
     "voiceHint": "Put recorded Khmer clips in public/sounds/kiosk/ to sound the same on every device",
-    "retry": "Try again"
+    "retry": "Try again",
+    "schoolCardTitle": "School student card",
+    "schoolCard": "Accept the QR on the school's student card (student ID)",
+    "schoolCardHint": "The QR can be the plain student ID or a link ending in it. Used for entry/exit and desk loans (check the photo on screen), never for logging in."
   },
   "logs": {
     "title": "Login history",

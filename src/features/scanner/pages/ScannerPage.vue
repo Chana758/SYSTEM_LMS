@@ -224,7 +224,8 @@ const borrowing = ref(false)
 
 // A member card is a phone QR ("SNX1.…") or the 48-character printed token.
 // Book copies use short barcodes like BC-26-000123.
-const looksLikeCard = (code) => /^SNX1\./.test(code) || /^[A-Za-z0-9]{40,64}$/.test(code)
+// Library card, phone card, or a school card link (https://…/student/ID)
+const looksLikeCard = (code) => /^SNX1\./.test(code) || /^[A-Za-z0-9]{40,64}$/.test(code) || /^https?:\/\//i.test(code)
 
 const remaining = computed(() => {
   const l = deskMember.value?.loans
