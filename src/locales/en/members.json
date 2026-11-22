@@ -49,7 +49,12 @@
     "address": "Address",
     "saving": "Saving...",
     "saveChanges": "Save Changes",
-    "createMember": "Create Member"
+    "createMember": "Create Member",
+    "nameEn": "Name in English",
+    "gender": "Gender",
+    "studentId": "Student ID",
+    "className": "Class",
+    "dateOfBirth": "Date of birth"
   },
   "detail": {
     "backToMembers": "Back to Members",
@@ -99,5 +104,9 @@
     "download": "Download",
     "print": "Print",
     "done": "Done"
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female"
   }
 }

@@ -35,7 +35,7 @@
         <img v-if="member.avatar" :src="member.avatar" alt="" class="w-12 h-12 rounded-xl object-cover bg-white" />
         <div v-else class="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-lg font-black text-emerald-700">{{ (member.name || '?').slice(0, 1) }}</div>
         <div class="flex-1 min-w-0">
-          <p class="text-base font-black text-slate-900 dark:text-white truncate">{{ member.name }}</p>
+          <p class="text-base font-black text-slate-900 dark:text-white truncate">{{ member.name }}<span v-if="member.name_en" class="ml-2 text-sm font-semibold text-slate-500">{{ member.name_en }}</span></p>
           <p class="text-xs text-slate-500 dark:text-slate-400">
             {{ member.membership_no }}<span v-if="member.class_name"> · {{ member.class_name }}</span><span v-if="member.membership_type"> · {{ member.membership_type }}</span>
           </p>

@@ -49,7 +49,12 @@
     "address": "អាសយដ្ឋាន",
     "saving": "កំពុងរក្សាទុក...",
     "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
-    "createMember": "បង្កើតសមាជិក"
+    "createMember": "បង្កើតសមាជិក",
+    "nameEn": "ឈ្មោះជាអក្សរឡាតាំង",
+    "gender": "ភេទ",
+    "studentId": "លេខសិស្ស",
+    "className": "ថ្នាក់",
+    "dateOfBirth": "ថ្ងៃកំណើត"
   },
   "detail": {
     "backToMembers": "ត្រឡប់ទៅសមាជិក",
@@ -99,5 +104,9 @@
     "download": "ទាញយក",
     "print": "បោះពុម្ព",
     "done": "រួចរាល់"
+  },
+  "gender": {
+    "male": "ប្រុស",
+    "female": "ស្រី"
   }
 }

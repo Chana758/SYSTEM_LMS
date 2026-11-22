@@ -55,6 +55,41 @@
       </div>
     </div>
 
+    <!-- English name & gender -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label :for="id('name_en')" :class="labelCls">{{ t('members.form.nameEn') }}</label>
+        <input :id="id('name_en')" v-model="form.name_en" type="text" placeholder="Sok Dara" :class="[inputCls, errs.name_en ? errBorder : '']" />
+        <p v-if="errs.name_en" class="text-rose-500 text-xs font-semibold mt-1">{{ errs.name_en }}</p>
+      </div>
+      <div>
+        <label :for="id('gender')" :class="labelCls">{{ t('members.form.gender') }}</label>
+        <select :id="id('gender')" v-model="form.gender" :class="inputCls">
+          <option value="">—</option>
+          <option value="male">{{ t('members.gender.male') }}</option>
+          <option value="female">{{ t('members.gender.female') }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- MEM1: student ID, class, date of birth (used to activate the account) -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div>
+        <label :for="id('student_id')" :class="labelCls">{{ t('members.form.studentId') }}</label>
+        <input :id="id('student_id')" v-model.trim="form.student_id" type="text" :class="[inputCls, errs.student_id ? errBorder : '']" />
+        <p v-if="errs.student_id" class="text-rose-500 text-xs font-semibold mt-1">{{ errs.student_id }}</p>
+      </div>
+      <div>
+        <label :for="id('class_name')" :class="labelCls">{{ t('members.form.className') }}</label>
+        <input :id="id('class_name')" v-model.trim="form.class_name" type="text" placeholder="12A" :class="inputCls" />
+      </div>
+      <div>
+        <label :for="id('dob')" :class="labelCls">{{ t('members.form.dateOfBirth') }}</label>
+        <input :id="id('dob')" v-model="form.date_of_birth" type="date" :class="[inputCls, errs.date_of_birth ? errBorder : '']" />
+        <p v-if="errs.date_of_birth" class="text-rose-500 text-xs font-semibold mt-1">{{ errs.date_of_birth }}</p>
+      </div>
+    </div>
+
     <!-- Phone & Identity Card -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
@@ -181,6 +216,11 @@ const form = reactive({
   phone: '',
   identity_card_no: '',
   emergency_contact: '',
+  name_en: '',
+  gender: '',
+  student_id: '',
+  class_name: '',
+  date_of_birth: '',
   membership_type: 'student',
   max_borrow_limit: 3,
   address: '',
@@ -227,6 +267,11 @@ watch(
         phone: data.user?.phone || '',
         identity_card_no: data.identity_card_no || '',
         emergency_contact: data.emergency_contact || '',
+        name_en: data.name_en || '',
+        gender: data.gender || '',
+        student_id: data.student_id || '',
+        class_name: data.class_name || '',
+        date_of_birth: (data.date_of_birth || '').slice(0, 10),
         membership_type: data.membership_type || 'student',
         max_borrow_limit: data.max_borrow_limit || 3,
         address: data.address || '',

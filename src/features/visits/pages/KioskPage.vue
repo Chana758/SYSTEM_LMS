@@ -75,7 +75,7 @@
         <div class="text-center max-w-2xl">
           <component :is="resultIcon" class="w-28 h-28 mx-auto mb-6" />
           <p v-if="result.person?.name" class="text-4xl sm:text-5xl font-black">{{ result.person.name }}</p>
-          <p v-if="result.person?.class_name" class="text-xl mt-2 opacity-80">{{ result.person.class_name }}</p>
+          <p v-if="result.person?.name_en || result.person?.class_name" class="text-xl mt-2 opacity-80">{{ [result.person.name_en, result.person.class_name].filter(Boolean).join(' · ') }}</p>
           <p class="text-2xl sm:text-3xl font-bold mt-6 leading-snug">{{ result.message }}</p>
           <p v-if="result.notice?.message" class="mt-6 text-lg bg-black/20 rounded-2xl px-5 py-4">{{ result.notice.message }}</p>
           <!-- Idea 3: reminder at the door -->

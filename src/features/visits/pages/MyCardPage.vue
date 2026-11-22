@@ -8,6 +8,7 @@
         <div class="min-w-0">
           <p class="text-xs uppercase tracking-widest text-emerald-200">{{ t('visits.card.title') }}</p>
           <p class="text-lg font-black truncate">{{ card?.name || '…' }}</p>
+          <p v-if="card?.name_en" class="text-sm text-emerald-100 truncate">{{ card.name_en }}</p>
           <p class="text-xs text-emerald-100/80">{{ card?.membership_no }}<span v-if="card?.class_name"> · {{ card.class_name }}</span></p>
         </div>
       </div>

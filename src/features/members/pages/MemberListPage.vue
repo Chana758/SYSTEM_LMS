@@ -174,7 +174,10 @@
                 <td class="px-5 py-4">
                   <span class="font-mono font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/10">{{ m.membership_no }}</span>
                 </td>
-                <td class="px-5 py-4 font-bold text-slate-900 dark:text-white">{{ m.user?.name }}</td>
+                <td class="px-5 py-4">
+                  <p class="font-bold text-slate-900 dark:text-white">{{ m.user?.name }}</p>
+                  <p v-if="m.name_en || m.class_name" class="text-xs text-slate-500 dark:text-slate-400">{{ [m.name_en, m.class_name].filter(Boolean).join(' · ') }}</p>
+                </td>
                 <td class="px-5 py-4 text-slate-500 dark:text-slate-400">{{ m.user?.email }}</td>
                 <td class="px-5 py-4">
                   <MembershipBadge :type="m.membership_type" hide-status />
@@ -206,6 +209,7 @@
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
               <p class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ m.user?.name }}</p>
+              <p v-if="m.name_en" class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ m.name_en }}</p>
               <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ m.user?.email }}</p>
             </div>
             <MembershipBadge :status="m.status" hide-type class="flex-shrink-0" />

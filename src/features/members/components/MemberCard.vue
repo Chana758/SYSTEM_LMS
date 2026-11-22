@@ -19,6 +19,9 @@
         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3">
           <div class="min-w-0">
             <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate">{{ member.user?.name }}</h2>
+            <p v-if="member.name_en || member.gender || member.student_id" class="text-xs text-slate-500 dark:text-slate-400 truncate">
+              {{ [member.name_en, member.gender ? t('members.gender.' + member.gender) : '', member.student_id, member.class_name].filter(Boolean).join(' · ') }}
+            </p>
             <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 truncate">{{ member.user?.email }}</p>
           </div>
           <MembershipBadge :type="member.membership_type" :status="member.status" class="flex-wrap" />
