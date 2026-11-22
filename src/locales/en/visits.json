@@ -156,7 +156,8 @@
     "voiceEnabled": "Speak on scan (welcome / goodbye)",
     "voiceName": "Say the name (needs a Khmer voice on the tablet)",
     "voiceVolume": "Volume {v}%",
-    "voiceHint": "Put recorded Khmer clips in public/sounds/kiosk/ to sound the same on every device"
+    "voiceHint": "Put recorded Khmer clips in public/sounds/kiosk/ to sound the same on every device",
+    "retry": "Try again"
   },
   "logs": {
     "title": "Login history",
