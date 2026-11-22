@@ -9,7 +9,7 @@
     "library": "Library",
     "scanTitle": "Please scan your library card",
     "scanHint": "Hold your card or the card on your phone in front of the scanner when you come in and when you leave",
-    "imGuest": "I am a guest",
+    "imGuest": "Guest entry",
     "guestLeaving": "Guest leaving",
     "cameraOn": "Use camera",
     "cameraOff": "Camera off",

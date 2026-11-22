@@ -25,11 +25,11 @@
         </div>
 
         <div class="flex flex-wrap justify-center gap-3">
-          <button type="button" @click="guestOpen = true"
+          <button v-if="device?.mode !== 'exit'" type="button" @click="guestOpen = true"
             class="px-6 py-4 rounded-2xl bg-white text-emerald-900 font-black text-lg cursor-pointer active:scale-95 transition">
             {{ t('visits.kiosk.imGuest') }}
           </button>
-          <button type="button" @click="openGuestList"
+          <button v-if="device?.mode !== 'entrance'" type="button" @click="openGuestList"
             class="px-6 py-4 rounded-2xl bg-white/10 border border-white/20 font-bold text-lg cursor-pointer active:scale-95 transition">
             {{ t('visits.kiosk.guestLeaving') }}
           </button>
