@@ -230,7 +230,11 @@
     "scanHint": "Scan at kiosk for instant check-in.",
     "scanKioskLogin": "Scan at the library kiosk to log in instantly.",
     "loadFailed": "Failed to load pending cards.",
-    "issueFailed": "Failed to issue card."
+    "issueFailed": "Failed to issue card.",
+    "searchPlaceholder": "Search name, student ID or member no…",
+    "pageOf": "Page {page}/{last} · {total} total",
+    "prev": "Prev",
+    "next": "Next"
   },
   "qrCard": {
     "title": "QR Login Card",

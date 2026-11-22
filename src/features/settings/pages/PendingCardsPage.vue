@@ -42,10 +42,15 @@
           <div class="flex items-center gap-2">
             <h2 class="text-sm font-bold text-gray-800 dark:text-white">{{ t('settings.cardApprovals.pendingRequests') }}</h2>
             <span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-[11px] font-extrabold rounded-md">
-              {{ users.length }}
+              {{ total }}
             </span>
           </div>
-          <span class="text-xs text-gray-400 dark:text-slate-500 font-medium">{{ t('settings.cardApprovals.autoUpdated') }}</span>
+          <input
+            v-model.trim="search"
+            type="search"
+            :placeholder="t('settings.cardApprovals.searchPlaceholder')"
+            class="w-full sm:w-72 h-9 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 text-xs text-gray-800 dark:text-white outline-none focus:border-emerald-600"
+          />
         </div>
 
         <div class="flex-1 min-h-[240px] sm:min-h-[320px]">
@@ -92,7 +97,7 @@
                 </div>
 
                 <div class="flex items-center justify-between gap-3">
-                  <span class="font-mono text-xs text-gray-600 dark:text-slate-300 truncate">{{ identifierOf(user) }}</span>
+                  <span class="font-mono text-xs text-gray-600 dark:text-slate-300 truncate">{{ identifierOf(user) }}<template v-if="user.member?.student_id"> · {{ user.member.student_id }}</template></span>
                   <button
                     type="button"
                     @click="handleIssue(user)"
@@ -146,7 +151,7 @@
                         {{ user.role?.name || 'User' }}
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 font-mono text-gray-600 dark:text-slate-300">{{ identifierOf(user) }}</td>
+                    <td class="py-3.5 px-4 font-mono text-gray-600 dark:text-slate-300">{{ identifierOf(user) }}<span v-if="user.member?.student_id" class="block text-[11px] text-gray-400 dark:text-slate-500">{{ user.member.student_id }}</span></td>
                     <td class="py-3.5 px-6 text-right">
                       <button
                         type="button"
@@ -165,6 +170,17 @@
               </table>
             </div>
           </template>
+        </div>
+
+        <!-- Pages: the queue can hold hundreds of people after an Excel import -->
+        <div v-if="lastPage > 1" class="px-4 sm:px-6 py-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-between gap-2 text-xs">
+          <span class="text-gray-500 dark:text-slate-400">{{ t('settings.cardApprovals.pageOf', { page, last: lastPage, total }) }}</span>
+          <div class="flex gap-2">
+            <button type="button" :disabled="page <= 1 || loading" @click="loadPending(page - 1)"
+              class="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 font-semibold text-gray-700 dark:text-slate-200 disabled:opacity-40 cursor-pointer">‹ {{ t('settings.cardApprovals.prev') }}</button>
+            <button type="button" :disabled="page >= lastPage || loading" @click="loadPending(page + 1)"
+              class="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 font-semibold text-gray-700 dark:text-slate-200 disabled:opacity-40 cursor-pointer">{{ t('settings.cardApprovals.next') }} ›</button>
+          </div>
         </div>
       </div>
 
@@ -222,7 +238,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import QRCode from 'qrcode'
 import { useToast } from 'vue-toastification'
 import { authService } from '@/features/auth/services/authService'
@@ -255,11 +271,25 @@ function buildAvatarUrl(user) {
   return `${baseUrl}/storage/${user.avatar}`
 }
 
-async function loadPending() {
+const search = ref('')
+const page = ref(1)
+const lastPage = ref(1)
+const total = ref(0)
+let searchTimer = null
+watch(search, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => loadPending(1), 350)
+})
+
+async function loadPending(toPage = page.value) {
+  if (typeof toPage !== 'number') toPage = 1 // called from the refresh button with a click event
   loading.value = true
   try {
-    const { data } = await authService.getPendingCards()
+    const { data } = await authService.getPendingCards({ page: toPage, search: search.value || undefined })
     users.value = data.data
+    page.value = data.current_page || 1
+    lastPage.value = data.last_page || 1
+    total.value = data.total ?? data.data.length
   } catch (e) {
     toast.error(e.response?.data?.message || t('settings.cardApprovals.loadFailed'))
   } finally {
@@ -292,6 +322,7 @@ async function handleIssue(user) {
     }
 
     users.value = users.value.filter((u) => u.id !== user.id)
+    total.value = Math.max(0, total.value - 1)
 
     // On phones the preview sits below the list: bring it into view
     if (window.matchMedia('(max-width: 1023px)').matches) {
