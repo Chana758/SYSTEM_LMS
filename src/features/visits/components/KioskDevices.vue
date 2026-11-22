@@ -115,7 +115,7 @@ async function save() {
 }
 
 async function resetPassword(d) {
-  if (!window.confirm(t('visits.devices.resetConfirm'))) return
+  if (!window.confirm(t('visits.devices.resetConfirm', { name: d.name, login: d.user?.email || '' }))) return
   secret.value = null
   try {
     const { data } = await visitService.resetDevicePassword(d.id)

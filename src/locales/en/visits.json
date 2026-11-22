@@ -139,7 +139,7 @@
     "doorEnabled": "Door controller connected (ESP32 + relay)",
     "doorHint": "The exit must always have a release button on the inside, for fire safety.",
     "savedOk": "Saved",
-    "resetConfirm": "The kiosk will be signed out and must sign in with the new password. Continue?",
+    "resetConfirm": "Create a new password for \"{name}\" ({login})?\nThis kiosk will be signed out and must log in again with the new password.",
     "doorKeyConfirm": "The current door controller stops working until it gets the new key. Continue?",
     "testSent": "Open command sent (waits 10 seconds)",
     "testNotSent": "Door is off or has no key",
