@@ -73,6 +73,17 @@
             <p class="text-[12px] font-semibold text-slate-500">{{ $t('auth.fillYourInfo') }}</p>
           </div>
 
+          <!-- Students the school already imported must activate, not sign up again (that would make a duplicate) -->
+          <router-link :to="{ name: 'activate-account' }"
+            class="flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 px-4 py-3 transition">
+            <span class="w-9 h-9 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0 text-lg">🎓</span>
+            <span class="flex-1 min-w-0">
+              <span class="block text-[12px] font-black text-emerald-900">{{ $t('auth.importedHint.title') }}</span>
+              <span class="block text-[11px] text-emerald-800/80">{{ $t('auth.importedHint.body') }}</span>
+            </span>
+            <span class="text-emerald-700 font-black">→</span>
+          </router-link>
+
           <RegisterForm
             :loading="authStore.loading"
             :errors="authStore.errors"

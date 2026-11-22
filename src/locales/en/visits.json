@@ -71,7 +71,11 @@
     "mode": {
       "member": "Member (forgot card)",
       "guest": "Guest"
-    }
+    },
+    "peak": "Busiest hour: {h}:00",
+    "hm": "{h}h {m}m",
+    "m": "{m} min",
+    "forgotOut": "Forgot to scan out"
   },
   "type": {
     "student": "Student",
@@ -105,7 +109,8 @@
     "avg": "Average stay",
     "minutes": "minutes per visit",
     "guests": "Guests",
-    "auto": "{n} auto-closed"
+    "auto": "{n} auto-closed",
+    "guestsN": "{n} guests"
   },
   "devices": {
     "title": "Kiosks and doors",
@@ -186,7 +191,19 @@
     "search": "Name, email, student ID or IP",
     "time": "Time",
     "who": "User",
-    "device": "Device"
+    "device": "Device",
+    "refresh": "Refresh",
+    "last24": "24 h",
+    "show": "show",
+    "filtered": "{n} rows found",
+    "clear": "Clear filters",
+    "retry": "Try again",
+    "unknownUser": "Unknown account",
+    "qAll": "All",
+    "qProblems": "All problems",
+    "qBadLogins": "Failed logins",
+    "qCards": "Refused cards",
+    "qLogins": "Successful logins"
   },
   "event": {
     "login": "Login",
@@ -195,7 +212,9 @@
     "activate": "Account activated",
     "logout": "Logout",
     "logout_all": "Logged out everywhere",
-    "card_denied": "Card refused"
+    "card_denied": "Card refused",
+    "self_checkout_start": "Self-checkout",
+    "self_checkout_pin_locked": "PIN locked"
   },
   "mine": {
     "title": "Recent sign-ins",
@@ -223,5 +242,24 @@
     "next": "Next person",
     "doneCount": "{n} book(s) borrowed. Thank you!",
     "doneNone": "No books borrowed."
+  },
+  "range": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "d7": "7 days",
+    "d30": "30 days",
+    "any": "Any time"
+  },
+  "reason": {
+    "INVALID_LOGIN": "Wrong email/ID or password",
+    "ACCOUNT_NOT_ACTIVATED": "Not activated",
+    "ACCOUNT_PENDING": "Waiting for approval",
+    "ACCOUNT_SUSPENDED": "Suspended",
+    "CARD_UNKNOWN": "Unknown card",
+    "CARD_EXPIRED": "Card expired or revoked",
+    "DIGITAL_CODE_EXPIRED": "Phone QR expired",
+    "MEMBER_INACTIVE": "Membership switched off",
+    "MEMBERSHIP_EXPIRED": "Membership expired",
+    "SELF_PIN_LOCKED": "PIN locked"
   }
 }

@@ -71,7 +71,11 @@
     "mode": {
       "member": "សមាជិក (ភ្លេចកាត)",
       "guest": "ភ្ញៀវ"
-    }
+    },
+    "peak": "ម៉ោងមនុស្សច្រើនបំផុត៖ {h}:00",
+    "hm": "{h}ម៉ោង {m}នាទី",
+    "m": "{m} នាទី",
+    "forgotOut": "ភ្លេចស្កេនចេញ"
   },
   "type": {
     "student": "សិស្ស",
@@ -105,7 +109,8 @@
     "avg": "រយៈពេលជាមធ្យម",
     "minutes": "នាទី ក្នុងមួយដង",
     "guests": "ភ្ញៀវ",
-    "auto": "{n} ដងបិទស្វ័យប្រវត្តិ"
+    "auto": "{n} ដងបិទស្វ័យប្រវត្តិ",
+    "guestsN": "ភ្ញៀវ {n} នាក់"
   },
   "devices": {
     "title": "Kiosk និងទ្វារ",
@@ -186,7 +191,19 @@
     "search": "ឈ្មោះ, Email, លេខសិស្ស ឬ IP",
     "time": "ពេលវេលា",
     "who": "អ្នកប្រើ",
-    "device": "ឧបករណ៍"
+    "device": "ឧបករណ៍",
+    "refresh": "ផ្ទុកឡើងវិញ",
+    "last24": "24 ម៉ោង",
+    "show": "មើល",
+    "filtered": "រកឃើញ {n} ជួរ",
+    "clear": "សម្អាតតម្រង",
+    "retry": "ព្យាយាមម្តងទៀត",
+    "unknownUser": "មិនស្គាល់គណនី",
+    "qAll": "ទាំងអស់",
+    "qProblems": "បញ្ហាទាំងអស់",
+    "qBadLogins": "Login ខុស",
+    "qCards": "កាតត្រូវបដិសេធ",
+    "qLogins": "Login ជោគជ័យ"
   },
   "event": {
     "login": "Login",
@@ -195,7 +212,9 @@
     "activate": "បើកគណនី",
     "logout": "ចាកចេញ",
     "logout_all": "ចាកចេញពីគ្រប់ឧបករណ៍",
-    "card_denied": "កាតត្រូវបដិសេធ"
+    "card_denied": "កាតត្រូវបដិសេធ",
+    "self_checkout_start": "ខ្ចីដោយខ្លួនឯង",
+    "self_checkout_pin_locked": "PIN ចាក់សោ"
   },
   "mine": {
     "title": "សកម្មភាព Login ថ្មីៗ",
@@ -223,5 +242,24 @@
     "next": "អ្នកបន្ទាប់",
     "doneCount": "បានខ្ចី {n} ក្បាល។ សូមអរគុណ!",
     "doneNone": "មិនបានខ្ចីសៀវភៅទេ។"
+  },
+  "range": {
+    "today": "ថ្ងៃនេះ",
+    "yesterday": "ម្សិលមិញ",
+    "d7": "7 ថ្ងៃ",
+    "d30": "30 ថ្ងៃ",
+    "any": "គ្រប់ពេល"
+  },
+  "reason": {
+    "INVALID_LOGIN": "Email/លេខសិស្ស ឬពាក្យសម្ងាត់ខុស",
+    "ACCOUNT_NOT_ACTIVATED": "គណនីមិនទាន់ Activate",
+    "ACCOUNT_PENDING": "រង់ចាំអនុម័ត",
+    "ACCOUNT_SUSPENDED": "គណនីត្រូវផ្អាក",
+    "CARD_UNKNOWN": "កាតមិនស្គាល់",
+    "CARD_EXPIRED": "កាតផុតកំណត់ ឬត្រូវបិទ",
+    "DIGITAL_CODE_EXPIRED": "QR ទូរស័ព្ទហួសពេល",
+    "MEMBER_INACTIVE": "សមាជិកភាពត្រូវបិទ",
+    "MEMBERSHIP_EXPIRED": "សមាជិកភាពផុតកំណត់",
+    "SELF_PIN_LOCKED": "PIN ត្រូវចាក់សោ"
   }
 }
