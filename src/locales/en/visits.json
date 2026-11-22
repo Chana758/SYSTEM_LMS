@@ -203,7 +203,8 @@
     "qProblems": "All problems",
     "qBadLogins": "Failed logins",
     "qCards": "Refused cards",
-    "qLogins": "Successful logins"
+    "qLogins": "Successful logins",
+    "qStaff": "Activations / resets"
   },
   "event": {
     "login": "Login",
@@ -214,7 +215,9 @@
     "logout_all": "Logged out everywhere",
     "card_denied": "Card refused",
     "self_checkout_start": "Self-checkout",
-    "self_checkout_pin_locked": "PIN locked"
+    "self_checkout_pin_locked": "PIN locked",
+    "staff_activate": "Activated by staff",
+    "staff_reset": "Login reset by staff"
   },
   "mine": {
     "title": "Recent sign-ins",

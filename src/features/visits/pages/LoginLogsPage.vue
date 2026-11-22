@@ -169,7 +169,7 @@ const { t, te } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
-const events = ['login', 'login_failed', 'login_blocked', 'activate', 'logout', 'logout_all', 'card_denied', 'self_checkout_start', 'self_checkout_pin_locked']
+const events = ['login', 'login_failed', 'login_blocked', 'activate', 'logout', 'logout_all', 'card_denied', 'self_checkout_start', 'self_checkout_pin_locked', 'staff_activate', 'staff_reset']
 const inputCls = 'h-10 rounded-xl border border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900 dark:text-white px-3 text-sm outline-none focus:border-emerald-600'
 
 const blank = () => ({ event: '', success: '', from: '', to: '', search: '' })
@@ -202,6 +202,8 @@ const eventCls = (e) => ({
   logout: 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300',
   logout_all: 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300',
   activate: 'bg-sky-50 text-sky-700 dark:bg-sky-500/10 dark:text-sky-300',
+  staff_activate: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300',
+  staff_reset: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300',
   login_failed: 'bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300',
   login_blocked: 'bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300',
   card_denied: 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300',
@@ -220,6 +222,7 @@ const quick = computed(() => [
   { key: 'bad', label: t('visits.logs.qBadLogins'), preset: BAD_LOGINS, on: 'bg-rose-600 border-rose-600 text-white' },
   { key: 'cards', label: t('visits.logs.qCards'), preset: CARDS, on: 'bg-amber-500 border-amber-500 text-white' },
   { key: 'logins', label: t('visits.logs.qLogins'), preset: { event: 'login', success: '1' }, on: 'bg-emerald-700 border-emerald-700 text-white' },
+  { key: 'staff', label: '🛡 ' + t('visits.logs.qStaff'), preset: { event: 'staff_activate,staff_reset,activate' }, on: 'bg-indigo-600 border-indigo-600 text-white' },
 ])
 function isPreset(p) {
   return filters.value.event === (p.event || '') && filters.value.success === (p.success || '')

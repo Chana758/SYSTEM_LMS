@@ -203,7 +203,8 @@
     "qProblems": "បញ្ហាទាំងអស់",
     "qBadLogins": "Login ខុស",
     "qCards": "កាតត្រូវបដិសេធ",
-    "qLogins": "Login ជោគជ័យ"
+    "qLogins": "Login ជោគជ័យ",
+    "qStaff": "Activate / កំណត់ឡើងវិញ"
   },
   "event": {
     "login": "Login",
@@ -214,7 +215,9 @@
     "logout_all": "ចាកចេញពីគ្រប់ឧបករណ៍",
     "card_denied": "កាតត្រូវបដិសេធ",
     "self_checkout_start": "ខ្ចីដោយខ្លួនឯង",
-    "self_checkout_pin_locked": "PIN ចាក់សោ"
+    "self_checkout_pin_locked": "PIN ចាក់សោ",
+    "staff_activate": "បុគ្គលិក Activate",
+    "staff_reset": "បុគ្គលិកកំណត់ Login ឡើងវិញ"
   },
   "mine": {
     "title": "សកម្មភាព Login ថ្មីៗ",
